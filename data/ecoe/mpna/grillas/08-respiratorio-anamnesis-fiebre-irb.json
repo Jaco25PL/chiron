@@ -1,0 +1,80 @@
+{
+  "id": "08-respiratorio-anamnesis-fiebre-irb",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 4,
+    "nombre": "Anamnesis y examen físico respiratorio."
+  },
+  "titulo": "SIMULACIÓN 3: ANAMNESIS FIEBRE - IRB",
+  "tipo": "anamnesis",
+  "motivo_consulta": "fiebre",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Ficha patronímica completa?"
+      ]
+    },
+    {
+      "nombre": "Motivo de Consulta y la Enfermedad Actual",
+      "items": [
+        "Interroga las características de la fiebre",
+        "Evolución de la fiebre"
+      ]
+    },
+    {
+      "nombre": "Pregunta síntomas acompañantes",
+      "items": [
+        "Malestar general, astenia, adinamia",
+        "Explora la presencia de Tos",
+        "Características de la tos y su evolución",
+        "Explora la presencia de Expectoración",
+        "Caract. de la expectoración y su evolución",
+        "Explora la presencia de Dolor torácico",
+        "Características del dolor, clasificación",
+        "Explora la presencia de Disnea",
+        "Aparición y características de la disnea"
+      ]
+    },
+    {
+      "nombre": "Otros síntomas respiratorios altos y bajos",
+      "items": [
+        "Pregunta sobre otalgia, otorrea, odinofagia, disfonía",
+        "Pregunta sobre ruidos audibles a distancia, tirajes"
+      ]
+    },
+    {
+      "nombre": "Antecedentes personales",
+      "items": [
+        "Tabaquismo",
+        "Enfermedades Respiratorias",
+        "Otras enfermedades (HTA, DM 2)"
+      ]
+    },
+    {
+      "nombre": "Antecedentes inmunitarios",
+      "items": [
+        "CEV, Vacuna antigripal y para SarsCov2"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      8
+    ]
+  }
+}

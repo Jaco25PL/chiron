@@ -1,0 +1,73 @@
+{
+  "id": "03-dolor-toracico",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 3,
+    "nombre": "Anamnesis y examen físico cardiovascular. Lectura básica del electrocardiograma."
+  },
+  "titulo": "SIMULACIÓN 2: DOLOR TORÁCICO",
+  "tipo": "anamnesis",
+  "motivo_consulta": "dolor torácico",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Se presenta y saluda",
+        "Ficha patronímica",
+        "pregunta por el motivo de consulta"
+      ]
+    },
+    {
+      "nombre": "Motivo de consulta",
+      "items": [
+        "Pregunta APARICIÓN (cuándo inicia y circunstancia de aparición)",
+        "Pregunta TIPO (urente, punzante, quemante, desgarrante, opresivo)",
+        "Pregunta INTENSIDAD (escala EVA de dolor)",
+        "Pregunta LOCALIZACIÓN (cara anterior de tórax, cuello, brazo)",
+        "Pregunta IRRADIACIONES (brazo izquierdo, mandíbula, espalda, brazo derecho)",
+        "Pregunta EVOLUCIÓN (desde el inicio, aparece ante igual esfuerzo, ¿cómo calma?)"
+      ]
+    },
+    {
+      "nombre": "Fenómenos acompañantes",
+      "items": [
+        "Disnea",
+        "Sudoración (u otros síntomas neurovegetativos)",
+        "Náuseas / vómitos",
+        "Palpitaciones",
+        "Síncope",
+        "Edemas MMII"
+      ]
+    },
+    {
+      "nombre": "Ant. Personales: factores de riesgo CV",
+      "items": [
+        "Tabaquismo",
+        "Profundiza sobre su Tabaquismo",
+        "Sedentarismo",
+        "Diabetes mellitus",
+        "Hipertensión arterial",
+        "Dislipemia",
+        "Profundiza sobre la dislipemia"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Rendimiento global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      3
+    ]
+  }
+}

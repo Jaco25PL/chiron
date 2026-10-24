@@ -1,0 +1,74 @@
+{
+  "id": "09-respiratorio-ex-fisico-tos-ira",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 4,
+    "nombre": "Anamnesis y examen físico respiratorio."
+  },
+  "titulo": "SIMULACIÓN 4: EXAMEN FÍSICO TOS- IRA",
+  "tipo": "examen_fisico",
+  "motivo_consulta": "tos",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Explica lo que va a realizar"
+      ]
+    },
+    {
+      "nombre": "Examen Físico General",
+      "items": [
+        "Menciona el estado general del paciente",
+        "Describe el Psiquismo",
+        "Constata coloración cutánea y mucosa",
+        "Constata hidratación cutánea y mucosa",
+        "Cuenta frecuencia cardíaca / toma pulso",
+        "Toma de temperatura axilar"
+      ]
+    },
+    {
+      "nombre": "Examen Físico extratorácico",
+      "items": [
+        "Observa las fosas nasales",
+        "Observa CAE, menciona otoscopía",
+        "Palpa el trago y moviliza el CAE",
+        "Examina la orofaringe pasiva y dinámicamente",
+        "Describe mucosas bucofaríngea",
+        "Describe las amígdalas, presencia y caract.",
+        "Palpación LG: se pone atrás del paciente",
+        "Describe LG submentoniano, submaxilar",
+        "Describe LG submentoniano, submaxilar",
+        "Describe LG preauriculares, carotídeos",
+        "Describe LG retroauriculares y occipitales"
+      ]
+    },
+    {
+      "nombre": "Examen Físico torácico (reducido)",
+      "items": [
+        "Cuenta frecuencia respiratoria (puede estar en ex. físico general)",
+        "Ausculta cara anterior, axilar y posterior",
+        "Ausculta sectores altos y bajos en cada una de las 3 caras",
+        "Ausculta bilateralmente y compara"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      9
+    ]
+  }
+}

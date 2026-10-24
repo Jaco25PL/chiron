@@ -1,0 +1,102 @@
+{
+  "id": "15-dolor-sim2-anamnesis-dolor",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 6,
+    "nombre": "Atención a personas con Dolor y atención a personas con Cefaleas."
+  },
+  "titulo": "SIMULACIÓN 2: ANAMNESIS DOLOR",
+  "tipo": "anamnesis",
+  "motivo_consulta": "dolor",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Pregunta por la Ficha patronímica",
+        "Pregunta el Motivo de Consulta"
+      ]
+    },
+    {
+      "nombre": "APARICIÓN",
+      "items": [
+        "Cuando le apareció",
+        "Circunstancias de aparición",
+        "Con qué lo relaciona",
+        "El comienzo fue brusco o insidioso"
+      ]
+    },
+    {
+      "nombre": "TIPO ¿Como es el dolor?",
+      "items": [
+        "¿Es cómo una plancha?",
+        "¿Es como un retortijón?",
+        "¿Es como un ardor?",
+        "¿Es como una corriente eléctrica?"
+      ]
+    },
+    {
+      "nombre": "INTENSIDAD",
+      "items": [
+        "Escala verbal del dolor del 1 al 10",
+        "LOCALIZACIÓN ¿Dónde le duele?",
+        "IRRADIACIÓN ¿Se corre para algún lugar?"
+      ]
+    },
+    {
+      "nombre": "EVOLUCIÓN",
+      "items": [
+        "¿Se ha mantenido igual desde el inicio?",
+        "Elementos que aumentan el dolor",
+        "¿Cuánto tiempo le duele en el día?",
+        "¿Duele en la noche? Lo despierta el dolor?",
+        "¿Calma con alguna posición?",
+        "Explora automedicación"
+      ]
+    },
+    {
+      "nombre": "FENÓMENOS ACOMPAÑANTES",
+      "items": [
+        "Fiebre",
+        "Sedimentos en la orina",
+        "Orinas espumosas",
+        "Hematurias",
+        "Elementos de síndrome neurovegetativo",
+        "Explora Antecedentes de Enfermedad Actual"
+      ]
+    },
+    {
+      "nombre": "CLASIFICACIÓN DEL DOLOR X EL ESTUDIANTE",
+      "items": [
+        "Lo clasifica como agudo",
+        "Lo clasifica como dolor cólico",
+        "Plantea que es un Cólico Nefrítico"
+      ]
+    },
+    {
+      "nombre": "TRATAMIENTO",
+      "items": [
+        "Le indica Tramadol 50 mg cada 6 horas (inicio) asociado a coadyuvantes",
+        "Comenta medidas no farmacológicas"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      21
+    ]
+  }
+}

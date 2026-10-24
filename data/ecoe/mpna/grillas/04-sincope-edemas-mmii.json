@@ -1,0 +1,84 @@
+{
+  "id": "04-sincope-edemas-mmii",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 3,
+    "nombre": "Anamnesis y examen físico cardiovascular. Lectura básica del electrocardiograma."
+  },
+  "titulo": "SIMULACIÓN 3: SÍNCOPE Y EDEMAS DE MMII",
+  "tipo": "anamnesis",
+  "motivo_consulta": "síncope y edemas de MMII",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Se presenta y saluda",
+        "Ficha patronímica",
+        "Pregunta por el motivo de consulta"
+      ]
+    },
+    {
+      "nombre": "Motivo de consulta",
+      "items": [
+        "Pregunta APARICIÓN (circunstancia de aparición)",
+        "Intenta saber si fue un evento BRUSCO o no",
+        "Pregunta Síntomas previos (PALPITACIONES)",
+        "Pregunta Síntomas previos (VISIÓN BORROSA)",
+        "Pregunta Síntomas previos (MAREO O VAHÍDO)",
+        "Pregunta Síntomas posteriores (SOPOR)",
+        "Pregunta Síntomas posteriores (PÉRDIDA DE CONTINENCIA ESFINTERIANA)",
+        "Antecedentes de enfermedad actual"
+      ]
+    },
+    {
+      "nombre": "Fenómenos acompañantes",
+      "items": [
+        "Disnea",
+        "Sudoración (u otros síntomas neurovegetativos)",
+        "Náuseas / vómitos",
+        "Dolor torácico",
+        "Nicturia"
+      ]
+    },
+    {
+      "nombre": "En relación a edemas de MMII",
+      "items": [
+        "Desde cuando aparecieron",
+        "Obtiene el dato de Gravitacionales",
+        "Pregunta pos si son bilaterales",
+        "Pregunta se son blancos y blandos",
+        "Pregunta si sin fríos o indoloros"
+      ]
+    },
+    {
+      "nombre": "Ant. Personales: factores de riesgo CV",
+      "items": [
+        "Tabaquismo",
+        "Profundiza sobre su Tabaquismo",
+        "Sedentarismo",
+        "Diabetes mellitus",
+        "Hipertensión arterial",
+        "Dislipemia",
+        "Profundiza sobre la hipertensión"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Rendimiento global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      4
+    ]
+  }
+}

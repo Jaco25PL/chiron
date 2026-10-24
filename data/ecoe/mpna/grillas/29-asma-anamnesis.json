@@ -1,0 +1,81 @@
+{
+  "id": "29-asma-anamnesis",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 9,
+    "nombre": "IRA, Asma y EPOC."
+  },
+  "titulo": "SIMULACIÓN 3: ANAMNESIS ASMA",
+  "tipo": "anamnesis",
+  "motivo_consulta": null,
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Pregunta Ficha Patronímica completa?"
+      ]
+    },
+    {
+      "nombre": "Valoración del ASMA Enfermedad y su CONTROL",
+      "items": [
+        "Momento y circunstancia de diagnóstico del Asma",
+        "Presencia de síntomas diurnos",
+        "Presencia de síntomas nocturnos",
+        "Frecuencia de los síntomas broncoobstructivos",
+        "Medicación que utiliza habitualmente",
+        "Aumento del uso de broncodilatadores",
+        "Como usa el inhalador",
+        "Desencadenantes (inhalantes, actividad física, etc.)",
+        "¿Ha tenido crisis?",
+        "Intensidad de las crisis (consultas en emergencia)",
+        "Internaciones, CTI, IOT",
+        "Investiga uso de pico Flujo",
+        "Consulta sobre Espirometría o F. Respiratorio"
+      ]
+    },
+    {
+      "nombre": "Hábitos, AP, AF, AA, AI",
+      "items": [
+        "Actividad física habitual",
+        "Estrés",
+        "Tabaquismo, THC",
+        "Rinitis alérgica",
+        "Dermatitis atópica",
+        "Asma en familiares de primer grado",
+        "Vacuna antigripal y para Sars Cov 2",
+        "Vacuna antineumocócica"
+      ]
+    },
+    {
+      "nombre": "Clasificación Asma Enfermedad",
+      "items": [
+        "Asma persistente leve"
+      ]
+    },
+    {
+      "nombre": "Clasificación de Control de Asma",
+      "items": [
+        "No controlada"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      35
+    ]
+  }
+}

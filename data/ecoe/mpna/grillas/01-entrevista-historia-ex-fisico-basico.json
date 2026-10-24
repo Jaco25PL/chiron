@@ -1,0 +1,75 @@
+{
+  "id": "01-entrevista-historia-ex-fisico-basico",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 1,
+    "nombre": "Entrevista Médica, Historia Clínica y Examen Físico General."
+  },
+  "titulo": "GRILLA DE ENTREVISTA, HISTORIA Y EX. FÍSICO BÁSICO",
+  "tipo": "anamnesis_y_examen_fisico",
+  "motivo_consulta": null,
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "General",
+      "items": [
+        "Saluda y se presenta",
+        "Ficha patronímica: nombre, edad",
+        "Ficha patronímica: Procedencia y dónde vive",
+        "Ficha patronímica: Ocupación",
+        "Ficha patronímica: Con quién vive",
+        "Ficha patronímica: Escolaridad",
+        "Ficha patronímica: Estado civil",
+        "Ficha patronímica: Médico de referencia",
+        "MOTIVO DE CONSULTA",
+        "ENFERMEDAD ACTUAL: amplía información sobre el motivo de consulta",
+        "ANTECEDENTES DE LA ENFERMEDAD ACTUAL",
+        "Tránsitos urinario y digestivo",
+        "ANTECEDENTES PERSONALES: Médicos o Quirúrg",
+        "ANTECEDENTES PERSONALES: Factores de riesgo CV y ECNT",
+        "ANTECEDENTES PERSONALES: Tóxicos",
+        "ANTECEDENTES PERSONALES: Si toma alguna medicación",
+        "ANTECEDENTES PERSONALES: Alergias, internaciones",
+        "Alimentación",
+        "Horas de sueño",
+        "Ejercicio físico",
+        "Tiempo libre",
+        "Estado de ánimo y screening de depresión",
+        "ANTECEDENTES INMUNITARIOS",
+        "ANTECEDENTES GINECOLÓGICOS",
+        "ANTECEDENTES OBSTÉTRICOS",
+        "ANTECEDENTES SEXUALES",
+        "ANTECEDENTES INMUNITARIOS",
+        "ANTECEDENTES FAMILIARES",
+        "Screening de violencia doméstica",
+        "REALIZA FAMILIOGRAMA",
+        "ASEC: Vivienda",
+        "ASEC: Instituciones y redes",
+        "ASEC: Barrio",
+        "ASEC: Acceso a la salud",
+        "EXAMEN FÍSICO: Conciencia",
+        "EXAMEN FÍSICO: Impresión general",
+        "EXAMEN FÍSICO: Hidratación y perfusión",
+        "EXAMEN FÍSICO: Funcional (Frec resp, temp, PA)",
+        "EXAMEN FÍSICO: Nutrición, Datos antropométricos, biotipo",
+        "EXAMEN FÍSICO: Piel y mucosas",
+        "EXAMEN FÍSICO: Bucofaringe",
+        "EXAMEN FÍSICO: Cuello y LG",
+        "EXAMEN FÍSICO: Pleuropulmonar",
+        "EXAMEN FÍSICO: Cardiovascular",
+        "EXAMEN FÍSICO: Abdomen"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      1
+    ]
+  }
+}

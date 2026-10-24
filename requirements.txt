@@ -1,0 +1,4 @@
+langchain-core
+langchain-chroma
+langchain-google-genai
+python-dotenv

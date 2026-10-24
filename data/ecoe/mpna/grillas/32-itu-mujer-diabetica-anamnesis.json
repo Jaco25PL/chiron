@@ -1,0 +1,100 @@
+{
+  "id": "32-itu-mujer-diabetica-anamnesis",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 10,
+    "nombre": "Atención a personas con síntomas urinarios."
+  },
+  "titulo": "SIMULACIÓN 2: ANAMNESIS ITU en MUJER DIABÉTICA",
+  "tipo": "anamnesis",
+  "motivo_consulta": "disuria",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Pregunta por la Ficha patronímica"
+      ]
+    },
+    {
+      "nombre": "Abordaje del Motivo de Consulta",
+      "items": [
+        "Desde cuando apareció la disuria",
+        "Dificultad para orinar",
+        "Dolor u ardor al orinar",
+        "Dolor suprapúbico?",
+        "Aumento de la frecuencia miccional/urgencia",
+        "Poliaquiuria?",
+        "Pujos?",
+        "Tenemos?",
+        "Retención urinaria?",
+        "Incontinencia urinaria?"
+      ]
+    },
+    {
+      "nombre": "Semiología de la orina",
+      "items": [
+        "Color (clara, oscura/concentrada)",
+        "Hematuria o sangre en la orina",
+        "Sedimento (arenilla)"
+      ]
+    },
+    {
+      "nombre": "Dolor en fosa lumbar",
+      "items": [
+        "Aparición del Dolor en Fosa Lumbar",
+        "Tipo de dolor (válido si consulta dolor cólico)",
+        "Intensidad (válido si utiliza escala EVA)",
+        "Localización (pide que le muestre zona)",
+        "Irradiaión (si consulta si irradia hacia vejiga)",
+        "Evolución del dolor y analgesia utilizada",
+        "Náuseas y/o vómitos",
+        "Fiebre / Chuchos de frío",
+        "Constipación u otros síntoma del TDB"
+      ]
+    },
+    {
+      "nombre": "Antecedentes de enfermedad actual",
+      "items": [
+        "ITU bajas",
+        "ITU alta o PNA"
+      ]
+    },
+    {
+      "nombre": "Preguntas sobre su diabetes",
+      "items": [
+        "Diagnóstico y circunstancia del Dg",
+        "Cifras habituales de HGT y HBA1C",
+        "Tratamiento higiénico/dietético/farmacológico",
+        "Repercusiones macro/microangiopáticas"
+      ]
+    },
+    {
+      "nombre": "AP y otros antecedentes que interesen",
+      "items": [
+        "Inmunodepresión",
+        "Litiasis en vías urinarias",
+        "Tabaquismo o consumo de otras sustancias",
+        "Cirugías en vía urinaria o genital"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      38
+    ]
+  }
+}

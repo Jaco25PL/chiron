@@ -1,0 +1,409 @@
+[
+  {
+    "id": "01-entrevista-historia-ex-fisico-basico",
+    "titulo": "GRILLA DE ENTREVISTA, HISTORIA Y EX. FÍSICO BÁSICO",
+    "unidad_tematica": {
+      "numero": 1,
+      "nombre": "Entrevista Médica, Historia Clínica y Examen Físico General."
+    },
+    "tipo": "anamnesis_y_examen_fisico",
+    "motivo_consulta": null,
+    "n_items": 45
+  },
+  {
+    "id": "02-disnea",
+    "titulo": "SIMULACIÓN 1: DISNEA",
+    "unidad_tematica": {
+      "numero": 3,
+      "nombre": "Anamnesis y examen físico cardiovascular. Lectura básica del electrocardiograma."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": "falta de aire",
+    "n_items": 23
+  },
+  {
+    "id": "03-dolor-toracico",
+    "titulo": "SIMULACIÓN 2: DOLOR TORÁCICO",
+    "unidad_tematica": {
+      "numero": 3,
+      "nombre": "Anamnesis y examen físico cardiovascular. Lectura básica del electrocardiograma."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": "dolor torácico",
+    "n_items": 23
+  },
+  {
+    "id": "04-sincope-edemas-mmii",
+    "titulo": "SIMULACIÓN 3: SÍNCOPE Y EDEMAS DE MMII",
+    "unidad_tematica": {
+      "numero": 3,
+      "nombre": "Anamnesis y examen físico cardiovascular. Lectura básica del electrocardiograma."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": "síncope y edemas de MMII",
+    "n_items": 29
+  },
+  {
+    "id": "05-ex-fisico-cardiovascular",
+    "titulo": "GRILLA EX. FÍSICO CARDIOVASCULAR",
+    "unidad_tematica": {
+      "numero": 3,
+      "nombre": "Anamnesis y examen físico cardiovascular. Lectura básica del electrocardiograma."
+    },
+    "tipo": "examen_fisico",
+    "motivo_consulta": null,
+    "n_items": 30
+  },
+  {
+    "id": "06-respiratorio-anamnesis-tos-ira",
+    "titulo": "SIMULACIÓN 1: ANAMNESIS TOS - IRA",
+    "unidad_tematica": {
+      "numero": 4,
+      "nombre": "Anamnesis y examen físico respiratorio."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": "tos",
+    "n_items": 25
+  },
+  {
+    "id": "07-respiratorio-anamnesis-disnea",
+    "titulo": "SIMULACIÓN 2: ANAMNESIS DISNEA",
+    "unidad_tematica": {
+      "numero": 4,
+      "nombre": "Anamnesis y examen físico respiratorio."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": "disnea",
+    "n_items": 25
+  },
+  {
+    "id": "08-respiratorio-anamnesis-fiebre-irb",
+    "titulo": "SIMULACIÓN 3: ANAMNESIS FIEBRE - IRB",
+    "unidad_tematica": {
+      "numero": 4,
+      "nombre": "Anamnesis y examen físico respiratorio."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": "fiebre",
+    "n_items": 20
+  },
+  {
+    "id": "09-respiratorio-ex-fisico-tos-ira",
+    "titulo": "SIMULACIÓN 4: EXAMEN FÍSICO TOS- IRA",
+    "unidad_tematica": {
+      "numero": 4,
+      "nombre": "Anamnesis y examen físico respiratorio."
+    },
+    "tipo": "examen_fisico",
+    "motivo_consulta": "tos",
+    "n_items": 24
+  },
+  {
+    "id": "10-respiratorio-ex-fisico-irb",
+    "titulo": "SIMULACIÓN 5 y 6: EXAMEN FÍSICO IRB",
+    "unidad_tematica": {
+      "numero": 4,
+      "nombre": "Anamnesis y examen físico respiratorio."
+    },
+    "tipo": "examen_fisico",
+    "motivo_consulta": null,
+    "n_items": 29
+  },
+  {
+    "id": "11-digestivo-dolor-abdominal",
+    "titulo": "SIMULACIÓN 1: ANAMNESIS y EX. FÍSICO DOLOR ABDOMINAL",
+    "unidad_tematica": {
+      "numero": 5,
+      "nombre": "Anamnesis y examen del Ap. Digestivo."
+    },
+    "tipo": "anamnesis_y_examen_fisico",
+    "motivo_consulta": "dolor abdominal",
+    "n_items": 66
+  },
+  {
+    "id": "12-digestivo-hepatalgia",
+    "titulo": "SIMULACIÓN 2: ANAMNESIS y EX. FÍSICO - HEPATALGIA",
+    "unidad_tematica": {
+      "numero": 5,
+      "nombre": "Anamnesis y examen del Ap. Digestivo."
+    },
+    "tipo": "anamnesis_y_examen_fisico",
+    "motivo_consulta": "hepatalgia",
+    "n_items": 70
+  },
+  {
+    "id": "13-digestivo-colico-biliar",
+    "titulo": "SIMULACIÓN 3: ANAMNESIS y EX. FÍSICO - CÓLICO BILIAR",
+    "unidad_tematica": {
+      "numero": 5,
+      "nombre": "Anamnesis y examen del Ap. Digestivo."
+    },
+    "tipo": "anamnesis_y_examen_fisico",
+    "motivo_consulta": "cólico biliar",
+    "n_items": 62
+  },
+  {
+    "id": "14-dolor-sim1-anamnesis-dolor",
+    "titulo": "SIMULACIÓN 1: ANAMNESIS DOLOR",
+    "unidad_tematica": {
+      "numero": 6,
+      "nombre": "Atención a personas con Dolor y atención a personas con Cefaleas."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": "dolor",
+    "n_items": 30
+  },
+  {
+    "id": "15-dolor-sim2-anamnesis-dolor",
+    "titulo": "SIMULACIÓN 2: ANAMNESIS DOLOR",
+    "unidad_tematica": {
+      "numero": 6,
+      "nombre": "Atención a personas con Dolor y atención a personas con Cefaleas."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": "dolor",
+    "n_items": 32
+  },
+  {
+    "id": "16-cefalea-sim3-anamnesis",
+    "titulo": "SIMULACIÓN 3: ANAMNESIS CEFALEA",
+    "unidad_tematica": {
+      "numero": 6,
+      "nombre": "Atención a personas con Dolor y atención a personas con Cefaleas."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": "cefalea",
+    "n_items": 26
+  },
+  {
+    "id": "17-cefalea-sim4-ex-fisico",
+    "titulo": "SIMULACIÓN 4: EXAMEN FÍSICO CEFALEA",
+    "unidad_tematica": {
+      "numero": 6,
+      "nombre": "Atención a personas con Dolor y atención a personas con Cefaleas."
+    },
+    "tipo": "examen_fisico",
+    "motivo_consulta": "cefalea",
+    "n_items": 25
+  },
+  {
+    "id": "18-cefalea-sim5-anamnesis",
+    "titulo": "SIMULACIÓN 5: ANAMNESIS CEFALEA",
+    "unidad_tematica": {
+      "numero": 6,
+      "nombre": "Atención a personas con Dolor y atención a personas con Cefaleas."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": "cefalea",
+    "n_items": 27
+  },
+  {
+    "id": "19-cefalea-sim6-ex-fisico",
+    "titulo": "SIMULACIÓN 6: EXAMEN FÍSICO CEFALEA",
+    "unidad_tematica": {
+      "numero": 6,
+      "nombre": "Atención a personas con Dolor y atención a personas con Cefaleas."
+    },
+    "tipo": "examen_fisico",
+    "motivo_consulta": "cefalea",
+    "n_items": 25
+  },
+  {
+    "id": "20-hta-anamnesis",
+    "titulo": "SIMULACIÓN 1: ANAMNESIS HIPERTENSIÓN ARTERIAL",
+    "unidad_tematica": {
+      "numero": 7,
+      "nombre": "Atención a personas con hipertensión arterial, diabetes mellitus 2 y/o tabaquismo."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": "hipertensión arterial",
+    "n_items": 29
+  },
+  {
+    "id": "21-hta-ex-fisico",
+    "titulo": "SIMULACIÓN 2: EXAMEN FÍSICO HIPERTENSIÓN ARTERIAL",
+    "unidad_tematica": {
+      "numero": 7,
+      "nombre": "Atención a personas con hipertensión arterial, diabetes mellitus 2 y/o tabaquismo."
+    },
+    "tipo": "examen_fisico",
+    "motivo_consulta": "hipertensión arterial",
+    "n_items": 23
+  },
+  {
+    "id": "22-diabetes-y-tabaquismo",
+    "titulo": "SIMULACIÓN 3: DIABETES Y TABAQUISMO",
+    "unidad_tematica": {
+      "numero": 7,
+      "nombre": "Atención a personas con hipertensión arterial, diabetes mellitus 2 y/o tabaquismo."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": null,
+    "n_items": 30
+  },
+  {
+    "id": "23-diabetes-avanzada",
+    "titulo": "SIMULACIÓN 4: DIABETES AVANZADA",
+    "unidad_tematica": {
+      "numero": 7,
+      "nombre": "Atención a personas con hipertensión arterial, diabetes mellitus 2 y/o tabaquismo."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": "frialdad",
+    "n_items": 32
+  },
+  {
+    "id": "24-pie-diabetico",
+    "titulo": "SIMULACIÓN 5: EXAMEN DE PIE DIABÉTICO",
+    "unidad_tematica": {
+      "numero": 7,
+      "nombre": "Atención a personas con hipertensión arterial, diabetes mellitus 2 y/o tabaquismo."
+    },
+    "tipo": "examen_fisico",
+    "motivo_consulta": null,
+    "n_items": 30
+  },
+  {
+    "id": "25-infeccion-respiratoria-alta",
+    "titulo": "SIMULACIÓN 1: INFECCIÓN RESPIRATORIA ALTA",
+    "unidad_tematica": {
+      "numero": 9,
+      "nombre": "IRA, Asma y EPOC."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": "odinofagia",
+    "n_items": 31
+  },
+  {
+    "id": "26-ex-fisico-ira",
+    "titulo": "SIMULACIÓN 1: EXAMEN FÍSICO IRA",
+    "unidad_tematica": {
+      "numero": 9,
+      "nombre": "IRA, Asma y EPOC."
+    },
+    "tipo": "examen_fisico",
+    "motivo_consulta": null,
+    "n_items": 25
+  },
+  {
+    "id": "27-infeccion-respiratoria-baja",
+    "titulo": "SIMULACIÓN 2: INFECCIÓN RESPIRATORIA BAJA",
+    "unidad_tematica": {
+      "numero": 9,
+      "nombre": "IRA, Asma y EPOC."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": "tos",
+    "n_items": 34
+  },
+  {
+    "id": "28-ex-fisico-ira-baja",
+    "titulo": "SIMULACIÓN 2: EXAMEN FÍSICO IRA BAJA",
+    "unidad_tematica": {
+      "numero": 9,
+      "nombre": "IRA, Asma y EPOC."
+    },
+    "tipo": "examen_fisico",
+    "motivo_consulta": null,
+    "n_items": 35
+  },
+  {
+    "id": "29-asma-anamnesis",
+    "titulo": "SIMULACIÓN 3: ANAMNESIS ASMA",
+    "unidad_tematica": {
+      "numero": 9,
+      "nombre": "IRA, Asma y EPOC."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": null,
+    "n_items": 26
+  },
+  {
+    "id": "30-asma-ex-fisico",
+    "titulo": "SIMULACIÓN 3: EXAMEN FÍSICO ASMA",
+    "unidad_tematica": {
+      "numero": 9,
+      "nombre": "IRA, Asma y EPOC."
+    },
+    "tipo": "examen_fisico",
+    "motivo_consulta": null,
+    "n_items": 34
+  },
+  {
+    "id": "31-itu-embarazada-anamnesis",
+    "titulo": "SIMULACIÓN 1: ANAMNESIS ITU en EMBARAZADA",
+    "unidad_tematica": {
+      "numero": 10,
+      "nombre": "Atención a personas con síntomas urinarios."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": "disuria",
+    "n_items": 32
+  },
+  {
+    "id": "32-itu-mujer-diabetica-anamnesis",
+    "titulo": "SIMULACIÓN 2: ANAMNESIS ITU en MUJER DIABÉTICA",
+    "unidad_tematica": {
+      "numero": 10,
+      "nombre": "Atención a personas con síntomas urinarios."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": "disuria",
+    "n_items": 35
+  },
+  {
+    "id": "33-itu-mujer-diabetica-ex-fisico",
+    "titulo": "SIMULACIÓN 2: EXAMEN FÍSICO ITU en MUJER DIABÉTICA",
+    "unidad_tematica": {
+      "numero": 10,
+      "nombre": "Atención a personas con síntomas urinarios."
+    },
+    "tipo": "examen_fisico",
+    "motivo_consulta": "disuria",
+    "n_items": 34
+  },
+  {
+    "id": "34-hpb-anamnesis",
+    "titulo": "SIMULACIÓN 3: ANAMNESIS HIPERTROFIA PROSTÁTICA BENIGNA",
+    "unidad_tematica": {
+      "numero": 10,
+      "nombre": "Atención a personas con síntomas urinarios."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": "dificultad para orinar",
+    "n_items": 33
+  },
+  {
+    "id": "35-hpb-ex-fisico",
+    "titulo": "SIMULACIÓN 3: EXAMEN FÍSICO HIPERTROFIA PROSTÁTICA BENIGNA",
+    "unidad_tematica": {
+      "numero": 10,
+      "nombre": "Atención a personas con síntomas urinarios."
+    },
+    "tipo": "examen_fisico",
+    "motivo_consulta": "dificultad para orinar",
+    "n_items": 33
+  },
+  {
+    "id": "36-colico-nefritico-anamnesis",
+    "titulo": "SIMULACIÓN 4: ANAMNESIS CÓLICO NEFRÍTICO",
+    "unidad_tematica": {
+      "numero": 10,
+      "nombre": "Atención a personas con síntomas urinarios."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": "dolor en fosa lumbar",
+    "n_items": 32
+  },
+  {
+    "id": "37-colico-nefritico-ex-fisico",
+    "titulo": "SIMULACIÓN 4: EXAMEN FÍSICO CÓLICO NEFRÍTICO",
+    "unidad_tematica": {
+      "numero": 10,
+      "nombre": "Atención a personas con síntomas urinarios."
+    },
+    "tipo": "examen_fisico",
+    "motivo_consulta": "dolor en fosa lumbar",
+    "n_items": 32
+  }
+]

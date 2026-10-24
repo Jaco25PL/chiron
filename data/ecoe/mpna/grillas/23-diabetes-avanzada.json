@@ -1,0 +1,97 @@
+{
+  "id": "23-diabetes-avanzada",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 7,
+    "nombre": "Atención a personas con hipertensión arterial, diabetes mellitus 2 y/o tabaquismo."
+  },
+  "titulo": "SIMULACIÓN 4: DIABETES AVANZADA",
+  "tipo": "anamnesis",
+  "motivo_consulta": "frialdad",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Pregunta por la Ficha Patronímica",
+        "Pregunta el Motivo de Consulta"
+      ]
+    },
+    {
+      "nombre": "Enfermedad actual",
+      "items": [
+        "Frialdad: Aparición, circunstancias, evolución",
+        "Parestesias o distesias en MMII",
+        "Disminución de sensibilidad en MMII",
+        "Lesiones o quemaduras no dolorosas en pies"
+      ]
+    },
+    {
+      "nombre": "Sindrome diabético precoz",
+      "items": [
+        "Orina más cantidad de lo habitual?",
+        "Tiene más sed de lo habitual?",
+        "Se alimenta más que antes?",
+        "Nota que adelgazó sin causa aparente?"
+      ]
+    },
+    {
+      "nombre": "Sobre su diabetes",
+      "items": [
+        "Desde cuándo",
+        "Cómo se la diagnosticaron",
+        "Cifras máximas y habituales de glicemia",
+        "Tratamiento indicado y cumplimiento de mismo",
+        "Si requirió internación por su diabetes"
+      ]
+    },
+    {
+      "nombre": "Repercusiones de su diabetes",
+      "items": [
+        "Pérdida de la visión progresiva",
+        "Amaurosis Fugaz",
+        "Disminución de fuerzas de un hemicuerpo",
+        "Dolor Precordial",
+        "Disnea: DD – DPN - DE",
+        "Orinas espumosas y/o isostenuria",
+        "Claudicación intermitente dolorosa"
+      ]
+    },
+    {
+      "nombre": "Otros FRCV",
+      "items": [
+        "Actividad física/sedentarismo",
+        "Hábitos de alimentación",
+        "Peso y talla para cálculo de IMC",
+        "Tabaquismo",
+        "Dislipemia o problemas con el colesterol",
+        "Hipertensión Arterial",
+        "AF de cardiopatía isquémica precoz"
+      ]
+    },
+    {
+      "nombre": "Antecedentes Familiares",
+      "items": [
+        "Pregunta AF pertinentes?"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      29
+    ]
+  }
+}

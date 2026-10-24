@@ -1,0 +1,73 @@
+{
+  "id": "02-disnea",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 3,
+    "nombre": "Anamnesis y examen físico cardiovascular. Lectura básica del electrocardiograma."
+  },
+  "titulo": "SIMULACIÓN 1: DISNEA",
+  "tipo": "anamnesis",
+  "motivo_consulta": "falta de aire",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Realiza ficha patronímica",
+        "Pregunta el Motivo de Consulta (falta de aire)"
+      ]
+    },
+    {
+      "nombre": "Enfermedad Actual",
+      "items": [
+        "Pregunta inicio y circunstancia de aparición de la disnea",
+        "Pregunta las características de la disnea (disnea de esfuerzo)",
+        "Hace preguntas para clasificar el grado de disnea",
+        "Pregunta disnea de decúbito",
+        "Pregunta disnea de reposo",
+        "Pregunta crisis de disnea paroxística nocturna"
+      ]
+    },
+    {
+      "nombre": "Antecedentes de la Enfermedad Actual",
+      "items": [
+        "Pregunta evolución de la disnea de esfuerzo",
+        "Pregunta por episodios de dolor torácico",
+        "Pregunta por palpitaciones",
+        "Pregunta por episodios de Síncope",
+        "Pregunta por edemas de MMII",
+        "Indaga los tránsitos, en especial tránsito urinario por nicturia"
+      ]
+    },
+    {
+      "nombre": "Antecedentes Personales: factores de riesgo CV",
+      "items": [
+        "Tabaquismo",
+        "Profundiza en conocer aspectos de su Tabaquismo",
+        "Sedentarismo",
+        "Diabetes mellitus",
+        "Hipertensión arterial",
+        "Profundiza en conocer aspectos de su HTA",
+        "Dislipemia"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Rendimiento global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      2
+    ]
+  }
+}

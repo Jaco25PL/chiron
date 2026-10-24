@@ -1,0 +1,85 @@
+{
+  "id": "17-cefalea-sim4-ex-fisico",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 6,
+    "nombre": "Atención a personas con Dolor y atención a personas con Cefaleas."
+  },
+  "titulo": "SIMULACIÓN 4: EXAMEN FÍSICO CEFALEA",
+  "tipo": "examen_fisico",
+  "motivo_consulta": "cefalea",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Explica al paciente que realizará el examen físico"
+      ]
+    },
+    {
+      "nombre": "EX. FÍSICO GENERAL",
+      "items": [
+        "Da cuenta del psiquismo y estado de conciencia",
+        "PyM: coloración, hidratación y perfusión",
+        "Menciona importancia de la toma de PA"
+      ]
+    },
+    {
+      "nombre": "EX. FÍSICO DE PC",
+      "items": [
+        "PC I: Menciona como podría explorarlo",
+        "PC II: AV comenta cartilla de optotipos Snellen",
+        "PC II: Óptico: campos visules",
+        "PC III Motor ocular común: movimientos extrínsecos: recto superior, inferior e interno. Oblicuo inferior.",
+        "PC IV Patético: movimientos extrínsecos: oblicuo superior",
+        "PC VI motor ocular externo: movimientos extrínsecos: recto externo",
+        "PC V: Trigémino: movimiento de cierre maxilar y lateral de la mandíbula.",
+        "PC V: Trigémino: sensibilidad en sus tres ramas.",
+        "PC VII: Facial: movimientos de expresión, cierre ocular y de la boca",
+        "PC X vago: Motor: paladar faringe y laringe",
+        "PC XI: Esternocleidomastoideo y trapecio",
+        "PC XII hipogloso: lengua"
+      ]
+    },
+    {
+      "nombre": "PLANTEO DIAGNÓSTICO",
+      "items": [
+        "Cefalea tensional episódica infrecuente"
+      ]
+    },
+    {
+      "nombre": "TRATAMIENTO",
+      "items": [
+        "Aine cualquiera en dosis adecuada",
+        "Ejercicio aeróbico",
+        "Técnicas de relajación"
+      ]
+    },
+    {
+      "nombre": "SEGUIMIENTO",
+      "items": [
+        "Menciona cuando lo quiere volver a ver",
+        "Menciona la posibilidad de confeccionar el diario de la cefalea",
+        "Explica elementos de alarma"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      23
+    ]
+  }
+}

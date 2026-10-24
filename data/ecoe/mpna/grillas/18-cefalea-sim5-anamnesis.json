@@ -1,0 +1,87 @@
+{
+  "id": "18-cefalea-sim5-anamnesis",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 6,
+    "nombre": "Atención a personas con Dolor y atención a personas con Cefaleas."
+  },
+  "titulo": "SIMULACIÓN 5: ANAMNESIS CEFALEA",
+  "tipo": "anamnesis",
+  "motivo_consulta": "cefalea",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Pregunta por la Ficha patronímica (nombre, edad, domicilio, procedencia, nivel de instrucción, ocupación, estado civil, con quien vive, prestador de salud, médico de referencia)",
+        "Pregunta el Motivo de Consulta"
+      ]
+    },
+    {
+      "nombre": "ABORDAJE DEL DOLOR",
+      "items": [
+        "Aparición del dolor, circunstancias",
+        "Tipo de dolor (plantea las diferentes variantes)",
+        "Intensidad (utiliza EVA)",
+        "Localización (plantea opciones de localizción)",
+        "Evolución",
+        "Respuesta a analgésicos comunes",
+        "Fonofobia",
+        "Fotofobia",
+        "Náuseas",
+        "Vómitos",
+        "Consulta sobre posibles AURAS (visuales, auditivas, vegetativas)"
+      ]
+    },
+    {
+      "nombre": "Causas Secundarias / Elementos de alarma",
+      "items": [
+        "TEC previo",
+        "Inmunodepresión",
+        "Fiebre",
+        "Vómitos en chorro",
+        "Síntomas focales",
+        "Malestar general, síntomas sistémicos"
+      ]
+    },
+    {
+      "nombre": "Antecedentes de enfermedad actual",
+      "items": [
+        "Elementos que aumentan el dolor",
+        "Episodios similares previos",
+        "Elementos que mejoran el dolor",
+        "Antecedentes familiares"
+      ]
+    },
+    {
+      "nombre": "PLANTEO DIAGNÓSTICO",
+      "items": [
+        "Migraña con aura"
+      ]
+    },
+    {
+      "nombre": "PARACLÍNICA",
+      "items": [
+        "Ninguna"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      24
+    ]
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "id": "21-hta-ex-fisico",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 7,
+    "nombre": "Atención a personas con hipertensión arterial, diabetes mellitus 2 y/o tabaquismo."
+  },
+  "titulo": "SIMULACIÓN 2: EXAMEN FÍSICO HIPERTENSIÓN ARTERIAL",
+  "tipo": "examen_fisico",
+  "motivo_consulta": "hipertensión arterial",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Le explica al paciente lo que va hacer"
+      ]
+    },
+    {
+      "nombre": "TOMA DE PRESIÓN ARTERIAL - Describe condiciones basales ideales",
+      "items": [
+        "Reposo temporal previo necesario",
+        "No haber fumado recientemente",
+        "No mate, té o café recientemente",
+        "Posición sentada, pies descruzados",
+        "Coloca en posición el miembro superior flexionado a la altura corazón"
+      ]
+    },
+    {
+      "nombre": "TOMA DE PRESIÓN ARTERIAL - Realiza el procedimiento comentandolo",
+      "items": [
+        "Explica las características del manguito (1 vuelta y ½ al brazo)",
+        "Explica las características del manguito (cubre 2/3 longitudinal)",
+        "Topografía y busca el pulso arteria humeral",
+        "Coloca la campana fuera del manguito",
+        "Insufla hasta que pierde el pulso radial",
+        "Vuelve a insuflar hasta el registro del pulso radial o hasta 20 mmHg por encima de la PA habitual",
+        "Des-insufla lentamente registrando PAS y PAD"
+      ]
+    },
+    {
+      "nombre": "CAMBIOS NO FARMACOLÓGICOS",
+      "items": [
+        "Explica que es una enfermedad silente y la importancia de tener controladas las cifras",
+        "Recomendaciones sobre dieta hiposódica",
+        "Medidas de actividad físicas en su jornada diaria",
+        "Recomendación de actividades aeróbicas semanales",
+        "Recomendación de peso saludable",
+        "Consejo breve para la cesación de tabaquismo"
+      ]
+    },
+    {
+      "nombre": "SEGUIMIENTO",
+      "items": [
+        "Solicita realice registro de PA ambulatorio",
+        "Cita máximo en 1 mes para ver registros y primeros cambios conductuales"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      27
+    ]
+  }
+}

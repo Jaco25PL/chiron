@@ -1,0 +1,107 @@
+{
+  "id": "37-colico-nefritico-ex-fisico",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 10,
+    "nombre": "Atención a personas con síntomas urinarios."
+  },
+  "titulo": "SIMULACIÓN 4: EXAMEN FÍSICO CÓLICO NEFRÍTICO",
+  "tipo": "examen_fisico",
+  "motivo_consulta": "dolor en fosa lumbar",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Pide permiso y explica que realizará el EX. F"
+      ]
+    },
+    {
+      "nombre": "Examen Físico General (resumido)",
+      "items": [
+        "Impresión del estado general",
+        "Estado hidratación (mucosas y pliegue cutáneo)",
+        "PA, FC cardíaca y relleno capilar"
+      ]
+    },
+    {
+      "nombre": "Ex. físico urinario",
+      "items": [
+        "Posiciona al paciente en decúbito dorsal",
+        "Inspecciona abdomen",
+        "Palpación superficial de abdomen"
+      ]
+    },
+    {
+      "nombre": "Puntos Ureterales",
+      "items": [
+        "Superior (borde rect. ant. y línea umbilical)",
+        "Medio (borde rect. ant. y línea esp. iliaca anterior)",
+        "Inferior (menciona se realizaría en el Tacto rectal)",
+        "Palpación de hipogastrio (dolor/globo vesical)",
+        "Maniobra de Guyón (peloteo renal)"
+      ]
+    },
+    {
+      "nombre": "Puntos Renales",
+      "items": [
+        "Posiciona al paciente (sentado)",
+        "Punto de Guyón (costovertebral)",
+        "Punto de Surraco (costomuscular)",
+        "Maniobra de Giordano (percusión)"
+      ]
+    },
+    {
+      "nombre": "Solicitud de PARACLÍNICA",
+      "items": [
+        "Plantea Tirilla reactiva o ex. orina",
+        "Creatininemia para función renal",
+        "Solicita ECO de Ap. Urinario",
+        "Solicitud de radiografía de abdomen"
+      ]
+    },
+    {
+      "nombre": "Planteo Diagnóstico",
+      "items": [
+        "Cólico Nefrítico"
+      ]
+    },
+    {
+      "nombre": "Conducta terapéutica en agudo",
+      "items": [
+        "Ofrece analgesia IV",
+        "AINE y/o Opiáceos y/o antiheméticos",
+        "Dosis y frecuencia adecuada"
+      ]
+    },
+    {
+      "nombre": "Conducta terapéutica al alta",
+      "items": [
+        "Medidas higiénica y dietética",
+        "Plantea qué hacer con la hidratación",
+        "Indica analgesia",
+        "Vía, posología y duración",
+        "Explica signos de alarma y reconsulta urinarios",
+        "Acuerda control evolutivo"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      44
+    ]
+  }
+}

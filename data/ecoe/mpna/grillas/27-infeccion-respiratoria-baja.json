@@ -1,0 +1,94 @@
+{
+  "id": "27-infeccion-respiratoria-baja",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 9,
+    "nombre": "IRA, Asma y EPOC."
+  },
+  "titulo": "SIMULACIÓN 2: INFECCIÓN RESPIRATORIA BAJA",
+  "tipo": "anamnesis",
+  "motivo_consulta": "tos",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Pregunta Ficha Patronímica completa?"
+      ]
+    },
+    {
+      "nombre": "Motivo de Consulta y la Enfermedad Actual",
+      "items": [
+        "Aparición de la tos",
+        "Circunstancia apareció la tos",
+        "Tos: Seca o productiva?",
+        "Tos: En accesos?",
+        "Tos: Disneizante y/o emetizante?",
+        "Tos: Cianozante y/o Sincopante?",
+        "Evolución de la tos durante la enf. actual",
+        "Expectoración: “coca sabe oler sangre”",
+        "Ruidos respiratorios (gemidos, sibilancias)",
+        "Disnea respiratoria",
+        "Circunstancia de aparición de la disnea",
+        "Interroga evolución de la disnea",
+        "Interroga sobre Disnea de Esfuerzo, DD y DPN"
+      ]
+    },
+    {
+      "nombre": "Pregunta síntomas acompañantes",
+      "items": [
+        "Rinorrea y sus características. Congestión nasal",
+        "Otros síntomas: otalgia, otorrea, odinofagia, disfonía",
+        "Otros síntomas: Anosmia/hiposmia",
+        "Otros síntomas: Ageusia/disgeusia",
+        "Dolor torácico tipo puntada de lado",
+        "Fiebre, características y evolución",
+        "Astenia, Adinamia",
+        "Adelgazamiento y Sudoración nocturna"
+      ]
+    },
+    {
+      "nombre": "Antecedente Enfermedad Actual",
+      "items": [
+        "Consulta antecedentes de IRAB anteriores"
+      ]
+    },
+    {
+      "nombre": "Antecedentes personales",
+      "items": [
+        "Tabaquismo y sus características",
+        "Repercusión del tabaquismo (Bronquitis Crónica)",
+        "Pregunta por EPOC y realización de espirometría",
+        "Asma / Rinitis alérgica",
+        "Tuberculosis",
+        "HTA, DM 2"
+      ]
+    },
+    {
+      "nombre": "Antecedentes inmunitarios",
+      "items": [
+        "Vacuna antigripal y para Sars Cov 2",
+        "Vacuna antineumocócica",
+        "AF: familiares de primera línea con enf. respiratorias."
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      33
+    ]
+  }
+}

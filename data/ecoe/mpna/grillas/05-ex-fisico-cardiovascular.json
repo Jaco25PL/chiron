@@ -1,0 +1,90 @@
+{
+  "id": "05-ex-fisico-cardiovascular",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 3,
+    "nombre": "Anamnesis y examen físico cardiovascular. Lectura básica del electrocardiograma."
+  },
+  "titulo": "GRILLA EX. FÍSICO CARDIOVASCULAR",
+  "tipo": "examen_fisico",
+  "motivo_consulta": null,
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Explica al paciente lo que se va a realizar"
+      ]
+    },
+    {
+      "nombre": "Inspección",
+      "items": [
+        "Acuesta al paciente (decúbito dorsal, cabeza a la izq y piernas a la derecha)",
+        "Realiza examen con tórax descubierto (vale pedir que levante la remera)",
+        "Realiza inspección desde la pelvis del paciente (o hace el gesto)",
+        "Describe el tórax (debe mencionar lo que busca cuando observa el tórax)",
+        "Búsqueda de latido en punta cardíaca (pensando en HVI)"
+      ]
+    },
+    {
+      "nombre": "Palpación",
+      "items": [
+        "Topografía el ángulo de Louis y lo utiliza como referencia.",
+        "Topografía y busca frémito en foco mitral (LMC y 5to espacio intercostal izq)",
+        "Topo. y busca frémito en foco aórtico (2do espacio paraesternal derecho)",
+        "Topo. y busca frémito en foco pulmonar (2do espacio paraesternal izquierdo)",
+        "Topo. y busca frémito en foco tricuspídeo (sobre base de apéndice xifoides)",
+        "Busca choque de punta (LMC y 5to espacio intercostal a izq, descenso o lateralización)"
+      ]
+    },
+    {
+      "nombre": "Auscultación",
+      "items": [
+        "Menciona la topografía y ausculta foco aórtico",
+        "Menciona la topografía y ausculta foco pulmonar",
+        "Menciona la topografía y ausculta foco tricuspídeo",
+        "Menciona la topografía y ausculta foco mitral",
+        "Toma pulso radial mientras ausculta (lo hace o menciona)"
+      ]
+    },
+    {
+      "nombre": "Solicite Ritmo y Frecuencia Cardíaca",
+      "items": [
+        "Identifica Ritmo (identifica ritmo regular y lo menciona al docente)",
+        "Toma frecuencia (por los menos en 30 seg) y se la menciona a docente"
+      ]
+    },
+    {
+      "nombre": "Examen venas yugulares",
+      "items": [
+        "Observa vena yugular interna derecha con paciente a 45°",
+        "Pulso venoso: Menciona que se ve pero no se palpa y es negativo al p. radial",
+        "Ingurgitación Yugular: Menciona la columna venosa supera el plano esternal",
+        "Reflujo Hepato-Yugular: Aum. columna venosa con compresión hepática."
+      ]
+    },
+    {
+      "nombre": "Examen de pulsos arteriales (frecuencia, regularidad, igualdad, tensión)",
+      "items": [
+        "Carotídeos",
+        "Radiales",
+        "Femorales",
+        "Popliteos",
+        "Tibiales posteriores",
+        "Pedios"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      5
+    ]
+  }
+}

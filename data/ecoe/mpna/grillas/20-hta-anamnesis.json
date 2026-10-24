@@ -1,0 +1,84 @@
+{
+  "id": "20-hta-anamnesis",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 7,
+    "nombre": "Atención a personas con hipertensión arterial, diabetes mellitus 2 y/o tabaquismo."
+  },
+  "titulo": "SIMULACIÓN 1: ANAMNESIS HIPERTENSIÓN ARTERIAL",
+  "tipo": "anamnesis",
+  "motivo_consulta": "hipertensión arterial",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Pregunta por la Ficha patronímica",
+        "Pregunta el Motivo de Consulta"
+      ]
+    },
+    {
+      "nombre": "HIPERTENSIÓN ENFERMEDAD",
+      "items": [
+        "Cuando se realizó diagnóstico",
+        "Circunstancia de diagnóstico y cifra inicial",
+        "Cifras máximas",
+        "Cifras habituales",
+        "Explora tto higiénico dietético y su cumplimiento",
+        "Tratamiento medicamentoso y su cumplimiento",
+        "Descompensaciones/internaciones/emergencia"
+      ]
+    },
+    {
+      "nombre": "REPERCUSIONES DE ÓRGANOS BLANCO",
+      "items": [
+        "Pérdida de fuerzas y/o sensibilidad de miembros",
+        "Disminución de agudeza visual brusca",
+        "Disnea de esfuerzo",
+        "Disnea de decúbito",
+        "Disnea paroxística nocturna",
+        "Angor",
+        "Edemas de MMII",
+        "Alteraciones en el tránsito urinario",
+        "Claudicación intermitente dolorosa"
+      ]
+    },
+    {
+      "nombre": "OTROS FACTORES DE RIESGO CV",
+      "items": [
+        "Actividad física/sedentarismo",
+        "Hábitos de alimentación",
+        "Peso y talla para cálculo de IMC",
+        "Tabaquismo: ¿desde cuándo?",
+        "Tabaquismo: ¿cuanta cantidad?",
+        "Tabaquismo: Intentos por dejar de fumar",
+        "Tabaquismo: Motivación para dejar de fumar",
+        "AF de cardiopatía isquémica precoz"
+      ]
+    },
+    {
+      "nombre": "RESPUESTA A ESTADO MOTIVACIONAL",
+      "items": [
+        "Se encuentra en precontemplación"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      26
+    ]
+  }
+}

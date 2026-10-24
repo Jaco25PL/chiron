@@ -1,0 +1,84 @@
+{
+  "id": "30-asma-ex-fisico",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 9,
+    "nombre": "IRA, Asma y EPOC."
+  },
+  "titulo": "SIMULACIÓN 3: EXAMEN FÍSICO ASMA",
+  "tipo": "examen_fisico",
+  "motivo_consulta": null,
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Explica lo que va a realizar"
+      ]
+    },
+    {
+      "nombre": "Examen Físico Pleuropulmonar",
+      "items": [
+        "Inspección: menciona cómo se realiza",
+        "Cuenta frecuencia respiratoria",
+        "Estática: busca lesiones de piel, tumoraciones, etc.",
+        "Menciona la forma del tórax y sus diámetros",
+        "Plantea lo esperable para cada caso",
+        "Dinámica: FR, busca tirajes (explica)",
+        "Palpación: explica en qué consiste",
+        "Pared del tórax: piel, celular subcutáneo, músculos",
+        "Expansibilidad: Realiza la maniobra",
+        "Expansibilidad; Plantea lo esperable para cada caso",
+        "Elasticidad: Realiza la maniobra",
+        "Elasticidad: Plantea lo esperable para cada caso",
+        "Vibraciones vocales: todas las caras / bilateralmente",
+        "Vibraciones vocales: Plantea lo esperable a cada caso",
+        "Percusión: en las 3 caras de ambos hemitórax",
+        "Percusión: Plantea lo esperable para cada caso",
+        "Auscultación: en las 3 caras de ambos hemitórax",
+        "Ausculta sectores altos y bajos en cada cara",
+        "Ausculta bilateralmente y compara",
+        "Auscultación: Plantea lo esperable para cada caso"
+      ]
+    },
+    {
+      "nombre": "Tratamiento Farmacológico",
+      "items": [
+        "Explica que debe realizar cambio en el tratamiento",
+        "Indica corticoides inhalados a dosis baja",
+        "Explica tto y su función (de control y de rescate)",
+        "Aumenta dosis de salbutamol para control síntomas",
+        "Cita para nueva consulta en un mes"
+      ]
+    },
+    {
+      "nombre": "Educación",
+      "items": [
+        "Explica sobre la enfermedad",
+        "Ayuda a reconocer desencadenantes",
+        "Aconseja evitar desencadenantes",
+        "Asesora realizar higiene bucal luego del tto",
+        "Recomienda uso de inhalocámara",
+        "Recomienda automonitoreo (pico flujo)"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      36
+    ]
+  }
+}

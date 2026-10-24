@@ -1,0 +1,81 @@
+{
+  "id": "25-infeccion-respiratoria-alta",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 9,
+    "nombre": "IRA, Asma y EPOC."
+  },
+  "titulo": "SIMULACIÓN 1: INFECCIÓN RESPIRATORIA ALTA",
+  "tipo": "anamnesis",
+  "motivo_consulta": "odinofagia",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Pregunta por la Ficha patronímica completa",
+        "Pregunta el Motivo de Consulta"
+      ]
+    },
+    {
+      "nombre": "Enfermedad actual: ODINOFAGIA",
+      "items": [
+        "Aparición y circunstancia de aparición",
+        "Tipo de dolor, lo intenta caracterizar",
+        "Intensidad de dolor a través de EVA",
+        "Localización",
+        "Irradiación",
+        "Evolución de la odinofagia durante la enf. actual",
+        "Fenómenos acompañantes (fiebre sobre todo)"
+      ]
+    },
+    {
+      "nombre": "Pregunta por otros síntomas respiratorios",
+      "items": [
+        "Cefalea",
+        "Rinitis y sus Características",
+        "Estornudos",
+        "Anosmia/hiposmia",
+        "Ageusia/disgeusia",
+        "Otalgia",
+        "Otorrea",
+        "Disfonías",
+        "Sibilancias o RAD",
+        "Disnea",
+        "Expectoración y sus características",
+        "Dolor torácico y sus características",
+        "Malestar general / decaimiento",
+        "Artromialgias",
+        "Pregunta Antecedentes Personales: tabaquismo, asma, Alergias etc.",
+        "Pregunta Antecedentes Ambientales de Inf. Resp."
+      ]
+    },
+    {
+      "nombre": "Planteo Diagnóstico",
+      "items": [
+        "Faringitis viral, IRA"
+      ]
+    },
+    {
+      "nombre": "Conducta",
+      "items": [
+        "Reposo relativo para evitar transmisión viral",
+        "Medidas dietéticas: Hidratación, alimentación fraccionada, blanda, etc",
+        "AINE: genérico, dosis, vía, posología, duración",
+        "Explica signos y síntomas de alarma"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      31
+    ]
+  }
+}

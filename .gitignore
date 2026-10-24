@@ -1,0 +1,10 @@
+.env
+.chroma/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Material crudo: solo se versiona lo procesado (clean/, grillas/, chunks.jsonl, transcripciones)
+data/ecoe/*/raw/
+data/ecoe/audios/*.ogg

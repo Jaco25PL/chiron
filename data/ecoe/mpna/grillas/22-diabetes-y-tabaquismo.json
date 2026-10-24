@@ -1,0 +1,85 @@
+{
+  "id": "22-diabetes-y-tabaquismo",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 7,
+    "nombre": "Atención a personas con hipertensión arterial, diabetes mellitus 2 y/o tabaquismo."
+  },
+  "titulo": "SIMULACIÓN 3: DIABETES Y TABAQUISMO",
+  "tipo": "anamnesis",
+  "motivo_consulta": null,
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Pregunta por la Ficha patronímica",
+        "Pregunta el Motivo de Consulta"
+      ]
+    },
+    {
+      "nombre": "Preguntas para orientarse a DIABETES",
+      "items": [
+        "Orina más cantidad de lo habitual?",
+        "Tiene más sed de lo habitual?",
+        "Se alimenta más que antes?",
+        "Nota que adelgazó sin causa aparente?",
+        "Alteración de cifras de glicemia",
+        "Peso al nacer macrosómico o mayor a 4kg",
+        "Antecedentes familiares de DM2"
+      ]
+    },
+    {
+      "nombre": "Respuesta a preguntas o aclaraciones",
+      "items": [
+        "No se puede confirmar diabetes con 1 sólo valor de glicemia basal",
+        "Los hemoglucotest no sirven para diagnóstico",
+        "Se debe realizar nueva glicemia basal para evaluar una 2da cifra mayor a 1.26",
+        "Como segunda opción plantea realizar PTOG",
+        "Explica diagnóstico con resultado mayor a 200 luego de las 2hs",
+        "O si en la GB vuelve a tener un valor ayor a 1.26",
+        "Explica lo que es la glicemia de ayuno alterada",
+        "Explica que es una PTOG alterada"
+      ]
+    },
+    {
+      "nombre": "OTROS FACTORES DE RIESGO CV",
+      "items": [
+        "Actividad física/sedentarismo",
+        "Hábitos de alimentación",
+        "Peso y talla para cálculo de IMC",
+        "Tabaquismo: ¿desde cuándo?",
+        "Tabaquismo: ¿cuanta cantidad?",
+        "Tab: características de la conducta de fumar",
+        "Tabaquismo: Intentos por dejar de fumar",
+        "Tabaquismo: Motivación para dejar de fumar",
+        "Dislipemia o problemas con el colesterol",
+        "AF de cardiopatía isquémica precoz"
+      ]
+    },
+    {
+      "nombre": "RESPUESTA A ESTADO MOTIVACIONAL",
+      "items": [
+        "Se encuentra en contemplación"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      28
+    ]
+  }
+}

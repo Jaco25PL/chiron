@@ -1,0 +1,95 @@
+{
+  "id": "24-pie-diabetico",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 7,
+    "nombre": "Atención a personas con hipertensión arterial, diabetes mellitus 2 y/o tabaquismo."
+  },
+  "titulo": "SIMULACIÓN 5: EXAMEN DE PIE DIABÉTICO",
+  "tipo": "examen_fisico",
+  "motivo_consulta": null,
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Le explica lo que va a hacer",
+        "Le solicita a el pte se coloque en decúbito dorsal"
+      ]
+    },
+    {
+      "nombre": "Inspección Estática",
+      "items": [
+        "Deformaciones",
+        "Amputaciones previas",
+        "Lesiones de mal perforante plantar",
+        "Lesiones vinculadas al calzado",
+        "Coloración",
+        "Temperatura",
+        "Hiperqueratosis",
+        "Observa si presenta lesiones interdigitales",
+        "Valora el estado de las uñas"
+      ]
+    },
+    {
+      "nombre": "Inspección Dinámica",
+      "items": [
+        "Solicita Flexo/Extensión",
+        "Solicita rotación",
+        "Solicita movilidad de dedos"
+      ]
+    },
+    {
+      "nombre": "Palpación",
+      "items": [
+        "Valora temperatura de ambos pies (con el dorso de la mano)",
+        "Valora estado de hidratación o hace referencia a la sequedad de la piel",
+        "Busca pulso tibial posterior",
+        "Busca pulso pedio"
+      ]
+    },
+    {
+      "nombre": "Reflejo",
+      "items": [
+        "Busca el reflejo aquiliano"
+      ]
+    },
+    {
+      "nombre": "Sensibilidad",
+      "items": [
+        "Menciona sensibilidad térmica",
+        "Busca sensibilidad fina",
+        "Menciona y describe uso del monofilamento",
+        "Menciona y describe uso del diapasón"
+      ]
+    },
+    {
+      "nombre": "Indicación de tratamiento",
+      "items": [
+        "Metformina 850 mg día con almuerzo",
+        "Ef. Adv.: Tolerancia gastrointestinal",
+        "Pauta de alimentación de diabético",
+        "Pauta de actividad física",
+        "Medidas de prevención de lesiones en pies"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      30
+    ]
+  }
+}

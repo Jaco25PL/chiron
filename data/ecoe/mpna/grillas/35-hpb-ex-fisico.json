@@ -1,0 +1,108 @@
+{
+  "id": "35-hpb-ex-fisico",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 10,
+    "nombre": "Atención a personas con síntomas urinarios."
+  },
+  "titulo": "SIMULACIÓN 3: EXAMEN FÍSICO HIPERTROFIA PROSTÁTICA BENIGNA",
+  "tipo": "examen_fisico",
+  "motivo_consulta": "dificultad para orinar",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Pide permiso y explica que realizará el EX. F"
+      ]
+    },
+    {
+      "nombre": "Examen Físico General (resumido)",
+      "items": [
+        "Impresión del estado general",
+        "Valorar estado nutricional, adelgazado??",
+        "Estado hidratación (mucosas y pliegue cutáneo)",
+        "PA, FC cardíaca y relleno capilar"
+      ]
+    },
+    {
+      "nombre": "Ex. físico urinario",
+      "items": [
+        "Posiciona al paciente en decúbito dorsal",
+        "Inspecciona abdomen",
+        "Palpación superficial de abdomen"
+      ]
+    },
+    {
+      "nombre": "Puntos Ureterales",
+      "items": [
+        "Superior (borde rect. ant. y línea umbilical)",
+        "Medio (borde rect. ant. y línea esp. iliaca anterior)",
+        "Inferior (menciona se realizaría el Tacto rectal)",
+        "Palpación de hipogastrio (dolor/globo vesical)",
+        "Maniobra de Guyón (peloteo renal)"
+      ]
+    },
+    {
+      "nombre": "Puntos Renales",
+      "items": [
+        "Posiciona al paciente (sentado)",
+        "Punto de Guyón (costovertebral)",
+        "Punto de Surraco (costomuscular)",
+        "Maniobra de Giordano (percusión)"
+      ]
+    },
+    {
+      "nombre": "Tacto rectal",
+      "items": [
+        "Comenta la maniobra",
+        "Comenta lo que esperaría palpar"
+      ]
+    },
+    {
+      "nombre": "Solicitud de PARACLÍNICA",
+      "items": [
+        "Plantea Tirilla reactiva o ex. orina",
+        "Creatininemia para función renal",
+        "Solicitud de PSA",
+        "Solicita ECO de Ap. Urinario",
+        "Aclara con medición de residuo post-miccional"
+      ]
+    },
+    {
+      "nombre": "Planteo Diagnóstico",
+      "items": [
+        "Hipertrofia Prostática Benigna",
+        "Diag. Dif: Alejado Patología Prostática Maligna"
+      ]
+    },
+    {
+      "nombre": "Conducta terapéutica",
+      "items": [
+        "Medidas higiénicas y dietéticas",
+        "Fármacos alfa bloqueantes",
+        "Vía, posología y duración",
+        "Explica signos de alarma y reconsulta urinarios",
+        "Acuerda control evolutivo"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      42
+    ]
+  }
+}

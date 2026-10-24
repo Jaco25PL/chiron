@@ -1,0 +1,105 @@
+{
+  "id": "33-itu-mujer-diabetica-ex-fisico",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 10,
+    "nombre": "Atención a personas con síntomas urinarios."
+  },
+  "titulo": "SIMULACIÓN 2: EXAMEN FÍSICO ITU en MUJER DIABÉTICA",
+  "tipo": "examen_fisico",
+  "motivo_consulta": "disuria",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Pide permiso y explica que realizará el EX. F"
+      ]
+    },
+    {
+      "nombre": "Examen Físico General (resumido)",
+      "items": [
+        "Impresión del estado general",
+        "Facies de dolor o no",
+        "Estado hidratación (mucosas y pliegue cutáneo)",
+        "PA, FC cardíaca y relleno capilar",
+        "Temperatura axilar"
+      ]
+    },
+    {
+      "nombre": "Ex. físico urinario",
+      "items": [
+        "Posiciona al paciente en decúbito dorsal",
+        "Inspecciona abdomen",
+        "Palpación superficial de abdomen"
+      ]
+    },
+    {
+      "nombre": "Puntos Ureterales",
+      "items": [
+        "Superior (borde rect. ant. y línea umbilical)",
+        "Medio (borde rect. ant. y línea esp. iliaca anterior)",
+        "Inferior (menciona que se realizaría por TV)",
+        "Palpación de hipogastrio (dolor/globo vesical)",
+        "Maniobra de Guyón (peloteo renal)"
+      ]
+    },
+    {
+      "nombre": "Puntos Renales",
+      "items": [
+        "Posiciona al paciente (sentado)",
+        "Punto de Guyón (costovertebral)",
+        "Punto de Surraco (costomuscular)",
+        "Maniobra de Giordano (percusión)"
+      ]
+    },
+    {
+      "nombre": "Solicitud de PARACLÍNICA",
+      "items": [
+        "Tirilla reactiva para hacer en el momento",
+        "Ex. de orina (no necesaria si está la tirilla)",
+        "Urocultivo (se puede indicar por PNA y DM2)",
+        "No es necesaria PC imagenológica"
+      ]
+    },
+    {
+      "nombre": "Planteo Diagnóstico",
+      "items": [
+        "Itu alta a modo de PNA en paciente con DM2",
+        "Diag. Dif: ITU baja + Cólico renal por litiasis"
+      ]
+    },
+    {
+      "nombre": "Conducta terapéutica",
+      "items": [
+        "Medidas higiénicas y dietéticas para ITU",
+        "Medidas higiénicas y dietéticas para DM2",
+        "Antibiótico empírico adecuado",
+        "Vía, posología y duración",
+        "Explica signos de alarma y reconsulta urinarios",
+        "Explica signos de alarma y reconsulta de DM2",
+        "Acuerda control evolutivo",
+        "Plantea posibilidad o no de URO de control"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      39,
+      40
+    ]
+  }
+}

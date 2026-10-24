@@ -1,0 +1,70 @@
+{
+  "id": "06-respiratorio-anamnesis-tos-ira",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 4,
+    "nombre": "Anamnesis y examen físico respiratorio."
+  },
+  "titulo": "SIMULACIÓN 1: ANAMNESIS TOS - IRA",
+  "tipo": "anamnesis",
+  "motivo_consulta": "tos",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Pregunta por la Ficha patronímica (nombre, edad, domicilio, procedencia, nivel de instrucción, ocupación, estado civil, con quien vive, prestador de salud, médico de referencia)",
+        "Pregunta el Motivo de Consulta"
+      ]
+    },
+    {
+      "nombre": "Enfermedad actual",
+      "items": [
+        "Pregunta cuándo apareció la tos",
+        "Pregunta en qué circunstancia apareció la tos",
+        "Características de la tos: Seca o productiva?",
+        "Características de la tos: En accesos?",
+        "Características de la tos: Disneizante emetizante?",
+        "Características de la tos: Cianosante o Sincopante?",
+        "Evolución de la tos durante la enf. actual"
+      ]
+    },
+    {
+      "nombre": "Pregunta por otros síntomas respiratorios",
+      "items": [
+        "Rinitis",
+        "Características de la rinorrea",
+        "Odinofagia",
+        "Otalgia",
+        "Otorrea",
+        "Disfonías",
+        "Sibilancias",
+        "Disnea",
+        "Expectoración y sus características",
+        "Dolor torácico y sus características",
+        "Fiebre, registro y evolución",
+        "Pregunta de forma sistematizada: síntomas respiratorios altos primero y síntomas respiratorios bajos después.",
+        "Pregunta Antecedentes Personales: tabaquismo, asma, etc.",
+        "Pregunta Antecedentes Ambientales de Inf. Resp."
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      6
+    ]
+  }
+}

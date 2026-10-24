@@ -1,0 +1,80 @@
+{
+  "id": "07-respiratorio-anamnesis-disnea",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 4,
+    "nombre": "Anamnesis y examen físico respiratorio."
+  },
+  "titulo": "SIMULACIÓN 2: ANAMNESIS DISNEA",
+  "tipo": "anamnesis",
+  "motivo_consulta": "disnea",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Pregunta Ficha Patronímica completa?"
+      ]
+    },
+    {
+      "nombre": "Motivo de Consulta y la Enfermedad Actual",
+      "items": [
+        "Interroga las características de la disnea respiratoria",
+        "Interroga aparición de la disnea",
+        "Interroga evolución de la disnea",
+        "Interroga sobre Disnea de Esfuerzo, DD y DPN"
+      ]
+    },
+    {
+      "nombre": "Pregunta síntomas acompañantes",
+      "items": [
+        "Rinorrea y sus características. Congestión nasal",
+        "Otros síntomas: otalgia, otorrea, odinofagia, disfonía",
+        "Pregunta sobre la Tos y su aparición",
+        "Características de la tos y su evolución",
+        "Pregunta sobre la expectoración",
+        "Características de la expectoración y su evolución",
+        "Presencia de sangre en la expectoración",
+        "Dolor torácico",
+        "Fiebre, si se la tomó"
+      ]
+    },
+    {
+      "nombre": "Antecedentes personales",
+      "items": [
+        "Tabaquismo y sus características",
+        "Repercusión del tabaquismo (Bronquitis Crónica)",
+        "pregunta por EPOC y realización de espirometría",
+        "Asma",
+        "Tuberculosis",
+        "HTA, DM 2"
+      ]
+    },
+    {
+      "nombre": "Antecedentes inmunitarios",
+      "items": [
+        "Vacuna antigripal, antineumocóccica y para SarsCov2",
+        "Antecedentes familiares: en especial familiares de primera línea con enfermedades respiratorias.",
+        "Antecedentes socioeconómicos: ocupación laboral, características de la vivienda y AA"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      7
+    ]
+  }
+}

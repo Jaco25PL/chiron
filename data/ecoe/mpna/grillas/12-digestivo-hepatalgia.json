@@ -1,0 +1,294 @@
+{
+  "id": "12-digestivo-hepatalgia",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 5,
+    "nombre": "Anamnesis y examen del Ap. Digestivo."
+  },
+  "titulo": "SIMULACIÓN 2: ANAMNESIS y EX. FÍSICO - HEPATALGIA",
+  "tipo": "anamnesis_y_examen_fisico",
+  "motivo_consulta": "hepatalgia",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No logrado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta"
+      ]
+    },
+    {
+      "nombre": "ANAMNESIS",
+      "items": [
+        "Explica lo que va hacer",
+        "Ficha patronímica",
+        "Motivo de consulta"
+      ]
+    },
+    {
+      "nombre": "Antecedentes",
+      "items": [
+        "Médicos, ENT y enf. Ap. digestivo",
+        "Quirurgicos, cirugia de abdomen",
+        "De Salud Mental",
+        "Consumos de sustancias",
+        "Inmunológicos",
+        "Antecedentes ambientales",
+        "Alimentación",
+        "Antecedentes familiares"
+      ]
+    },
+    {
+      "nombre": "DOLOR ABDOMINAL",
+      "items": [
+        "Aparición (cuando, circunstancia)",
+        "Tipo (Da opicones)",
+        "Intensidad",
+        "Localización (topografía cuadrantes)",
+        "Irradiaciones",
+        "Evolución",
+        "Fenómenos acompañantes",
+        "Fiebre"
+      ]
+    },
+    {
+      "nombre": "Antecedentes de la enfermedad actual",
+      "items": [
+        "Historia de la enfermedad actual",
+        "Disfagia",
+        "Pirosis / regurgitaciones",
+        "Dispepsia",
+        "Náuseas o vómitos",
+        "Dolor al defecar",
+        "Sangrado con la defecación",
+        "Secreciones con la defecación",
+        "Pujos y/o tenesmos",
+        "Diarrea",
+        "Constipación",
+        "Distensión abdominal, flatulencias",
+        "Tránsito urinario",
+        "Coluria"
+      ]
+    },
+    {
+      "nombre": "EXAMEN FÍSICO",
+      "items": [
+        "Hace mención al EF general",
+        "Piel y Mucosas",
+        "TAX"
+      ]
+    },
+    {
+      "nombre": "Examen físico abdominal INSPECCIÓN",
+      "items": [
+        "Posición del paciente (decúbito supino)",
+        "Posición del examinador (a los pies)",
+        "Topografía en 9 cuadrantes",
+        "Inspección estática",
+        "Inspeccion dinamica"
+      ]
+    },
+    {
+      "nombre": "PERCUSIÓN",
+      "items": [
+        "Explica la percusión radiada",
+        "Sonido mate y timpánico"
+      ]
+    },
+    {
+      "nombre": "Espacio de TRAUBE.",
+      "items": [
+        "Topografía el espacio de TRAUBE",
+        "Percute el espacio de TRAUBE",
+        "Busca matidez hepática"
+      ]
+    },
+    {
+      "nombre": "Percusión de Bazo",
+      "items": [
+        "Posición del paciente",
+        "Busca matidez esplénica"
+      ]
+    },
+    {
+      "nombre": "PALPACIÓN",
+      "items": [
+        "Explica por donde inicia y porque",
+        "Palpación monomanual superficial",
+        "Explica que es la Defensa Abdominal",
+        "Palpación bimanual profunda"
+      ]
+    },
+    {
+      "nombre": "Palpación de hígado",
+      "items": [
+        "Maniobra Mano en cuchara",
+        "Maniobra de Gilbert",
+        "Maniobra de Mathieu (enganche)"
+      ]
+    },
+    {
+      "nombre": "Descripción de la palpación hepática (el docente informa borde palpable luego de que realiza la maniobra)",
+      "items": [
+        "Superficie",
+        "Borde",
+        "Consistencia",
+        "Dolor",
+        "Topografia punto de Murphy",
+        "Explica maniobra de signo de Murphy",
+        "Palpación del Bazo",
+        "Palpación de Colon Sigmoides",
+        "Palpación de Latido Aórtico",
+        "Busca signo de Blumberg",
+        "Topografia punto de McBurney",
+        "Explica buscar Matidez Desplazable",
+        "Explica buscar signo de onda líquida",
+        "Explica buscar signo témpano de hielo"
+      ]
+    }
+  ],
+  "observaciones": [
+    {
+      "seccion": "Antecedentes",
+      "item": "Inmunológicos",
+      "observacion": "Vacunas viajero y anti VHA"
+    },
+    {
+      "seccion": "Antecedentes",
+      "item": "Antecedentes ambientales",
+      "observacion": "Otras personas con síntomas similares"
+    },
+    {
+      "seccion": "Antecedentes",
+      "item": "Alimentación",
+      "observacion": "Interroga dia alimentario"
+    },
+    {
+      "seccion": "DOLOR ABDOMINAL",
+      "item": "Aparición (cuando, circunstancia)",
+      "observacion": "Desencadenantes"
+    },
+    {
+      "seccion": "DOLOR ABDOMINAL",
+      "item": "Intensidad",
+      "observacion": "Utiliza EVA (Escala Visual Analogica)"
+    },
+    {
+      "seccion": "EXAMEN FÍSICO",
+      "item": "Piel y Mucosas",
+      "observacion": "Docente: aporta Ictericia"
+    },
+    {
+      "seccion": "EXAMEN FÍSICO",
+      "item": "TAX",
+      "observacion": "Docente: 38.1°C"
+    },
+    {
+      "seccion": "Examen físico abdominal INSPECCIÓN",
+      "item": "Posición del paciente (decúbito supino)",
+      "observacion": "Abdomen descubierto)"
+    },
+    {
+      "seccion": "Examen físico abdominal INSPECCIÓN",
+      "item": "Posición del examinador (a los pies)",
+      "observacion": "Lado derecho de la camilla)"
+    },
+    {
+      "seccion": "Examen físico abdominal INSPECCIÓN",
+      "item": "Topografía en 9 cuadrantes",
+      "observacion": "nombra referencias anatómicas"
+    },
+    {
+      "seccion": "PERCUSIÓN",
+      "item": "Sonido mate y timpánico",
+      "observacion": "Explica diferencia"
+    },
+    {
+      "seccion": "Espacio de TRAUBE.",
+      "item": "Busca matidez hepática",
+      "observacion": "Topografía donde hallarla"
+    },
+    {
+      "seccion": "Percusión de Bazo",
+      "item": "Posición del paciente",
+      "observacion": "No es prioridad en esta sim"
+    },
+    {
+      "seccion": "Percusión de Bazo",
+      "item": "Busca matidez esplénica",
+      "observacion": "No es prioridad en esta sim"
+    },
+    {
+      "seccion": "Descripción de la palpación hepática (el docente informa borde palpable luego de que realiza la maniobra)",
+      "item": "Superficie",
+      "observacion": "Lisa"
+    },
+    {
+      "seccion": "Descripción de la palpación hepática (el docente informa borde palpable luego de que realiza la maniobra)",
+      "item": "Borde",
+      "observacion": "Romo"
+    },
+    {
+      "seccion": "Descripción de la palpación hepática (el docente informa borde palpable luego de que realiza la maniobra)",
+      "item": "Consistencia",
+      "observacion": "Ligeramente disminuída"
+    },
+    {
+      "seccion": "Descripción de la palpación hepática (el docente informa borde palpable luego de que realiza la maniobra)",
+      "item": "Dolor",
+      "observacion": "5 en 10"
+    },
+    {
+      "seccion": "Descripción de la palpación hepática (el docente informa borde palpable luego de que realiza la maniobra)",
+      "item": "Palpación del Bazo",
+      "observacion": "No es prioridad en esta sim"
+    },
+    {
+      "seccion": "Descripción de la palpación hepática (el docente informa borde palpable luego de que realiza la maniobra)",
+      "item": "Palpación de Colon Sigmoides",
+      "observacion": "No es prioridad en esta sim"
+    },
+    {
+      "seccion": "Descripción de la palpación hepática (el docente informa borde palpable luego de que realiza la maniobra)",
+      "item": "Palpación de Latido Aórtico",
+      "observacion": "No es prioridad en esta sim"
+    },
+    {
+      "seccion": "Descripción de la palpación hepática (el docente informa borde palpable luego de que realiza la maniobra)",
+      "item": "Busca signo de Blumberg",
+      "observacion": "No es prioridad en esta sim"
+    },
+    {
+      "seccion": "Descripción de la palpación hepática (el docente informa borde palpable luego de que realiza la maniobra)",
+      "item": "Topografia punto de McBurney",
+      "observacion": "No es prioridad en esta sim"
+    },
+    {
+      "seccion": "Descripción de la palpación hepática (el docente informa borde palpable luego de que realiza la maniobra)",
+      "item": "Explica buscar Matidez Desplazable",
+      "observacion": "No es prioridad en esta sim"
+    },
+    {
+      "seccion": "Descripción de la palpación hepática (el docente informa borde palpable luego de que realiza la maniobra)",
+      "item": "Explica buscar signo de onda líquida",
+      "observacion": "No es prioridad en esta sim"
+    },
+    {
+      "seccion": "Descripción de la palpación hepática (el docente informa borde palpable luego de que realiza la maniobra)",
+      "item": "Explica buscar signo témpano de hielo",
+      "observacion": "No es prioridad en esta sim"
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      14,
+      15,
+      16
+    ]
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "id": "34-hpb-anamnesis",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 10,
+    "nombre": "Atención a personas con síntomas urinarios."
+  },
+  "titulo": "SIMULACIÓN 3: ANAMNESIS HIPERTROFIA PROSTÁTICA BENIGNA",
+  "tipo": "anamnesis",
+  "motivo_consulta": "dificultad para orinar",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Pregunta por la Ficha patronímica"
+      ]
+    },
+    {
+      "nombre": "Abordaje del Motivo de Consulta",
+      "items": [
+        "Desde cuando le cuesta orinar",
+        "La dificultad es al empezar a orinar?",
+        "Chorro doble",
+        "Chorro entrecortado",
+        "Chorro com regadera",
+        "Goteo post miccional",
+        "Dolor u ardor al orinar",
+        "Poliaquiuria",
+        "Nicturia",
+        "Tenemos?",
+        "Incontinencia urinaria?"
+      ]
+    },
+    {
+      "nombre": "Semiología de la orina",
+      "items": [
+        "Color (clara, oscura/concentrada)",
+        "Hematuria o sangre en la orina",
+        "Sedimento (arenilla)"
+      ]
+    },
+    {
+      "nombre": "Otros síntomas y síntomas generales",
+      "items": [
+        "Dolor lumbar?",
+        "Náuseas y/o vómitos",
+        "Fiebre / Chuchos de frío",
+        "Constipación u otros síntoma del TDB"
+      ]
+    },
+    {
+      "nombre": "Elementos de organicidad",
+      "items": [
+        "Dolor óseo nocturno",
+        "Astenia",
+        "Adinamia",
+        "Anorexia",
+        "Adelgazamiento"
+      ]
+    },
+    {
+      "nombre": "Antecedentes de enfermedad actual",
+      "items": [
+        "Episodios anteriores de síntomas obstructivos"
+      ]
+    },
+    {
+      "nombre": "Antecedentes personales",
+      "items": [
+        "Aborda coherentemente tabaquismo",
+        "Aborda coherentemente hipertensión arterial",
+        "Inmunodepresión",
+        "Litiasis en vías urinarias"
+      ]
+    },
+    {
+      "nombre": "Antecedentes familiares",
+      "items": [
+        "Padre, tíos, hermanos con cá. próstata",
+        "Padre, tíos, hermanos con HPB"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "grillas-mpna.pdf",
+    "paginas": [
+      41
+    ]
+  }
+}
