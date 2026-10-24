@@ -4,45 +4,45 @@ Uso:
     python rag/chunk.py mpna      # primero generar los chunks
     python rag/ingest.py mpna
 
-Requiere GOOGLE_API_KEY en el entorno (o en .env).
-El índice queda en .chroma/ (no se versiona) con una colección por materia: ecoe_<materia>.
+Las keys se leen de .env (GOOGLE_API_KEY_1, _2, ...); si una se queda sin cuota
+se rota a la siguiente. El índice queda en .chroma/ (no se versiona) con una
+colección por materia: ecoe_<materia>.
 """
 
 import json
-import os
 import sys
 from pathlib import Path
 
-from dotenv import load_dotenv
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+from llm.gemini import MODELS, api_keys, with_rotation  # noqa: E402
+
 PERSIST_DIR = ROOT / ".chroma"
-EMBEDDING_MODEL = "models/gemini-embedding-001"
 BATCH = 50
 
 
-def get_store(materia: str) -> Chroma:
+def get_store(materia: str, api_key: str | None = None, model: str | None = None) -> Chroma:
+    embeddings = GoogleGenerativeAIEmbeddings(
+        model=model or MODELS["embedding"][0],
+        google_api_key=api_key or api_keys()[0],
+    )
     return Chroma(
         collection_name=f"ecoe_{materia}",
-        embedding_function=GoogleGenerativeAIEmbeddings(model=EMBEDDING_MODEL),
+        embedding_function=embeddings,
         persist_directory=str(PERSIST_DIR),
     )
 
 
 def main():
-    load_dotenv(ROOT / ".env")
-    if not os.environ.get("GOOGLE_API_KEY"):
-        sys.exit("Falta GOOGLE_API_KEY (ponla en .env)")
-
     materia = sys.argv[1] if len(sys.argv) > 1 else "mpna"
     path = ROOT / "data" / "ecoe" / materia / "chunks.jsonl"
     rows = [json.loads(l) for l in path.read_text(encoding="utf-8").splitlines() if l.strip()]
 
-    store = get_store(materia)
-    store.reset_collection()
+    get_store(materia).reset_collection()
     for i in range(0, len(rows), BATCH):
         batch = rows[i : i + BATCH]
         docs = [
@@ -50,7 +50,8 @@ def main():
             Document(page_content=r["texto"], metadata={k: v for k, v in r["metadata"].items() if v is not None})
             for r in batch
         ]
-        store.add_documents(docs, ids=[r["id"] for r in batch])
+        ids = [r["id"] for r in batch]
+        with_rotation(lambda key, model: get_store(materia, key, model).add_documents(docs, ids=ids), "embedding")
         print(f"{min(i + BATCH, len(rows))}/{len(rows)}")
     print(f"Listo: colección ecoe_{materia} en {PERSIST_DIR.relative_to(ROOT)}")
 

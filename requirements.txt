@@ -1,4 +1,6 @@
+google-genai
 langchain-core
 langchain-chroma
 langchain-google-genai
+langchain-text-splitters
 python-dotenv

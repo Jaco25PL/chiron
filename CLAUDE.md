@@ -32,7 +32,16 @@ data/ecoe/
 - Las **grillas** son la fuente de verdad de la rúbrica. Su texto es literal del PDF: no parafrasearlo.
 - El contenido médico no se reescribe con LLM. La limpieza de PDFs es determinística (`rag/clean_pdfs.py`).
 
+## Gemini
+
+- Keys en `.env` como `GOOGLE_API_KEY_1`, `_2`, `_3` (cuentas distintas). `llm/gemini.py` rota de key ante 429 y espera si todas llegaron al límite por minuto.
+- `MODELS` en `llm/gemini.py` define qué modelo usa cada tarea (`patient`, `router`, `judge`, `live`, `embedding`), con alternativas de respaldo.
+- Los modelos cambian seguido: `python llm/probe_models.py` prueba cuáles andan con cada key y cuánto tardan.
+- En el plan gratuito los modelos "pro" tienen cuota 0, y el límite de embeddings es de 100 por minuto por key.
+
 ## RAG
+
+Entorno: `python -m venv .venv` + `.venv/Scripts/pip install -r requirements.txt`.
 
 ```
 python rag/clean_pdfs.py mpna   # raw/*.pdf -> clean/*.md (requiere pdftotext)
@@ -43,7 +52,7 @@ python rag/query.py mpna "¿qué preguntar ante disnea?"
 
 - Una colección de Chroma por materia: `ecoe_<materia>`.
 - Metadata de cada chunk: `materia`, `fuente`, `tipo` (`apunte` | `grilla` | `contexto_ecoe`), `seccion`, `pagina`.
-- `GOOGLE_API_KEY` va en `.env` (no se versiona).
+- Chunking con LangChain (`MarkdownHeaderTextSplitter` + `RecursiveCharacterTextSplitter`).
 
 ## Convenciones
 

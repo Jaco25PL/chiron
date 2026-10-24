@@ -4,15 +4,16 @@ Uso:
     python rag/chunk.py mpna
 
 Lee:
-    data/ecoe/<materia>/clean/*.md   apuntes en Markdown
+    data/ecoe/<materia>/clean/*.md       apuntes en Markdown
     data/ecoe/<materia>/grillas/*.json   grillas de evaluación (una por chunk)
-    data/ecoe/contexto-ecoe.md       contexto general del ECOE (común a todas las materias)
+    data/ecoe/contexto-ecoe.md           contexto general del ECOE (común a todas las materias)
 Escribe:
     data/ecoe/<materia>/chunks.jsonl
 
-Cada chunk lleva metadata para filtrar y citar: materia, fuente, tipo, sección
-(ruta de encabezados) y página. El texto de cada chunk empieza con la ruta de
-encabezados para que el embedding tenga contexto.
+Usa los splitters de LangChain: MarkdownHeaderTextSplitter corta por encabezados y
+RecursiveCharacterTextSplitter parte las secciones largas. Cada chunk lleva metadata
+para filtrar y citar (materia, fuente, tipo, sección, página) y su texto empieza con
+la ruta de encabezados para que el embedding tenga contexto.
 """
 
 import json
@@ -20,79 +21,72 @@ import re
 import sys
 from pathlib import Path
 
+from langchain_core.documents import Document
+from langchain_text_splitters import MarkdownHeaderTextSplitter, RecursiveCharacterTextSplitter
+
 ROOT = Path(__file__).resolve().parent.parent
-MAX_CHARS = 1800  # ~450 tokens
-MIN_CHARS = 200
+CHUNK_SIZE = 1800  # ~450 tokens
+CHUNK_OVERLAP = 150
+MIN_CHARS = 200  # secciones más cortas se unen con la siguiente
 
-HEADING = re.compile(r"^(#{1,4}) (.+)$")
-PAGE = re.compile(r"^<!-- p\. (\d+) -->$")
+HEADERS = [("#", "h1"), ("##", "h2"), ("###", "h3"), ("####", "h4")]
+PAGE = re.compile(r"<!-- p\. (\d+) -->")
+COMMENT = re.compile(r"<!--.*?-->", re.S)
+
+header_splitter = MarkdownHeaderTextSplitter(HEADERS, strip_headers=True)
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=CHUNK_SIZE,
+    chunk_overlap=CHUNK_OVERLAP,
+    separators=["\n\n", "\n- ", "\n", ". ", " "],
+)
 
 
-def split_long(text: str) -> list[str]:
-    """Parte un bloque largo por párrafos, sin cortar a mitad de párrafo."""
-    parts, current = [], ""
-    for para in text.split("\n\n"):
-        if current and len(current) + len(para) > MAX_CHARS:
-            parts.append(current.strip())
-            current = ""
-        current += para + "\n\n"
-    if current.strip():
-        parts.append(current.strip())
-    return parts
+def section_path(doc: Document) -> str:
+    return " > ".join(doc.metadata[h] for _, h in HEADERS if h in doc.metadata)
+
+
+def merge_short(sections: list[Document]) -> list[Document]:
+    """Une secciones muy cortas (p. ej. un título con una línea) con la siguiente."""
+    merged: list[Document] = []
+    for doc in sections:
+        prev = merged[-1] if merged else None
+        if prev and len(COMMENT.sub("", prev.page_content).strip()) < MIN_CHARS:
+            title = section_path(doc).split(" > ")[-1]
+            prev.page_content += f"\n\n{title}\n\n{doc.page_content}"
+            continue
+        merged.append(doc)
+    return merged
 
 
 def chunk_markdown(path: Path, materia: str, tipo: str) -> list[dict]:
-    headings: list[str] = []
-    page = None
-    sections: list[dict] = []
-    body: list[str] = []
-    body_page = None
+    sections = merge_short(header_splitter.split_text(path.read_text(encoding="utf-8")))
 
-    def flush():
-        text = "\n".join(body).strip()
-        if text:
-            sections.append({"seccion": " > ".join(headings), "pagina": body_page, "texto": text})
-        body.clear()
-
-    for line in path.read_text(encoding="utf-8").splitlines():
-        if m := PAGE.match(line):
-            page = int(m.group(1))
-            continue
-        if line.startswith("<!--"):
-            continue
-        if m := HEADING.match(line):
-            flush()
-            level = len(m.group(1))
-            headings[:] = headings[: level - 1] + [m.group(2).strip()]
-            continue
-        if not body:
-            body_page = page
-        body.append(line)
-    flush()
-
-    # une secciones muy cortas con la siguiente y parte las largas
-    merged: list[dict] = []
-    for s in sections:
-        if merged and len(merged[-1]["texto"]) < MIN_CHARS:
-            prev = merged[-1]
-            prev["texto"] += f"\n\n{s['seccion'].split(' > ')[-1]}\n\n{s['texto']}"
-            continue
-        merged.append(s)
-
-    chunks = []
-    for s in merged:
-        for i, part in enumerate(split_long(s["texto"])):
-            header = s["seccion"] or path.stem
+    chunks: list[dict] = []
+    page = None  # última marca de página vista, en orden de lectura
+    for section in sections:
+        seccion = section_path(section)
+        # el splitter une las líneas con "  \n": se recuperan los cortes de párrafo
+        content = section.page_content.replace("  \n", "\n\n")
+        for part in text_splitter.split_text(content):
+            # la página del chunk es la marca que lo abre (si no hay texto antes) o la última vista
+            first = PAGE.search(part)
+            opens = first and not COMMENT.sub("", part[: first.start()]).strip()
+            chunk_page = int(first.group(1)) if opens else page
+            for m in PAGE.finditer(part):
+                page = int(m.group(1))
+            text = re.sub(r"\n{3,}", "\n\n", COMMENT.sub("", part)).strip()
+            if not text:
+                continue
             chunks.append(
                 {
                     "id": f"{materia}/{path.stem}/{len(chunks):04d}",
-                    "texto": f"{header}\n\n{part}",
+                    "texto": f"{seccion or path.stem}\n\n{text}",
                     "metadata": {
                         "materia": materia,
                         "fuente": path.name,
                         "tipo": tipo,
-                        "seccion": s["seccion"],
-                        "pagina": s["pagina"],
+                        "seccion": seccion,
+                        "pagina": chunk_page,
                     },
                 }
             )
