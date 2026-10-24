@@ -1,0 +1,876 @@
+{
+  "id": "mpna-disnea-icc",
+  "materia": "mpna",
+  "titulo": "Disnea de esfuerzo progresiva",
+  "grillas": [
+    "02-disnea",
+    "05-ex-fisico-cardiovascular"
+  ],
+  "dificultad": "intermedio",
+  "paciente": {
+    "nombre": "Washington Ferreira Olivera",
+    "edad": 64,
+    "sexo": "masculino",
+    "procedencia": "Nacido en Florida, vive en Montevideo desde los 20 años",
+    "domicilio": "Barrio Cerrito de la Victoria, Montevideo",
+    "ocupacion": "Chofer de ómnibus jubilado; hace changas de portero en un edificio",
+    "convivencia": "Vive con su esposa en una casa de planta baja",
+    "escolaridad": "Primaria completa, secundaria incompleta (2.º año de liceo)",
+    "estado_civil": "Casado",
+    "prestador": "Mutualista del Centro",
+    "medico_referencia": "Dra. Silvana Méndez (médica de familia)"
+  },
+  "personalidad": {
+    "tipo": "reservado",
+    "descripcion": "Hombre de pocas palabras, algo incómodo en la consulta; vino porque la esposa insistió. Responde lo justo a cada pregunta y no agrega datos por su cuenta. Tiende a minimizar los síntomas ('no es para tanto') y le da un poco de vergüenza admitir que no toma bien la medicación ni dejó de fumar.",
+    "forma_de_hablar": "Frases cortas, registro montevideano con voseo ('mirá', 'tá', 'capaz'). Si la pregunta es vaga contesta con un 'normal' o 'más o menos'; solo da detalle si le preguntan algo concreto."
+  },
+  "motivo_consulta": {
+    "frase_inicial": "Vine porque me falta el aire. Mi señora me obligó a venir."
+  },
+  "anamnesis": [
+    {
+      "id": "motivo-consulta",
+      "tema": "Motivo de consulta",
+      "preguntas_ejemplo": [
+        "¿Qué lo trae por acá?",
+        "¿Por qué consulta hoy?"
+      ],
+      "respuesta": "Vine porque me falta el aire. Mi señora me obligó a venir.",
+      "grilla_items": [
+        "02-disnea::Pregunta el Motivo de Consulta (falta de aire)"
+      ]
+    },
+    {
+      "id": "inicio",
+      "tema": "Inicio y circunstancia de aparición de la disnea",
+      "preguntas_ejemplo": [
+        "¿Desde cuándo le pasa?",
+        "¿Cómo empezó?",
+        "¿Empezó de golpe o de a poco?"
+      ],
+      "respuesta": "Hará unos cuatro meses, más o menos. Fue de a poco, no de golpe. Me di cuenta un día subiendo la cuesta para ir al almacén, que tuve que parar.",
+      "grilla_items": [
+        "02-disnea::Pregunta inicio y circunstancia de aparición de la disnea"
+      ]
+    },
+    {
+      "id": "caracteristicas",
+      "tema": "Características de la disnea: relación con el esfuerzo",
+      "preguntas_ejemplo": [
+        "¿Cuándo le falta el aire?",
+        "¿Le pasa cuando hace fuerza o camina?",
+        "¿Se le pasa cuando descansa?"
+      ],
+      "respuesta": "Cuando camino o hago alguna fuerza. Si me paro y descanso un rato se me va pasando.",
+      "grilla_items": [
+        "02-disnea::Pregunta las características de la disnea (disnea de esfuerzo)"
+      ]
+    },
+    {
+      "id": "grado",
+      "tema": "Grado de disnea / limitación funcional",
+      "preguntas_ejemplo": [
+        "¿Cuántas cuadras puede caminar?",
+        "¿Puede subir escaleras?",
+        "¿Puede bañarse o vestirse sin que le falte el aire?"
+      ],
+      "respuesta": "Ahora camino una cuadra, cuadra y media, y tengo que parar. Subo un piso por escalera y llego arriba sin aire. Bañarme y vestirme sí puedo, despacio. En la casa, caminando tranquilo, no me pasa.",
+      "grilla_items": [
+        "02-disnea::Hace preguntas para clasificar el grado de disnea"
+      ]
+    },
+    {
+      "id": "ortopnea",
+      "tema": "Disnea de decúbito (ortopnea)",
+      "preguntas_ejemplo": [
+        "¿Puede dormir acostado?",
+        "¿Con cuántas almohadas duerme?",
+        "¿Le falta el aire cuando se acuesta?"
+      ],
+      "respuesta": "Acostado plano no puedo, me ahogo. Ahora duermo con tres almohadas, antes usaba una sola.",
+      "grilla_items": [
+        "02-disnea::Pregunta disnea de decúbito"
+      ]
+    },
+    {
+      "id": "reposo",
+      "tema": "Disnea de reposo",
+      "preguntas_ejemplo": [
+        "¿Le falta el aire estando quieto?",
+        "¿Sentado tranquilo le pasa?"
+      ],
+      "respuesta": "No, sentado tranquilo estoy bien.",
+      "grilla_items": [
+        "02-disnea::Pregunta disnea de reposo"
+      ]
+    },
+    {
+      "id": "dpn",
+      "tema": "Crisis de disnea paroxística nocturna",
+      "preguntas_ejemplo": [
+        "¿Se despierta de noche con falta de aire?",
+        "¿Tiene que levantarse o sentarse en la cama para respirar?"
+      ],
+      "respuesta": "Sí, un par de veces este último mes. Me desperté de madrugada ahogado y me tuve que sentar en la cama, y abrí la ventana. Al rato se me pasó.",
+      "grilla_items": [
+        "02-disnea::Pregunta crisis de disnea paroxística nocturna"
+      ]
+    },
+    {
+      "id": "evolucion",
+      "tema": "Evolución de la disnea de esfuerzo",
+      "preguntas_ejemplo": [
+        "¿Fue empeorando?",
+        "¿Cómo estaba al principio comparado con ahora?"
+      ],
+      "respuesta": "Fue empeorando. Al principio era con la cuesta o subiendo varios pisos; hacía unas diez cuadras sin problema. Ahora con una cuadra ya estoy.",
+      "grilla_items": [
+        "02-disnea::Pregunta evolución de la disnea de esfuerzo"
+      ]
+    },
+    {
+      "id": "dolor-toracico",
+      "tema": "Episodios de dolor torácico",
+      "preguntas_ejemplo": [
+        "¿Ha tenido dolor en el pecho?",
+        "¿Alguna opresión en el pecho al caminar?"
+      ],
+      "respuesta": "No, dolor en el pecho no he tenido. Es falta de aire nomás.",
+      "grilla_items": [
+        "02-disnea::Pregunta por episodios de dolor torácico"
+      ]
+    },
+    {
+      "id": "palpitaciones",
+      "tema": "Palpitaciones",
+      "preguntas_ejemplo": [
+        "¿Siente el corazón acelerado o que late raro?",
+        "¿Ha tenido palpitaciones?"
+      ],
+      "respuesta": "No, palpitaciones no.",
+      "grilla_items": [
+        "02-disnea::Pregunta por palpitaciones"
+      ]
+    },
+    {
+      "id": "sincope",
+      "tema": "Episodios de síncope o presíncope",
+      "preguntas_ejemplo": [
+        "¿Se ha desmayado?",
+        "¿Perdió el conocimiento alguna vez?",
+        "¿Se ha sentido a punto de desmayarse?"
+      ],
+      "respuesta": "No, nunca me desmayé. Mareos tampoco.",
+      "grilla_items": [
+        "02-disnea::Pregunta por episodios de Síncope"
+      ]
+    },
+    {
+      "id": "edemas",
+      "tema": "Edemas de miembros inferiores",
+      "preguntas_ejemplo": [
+        "¿Se le hinchan las piernas?",
+        "¿Los tobillos se le hinchan?",
+        "¿En qué momento del día?"
+      ],
+      "respuesta": "Sí, los tobillos se me hinchan, los dos. Más que nada de tarde, a la noche me marca la media. A la mañana cuando me levanto están mejor. Hará un mes, mes y medio.",
+      "grilla_items": [
+        "02-disnea::Pregunta por edemas de MMII"
+      ]
+    },
+    {
+      "id": "peso",
+      "tema": "Cambios de peso",
+      "preguntas_ejemplo": [
+        "¿Ha cambiado de peso?",
+        "¿Aumentó de peso últimamente?"
+      ],
+      "respuesta": "Capaz que subí unos kilos. Me pesé en la farmacia hace poco y estaba como cuatro kilos más, y no estoy comiendo más que antes.",
+      "grilla_items": []
+    },
+    {
+      "id": "transito-urinario",
+      "tema": "Tránsito urinario, nicturia",
+      "preguntas_ejemplo": [
+        "¿Cómo anda para orinar?",
+        "¿Se levanta de noche a orinar?",
+        "¿Cuántas veces?"
+      ],
+      "respuesta": "De noche me levanto dos o tres veces a orinar, antes no me levantaba. De día normal. El chorro sale bien, no me arde ni nada.",
+      "grilla_items": [
+        "02-disnea::Indaga los tránsitos, en especial tránsito urinario por nicturia"
+      ]
+    },
+    {
+      "id": "transito-digestivo",
+      "tema": "Tránsito digestivo y apetito",
+      "preguntas_ejemplo": [
+        "¿Cómo anda del intestino?",
+        "¿Cómo está de apetito?"
+      ],
+      "respuesta": "Del intestino normal, todos los días. Apetito más o menos, me lleno rápido.",
+      "grilla_items": [
+        "02-disnea::Indaga los tránsitos, en especial tránsito urinario por nicturia"
+      ]
+    },
+    {
+      "id": "tos",
+      "tema": "Tos y otros síntomas respiratorios",
+      "preguntas_ejemplo": [
+        "¿Tiene tos?",
+        "¿Saca flema?",
+        "¿Tuvo fiebre?"
+      ],
+      "respuesta": "Tengo una tos seca, más que nada de noche cuando me acuesto. Flema la de siempre a la mañana, la del cigarro, blanca. Fiebre no.",
+      "grilla_items": []
+    },
+    {
+      "id": "cansancio",
+      "tema": "Fatiga / astenia",
+      "preguntas_ejemplo": [
+        "¿Se siente cansado?",
+        "¿Tiene menos fuerza que antes?"
+      ],
+      "respuesta": "Sí, ando más cansado. Me canso enseguida.",
+      "grilla_items": []
+    },
+    {
+      "id": "tabaquismo",
+      "tema": "Tabaquismo",
+      "preguntas_ejemplo": [
+        "¿Fuma?",
+        "¿Fumó alguna vez?"
+      ],
+      "respuesta": "Sí, fumo.",
+      "grilla_items": [
+        "02-disnea::Tabaquismo"
+      ]
+    },
+    {
+      "id": "tabaquismo-detalle",
+      "tema": "Caracterización del tabaquismo: inicio, cantidad, tipo",
+      "preguntas_ejemplo": [
+        "¿Desde qué edad fuma?",
+        "¿Cuántos cigarrillos por día?",
+        "¿Fuma otra cosa o usa vapeador?"
+      ],
+      "respuesta": "Empecé a los 18. Una caja por día, veinte, de paquete. Vapeador no.",
+      "grilla_items": [
+        "02-disnea::Profundiza en conocer aspectos de su Tabaquismo"
+      ]
+    },
+    {
+      "id": "tabaquismo-abandono",
+      "tema": "Intentos de abandono del tabaco",
+      "preguntas_ejemplo": [
+        "¿Intentó dejar alguna vez?",
+        "¿Pensó en dejar de fumar?"
+      ],
+      "respuesta": "Dejé una vez, como seis meses, cuando nació mi nieto. Pero volví. Ahora fumo un poco menos porque me agito, pero sigo.",
+      "grilla_items": [
+        "02-disnea::Profundiza en conocer aspectos de su Tabaquismo"
+      ]
+    },
+    {
+      "id": "sedentarismo",
+      "tema": "Actividad física / sedentarismo",
+      "preguntas_ejemplo": [
+        "¿Hace ejercicio?",
+        "¿Camina habitualmente?"
+      ],
+      "respuesta": "Ejercicio no hago. Nunca hice. Desde que me jubilé paso bastante sentado, mirando la tele.",
+      "grilla_items": [
+        "02-disnea::Sedentarismo"
+      ]
+    },
+    {
+      "id": "diabetes",
+      "tema": "Diabetes mellitus",
+      "preguntas_ejemplo": [
+        "¿Tiene diabetes?",
+        "¿Le dijeron que tenía el azúcar alto?"
+      ],
+      "respuesta": "No, diabetes no. El azúcar me lo miraron el año pasado y estaba bien.",
+      "grilla_items": [
+        "02-disnea::Diabetes mellitus"
+      ]
+    },
+    {
+      "id": "hta",
+      "tema": "Hipertensión arterial",
+      "preguntas_ejemplo": [
+        "¿Tiene presión alta?",
+        "¿Le dijeron que era hipertenso?"
+      ],
+      "respuesta": "Sí, la presión la tengo alta.",
+      "grilla_items": [
+        "02-disnea::Hipertensión arterial"
+      ]
+    },
+    {
+      "id": "hta-detalle",
+      "tema": "Caracterización de la HTA: tiempo de evolución y tratamiento indicado",
+      "preguntas_ejemplo": [
+        "¿Desde cuándo es hipertenso?",
+        "¿Qué medicación le indicaron?"
+      ],
+      "respuesta": "Me la encontraron hace unos doce años, en un control del trabajo. Me dieron enalapril, uno de 10 dos veces por día.",
+      "grilla_items": [
+        "02-disnea::Profundiza en conocer aspectos de su HTA"
+      ]
+    },
+    {
+      "id": "hta-adherencia",
+      "tema": "Adherencia al tratamiento antihipertensivo",
+      "preguntas_ejemplo": [
+        "¿Toma la medicación todos los días?",
+        "¿Se olvida de tomarla?"
+      ],
+      "respuesta": "La verdad que lo tomo cuando me acuerdo. A veces se me termina y no voy a buscar.",
+      "grilla_items": [
+        "02-disnea::Profundiza en conocer aspectos de su HTA"
+      ]
+    },
+    {
+      "id": "hta-controles",
+      "tema": "Controles de presión arterial, seguimiento y consumo de sal",
+      "preguntas_ejemplo": [
+        "¿Se controla la presión?",
+        "¿Cuánto le da?",
+        "¿Cuándo fue la última vez que vio a su médica?",
+        "¿Le pone sal a la comida?"
+      ],
+      "respuesta": "No me la controlo. La última vez que me la tomaron en la farmacia me dio 17 y algo. A la doctora no la veo hace como dos años. Sal le pongo, sí.",
+      "grilla_items": [
+        "02-disnea::Profundiza en conocer aspectos de su HTA"
+      ]
+    },
+    {
+      "id": "dislipemia",
+      "tema": "Dislipemia",
+      "preguntas_ejemplo": [
+        "¿Tiene el colesterol alto?",
+        "¿Le dijeron algo de las grasas en sangre?"
+      ],
+      "respuesta": "Hace unos años me dijeron que tenía el colesterol alto. Me dieron una pastilla pero no la llegué a tomar.",
+      "grilla_items": [
+        "02-disnea::Dislipemia"
+      ]
+    },
+    {
+      "id": "antecedentes-cv",
+      "tema": "Otros antecedentes cardiovasculares personales",
+      "preguntas_ejemplo": [
+        "¿Tuvo algún infarto?",
+        "¿Problemas del corazón conocidos?",
+        "¿Lo internaron alguna vez?"
+      ],
+      "respuesta": "No, del corazón nunca me dijeron nada. Internado nunca estuve.",
+      "grilla_items": []
+    },
+    {
+      "id": "otros-medicamentos",
+      "tema": "Otros medicamentos (AINEs, etc.)",
+      "preguntas_ejemplo": [
+        "¿Toma algún otro medicamento?",
+        "¿Toma algo para el dolor?"
+      ],
+      "respuesta": "No, solo el enalapril. A veces un ibuprofeno si me duele la espalda, pero poco.",
+      "grilla_items": []
+    },
+    {
+      "id": "alcohol",
+      "tema": "Consumo de alcohol y otras sustancias",
+      "preguntas_ejemplo": [
+        "¿Toma alcohol?",
+        "¿Consume alguna droga?"
+      ],
+      "respuesta": "Un vaso de vino en la comida, los fines de semana algo más. Drogas no.",
+      "grilla_items": []
+    },
+    {
+      "id": "antecedentes-familiares",
+      "tema": "Antecedentes familiares cardiovasculares",
+      "preguntas_ejemplo": [
+        "¿Alguien en la familia con problemas del corazón?",
+        "¿De qué fallecieron sus padres?"
+      ],
+      "respuesta": "Mi padre tenía presión alta, murió de un derrame a los 70. Mi madre murió vieja, de 85. Mis hermanos, que yo sepa, bien.",
+      "grilla_items": []
+    }
+  ],
+  "signos_vitales": {
+    "pa": "164/98 mmHg (brazo derecho, sentado)",
+    "fc": "96 lpm, regular",
+    "fr": "22 rpm",
+    "temperatura": "36,6 °C",
+    "saturacion": "93 % (aire ambiente)",
+    "peso": "88 kg",
+    "talla": "1,72 m",
+    "imc": "29,7 kg/m²"
+  },
+  "examen_fisico": [
+    {
+      "id": "inspeccion-torax",
+      "maniobra": "Inspección del tórax (forma, simetría, deformidades, abombamiento, pulsaciones visibles)",
+      "hallazgo": "Tórax simétrico, sin deformidades ni abombamiento precordial. Sin cicatrices. Respira con leve polipnea, sin tiraje ni uso de músculos accesorios. No se observan latidos anormales en región paraesternal ni epigástrica.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Describe el tórax (debe mencionar lo que busca cuando observa el tórax)"
+      ]
+    },
+    {
+      "id": "inspeccion-punta",
+      "maniobra": "Búsqueda del latido de la punta a la inspección",
+      "hallazgo": "Se insinúa un latido de la punta difuso por fuera de la línea medioclavicular izquierda, a nivel del 6.º espacio intercostal (se precisa mejor a la palpación).",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Búsqueda de latido en punta cardíaca (pensando en HVI)"
+      ]
+    },
+    {
+      "id": "angulo-louis",
+      "maniobra": "Topografía del ángulo de Louis y conteo de espacios intercostales",
+      "hallazgo": "Ángulo de Louis palpable; a su nivel se ubica la 2.ª costilla y por debajo el 2.º espacio intercostal, desde donde se cuentan los espacios hacia abajo.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Topografía el ángulo de Louis y lo utiliza como referencia."
+      ]
+    },
+    {
+      "id": "fremito-mitral",
+      "maniobra": "Palpación en foco mitral buscando frémito",
+      "hallazgo": "Sin frémito en foco mitral.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Topografía y busca frémito en foco mitral (LMC y 5to espacio intercostal izq)"
+      ]
+    },
+    {
+      "id": "fremito-aortico",
+      "maniobra": "Palpación en foco aórtico buscando frémito",
+      "hallazgo": "Sin frémito en foco aórtico.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Topo. y busca frémito en foco aórtico (2do espacio paraesternal derecho)"
+      ]
+    },
+    {
+      "id": "fremito-pulmonar",
+      "maniobra": "Palpación en foco pulmonar buscando frémito",
+      "hallazgo": "Sin frémito en foco pulmonar.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Topo. y busca frémito en foco pulmonar (2do espacio paraesternal izquierdo)"
+      ]
+    },
+    {
+      "id": "fremito-tricuspideo",
+      "maniobra": "Palpación en foco tricuspídeo buscando frémito; impulso paraesternal",
+      "hallazgo": "Sin frémito en foco tricuspídeo. Sin impulso paraesternal izquierdo.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Topo. y busca frémito en foco tricuspídeo (sobre base de apéndice xifoides)"
+      ]
+    },
+    {
+      "id": "choque-punta",
+      "maniobra": "Palpación del choque de punta",
+      "hallazgo": "Choque de punta desplazado hacia abajo y afuera: 6.º espacio intercostal izquierdo, sobre la línea axilar anterior. Extendido (ocupa unos 3-4 cm, dos traveses de dedo) y sostenido.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Busca choque de punta (LMC y 5to espacio intercostal a izq, descenso o lateralización)"
+      ]
+    },
+    {
+      "id": "auscultacion-aortico",
+      "maniobra": "Auscultación del foco aórtico",
+      "hallazgo": "Ruidos cardíacos regulares. R2 de intensidad aumentada (componente aórtico). Sin soplos.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Menciona la topografía y ausculta foco aórtico"
+      ]
+    },
+    {
+      "id": "auscultacion-pulmonar",
+      "maniobra": "Auscultación del foco pulmonar",
+      "hallazgo": "R1 y R2 normales en foco pulmonar, sin soplos.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Menciona la topografía y ausculta foco pulmonar"
+      ]
+    },
+    {
+      "id": "auscultacion-tricuspideo",
+      "maniobra": "Auscultación del foco tricuspídeo",
+      "hallazgo": "R1 y R2 normales, sin soplos ni ruidos agregados en foco tricuspídeo.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Menciona la topografía y ausculta foco tricuspídeo"
+      ]
+    },
+    {
+      "id": "auscultacion-mitral",
+      "maniobra": "Auscultación del foco mitral (incluye campana y decúbito lateral izquierdo)",
+      "hallazgo": "Ritmo de galope por tercer ruido (R1-R2-R3), que se oye mejor con la campana en el ápex en decúbito lateral izquierdo. Sin soplos.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Menciona la topografía y ausculta foco mitral"
+      ]
+    },
+    {
+      "id": "pulso-radial-auscultacion",
+      "maniobra": "Toma del pulso radial mientras ausculta",
+      "hallazgo": "Cada latido auscultado se corresponde con un pulso radial; no hay déficit de pulso.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Toma pulso radial mientras ausculta (lo hace o menciona)"
+      ]
+    },
+    {
+      "id": "ritmo",
+      "maniobra": "Identificación del ritmo cardíaco",
+      "hallazgo": "Ritmo regular.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Identifica Ritmo (identifica ritmo regular y lo menciona al docente)"
+      ]
+    },
+    {
+      "id": "frecuencia",
+      "maniobra": "Toma de la frecuencia cardíaca (30 segundos x 2)",
+      "hallazgo": "48 latidos en 30 segundos: frecuencia cardíaca de 96 lpm.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Toma frecuencia (por los menos en 30 seg) y se la menciona a docente"
+      ]
+    },
+    {
+      "id": "yugular-inspeccion",
+      "maniobra": "Observación de la vena yugular interna derecha con el paciente a 45°",
+      "hallazgo": "Con el tronco a 45° y la cabeza girada a la izquierda se observan las oscilaciones de la yugular interna derecha, con el borde superior de la columna alto en el cuello, cerca del ángulo mandibular.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Observa vena yugular interna derecha con paciente a 45°"
+      ]
+    },
+    {
+      "id": "pulso-venoso",
+      "maniobra": "Caracterización del pulso venoso yugular",
+      "hallazgo": "Pulso venoso visible, no palpable, que no coincide con el pulso radial (negativo respecto al pulso radial); desciende con la inspiración.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Pulso venoso: Menciona que se ve pero no se palpa y es negativo al p. radial"
+      ]
+    },
+    {
+      "id": "ingurgitacion-yugular",
+      "maniobra": "Evaluación de ingurgitación yugular (altura de la columna sobre el ángulo esternal)",
+      "hallazgo": "Ingurgitación yugular: la columna venosa se eleva unos 7 cm por encima del ángulo esternal (supera ampliamente el plano esternal).",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Ingurgitación Yugular: Menciona la columna venosa supera el plano esternal"
+      ]
+    },
+    {
+      "id": "reflujo-hepatoyugular",
+      "maniobra": "Reflujo hepatoyugular (abdominoyugular)",
+      "hallazgo": "Positivo: con compresión sostenida en hipocondrio derecho durante 10-15 segundos la columna venosa asciende unos 3 cm y se mantiene elevada mientras dura la compresión.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Reflujo Hepato-Yugular: Aum. columna venosa con compresión hepática."
+      ]
+    },
+    {
+      "id": "pulso-carotideo",
+      "maniobra": "Palpación de pulsos carotídeos (de a uno)",
+      "hallazgo": "Pulsos carotídeos presentes, simétricos, regulares, de amplitud normal. Sin soplos carotídeos.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Carotídeos"
+      ]
+    },
+    {
+      "id": "pulso-radial",
+      "maniobra": "Palpación de pulsos radiales (comparando ambos)",
+      "hallazgo": "Pulsos radiales presentes y simétricos, 96 por minuto, regulares, de amplitud normal y tensión aumentada (pulso tenso).",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Radiales"
+      ]
+    },
+    {
+      "id": "pulso-femoral",
+      "maniobra": "Palpación de pulsos femorales",
+      "hallazgo": "Pulsos femorales presentes y simétricos, sincrónicos con los radiales. Sin soplos femorales.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Femorales"
+      ]
+    },
+    {
+      "id": "pulso-popliteo",
+      "maniobra": "Palpación de pulsos poplíteos",
+      "hallazgo": "Pulsos poplíteos presentes y simétricos.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Popliteos"
+      ]
+    },
+    {
+      "id": "pulso-tibial-posterior",
+      "maniobra": "Palpación de pulsos tibiales posteriores",
+      "hallazgo": "Pulsos tibiales posteriores presentes y simétricos, algo difíciles de palpar por el edema perimaleolar.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Tibiales posteriores"
+      ]
+    },
+    {
+      "id": "pulso-pedio",
+      "maniobra": "Palpación de pulsos pedios",
+      "hallazgo": "Pulsos pedios presentes y simétricos.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Pedios"
+      ]
+    },
+    {
+      "id": "edemas-mmii",
+      "maniobra": "Búsqueda de edemas en miembros inferiores (signo de la fóvea) y región sacra",
+      "hallazgo": "Edema bilateral y simétrico de tobillos y tercio inferior de ambas piernas, blando, con fóvea positiva en región pretibial. Sin calor, rubor ni dolor. Sin edema sacro.",
+      "grilla_items": []
+    },
+    {
+      "id": "pleuropulmonar",
+      "maniobra": "Auscultación pleuropulmonar",
+      "hallazgo": "Murmullo alveolovesicular presente bilateral. Estertores crepitantes en ambas bases pulmonares, que no se modifican con la tos. Sin sibilancias.",
+      "grilla_items": []
+    },
+    {
+      "id": "hepatomegalia",
+      "maniobra": "Palpación hepática",
+      "hallazgo": "Borde hepático palpable a 2 cm por debajo del reborde costal derecho en la línea medioclavicular, liso, levemente doloroso a la palpación.",
+      "grilla_items": []
+    }
+  ],
+  "paraclinica": [
+    {
+      "estudio": "Electrocardiograma de 12 derivaciones",
+      "resultado": "Ritmo sinusal, 96 lpm. PR 0,18 s, QRS 0,10 s. Eje eléctrico desviado a la izquierda (-30°). Criterios de voltaje de hipertrofia ventricular izquierda (S en V1 + R en V5 = 41 mm) con infradesnivel del ST y T negativa asimétrica en DI, aVL, V5 y V6 (patrón de sobrecarga). Sin ondas Q patológicas. Sin arritmias.",
+      "indicado": true,
+      "justificacion": "Estudio inicial obligado ante disnea de probable origen cardíaco en un hipertenso: busca hipertrofia ventricular izquierda, crecimiento auricular, arritmias (fibrilación auricular) o signos de infarto previo. Tiene sensibilidad limitada para HVI.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Radiografía de tórax frente (PA) y perfil",
+      "resultado": "Técnica adecuada: PA de pie, bien inspirada, no rotada. Aumento de la silueta cardiopericárdica con índice cardiotorácico de 0,58, con predominio del contorno izquierdo y ápex desplazado hacia abajo y afuera. Opacidades intersticiales perihiliares bilaterales y redistribución del flujo hacia los vértices. Borramiento de ambos senos costofrénicos por pequeño derrame pleural bilateral. Sin consolidaciones.",
+      "indicado": true,
+      "justificacion": "Valora tamaño y morfología de la silueta cardiopericárdica (ICT > 0,50 en PA bien realizada) y signos de congestión pulmonar o derrame pleural; también descarta causas pulmonares de disnea (consolidación, hiperinsuflación). La radiografía no diferencia cardiomegalia de derrame pericárdico: se necesita ecocardiograma.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Ecocardiograma transtorácico",
+      "resultado": "Ventrículo izquierdo dilatado (diámetro diastólico 62 mm) con aumento leve del espesor parietal (septum y pared posterior 12 mm). Hipoquinesia global. Fracción de eyección del VI estimada en 35 %. Aurícula izquierda dilatada. Insuficiencia mitral leve funcional. Sin estenosis valvulares. Ventrículo derecho de tamaño y función conservados. Presión sistólica de arteria pulmonar estimada en 42 mmHg (levemente elevada). Vena cava inferior dilatada con escasa variación respiratoria. Sin derrame pericárdico.",
+      "indicado": true,
+      "justificacion": "Indicado ante síntomas cardíacos, ECG anormal (HVI) y aumento de la silueta en la radiografía: valora cavidades, hipertrofia, función ventricular, válvulas y descarta derrame pericárdico. Es el estudio que confirma la disfunción ventricular.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Creatininemia y filtrado glomerular estimado",
+      "resultado": "Creatinina 1,21 mg/dL. FG estimado (CKD-EPI 2021) 67 mL/min/1,73 m². Azoemia 48 mg/dL.",
+      "indicado": true,
+      "justificacion": "Valora función renal (daño de órgano blanco de la HTA, repercusión del bajo gasto) y es necesaria antes de ajustar IECA/ARA II y diuréticos. Recordar que una creatinina normal no asegura función renal normal.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Ionograma (sodio y potasio)",
+      "resultado": "Na+ 136 mEq/L, K+ 4,5 mEq/L, Cl- 101 mEq/L.",
+      "indicado": true,
+      "justificacion": "Recomendado cuando se usan IECA, ARA II o diuréticos (el paciente recibe enalapril y va a requerir diuréticos); detecta hiper/hipopotasemia e hiponatremia.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Hemograma",
+      "resultado": "Hb 14,1 g/dL, Hto 42 %, VCM 90 fL. Leucocitos 7.800/mm³ con fórmula normal. Plaquetas 245.000/mm³.",
+      "indicado": true,
+      "justificacion": "Descarta anemia como causa o agravante de la disnea y valora el estado general. Sin leucocitosis que sugiera infección.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Glicemia en ayunas",
+      "resultado": "102 mg/dL.",
+      "indicado": true,
+      "justificacion": "Parte de la evaluación del riesgo cardiovascular en un hipertenso tabaquista; descarta diabetes no conocida. Valor en rango de glucemia alterada en ayunas, a repetir/confirmar.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Perfil lipídico",
+      "resultado": "Colesterol total 248 mg/dL, LDL 168 mg/dL, HDL 36 mg/dL, triglicéridos 220 mg/dL, colesterol no HDL 212 mg/dL.",
+      "indicado": true,
+      "justificacion": "Evaluación de rutina del riesgo cardiovascular; confirma la dislipemia referida y no tratada.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Examen de orina y cociente albúmina/creatinina urinaria",
+      "resultado": "Orina: densidad 1.018, proteínas trazas, sin hematuria ni leucocituria, sedimento sin cilindros. Cociente albúmina/creatinina 85 mg/g (albuminuria moderadamente aumentada).",
+      "indicado": true,
+      "justificacion": "De rutina en el hipertenso para buscar daño renal (albuminuria). También orienta frente a causas renales de edema (síndrome nefrótico), que aquí no se sostiene.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Hemocultivos",
+      "resultado": "Sin desarrollo bacteriano a las 72 horas.",
+      "indicado": false,
+      "justificacion": "No corresponde: el paciente no tiene fiebre, leucocitosis ni sospecha de infección o sepsis. Los hemocultivos se reservan para cuadros infecciosos graves; pedirlos aquí no aporta al diagnóstico de la disnea.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Espirometría con prueba broncodilatadora",
+      "resultado": "Realizada en este momento: patrón con leve reducción de VEF1 y CVF, relación VEF1/CVF 0,72, sin respuesta significativa al broncodilatador. Resultado de interpretación limitada por la congestión pulmonar.",
+      "indicado": false,
+      "justificacion": "No es el estudio a pedir en la evaluación inicial de esta disnea: el cuadro (ortopnea, DPN, edemas, ingurgitación yugular, R3, crepitantes) orienta a origen cardíaco, y la congestión pulmonar altera la función ventilatoria. Por su tabaquismo podrá valorarse una vez compensado, si persisten síntomas respiratorios.",
+      "grilla_items": []
+    }
+  ],
+  "diagnostico": {
+    "principal": "Insuficiencia cardíaca congestiva global con fracción de eyección reducida, de probable etiología hipertensiva",
+    "diferenciales": [
+      "Cardiopatía isquémica con disfunción ventricular (miocardiopatía isquémica): debe descartarse por factores de riesgo múltiples aunque no tenga angor",
+      "EPOC (tabaquista de ≈ 46 paquetes-año): no explica ortopnea, DPN, ingurgitación yugular, R3 ni edemas",
+      "Enfermedad renal con sobrecarga de volumen o síndrome nefrótico: creatinina apenas elevada y sin proteinuria importante",
+      "Anemia: descartada por hemograma",
+      "Valvulopatía (estenosis aórtica, insuficiencia mitral primaria): sin soplos ni frémitos al examen"
+    ],
+    "fundamento": "Hombre de 64 años con HTA de 12 años mal controlada (mala adherencia al enalapril, consumo de sal), tabaquismo activo (20 cig/día desde los 18 años: ≈ 46 paquetes-año), sedentarismo y dislipemia no tratada. Disnea de esfuerzo de comienzo insidioso y progresiva en 4 meses, hoy ante actividad menor a la habitual (1 cuadra, 1 piso; clase funcional III), con ortopnea de 3 almohadas y episodios de disnea paroxística nocturna (congestión pulmonar / falla izquierda). Edemas bilaterales vespertinos de MMII, aumento de peso de 4 kg, nicturia y saciedad precoz (congestión sistémica / falla derecha). Al examen: PA 164/98, taquipnea, SatO2 93 %, choque de punta desplazado al 6.º EIC línea axilar anterior, extendido y sostenido (HVI y dilatación), galope por R3, crepitantes bibasales, ingurgitación yugular 7 cm sobre el ángulo esternal, reflujo hepatoyugular positivo, hepatomegalia dolorosa y edemas con fóvea: síndrome congestivo global. Paraclínica: ECG con HVI y sobrecarga, Rx con ICT 0,58, congestión y derrame bilateral; ecocardiograma con VI dilatado e hipertrófico y FEVI 35 %.",
+    "grilla_items": []
+  },
+  "conducta_esperada": [
+    {
+      "accion": "Reconocer el síndrome congestivo global e indicar la paraclínica dirigida: ECG, radiografía de tórax PA y perfil, ecocardiograma, función renal, ionograma, hemograma, glicemia, perfil lipídico y orina con albúmina/creatinina.",
+      "grilla_items": []
+    },
+    {
+      "accion": "Control de factores de riesgo: reforzar la adherencia al tratamiento antihipertensivo, dieta hiposódica, cesación tabáquica, control de lípidos y actividad física adaptada una vez compensado; derivación a cardiología.",
+      "grilla_items": []
+    }
+  ],
+  "fuentes": [
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Anamnesis Cardiovascular — Síntomas cardiovasculares: Disnea (disnea de esfuerzo, clasificación funcional, ortopnea, disnea paroxística nocturna, síntomas asociados)",
+      "pagina": 30
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Síntomas cardiovasculares: Disnea — clasificación, ortopnea y disnea paroxística nocturna",
+      "pagina": 31
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Síntomas cardiovasculares: Edemas (características del edema cardíaco)",
+      "pagina": 35
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Edemas: interrogatorio, signo de la fóvea, fármacos asociados",
+      "pagina": 36
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Antecedentes cardiovasculares — factores de riesgo, tabaquismo (paquetes-año)",
+      "pagina": 38
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Examen físico — Pulso arterial (técnica, frecuencia, ritmo, tensión, pulsos periféricos)",
+      "pagina": 40
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Pulso venoso yugular — técnica, medición sobre el ángulo esternal, ingurgitación yugular",
+      "pagina": 43
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Reflujo abdominoyugular",
+      "pagina": 44
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Región precordial — inspección, palpación, choque de la punta",
+      "pagina": 45
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Choque de la punta: desplazamiento, extensión aumentada, impulso sostenido; frémitos",
+      "pagina": 46
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Auscultación cardíaca — focos de auscultación",
+      "pagina": 47
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Segundo ruido — A2 aumentado en hipertensión arterial",
+      "pagina": 49
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "R3 y R4, ritmo de galope",
+      "pagina": 50
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Síndromes cardiovasculares — insuficiencia cardíaca izquierda y derecha",
+      "pagina": 52
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Síndrome congestivo global",
+      "pagina": 53
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "ECG — eje eléctrico: desviación izquierda e hipertrofia ventricular izquierda",
+      "pagina": 62
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Disnea (semiotecnia, disnea de esfuerzo)",
+      "pagina": 77
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Hipertensión arterial — definición",
+      "pagina": 175
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Hipertensión arterial — daño de órgano blanco (HVI, insuficiencia cardíaca)",
+      "pagina": 180
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Hipertensión arterial — paraclínica basal y según la situación (ECG, ecocardiograma, ionograma)",
+      "pagina": 181
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Hiperplasia prostática — síntomas irritativos (nicturia como diferencial)",
+      "pagina": 274
+    },
+    {
+      "archivo": "imagenologia.md",
+      "seccion": "Silueta cardiovascular — índice cardiotorácico, valor normal y limitaciones",
+      "pagina": 43
+    },
+    {
+      "archivo": "imagenologia.md",
+      "seccion": "Edema pulmonar (opacidades perihiliares bilaterales)",
+      "pagina": 52
+    },
+    {
+      "archivo": "imagenologia.md",
+      "seccion": "Patología pleural — derrame pleural (borramiento del seno costofrénico)",
+      "pagina": 53
+    },
+    {
+      "archivo": "laboratorio-clinico.md",
+      "seccion": "Filtrado glomerular — creatinina",
+      "pagina": 33
+    },
+    {
+      "archivo": "laboratorio-clinico.md",
+      "seccion": "Filtrado glomerular estimado — CKD-EPI 2021",
+      "pagina": 35
+    },
+    {
+      "archivo": "paraclinica.md",
+      "seccion": "Cardiovascular — HTA (ECG, ETT, creatininemia, orina y albúmina/creatinina, glicemia, perfil lipídico, ionograma)",
+      "pagina": null
+    },
+    {
+      "archivo": "paraclinica.md",
+      "seccion": "Respiratorio — NAC (hemocultivos) y Asma (espirometría)",
+      "pagina": null
+    }
+  ]
+}

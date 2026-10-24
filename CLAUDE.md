@@ -32,6 +32,17 @@ data/ecoe/
 - Las **grillas** son la fuente de verdad de la rúbrica. Su texto es literal del PDF: no parafrasearlo.
 - El contenido médico no se reescribe con LLM. La limpieza de PDFs es determinística (`rag/clean_pdfs.py`).
 
+## Casos clínicos
+
+- Spec en [cases/SPEC.md](cases/SPEC.md); casos en `cases/<materia>/<id>.json`, cada uno armado a partir de una o más grillas.
+- Cada ítem evaluable de la grilla tiene que estar cubierto (`grilla_items: ["<grilla_id>::<texto literal>"]`), incluidos los negativos pertinentes.
+- Las respuestas del paciente revelan un solo hecho por pregunta, en lenguaje de paciente, sin nombrar el diagnóstico.
+- Flujo para casos nuevos: un agente escribe el caso, otro con contexto limpio lo revisa contra los apuntes, y `python cases/validate.py` + `pytest` tienen que pasar.
+
+## Tests
+
+`python -m pytest` (config en `pytest.ini`). TDD para lo determinístico; el comportamiento del LLM se mide con evals.
+
 ## Gemini
 
 - Keys en `.env` como `GOOGLE_API_KEY_1`, `_2`, `_3` (cuentas distintas). `llm/gemini.py` rota de key ante 429 y espera si todas llegaron al límite por minuto.

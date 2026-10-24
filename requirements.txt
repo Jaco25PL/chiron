@@ -4,3 +4,4 @@ langchain-chroma
 langchain-google-genai
 langchain-text-splitters
 python-dotenv
+pytest

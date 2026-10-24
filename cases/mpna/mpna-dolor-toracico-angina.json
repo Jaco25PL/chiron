@@ -1,0 +1,820 @@
+{
+  "id": "mpna-dolor-toracico-angina",
+  "materia": "mpna",
+  "titulo": "Dolor en el pecho al caminar",
+  "grillas": [
+    "03-dolor-toracico",
+    "05-ex-fisico-cardiovascular"
+  ],
+  "dificultad": "basico",
+  "paciente": {
+    "nombre": "Néstor Fabián Olivera Castro",
+    "edad": 58,
+    "sexo": "masculino",
+    "procedencia": "Montevideo",
+    "domicilio": "Barrio Cerro Norte, Montevideo",
+    "ocupacion": "Taxista (trabaja turnos de 10 horas sentado)",
+    "convivencia": "Vive con su esposa y su hijo menor de 22 años",
+    "escolaridad": "Secundaria incompleta (hasta 3.º de liceo)",
+    "estado_civil": "Casado",
+    "prestador": "Mutualista Sanatorio del Oeste",
+    "medico_referencia": "Dra. Mariela Sosa (médica de familia de la policlínica)"
+  },
+  "personalidad": {
+    "tipo": "nervioso",
+    "descripcion": "Está preocupado porque su padre se murió del corazón. Se mueve en la silla, se toca el pecho al hablar del dolor y en algún momento pregunta si lo que tiene es grave o si le va a dar un infarto. Aun así, solo cuenta lo que le preguntan; no adelanta datos por su cuenta.",
+    "forma_de_hablar": "Habla un poco rápido, con voseo montevideano y muletillas ('mirá', 'viste', 'qué sé yo', 'la verdad'). Respuestas cortas pero cargadas de preocupación; a veces repite la pregunta '¿pero es grave, doctor?'. Usa lenguaje común: 'un peso', 'como que me aprietan', 'me falta el aire', 'el pucho'. No usa términos médicos."
+  },
+  "motivo_consulta": {
+    "frase_inicial": "Mirá, vengo porque me viene dando un dolor acá en el pecho y la verdad que estoy asustado."
+  },
+  "anamnesis": [
+    {
+      "id": "aparicion",
+      "tema": "Inicio y circunstancia de aparición del dolor",
+      "preguntas_ejemplo": [
+        "¿Desde cuándo tiene el dolor?",
+        "¿Cómo empezó?",
+        "¿Qué estaba haciendo cuando le dio?"
+      ],
+      "respuesta": "Hace como dos meses, más o menos. La primera vez fue subiendo el repecho de mi casa, que es bastante empinado. Y desde ahí me agarra cuando camino ligero o subo la escalera del edificio de mi hija, que es un tercer piso.",
+      "grilla_items": [
+        "03-dolor-toracico::Pregunta APARICIÓN (cuándo inicia y circunstancia de aparición)"
+      ]
+    },
+    {
+      "id": "desencadenante-emocional",
+      "tema": "Desencadenante emocional",
+      "preguntas_ejemplo": [
+        "¿Le aparece con nervios o enojos?",
+        "¿Le dio alguna vez estando nervioso?"
+      ],
+      "respuesta": "Mirá, una vez me dio discutiendo con un pasajero, que me puse muy nervioso. Pero fue una sola vez.",
+      "grilla_items": []
+    },
+    {
+      "id": "respiracion-movimientos",
+      "tema": "Relación con la respiración, los movimientos y la presión local",
+      "preguntas_ejemplo": [
+        "¿Le duele más al respirar hondo?",
+        "¿Cambia al moverse o al cambiar de posición?",
+        "¿Le duele si se aprieta ahí?"
+      ],
+      "respuesta": "No, no me duele más si respiro hondo, ni si muevo el brazo o me doy vuelta. Y si me aprieto ahí tampoco me duele.",
+      "grilla_items": []
+    },
+    {
+      "id": "tipo",
+      "tema": "Tipo o carácter del dolor",
+      "preguntas_ejemplo": [
+        "¿Cómo es el dolor?",
+        "¿Es como una puntada, un ardor, una presión?"
+      ],
+      "respuesta": "Es como un peso, como si me apretaran el pecho, viste. No es una puntada ni un ardor, es como que algo me aplasta.",
+      "grilla_items": [
+        "03-dolor-toracico::Pregunta TIPO (urente, punzante, quemante, desgarrante, opresivo)"
+      ]
+    },
+    {
+      "id": "intensidad",
+      "tema": "Intensidad del dolor (EVA)",
+      "preguntas_ejemplo": [
+        "Del 0 al 10, ¿cuánto le duele?",
+        "¿Qué tan fuerte es?"
+      ],
+      "respuesta": "Y... un 6, digamos. No es que me tire al piso, pero es fuerte, la verdad.",
+      "grilla_items": [
+        "03-dolor-toracico::Pregunta INTENSIDAD (escala EVA de dolor)"
+      ]
+    },
+    {
+      "id": "localizacion",
+      "tema": "Localización del dolor",
+      "preguntas_ejemplo": [
+        "¿Dónde le duele exactamente?",
+        "¿Me puede mostrar con la mano?"
+      ],
+      "respuesta": "Acá, en el medio del pecho, atrás del hueso (se apoya la mano abierta sobre el esternón). No es un puntito, es toda esta zona.",
+      "grilla_items": [
+        "03-dolor-toracico::Pregunta LOCALIZACIÓN (cara anterior de tórax, cuello, brazo)"
+      ]
+    },
+    {
+      "id": "irradiacion",
+      "tema": "Irradiación del dolor",
+      "preguntas_ejemplo": [
+        "¿El dolor se le corre para algún lado?",
+        "¿Le va al brazo, a la mandíbula, a la espalda?"
+      ],
+      "respuesta": "Sí, a veces se me va para el brazo izquierdo, por la parte de adentro, hasta el codo más o menos. A la mandíbula, a la espalda o al brazo derecho no, eso no.",
+      "grilla_items": [
+        "03-dolor-toracico::Pregunta IRRADIACIONES (brazo izquierdo, mandíbula, espalda, brazo derecho)"
+      ]
+    },
+    {
+      "id": "duracion-alivio",
+      "tema": "Duración de los episodios y cómo calma",
+      "preguntas_ejemplo": [
+        "¿Cuánto le dura?",
+        "¿Cómo se le calma?",
+        "¿Qué hace cuando le da?"
+      ],
+      "respuesta": "Me dura unos tres, cuatro minutos. Me tengo que parar, y si me quedo quieto se me va solo.",
+      "grilla_items": [
+        "03-dolor-toracico::Pregunta EVOLUCIÓN (desde el inicio, aparece ante igual esfuerzo, ¿cómo calma?)"
+      ]
+    },
+    {
+      "id": "evolucion",
+      "tema": "Evolución desde el inicio: umbral de esfuerzo, frecuencia, progresión, dolor en reposo",
+      "preguntas_ejemplo": [
+        "¿Le aparece siempre con el mismo esfuerzo?",
+        "¿Cada cuánto le da?",
+        "¿Ha ido empeorando desde que empezó?",
+        "¿Le dio alguna vez estando quieto o durmiendo?"
+      ],
+      "respuesta": "Siempre me pasa más o menos con lo mismo: el repecho, dos o tres cuadras rápido, la escalera. Me da dos o tres veces por semana, según cuánto camine. No, no ha empeorado, es siempre igual. Estando tranquilo, en casa o durmiendo, nunca me dio. ¿Eso es bueno o es malo, doctor?",
+      "grilla_items": [
+        "03-dolor-toracico::Pregunta EVOLUCIÓN (desde el inicio, aparece ante igual esfuerzo, ¿cómo calma?)"
+      ]
+    },
+    {
+      "id": "medicacion-dolor",
+      "tema": "Medicación tomada para el dolor",
+      "preguntas_ejemplo": [
+        "¿Tomó algo para el dolor?",
+        "¿Probó algún remedio?"
+      ],
+      "respuesta": "No, nada. No tomé ningún remedio para eso.",
+      "grilla_items": []
+    },
+    {
+      "id": "disnea",
+      "tema": "Disnea acompañante",
+      "preguntas_ejemplo": [
+        "¿Le falta el aire?",
+        "¿Se agita cuando le da el dolor?"
+      ],
+      "respuesta": "Cuando me agarra el dolor sí, me falta un poco el aire, como que respiro más corto, pero se me va junto con el dolor. Fuera de eso no.",
+      "grilla_items": [
+        "03-dolor-toracico::Disnea"
+      ]
+    },
+    {
+      "id": "ortopnea-dpn",
+      "tema": "Falta de aire al acostarse o despertares nocturnos por falta de aire",
+      "preguntas_ejemplo": [
+        "¿Puede dormir acostado?",
+        "¿Cuántas almohadas usa?",
+        "¿Se despierta de noche con falta de aire?"
+      ],
+      "respuesta": "No, duermo acostado normal, con una almohada. Y de noche no me despierto ahogado, no.",
+      "grilla_items": []
+    },
+    {
+      "id": "sudoracion",
+      "tema": "Sudoración u otros síntomas neurovegetativos",
+      "preguntas_ejemplo": [
+        "¿Transpira cuando le da el dolor?",
+        "¿Se pone pálido, siente frío?"
+      ],
+      "respuesta": "No, transpirar frío no. Por lo menos no me di cuenta. Tampoco me puse pálido, que mi señora me hubiera dicho.",
+      "grilla_items": [
+        "03-dolor-toracico::Sudoración (u otros síntomas neurovegetativos)"
+      ]
+    },
+    {
+      "id": "nauseas",
+      "tema": "Náuseas o vómitos",
+      "preguntas_ejemplo": [
+        "¿Tiene náuseas o vómitos con el dolor?"
+      ],
+      "respuesta": "No, náuseas no, y vomitar tampoco.",
+      "grilla_items": [
+        "03-dolor-toracico::Náuseas / vómitos"
+      ]
+    },
+    {
+      "id": "palpitaciones",
+      "tema": "Palpitaciones",
+      "preguntas_ejemplo": [
+        "¿Siente el corazón acelerado o que late raro?"
+      ],
+      "respuesta": "No, eso no. El corazón lo siento normal, no se me acelera ni me late raro.",
+      "grilla_items": [
+        "03-dolor-toracico::Palpitaciones"
+      ]
+    },
+    {
+      "id": "sincope",
+      "tema": "Síncope o presíncope",
+      "preguntas_ejemplo": [
+        "¿Se desmayó alguna vez?",
+        "¿Se mareó o sintió que se iba a desmayar?"
+      ],
+      "respuesta": "No, no me desmayé nunca. Mareos tampoco.",
+      "grilla_items": [
+        "03-dolor-toracico::Síncope"
+      ]
+    },
+    {
+      "id": "edemas",
+      "tema": "Edemas de miembros inferiores",
+      "preguntas_ejemplo": [
+        "¿Se le hinchan las piernas o los tobillos?"
+      ],
+      "respuesta": "No, las piernas no se me hinchan. Ni a la noche.",
+      "grilla_items": [
+        "03-dolor-toracico::Edemas MMII"
+      ]
+    },
+    {
+      "id": "tabaquismo",
+      "tema": "Tabaquismo",
+      "preguntas_ejemplo": [
+        "¿Fuma?",
+        "¿Fumó alguna vez?"
+      ],
+      "respuesta": "Sí, fumo. Ya sé, ya sé que me lo van a decir...",
+      "grilla_items": [
+        "03-dolor-toracico::Tabaquismo"
+      ]
+    },
+    {
+      "id": "tabaquismo-cantidad",
+      "tema": "Cuantificación del tabaquismo (cigarrillos por día, edad de inicio)",
+      "preguntas_ejemplo": [
+        "¿Cuántos cigarrillos por día?",
+        "¿Desde qué edad fuma?"
+      ],
+      "respuesta": "Una caja por día, veinte cigarrillos, a veces un poco más en el taxi. Empecé a los 18 años, así que son como 40 años fumando. El primero me lo prendo ni bien me levanto, con el mate.",
+      "grilla_items": [
+        "03-dolor-toracico::Profundiza sobre su Tabaquismo"
+      ]
+    },
+    {
+      "id": "tabaquismo-abandono",
+      "tema": "Intentos de abandono y otros productos de nicotina",
+      "preguntas_ejemplo": [
+        "¿Intentó dejar?",
+        "¿Usa vapeador u otra cosa?"
+      ],
+      "respuesta": "Intenté dejar una vez, hace cinco años, con los chicles. Aguanté un mes y volví. Vapeador no uso, no.",
+      "grilla_items": [
+        "03-dolor-toracico::Profundiza sobre su Tabaquismo"
+      ]
+    },
+    {
+      "id": "sedentarismo",
+      "tema": "Actividad física",
+      "preguntas_ejemplo": [
+        "¿Hace ejercicio?",
+        "¿Camina?",
+        "¿Cómo es su actividad física?"
+      ],
+      "respuesta": "No, ejercicio no hago nada. Me paso diez horas sentado en el taxi y después llego y me tiro en el sillón. Lo único que camino es del taxi a casa.",
+      "grilla_items": [
+        "03-dolor-toracico::Sedentarismo"
+      ]
+    },
+    {
+      "id": "diabetes",
+      "tema": "Diabetes mellitus",
+      "preguntas_ejemplo": [
+        "¿Tiene diabetes?",
+        "¿Azúcar alto en sangre?"
+      ],
+      "respuesta": "No, diabetes no. En el último análisis que me hice, el azúcar me dijeron que estaba bien.",
+      "grilla_items": [
+        "03-dolor-toracico::Diabetes mellitus"
+      ]
+    },
+    {
+      "id": "hta",
+      "tema": "Hipertensión arterial",
+      "preguntas_ejemplo": [
+        "¿Tiene presión alta?",
+        "¿Le han tomado la presión?"
+      ],
+      "respuesta": "No, presión no tengo. Siempre que me la toman me dicen que está bien, capaz que un poquito alta cuando estoy nervioso, qué sé yo.",
+      "grilla_items": [
+        "03-dolor-toracico::Hipertensión arterial"
+      ]
+    },
+    {
+      "id": "dislipemia",
+      "tema": "Dislipemia",
+      "preguntas_ejemplo": [
+        "¿Tiene el colesterol alto?",
+        "¿Grasas en sangre?"
+      ],
+      "respuesta": "Sí, el colesterol lo tengo alto. Me lo dijeron hace unos años.",
+      "grilla_items": [
+        "03-dolor-toracico::Dislipemia"
+      ]
+    },
+    {
+      "id": "dislipemia-diagnostico",
+      "tema": "Cuándo y cómo se diagnosticó la dislipemia",
+      "preguntas_ejemplo": [
+        "¿Cuándo se lo diagnosticaron?",
+        "¿Cómo se enteró?"
+      ],
+      "respuesta": "Hace tres años, en un análisis de rutina que me pidieron para renovar la libreta de conducir.",
+      "grilla_items": [
+        "03-dolor-toracico::Profundiza sobre la dislipemia"
+      ]
+    },
+    {
+      "id": "dislipemia-tratamiento",
+      "tema": "Tratamiento y adherencia de la dislipemia",
+      "preguntas_ejemplo": [
+        "¿Toma algo para el colesterol?",
+        "¿Lo toma todos los días?",
+        "¿Hace dieta?"
+      ],
+      "respuesta": "La doctora me dio una pastilla, la atorvastatina, de 20 me parece. Pero la tomé unos meses y la dejé, porque me olvidaba y como no sentía nada... Dieta tampoco hago, la verdad: como mucho asado y fiambre, y comida rápida en el taxi.",
+      "grilla_items": [
+        "03-dolor-toracico::Profundiza sobre la dislipemia"
+      ]
+    },
+    {
+      "id": "dislipemia-controles",
+      "tema": "Controles de la dislipemia",
+      "preguntas_ejemplo": [
+        "¿Se hace controles?",
+        "¿Cuándo fue su último análisis?"
+      ],
+      "respuesta": "No, no me volví a hacer análisis desde ese entonces. Hace tres años ya.",
+      "grilla_items": [
+        "03-dolor-toracico::Profundiza sobre la dislipemia"
+      ]
+    },
+    {
+      "id": "antecedentes-familiares",
+      "tema": "Antecedentes familiares cardiovasculares",
+      "preguntas_ejemplo": [
+        "¿Alguien en su familia tuvo problemas del corazón?",
+        "¿De qué murieron sus padres?"
+      ],
+      "respuesta": "Mi padre se murió de un infarto a los 52 años, de golpe. Por eso estoy tan asustado, doctor, yo ya tengo más edad que él. Mi madre vive, tiene 80 y es de la presión. Mi hermano mayor tiene el colesterol alto también.",
+      "grilla_items": []
+    },
+    {
+      "id": "antecedentes-personales-cv",
+      "tema": "Otros antecedentes personales cardiovasculares",
+      "preguntas_ejemplo": [
+        "¿Tuvo algún infarto, problema del corazón o ataque cerebral?",
+        "¿Le duelen las piernas al caminar?",
+        "¿Problemas de riñón?"
+      ],
+      "respuesta": "No, nunca tuve nada del corazón, ni me internaron. Ataque cerebral tampoco. Las piernas no me duelen al caminar. De los riñones nunca me dijeron nada.",
+      "grilla_items": []
+    },
+    {
+      "id": "medicacion-habitual",
+      "tema": "Medicación habitual y alergias",
+      "preguntas_ejemplo": [
+        "¿Toma alguna medicación?",
+        "¿Es alérgico a algún medicamento?"
+      ],
+      "respuesta": "Ahora no tomo nada. La pastilla del colesterol la dejé, como le dije. Alergias no tengo.",
+      "grilla_items": []
+    },
+    {
+      "id": "sustancias",
+      "tema": "Alcohol y otras sustancias",
+      "preguntas_ejemplo": [
+        "¿Toma alcohol?",
+        "¿Consume alguna droga o energizantes?"
+      ],
+      "respuesta": "Alcohol, un par de vasos de vino los fines de semana con el asado. Drogas nunca. Energizantes no, lo que sí tomo es mucho mate y café para aguantar el turno.",
+      "grilla_items": []
+    },
+    {
+      "id": "sintomas-digestivos",
+      "tema": "Síntomas digestivos (ardor, acidez)",
+      "preguntas_ejemplo": [
+        "¿Tiene acidez o ardor en la boca del estómago?",
+        "¿El dolor le aparece después de comer o acostado?"
+      ],
+      "respuesta": "No, acidez no tengo. Y el dolor no tiene nada que ver con las comidas ni con acostarme.",
+      "grilla_items": []
+    }
+  ],
+  "signos_vitales": {
+    "pa": "136/84 mmHg (brazo derecho, sentado)",
+    "fc": "74 lpm, regular",
+    "fr": "16 rpm",
+    "temperatura": "36,4 °C",
+    "saturacion": "97 % al aire ambiente",
+    "peso": "88 kg",
+    "talla": "1,74 m",
+    "imc": "29,1 kg/m² (sobrepeso)"
+  },
+  "examen_fisico": [
+    {
+      "id": "aspecto-general",
+      "maniobra": "Valoración general",
+      "hallazgo": "Lúcido, ansioso, sin dolor en el momento del examen. Eupneico, normocoloreado, bien perfundido. Sin cianosis. Perímetro abdominal aumentado (sobrepeso). Dedos de la mano derecha con tinción amarillenta por tabaco.",
+      "grilla_items": []
+    },
+    {
+      "id": "inspeccion-torax",
+      "maniobra": "Inspección del tórax",
+      "hallazgo": "Tórax simétrico, normoconformado, sin deformidades ni abombamiento precordial. Sin cicatrices de cirugías previas. Sin pulsaciones visibles en región paraesternal ni epigástrica. Sin circulación colateral.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Describe el tórax (debe mencionar lo que busca cuando observa el tórax)"
+      ]
+    },
+    {
+      "id": "inspeccion-latido-punta",
+      "maniobra": "Búsqueda del latido de la punta a la inspección",
+      "hallazgo": "No se visualiza el latido de la punta (panículo adiposo aumentado). Sin levantamiento visible del precordio.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Búsqueda de latido en punta cardíaca (pensando en HVI)"
+      ]
+    },
+    {
+      "id": "angulo-louis",
+      "maniobra": "Palpación del ángulo de Louis",
+      "hallazgo": "Ángulo de Louis palpable a nivel de la unión manubrio-esternal; a sus lados se ubica la 2.ª costilla y por debajo el 2.º espacio intercostal, que se usa para contar los espacios.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Topografía el ángulo de Louis y lo utiliza como referencia."
+      ]
+    },
+    {
+      "id": "fremito-mitral",
+      "maniobra": "Palpación de foco mitral en busca de frémito",
+      "hallazgo": "En 5.º espacio intercostal izquierdo, línea medioclavicular: no se palpa frémito.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Topografía y busca frémito en foco mitral (LMC y 5to espacio intercostal izq)"
+      ]
+    },
+    {
+      "id": "fremito-aortico",
+      "maniobra": "Palpación de foco aórtico en busca de frémito",
+      "hallazgo": "En 2.º espacio intercostal derecho, paraesternal: no se palpa frémito.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Topo. y busca frémito en foco aórtico (2do espacio paraesternal derecho)"
+      ]
+    },
+    {
+      "id": "fremito-pulmonar",
+      "maniobra": "Palpación de foco pulmonar en busca de frémito",
+      "hallazgo": "En 2.º espacio intercostal izquierdo, paraesternal: no se palpa frémito.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Topo. y busca frémito en foco pulmonar (2do espacio paraesternal izquierdo)"
+      ]
+    },
+    {
+      "id": "fremito-tricuspideo",
+      "maniobra": "Palpación de foco tricuspídeo en busca de frémito",
+      "hallazgo": "Sobre la base del apéndice xifoides: no se palpa frémito. Sin impulso paraesternal izquierdo.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Topo. y busca frémito en foco tricuspídeo (sobre base de apéndice xifoides)"
+      ]
+    },
+    {
+      "id": "choque-punta",
+      "maniobra": "Palpación del choque de punta",
+      "hallazgo": "Choque de punta palpable en 5.º espacio intercostal izquierdo, sobre la línea medioclavicular, no descendido ni lateralizado. Ocupa un espacio (aprox. 2 cm), de intensidad normal, no sostenido. Se palpa mejor en decúbito lateral izquierdo.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Busca choque de punta (LMC y 5to espacio intercostal a izq, descenso o lateralización)"
+      ]
+    },
+    {
+      "id": "auscultacion-aortico",
+      "maniobra": "Auscultación de foco aórtico",
+      "hallazgo": "2.º espacio intercostal derecho paraesternal: R1 y R2 normales, R2 de intensidad conservada. Sin soplos.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Menciona la topografía y ausculta foco aórtico"
+      ]
+    },
+    {
+      "id": "auscultacion-pulmonar",
+      "maniobra": "Auscultación de foco pulmonar",
+      "hallazgo": "2.º espacio intercostal izquierdo paraesternal: R1 y R2 normales, desdoblamiento fisiológico de R2 en inspiración. Sin soplos.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Menciona la topografía y ausculta foco pulmonar"
+      ]
+    },
+    {
+      "id": "auscultacion-tricuspideo",
+      "maniobra": "Auscultación de foco tricuspídeo",
+      "hallazgo": "Borde esternal izquierdo inferior / base del apéndice xifoides: R1 y R2 normales. Sin soplos ni ruidos agregados.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Menciona la topografía y ausculta foco tricuspídeo"
+      ]
+    },
+    {
+      "id": "auscultacion-mitral",
+      "maniobra": "Auscultación de foco mitral",
+      "hallazgo": "5.º espacio intercostal izquierdo, línea medioclavicular: R1 y R2 normales. Sin soplos. No se auscultan R3 ni R4, tampoco en decúbito lateral izquierdo con campana.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Menciona la topografía y ausculta foco mitral"
+      ]
+    },
+    {
+      "id": "pulso-radial-auscultacion",
+      "maniobra": "Palpación del pulso radial mientras ausculta",
+      "hallazgo": "Cada latido auscultado se corresponde con un pulso radial palpable. Sin déficit de pulso.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Toma pulso radial mientras ausculta (lo hace o menciona)"
+      ]
+    },
+    {
+      "id": "ritmo",
+      "maniobra": "Identificación del ritmo cardíaco",
+      "hallazgo": "Ritmo regular, sin pausas ni latidos prematuros.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Identifica Ritmo (identifica ritmo regular y lo menciona al docente)"
+      ]
+    },
+    {
+      "id": "frecuencia",
+      "maniobra": "Toma de la frecuencia cardíaca",
+      "hallazgo": "37 latidos en 30 segundos: frecuencia cardíaca de 74 lpm.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Toma frecuencia (por los menos en 30 seg) y se la menciona a docente"
+      ]
+    },
+    {
+      "id": "yugular-observacion",
+      "maniobra": "Observación de la vena yugular interna derecha con el paciente a 45°",
+      "hallazgo": "Con el tronco a 45° y la cabeza girada a la izquierda, se observan las oscilaciones de la yugular interna derecha en la base del cuello, entre los haces del esternocleidomastoideo. Punto más alto de la columna venosa a unos 2 cm por encima del ángulo esternal.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Observa vena yugular interna derecha con paciente a 45°"
+      ]
+    },
+    {
+      "id": "pulso-venoso",
+      "maniobra": "Caracterización del pulso venoso yugular",
+      "hallazgo": "Pulso venoso visible, ondulante, no palpable (desaparece con la compresión suave en la base del cuello) y no coincide con el pulso radial. Desciende en inspiración.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Pulso venoso: Menciona que se ve pero no se palpa y es negativo al p. radial"
+      ]
+    },
+    {
+      "id": "ingurgitacion-yugular",
+      "maniobra": "Búsqueda de ingurgitación yugular",
+      "hallazgo": "Sin ingurgitación yugular: a 45° el punto más alto de la columna venosa queda a unos 2 cm por encima del ángulo esternal (habitual hasta 3–4 cm).",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Ingurgitación Yugular: Menciona la columna venosa supera el plano esternal"
+      ]
+    },
+    {
+      "id": "reflujo-hepatoyugular",
+      "maniobra": "Reflujo hepato-yugular (abdominoyugular)",
+      "hallazgo": "Negativo: con compresión sostenida en hipocondrio derecho durante 10–15 segundos la columna venosa no aumenta de forma sostenida.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Reflujo Hepato-Yugular: Aum. columna venosa con compresión hepática."
+      ]
+    },
+    {
+      "id": "pulsos-carotideos",
+      "maniobra": "Palpación y auscultación de pulsos carotídeos",
+      "hallazgo": "Pulsos carotídeos presentes, simétricos, de amplitud normal, regulares, palpados de a uno por vez. Sin soplos carotídeos a la auscultación.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Carotídeos"
+      ]
+    },
+    {
+      "id": "pulsos-radiales",
+      "maniobra": "Palpación de pulsos radiales",
+      "hallazgo": "Radiales presentes, simétricos, regulares, 74 lpm, amplitud normal, tensión normal.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Radiales"
+      ]
+    },
+    {
+      "id": "pulsos-femorales",
+      "maniobra": "Palpación de pulsos femorales",
+      "hallazgo": "Femorales presentes y simétricos, por debajo del ligamento inguinal, amplitud normal. Sin soplos femorales.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Femorales"
+      ]
+    },
+    {
+      "id": "pulsos-popliteos",
+      "maniobra": "Palpación de pulsos poplíteos",
+      "hallazgo": "Poplíteos presentes y simétricos, palpados con la rodilla semiflexionada.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Popliteos"
+      ]
+    },
+    {
+      "id": "pulsos-tibiales",
+      "maniobra": "Palpación de pulsos tibiales posteriores",
+      "hallazgo": "Tibiales posteriores presentes y simétricos, detrás del maléolo medial.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Tibiales posteriores"
+      ]
+    },
+    {
+      "id": "pulsos-pedios",
+      "maniobra": "Palpación de pulsos pedios",
+      "hallazgo": "Pedios presentes y simétricos en el dorso de ambos pies.",
+      "grilla_items": [
+        "05-ex-fisico-cardiovascular::Pedios"
+      ]
+    },
+    {
+      "id": "edemas-mmii",
+      "maniobra": "Búsqueda de edemas en miembros inferiores",
+      "hallazgo": "Sin edemas: no deja fóvea en región pretibial ni maleolar. Piel de miembros inferiores normal, sin frialdad ni palidez.",
+      "grilla_items": []
+    },
+    {
+      "id": "pleuropulmonar",
+      "maniobra": "Auscultación pleuropulmonar",
+      "hallazgo": "Murmullo alveolovesicular presente en ambos campos, sin estertores crepitantes ni sibilancias.",
+      "grilla_items": []
+    },
+    {
+      "id": "palpacion-pared",
+      "maniobra": "Palpación de la pared torácica (dolor a la presión)",
+      "hallazgo": "La palpación de esternón, articulaciones condrocostales y músculos pectorales no reproduce el dolor.",
+      "grilla_items": []
+    }
+  ],
+  "paraclinica": [
+    {
+      "estudio": "ECG de 12 derivaciones en reposo",
+      "resultado": "Ritmo sinusal, FC 72 lpm. Eje QRS +30°. PR 0,16 s, QRS 0,08 s, QTc 0,41 s. Segmento ST isoeléctrico en todas las derivaciones, ondas T concordantes con el QRS. Sin ondas Q patológicas. Sin criterios de hipertrofia ventricular izquierda. ECG en reposo normal (sin dolor durante el registro).",
+      "indicado": true,
+      "justificacion": "Estudio inicial obligatorio ante dolor torácico de características isquémicas: busca alteraciones del ST-T, ondas Q de infarto previo, HVI o arritmias. Un ECG normal en reposo y sin dolor no descarta cardiopatía isquémica; por eso se completa con una prueba funcional.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Perfil lipídico",
+      "resultado": "Colesterol total 252 mg/dL, HDL-colesterol 38 mg/dL, triglicéridos 180 mg/dL, LDL-colesterol (Friedewald) 178 mg/dL, colesterol no-HDL 214 mg/dL.",
+      "indicado": true,
+      "justificacion": "Dislipemia conocida sin tratamiento ni control hace 3 años. Confirma LDL elevado y HDL bajo, permite estimar el riesgo cardiovascular y es la base para reiniciar estatina con objetivo de LDL acorde a cardiopatía isquémica.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Glicemia en ayunas y HbA1c",
+      "resultado": "Glicemia en ayunas 97 mg/dL. HbA1c 5,5 %.",
+      "indicado": true,
+      "justificacion": "Tamizaje de diabetes como factor de riesgo cardiovascular (sobrepeso, sedentarismo, dislipemia). Resultados en rango normal: descarta diabetes.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Creatininemia y filtrado glomerular estimado",
+      "resultado": "Creatinina 0,94 mg/dL. FGe (CKD-EPI) 91 mL/min/1,73 m².",
+      "indicado": true,
+      "justificacion": "Valora función renal (la enfermedad renal crónica es factor de riesgo cardiovascular) y antes de iniciar fármacos. Normal.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Hemograma",
+      "resultado": "Hemoglobina 15,1 g/dL, hematocrito 45 %, VCM 90 fL, leucocitos 7.800/mm³, plaquetas 245.000/mm³.",
+      "indicado": true,
+      "justificacion": "Descartar anemia como factor que agrave o precipite la isquemia por menor aporte de oxígeno. Normal.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Ergometría (prueba de esfuerzo graduada)",
+      "resultado": "Protocolo de Bruce. A los 7 minutos (8 METs, FC 142 lpm, 88 % de la FC máxima teórica) presenta opresión retroesternal similar a la habitual, con infradesnivel horizontal del ST de 1,5 mm en V4–V6 y DII. Se detiene la prueba; los síntomas y las alteraciones del ST revierten en 4 minutos de recuperación. Sin arritmias. Respuesta tensional normal (PA máxima 170/85 mmHg). Prueba clínica y eléctricamente positiva para isquemia a carga moderada-alta.",
+      "indicado": "opcional",
+      "justificacion": "Paciente con dolor de patrón estable, sin dolor en reposo y con ECG basal interpretable: corresponde una prueba funcional ambulatoria para confirmar isquemia inducible y estratificar riesgo; se coordina a través de cardiología y está contraindicada si el dolor fuera inestable (síndrome coronario agudo). La depresión del ST sugiere isquemia subendocárdica (apuntes, ECG > segmento ST). La ergometría como tal no figura en los apuntes del curso: a nivel de 4.º año alcanza con plantear que se necesita una prueba funcional/derivación a cardiología; el resultado se entrega si el estudiante la pide.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Ecocardiograma transtorácico",
+      "resultado": "Ventrículo izquierdo de dimensiones y espesores normales. FEVI 60 % (Simpson). Sin alteraciones de la motilidad segmentaria en reposo. Válvulas sin alteraciones significativas. Aorta de calibre normal.",
+      "indicado": true,
+      "justificacion": "Ante síntomas cardíacos sugestivos de cardiopatía isquémica permite valorar función ventricular y motilidad segmentaria, y descartar valvulopatía (por ejemplo, estenosis aórtica) como causa de angina. Normal en reposo, lo que es habitual en la angina estable.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Troponina cardíaca seriada",
+      "resultado": "Si se solicita: troponina T ultrasensible 8 ng/L (por debajo del percentil 99).",
+      "indicado": false,
+      "justificacion": "No indicada en la consulta de policlínica: el dolor es de patrón estable (mismo esfuerzo, cede con reposo, nunca en reposo, sin progresión) y el paciente está asintomático. La troponina se pide ante sospecha de síndrome coronario agudo (dolor en reposo, prolongado, de reciente comienzo o progresivo), que en ese caso requiere derivación a emergencia.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Dímero D",
+      "resultado": "Si se solicita: 280 ng/mL (normal).",
+      "indicado": false,
+      "justificacion": "No indicado: no hay sospecha clínica de tromboembolismo pulmonar (dolor de esfuerzo que cede con reposo, sin disnea de reposo, sin taquicardia, saturación normal, sin factores de riesgo de trombosis). Un resultado aislado no aporta a este cuadro y puede generar estudios innecesarios.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Radiografía de tórax frente y perfil",
+      "resultado": "Si se solicita: índice cardiotorácico 0,45. Campos pulmonares sin opacidades. Senos costofrénicos libres. Mediastino de ancho normal.",
+      "indicado": false,
+      "justificacion": "No es necesaria para el diagnóstico de angina estable con examen cardiopulmonar normal: no aporta al diagnóstico de isquemia. Se reserva para sospecha de insuficiencia cardíaca, patología pulmonar o aórtica.",
+      "grilla_items": []
+    }
+  ],
+  "diagnostico": {
+    "principal": "Angina estable (angina típica de esfuerzo) por probable cardiopatía isquémica crónica",
+    "diferenciales": [
+      "Síndrome coronario agudo / angina inestable (descartado por patrón estable, sin dolor en reposo ni progresión)",
+      "Dolor torácico de origen esofágico (reflujo gastroesofágico, espasmo esofágico)",
+      "Dolor osteomuscular de pared torácica",
+      "Estenosis aórtica como causa de angina (descartada por auscultación sin soplos y ecocardiograma)",
+      "Dolor torácico de origen ansioso"
+    ],
+    "fundamento": "Hombre de 58 años con múltiples factores de riesgo cardiovascular: tabaquismo activo (40 paquetes-año), dislipemia sin tratamiento ni control, sedentarismo, sobrepeso y antecedente familiar de cardiopatía isquémica precoz (padre con infarto a los 52 años). Dolor retroesternal opresivo, EVA 6/10, irradiado a cara interna del brazo izquierdo, desencadenado por esfuerzo (y en una ocasión por estrés emocional) y que cede con el reposo en 3–4 minutos: cumple los 3 criterios clásicos de angina (angina típica). Disnea acompañante durante los episodios, sin síntomas neurovegetativos. El patrón es reproducible ante el mismo nivel de esfuerzo, sin progresión ni episodios en reposo desde hace 2 meses (angina estable, no SCA). Examen cardiovascular normal, ECG de reposo normal, ergometría positiva con infradesnivel del ST y reproducción del dolor, ecocardiograma con función normal. Perfil lipídico con LDL 178 mg/dL y HDL bajo.",
+    "grilla_items": []
+  },
+  "conducta_esperada": [
+    {
+      "accion": "Explicar signos de alarma de síndrome coronario agudo (dolor en reposo, de más de 20 minutos, con esfuerzos cada vez menores o que no cede con el reposo/nitrato) y consultar a emergencia si aparecen.",
+      "grilla_items": []
+    },
+    {
+      "accion": "Cesación tabáquica: consejo breve y oferta de tratamiento (programa de cesación, terapia de reemplazo nicotínico).",
+      "grilla_items": []
+    },
+    {
+      "accion": "Iniciar o reiniciar estatina de alta intensidad, antiagregación con aspirina y nitrato sublingual a demanda; considerar betabloqueante como antianginoso, según indicación de cardiología.",
+      "grilla_items": []
+    },
+    {
+      "accion": "Derivación a cardiología para estratificación (prueba funcional) y cambios de estilo de vida: actividad física progresiva y supervisada, dieta, descenso de peso.",
+      "grilla_items": []
+    }
+  ],
+  "fuentes": [
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Anamnesis cardiovascular > Dolor torácico (ATILDAE, dolor de probable origen isquémico, criterios clásicos de angina)",
+      "pagina": 32
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Dolor torácico > Angina estable / Síndrome coronario agudo",
+      "pagina": 33
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Antecedentes cardiovasculares > Factores de riesgo, tabaquismo (paquetes-año)",
+      "pagina": 38
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Antecedentes familiares > Criterio de enfermedad coronaria precoz",
+      "pagina": 39
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Examen físico > Pulso arterial",
+      "pagina": 40
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Examen físico > Déficit de pulso, pulsos periféricos, auscultación arterial",
+      "pagina": 42
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Pulso venoso yugular, ingurgitación yugular, reflujo abdominoyugular",
+      "pagina": 43
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Región precordial > Choque de la punta, frémitos",
+      "pagina": 45
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Auscultación cardíaca > Áreas de auscultación",
+      "pagina": 47
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Síndromes cardiovasculares > Síndrome anginoso (isquémico)",
+      "pagina": 53
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Electrocardiograma > Onda T",
+      "pagina": 63
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Electrocardiograma > Segmento ST (depresión del ST = isquemia subendocárdica)",
+      "pagina": 64
+    },
+    {
+      "archivo": "laboratorio-clinico.md",
+      "seccion": "Diagnóstico de laboratorio de diabetes (glicemia en ayunas, HbA1c)",
+      "pagina": 6
+    },
+    {
+      "archivo": "laboratorio-clinico.md",
+      "seccion": "Perfil lipídico > LDL-colesterol (Friedewald)",
+      "pagina": 8
+    },
+    {
+      "archivo": "paraclinica.md",
+      "seccion": "Cardiovascular — HTA: ECG de 12 derivaciones, ecocardiograma transtorácico, perfil lipídico, glicemia en ayunas, creatininemia y TFGe",
+      "pagina": null
+    }
+  ]
+}

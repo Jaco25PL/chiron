@@ -1,0 +1,858 @@
+{
+  "id": "mpna-itu-pna-diabetica",
+  "materia": "mpna",
+  "titulo": "Ardor al orinar en mujer con diabetes",
+  "grillas": [
+    "32-itu-mujer-diabetica-anamnesis",
+    "33-itu-mujer-diabetica-ex-fisico"
+  ],
+  "dificultad": "intermedio",
+  "paciente": {
+    "nombre": "Graciela Noemí Barreiro Suárez",
+    "edad": 61,
+    "sexo": "femenino",
+    "procedencia": "Nacida en Paso de los Toros (Tacuarembó); vive en Montevideo desde los 19 años",
+    "domicilio": "Barrio Colón, Montevideo",
+    "ocupacion": "Costurera; hace arreglos de ropa en su casa",
+    "convivencia": "Vive con su esposo y un nieto de 17 años",
+    "escolaridad": "Primaria completa y primer año de liceo",
+    "estado_civil": "Casada",
+    "prestador": "ASSE, policlínica barrial",
+    "medico_referencia": "Dra. Laura Méndez, médica de familia de la policlínica"
+  },
+  "personalidad": {
+    "tipo": "conversador",
+    "descripcion": "Simpática y charlatana. Contesta lo que le preguntan pero se va por las ramas con cosas de todos los días: el nieto, los arreglos de costura que tiene atrasados, la feria del domingo, la vecina. Nunca agrega datos clínicos que no le preguntaron; si el estudiante la corta, vuelve al tema sin problema. Está algo decaída por la fiebre pero de buen humor.",
+    "forma_de_hablar": "Voseo montevideano, registro popular. Muletillas: 'mirá', 'viste', 'ay, m'hijo/m'hija', 'qué querés que te diga', 'bárbaro'. Respuestas largas con anécdotas, pero el dato médico que da es solo el que se le preguntó."
+  },
+  "motivo_consulta": {
+    "frase_inicial": "Ay, mirá, vengo porque me arde muchísimo cuando hago pichí. Y yo con la diabetes viste que tengo que andar con cuidado."
+  },
+  "anamnesis": [
+    {
+      "id": "ficha-patronimica",
+      "tema": "Datos patronímicos",
+      "preguntas_ejemplo": [
+        "¿Cómo se llama?",
+        "¿Qué edad tiene?",
+        "¿A qué se dedica?",
+        "¿Con quién vive?"
+      ],
+      "respuesta": "Graciela Barreiro, 61 años cumplidos en marzo. Soy de Paso de los Toros pero vivo en Colón hace una vida. Soy costurera, hago arreglos en casa, dobladillos, cierres... ahora tengo una pila atrasada, ni te cuento. Vivo con mi marido, Rubén, y con mi nieto Matías que tiene 17 y come como un batallón. Hice la escuela y un año de liceo. Me atiendo en la policlínica de ASSE del barrio, con la doctora Méndez, un amor.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Pregunta por la Ficha patronímica"
+      ]
+    },
+    {
+      "id": "inicio-disuria",
+      "tema": "Inicio y circunstancia de aparición del ardor miccional",
+      "preguntas_ejemplo": [
+        "¿Desde cuándo le arde al orinar?",
+        "¿Cómo empezó?"
+      ],
+      "respuesta": "Y... empezó el sábado pasado, hace cinco días. Me acuerdo porque era el cumpleaños de mi cuñada, que hizo un asado divino, y esa noche ya me empezó a arder. Empezó de a poquito y después fue a más.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Desde cuando apareció la disuria"
+      ]
+    },
+    {
+      "id": "dificultad-orinar",
+      "tema": "Dificultad para iniciar o mantener la micción",
+      "preguntas_ejemplo": [
+        "¿Le cuesta empezar a orinar?",
+        "¿El chorro sale bien?"
+      ],
+      "respuesta": "No, no, eso no. El pichí sale bien, el chorro normal. Lo que pasa es que arde, no que me cueste.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Dificultad para orinar"
+      ]
+    },
+    {
+      "id": "ardor-miccional",
+      "tema": "Dolor o ardor al orinar",
+      "preguntas_ejemplo": [
+        "¿Le duele o le arde al orinar?",
+        "¿Cómo es esa molestia?"
+      ],
+      "respuesta": "Me arde, m'hija, como si orinara agua caliente. Sobre todo al final, cuando estoy terminando. Ya me da miedo ir al baño, mirá lo que te digo.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Dolor u ardor al orinar"
+      ]
+    },
+    {
+      "id": "dolor-suprapubico",
+      "tema": "Dolor suprapúbico",
+      "preguntas_ejemplo": [
+        "¿Le duele abajo del ombligo, sobre el pubis?"
+      ],
+      "respuesta": "Sí, acá abajo, arriba del pubis, tengo como un peso, una molestia. No es un dolor fuerte, es como una pesadez, como cuando una aguanta mucho las ganas.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Dolor suprapúbico?"
+      ]
+    },
+    {
+      "id": "polaquiuria",
+      "tema": "Aumento de la frecuencia miccional",
+      "preguntas_ejemplo": [
+        "¿Va al baño más seguido que antes?",
+        "¿Cuántas veces orina por día?",
+        "¿Se levanta de noche a orinar?"
+      ],
+      "respuesta": "Ay, sí, vivo en el baño. Voy cada media hora y hago poquito, unas gotitas nomás. De noche me levanté como cuatro o cinco veces, mi marido ya me rezonga porque lo despierto.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Poliaquiuria?",
+        "32-itu-mujer-diabetica-anamnesis::Aumento de la frecuencia miccional/urgencia"
+      ]
+    },
+    {
+      "id": "urgencia",
+      "tema": "Urgencia miccional",
+      "preguntas_ejemplo": [
+        "¿Siente que tiene que ir al baño de golpe, que no puede aguantar?"
+      ],
+      "respuesta": "Sí, me vienen las ganas de repente y tengo que salir corriendo. Ayer estaba en la máquina cosiendo un vestido de quince y tuve que largar todo e ir disparada.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Aumento de la frecuencia miccional/urgencia"
+      ]
+    },
+    {
+      "id": "pujos",
+      "tema": "Pujos (necesidad de hacer fuerza para orinar)",
+      "preguntas_ejemplo": [
+        "¿Tiene que hacer fuerza o pujar para orinar?"
+      ],
+      "respuesta": "No, fuerza no hago. Sale solo, poquito pero sale.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Pujos?"
+      ]
+    },
+    {
+      "id": "tenesmo",
+      "tema": "Tenesmo vesical (sensación de vaciado incompleto)",
+      "preguntas_ejemplo": [
+        "Cuando termina de orinar, ¿le quedan ganas de seguir?",
+        "¿Siente que no vacía del todo?"
+      ],
+      "respuesta": "Eso sí. Termino y me quedo con las ganas, como que no terminé nunca. Me quedo sentada ahí un rato esperando y no sale nada más.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Tenemos?"
+      ]
+    },
+    {
+      "id": "retencion",
+      "tema": "Retención urinaria",
+      "preguntas_ejemplo": [
+        "¿Le pasó de no poder orinar nada, aunque tuviera ganas?"
+      ],
+      "respuesta": "No, eso no me pasó. Siempre algo sale.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Retención urinaria?"
+      ]
+    },
+    {
+      "id": "incontinencia",
+      "tema": "Incontinencia urinaria",
+      "preguntas_ejemplo": [
+        "¿Se le escapa la orina?",
+        "¿Ha tenido pérdidas?"
+      ],
+      "respuesta": "Mirá, me da vergüenza decirte, pero un par de veces estos días se me escaparon unas gotitas porque no llegaba al baño. Antes de esto no me pasaba, eh.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Incontinencia urinaria?"
+      ]
+    },
+    {
+      "id": "color-orina",
+      "tema": "Color y aspecto de la orina",
+      "preguntas_ejemplo": [
+        "¿De qué color tiene la orina?",
+        "¿Está clara u oscura?",
+        "¿Tiene olor?"
+      ],
+      "respuesta": "Oscura, como té cargado, y medio turbia. Y tiene un olor fuerte, feo. Yo pensé que era porque estoy tomando poca agua, que la verdad es que tomo poca, prefiero el mate.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Color (clara, oscura/concentrada)"
+      ]
+    },
+    {
+      "id": "hematuria",
+      "tema": "Sangre en la orina",
+      "preguntas_ejemplo": [
+        "¿Vio sangre en la orina?",
+        "¿Está rojiza?"
+      ],
+      "respuesta": "No, sangre no vi. Oscura sí, pero roja no.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Hematuria o sangre en la orina"
+      ]
+    },
+    {
+      "id": "arenilla",
+      "tema": "Sedimento o arenilla en la orina",
+      "preguntas_ejemplo": [
+        "¿Notó arenilla o piedritas al orinar?",
+        "¿Queda algún depósito en la orina?"
+      ],
+      "respuesta": "¿Arenilla? No, nunca vi nada de eso. Turbia sí, pero arenilla no.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Sedimento (arenilla)"
+      ]
+    },
+    {
+      "id": "dolor-lumbar-aparicion",
+      "tema": "Aparición del dolor en fosa lumbar",
+      "preguntas_ejemplo": [
+        "¿Tiene dolor en la espalda o en la cintura?",
+        "¿Cuándo empezó ese dolor?"
+      ],
+      "respuesta": "Sí, de la cintura para atrás. Empezó hace dos días, el martes de noche. Primero pensé que era de estar tantas horas agachada en la máquina, pero no, esto es otra cosa.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Aparición del Dolor en Fosa Lumbar"
+      ]
+    },
+    {
+      "id": "dolor-lumbar-tipo",
+      "tema": "Tipo de dolor lumbar (cólico o continuo)",
+      "preguntas_ejemplo": [
+        "¿Cómo es el dolor?",
+        "¿Va y viene como un cólico o es fijo?"
+      ],
+      "respuesta": "Es un dolor sordo, pesado, que está todo el tiempo. No es de esos que vienen y van, retorcijones no. Está ahí, fijo, y cuando me muevo o me apoyo en el respaldo lo siento más.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Tipo de dolor (válido si consulta dolor cólico)"
+      ]
+    },
+    {
+      "id": "dolor-lumbar-intensidad",
+      "tema": "Intensidad del dolor lumbar (escala EVA)",
+      "preguntas_ejemplo": [
+        "Del 0 al 10, ¿cuánto le duele?"
+      ],
+      "respuesta": "¿Del cero al diez? Y... un seis, te diría. Un siete cuando me levanto de la cama. Molesta bastante pero no es para gritar, eh.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Intensidad (válido si utiliza escala EVA)"
+      ]
+    },
+    {
+      "id": "dolor-lumbar-localizacion",
+      "tema": "Localización del dolor lumbar",
+      "preguntas_ejemplo": [
+        "¿Me muestra dónde le duele?",
+        "¿De qué lado?"
+      ],
+      "respuesta": "Acá, mirá (se señala la región lumbar derecha, debajo de las últimas costillas). Del lado derecho nomás. Del otro lado no me duele.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Localización (pide que le muestre zona)"
+      ]
+    },
+    {
+      "id": "dolor-lumbar-irradiacion",
+      "tema": "Irradiación del dolor lumbar",
+      "preguntas_ejemplo": [
+        "¿El dolor se corre para algún lado?",
+        "¿Baja hacia la vejiga, la ingle o los genitales?"
+      ],
+      "respuesta": "No, se queda ahí. No baja para adelante ni para la ingle ni para abajo. Es ahí en la cintura del lado derecho.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Irradiaión (si consulta si irradia hacia vejiga)"
+      ]
+    },
+    {
+      "id": "dolor-lumbar-evolucion-analgesia",
+      "tema": "Evolución del dolor y analgesia utilizada",
+      "preguntas_ejemplo": [
+        "¿El dolor fue aumentando?",
+        "¿Tomó algo para el dolor?",
+        "¿Le hizo efecto?"
+      ],
+      "respuesta": "Fue aumentando un poco desde el martes, hoy está peor que ayer. Tomé paracetamol, el de 500, dos pastillas juntas, tres veces por día. Me alivia un rato, pero después vuelve. Ibuprofeno no tomé porque la doctora me dijo que con la diabetes mejor no abusar.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Evolución del dolor y analgesia utilizada"
+      ]
+    },
+    {
+      "id": "nauseas-vomitos",
+      "tema": "Náuseas y vómitos",
+      "preguntas_ejemplo": [
+        "¿Tiene náuseas?",
+        "¿Vomitó?"
+      ],
+      "respuesta": "Náuseas sí, desde ayer tengo el estómago revuelto y poco apetito, yo que siempre como bien. Pero vomitar no vomité. Los remedios los pude tomar.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Náuseas y/o vómitos"
+      ]
+    },
+    {
+      "id": "fiebre-chuchos",
+      "tema": "Fiebre y chuchos de frío",
+      "preguntas_ejemplo": [
+        "¿Tuvo fiebre?",
+        "¿Se tomó la temperatura?",
+        "¿Tuvo chuchos de frío?"
+      ],
+      "respuesta": "Sí, desde el martes de noche. Me puse el termómetro de mi nieto y marcaba 38,8. Y unos chuchos, m'hija, que temblaba entera, me tuve que tapar con dos frazadas en pleno octubre. Anoche también.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Fiebre / Chuchos de frío"
+      ]
+    },
+    {
+      "id": "transito-digestivo",
+      "tema": "Constipación u otros síntomas digestivos",
+      "preguntas_ejemplo": [
+        "¿Cómo anda del intestino?",
+        "¿Está constipada?",
+        "¿Tuvo diarrea?"
+      ],
+      "respuesta": "No, del intestino ando normal, voy todos los días. Ni diarrea ni constipación. Eso siempre lo tuve bien, gracias a Dios.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Constipación u otros síntoma del TDB"
+      ]
+    },
+    {
+      "id": "flujo-vaginal",
+      "tema": "Flujo vaginal, prurito o lesiones genitales",
+      "preguntas_ejemplo": [
+        "¿Tiene flujo?",
+        "¿Picazón en la zona genital?"
+      ],
+      "respuesta": "No, flujo no, ni picazón. Eso no.",
+      "grilla_items": []
+    },
+    {
+      "id": "itu-bajas-previas",
+      "tema": "Antecedentes de infecciones urinarias bajas",
+      "preguntas_ejemplo": [
+        "¿Tuvo infecciones urinarias antes?",
+        "¿Cuántas?"
+      ],
+      "respuesta": "Sí, de joven tuve alguna, y hace como dos años tuve una que me ardía igual que ahora. Me dieron unas pastillas por unos días y se me fue. No me acuerdo el nombre del remedio, era una caja blanca.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::ITU bajas"
+      ]
+    },
+    {
+      "id": "pna-previa",
+      "tema": "Antecedente de infección urinaria alta o pielonefritis",
+      "preguntas_ejemplo": [
+        "¿Alguna vez tuvo una infección que le tomara los riñones?",
+        "¿Estuvo internada por una infección urinaria?"
+      ],
+      "respuesta": "No, que yo sepa no, de los riñones nunca me dijeron nada de eso. Internada nunca estuve por eso, solo para los partos.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::ITU alta o PNA"
+      ]
+    },
+    {
+      "id": "dm-diagnostico",
+      "tema": "Diagnóstico de la diabetes y circunstancia",
+      "preguntas_ejemplo": [
+        "¿Desde cuándo es diabética?",
+        "¿Cómo se la diagnosticaron?"
+      ],
+      "respuesta": "Hace ocho años. Fue de casualidad, viste, fui a hacerme el carné de salud y me salió el azúcar alto en el análisis. Me lo repitieron y me dijeron que era diabetes tipo 2. Yo no tenía nada, me sentía bárbara.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Diagnóstico y circunstancia del Dg"
+      ]
+    },
+    {
+      "id": "dm-cifras",
+      "tema": "Cifras habituales de glicemia capilar (HGT) y HbA1c",
+      "preguntas_ejemplo": [
+        "¿Cuánto le da el azúcar cuando se controla?",
+        "¿Se acuerda de la hemoglobina glicosilada?"
+      ],
+      "respuesta": "Tengo el aparatito y me pincho dos o tres veces por semana en ayunas. Normalmente me da entre 140 y 170. Estos días me dio más, ayer de mañana me dio 245, por eso me asusté. La hemoglobina esa... la última fue en junio y me dio 7,8; la doctora me dijo que tenía que bajarla un poco.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Cifras habituales de HGT y HBA1C"
+      ]
+    },
+    {
+      "id": "dm-tratamiento",
+      "tema": "Tratamiento higiénico-dietético y farmacológico de la diabetes",
+      "preguntas_ejemplo": [
+        "¿Qué toma para la diabetes?",
+        "¿Hace dieta?",
+        "¿Hace ejercicio?"
+      ],
+      "respuesta": "Tomo metformina de 850, una en el almuerzo y otra en la cena. No me la salteo, eh. Insulina nunca usé. La dieta... y, más o menos, qué querés que te diga: con el nieto en casa siempre hay bizcochos y yo soy golosa. Caminar camino los domingos a la feria y poco más, porque estoy todo el día sentada en la máquina.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Tratamiento higiénico/dietético/farmacológico"
+      ]
+    },
+    {
+      "id": "dm-microangiopatia",
+      "tema": "Repercusiones microangiopáticas (ojos, riñón, nervios, pies)",
+      "preguntas_ejemplo": [
+        "¿Le controlaron la vista?",
+        "¿Le dijeron algo de los riñones?",
+        "¿Tiene hormigueos en los pies?",
+        "¿Heridas en los pies?"
+      ],
+      "respuesta": "Al oculista fui el año pasado y me dijo que el fondo de ojo estaba bien. De los riñones nunca me dijeron nada malo, me piden análisis de orina una vez por año. A veces de noche siento un hormigueo en las plantas de los pies, pero heridas no tengo, y me los miro porque la doctora me retó.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Repercusiones macro/microangiopáticas"
+      ]
+    },
+    {
+      "id": "dm-macroangiopatia",
+      "tema": "Repercusiones macroangiopáticas y otros factores de riesgo cardiovascular",
+      "preguntas_ejemplo": [
+        "¿Tuvo infarto o problemas del corazón?",
+        "¿ACV?",
+        "¿Le duelen las piernas al caminar?",
+        "¿Tiene presión alta o colesterol?"
+      ],
+      "respuesta": "No, del corazón nada, ni infarto ni nada de eso, y derrame tampoco. Las piernas no me duelen al caminar. Presión alta no tengo, siempre la tengo bien. El colesterol me dio un poco alto la última vez y me dijeron de cuidar las grasas.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Repercusiones macro/microangiopáticas"
+      ]
+    },
+    {
+      "id": "inmunodepresion",
+      "tema": "Inmunodepresión (corticoides, quimioterapia, VIH, otras)",
+      "preguntas_ejemplo": [
+        "¿Toma corticoides u otros remedios que bajen las defensas?",
+        "¿Tuvo cáncer o algún tratamiento con quimio?",
+        "¿Alguna enfermedad de las defensas?"
+      ],
+      "respuesta": "No, nada de eso. Corticoides no tomo, cáncer no tuve, gracias a Dios. El análisis del VIH me lo hicieron una vez y dio bien.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Inmunodepresión"
+      ]
+    },
+    {
+      "id": "litiasis",
+      "tema": "Antecedentes de litiasis urinaria",
+      "preguntas_ejemplo": [
+        "¿Tuvo piedras en el riñón?",
+        "¿Alguna vez un cólico renal?"
+      ],
+      "respuesta": "No, yo nunca tuve piedras ni cólicos de riñón. La que tuvo fue mi hermana Teresa, que la tuvieron que operar. Yo no.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Litiasis en vías urinarias"
+      ]
+    },
+    {
+      "id": "habitos-toxicos",
+      "tema": "Tabaquismo, alcohol y otras sustancias",
+      "preguntas_ejemplo": [
+        "¿Fuma?",
+        "¿Toma alcohol?",
+        "¿Consume alguna otra sustancia?"
+      ],
+      "respuesta": "No, nunca fumé, y eso que en mi casa fumaban todos. Alcohol alguna copita de vino en un cumpleaños y nada más. Otras cosas, ¡no, m'hija, por favor!",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Tabaquismo o consumo de otras sustancias"
+      ]
+    },
+    {
+      "id": "cirugias-urogenitales",
+      "tema": "Cirugías o procedimientos en vía urinaria o genital",
+      "preguntas_ejemplo": [
+        "¿La operaron alguna vez?",
+        "¿Le hicieron algún procedimiento en la vejiga o en la vía urinaria?",
+        "¿Le pusieron sonda?"
+      ],
+      "respuesta": "De la vía urinaria nunca me operaron ni me pusieron sondas. Tuve dos partos normales y después del segundo me hicieron la ligadura de trompas. Y la vesícula, hace como quince años. Nada más.",
+      "grilla_items": [
+        "32-itu-mujer-diabetica-anamnesis::Cirugías en vía urinaria o genital"
+      ]
+    },
+    {
+      "id": "gineco-menopausia",
+      "tema": "Antecedentes gineco-obstétricos y menopausia",
+      "preguntas_ejemplo": [
+        "¿Sigue menstruando?",
+        "¿Cuántos hijos tuvo?"
+      ],
+      "respuesta": "No, ya no menstrúo, se me retiró a los 50. Tuve dos hijos, los dos por parto normal; ya son grandes, el mayor es el padre de Matías.",
+      "grilla_items": []
+    },
+    {
+      "id": "medicacion-alergias",
+      "tema": "Medicación habitual y alergias",
+      "preguntas_ejemplo": [
+        "¿Toma algún otro medicamento?",
+        "¿Es alérgica a algún remedio?"
+      ],
+      "respuesta": "Solo la metformina, y estos días el paracetamol. Alergias no tengo a ningún remedio, he tomado de todo, penicilina también, y nunca me pasó nada.",
+      "grilla_items": []
+    },
+    {
+      "id": "sed-poliuria",
+      "tema": "Síntomas de hiperglicemia (sed, poliuria)",
+      "preguntas_ejemplo": [
+        "¿Tiene más sed que de costumbre?",
+        "¿Está orinando mucha cantidad?"
+      ],
+      "respuesta": "Sed un poco más, tengo la boca seca. Pero cantidad no orino mucha, voy seguido pero poquito cada vez.",
+      "grilla_items": []
+    }
+  ],
+  "signos_vitales": {
+    "pa": "118/74 mmHg",
+    "fc": "104 lpm, regular",
+    "fr": "18 rpm",
+    "temperatura": "38,6 °C axilar",
+    "saturacion": "97 % (aire ambiente)",
+    "relleno_capilar": "Menor a 2 segundos",
+    "hgt": "238 mg/dL",
+    "peso": "82 kg",
+    "talla": "1,60 m",
+    "imc": "32 kg/m²"
+  },
+  "examen_fisico": [
+    {
+      "id": "estado-general",
+      "maniobra": "Impresión del estado general",
+      "hallazgo": "Lúcida, orientada, colaboradora. Impresiona febril y algo decaída, sin aspecto tóxico ni séptico. Se moviliza sola, con cierta cautela por el dolor lumbar.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Impresión del estado general"
+      ]
+    },
+    {
+      "id": "facies",
+      "maniobra": "Valoración de la facies",
+      "hallazgo": "Facies febril (rubicunda, ojos brillantes) con leve expresión de dolor al cambiar de posición. No facies de dolor intenso ni agitación.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Facies de dolor o no"
+      ]
+    },
+    {
+      "id": "hidratacion",
+      "maniobra": "Estado de hidratación (mucosas y pliegue cutáneo)",
+      "hallazgo": "Mucosa oral levemente seca. Pliegue cutáneo negativo. Deshidratación leve.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Estado hidratación (mucosas y pliegue cutáneo)"
+      ]
+    },
+    {
+      "id": "hemodinamia",
+      "maniobra": "Presión arterial, frecuencia cardíaca y relleno capilar",
+      "hallazgo": "PA 118/74 mmHg, FC 104 lpm regular (taquicardia en contexto febril), relleno capilar menor a 2 segundos. Hemodinámicamente estable.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::PA, FC cardíaca y relleno capilar"
+      ]
+    },
+    {
+      "id": "temperatura",
+      "maniobra": "Temperatura axilar",
+      "hallazgo": "38,6 °C axilar.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Temperatura axilar"
+      ]
+    },
+    {
+      "id": "posicion-decubito",
+      "maniobra": "Coloca a la paciente en decúbito dorsal",
+      "hallazgo": "La paciente se acuesta en decúbito dorsal sin dificultad, refiere molestia lumbar derecha al apoyar la espalda.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Posiciona al paciente en decúbito dorsal"
+      ]
+    },
+    {
+      "id": "inspeccion-abdomen",
+      "maniobra": "Inspección del abdomen",
+      "hallazgo": "Abdomen globuloso a expensas de panículo adiposo, simétrico, acompaña los movimientos respiratorios. Cicatriz de colecistectomía antigua en hipocondrio derecho. Sin abombamiento suprapúbico ni otras lesiones.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Inspecciona abdomen"
+      ]
+    },
+    {
+      "id": "palpacion-superficial",
+      "maniobra": "Palpación superficial del abdomen",
+      "hallazgo": "Blando, depresible, sin defensa ni contractura. Leve dolor a la palpación en hipogastrio y en flanco derecho. Sin signos de irritación peritoneal.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Palpación superficial de abdomen"
+      ]
+    },
+    {
+      "id": "punto-ureteral-superior",
+      "maniobra": "Punto ureteral superior (borde externo del recto anterior a la altura de la línea umbilical), bilateral",
+      "hallazgo": "Doloroso a derecha. Indoloro a izquierda.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Superior (borde rect. ant. y línea umbilical)"
+      ]
+    },
+    {
+      "id": "punto-ureteral-medio",
+      "maniobra": "Punto ureteral medio (borde externo del recto anterior a la altura de la línea biespinosa), bilateral",
+      "hallazgo": "Indoloro bilateralmente.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Medio (borde rect. ant. y línea esp. iliaca anterior)"
+      ]
+    },
+    {
+      "id": "punto-ureteral-inferior",
+      "maniobra": "Punto ureteral inferior (por tacto vaginal)",
+      "hallazgo": "No se realiza en la estación; se acepta que el estudiante mencione que se explora mediante tacto vaginal. Si se insiste: sin dato relevante.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Inferior (menciona que se realizaría por TV)"
+      ]
+    },
+    {
+      "id": "hipogastrio",
+      "maniobra": "Palpación de hipogastrio (dolor / globo vesical)",
+      "hallazgo": "Dolor leve a la palpación profunda suprapúbica. No se palpa globo vesical; matidez suprapúbica ausente.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Palpación de hipogastrio (dolor/globo vesical)"
+      ]
+    },
+    {
+      "id": "guyon-peloteo",
+      "maniobra": "Maniobra de Guyón y peloteo renal (palpación bimanual)",
+      "hallazgo": "Riñones no palpables bilateralmente; peloteo renal negativo. La maniobra despierta dolor en la fosa lumbar derecha.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Maniobra de Guyón (peloteo renal)"
+      ]
+    },
+    {
+      "id": "posicion-sentada",
+      "maniobra": "Coloca a la paciente sentada para explorar la región lumbar",
+      "hallazgo": "Se sienta en la camilla con ayuda mínima.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Posiciona al paciente (sentado)"
+      ]
+    },
+    {
+      "id": "punto-costovertebral",
+      "maniobra": "Punto costovertebral (ángulo entre la 12.ª costilla y la columna), bilateral",
+      "hallazgo": "Doloroso a derecha (la paciente retira el cuerpo). Indoloro a izquierda.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Punto de Guyón (costovertebral)"
+      ]
+    },
+    {
+      "id": "punto-costomuscular",
+      "maniobra": "Punto costomuscular (ángulo entre la 12.ª costilla y la masa muscular paravertebral), bilateral",
+      "hallazgo": "Doloroso a derecha. Indoloro a izquierda.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Punto de Surraco (costomuscular)"
+      ]
+    },
+    {
+      "id": "giordano",
+      "maniobra": "Maniobra de Giordano (puñopercusión lumbar), bilateral",
+      "hallazgo": "Giordano positivo a derecha (dolor intenso a la puñopercusión de la fosa lumbar derecha). Negativo a izquierda.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Maniobra de Giordano (percusión)"
+      ]
+    },
+    {
+      "id": "pies",
+      "maniobra": "Inspección de los pies y pulsos distales",
+      "hallazgo": "Piel íntegra, sin úlceras, heridas ni signos de infección; leve hiperqueratosis plantar. Pulsos pedios y tibiales posteriores presentes y simétricos. Sensibilidad protectora conservada con monofilamento de 10 g.",
+      "grilla_items": []
+    }
+  ],
+  "paraclinica": [
+    {
+      "estudio": "Tirilla reactiva de orina (en el momento)",
+      "resultado": "Esterasa leucocitaria +++, nitritos positivos, sangre +, proteínas +, glucosa ++, cetonas negativas, densidad 1.025, pH 6.",
+      "indicado": true,
+      "justificacion": "Estudio rápido que se hace en la consulta. Esterasa leucocitaria y nitritos positivos apoyan fuertemente la ITU en una paciente sintomática; un resultado negativo no la descartaría. La glucosuria acompaña la hiperglicemia; cetonas negativas.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Tirilla reactiva para hacer en el momento"
+      ]
+    },
+    {
+      "estudio": "Examen de orina con sedimento",
+      "resultado": "Orina turbia. Leucocitos > 50 por campo, algunos en acúmulos; bacterias abundantes; hematíes 5–10 por campo; sin cilindros. Glucosuria y proteinuria leve.",
+      "indicado": "opcional",
+      "justificacion": "No imprescindible si ya se cuenta con la tirilla (lo señala la grilla); puede complementar mostrando leucocituria y bacteriuria, pero no distingue por sí solo cistitis de pielonefritis.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Ex. de orina (no necesaria si está la tirilla)"
+      ]
+    },
+    {
+      "estudio": "Urocultivo con antibiograma (chorro medio, antes de iniciar el antibiótico)",
+      "resultado": "A las 48–72 h: Escherichia coli > 10⁵ UFC/mL, cultivo puro. Sensible a ceftriaxona, cefuroxima, ciprofloxacina y gentamicina. Resistente a ampicilina y trimetoprim-sulfametoxazol.",
+      "indicado": true,
+      "justificacion": "Indicado ante sospecha de pielonefritis (ITU complicada) en paciente con DM2: permite identificar el agente y ajustar el antibiótico empírico según sensibilidad. La muestra debe tomarse antes de comenzar el antibiótico, sin retrasar el tratamiento.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Urocultivo (se puede indicar por PNA y DM2)"
+      ]
+    },
+    {
+      "estudio": "Glicemia capilar (HGT)",
+      "resultado": "238 mg/dL.",
+      "indicado": true,
+      "justificacion": "Valora la repercusión de la infección sobre el control glucémico en una paciente con DM2 (enfermedad intercurrente).",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Hemograma, PCR y creatininemia",
+      "resultado": "Leucocitos 14.800/mm³ con 84 % de neutrófilos; hemoglobina 12,9 g/dL; plaquetas 265.000/mm³. PCR 96 mg/L. Creatinina 0,9 mg/dL (TFGe > 60 mL/min/1,73 m²).",
+      "indicado": "opcional",
+      "justificacion": "No figura en la grilla. Razonable en una PNA en paciente diabética para valorar repercusión sistémica y función renal (que condiciona la metformina y la dosis de algunos antibióticos). No es imprescindible para el diagnóstico.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Ecografía del aparato urinario",
+      "resultado": "Si se solicitara: riñones de tamaño y ecoestructura normales, sin dilatación de la vía excretora, sin litiasis ni colecciones. Vejiga de paredes finas.",
+      "indicado": false,
+      "justificacion": "No es necesaria de rutina: el diagnóstico de ITU es clínico y por urocultivo. La imagen se reserva para buscar complicaciones (obstrucción, absceso, pionefrosis) o factores predisponentes, por ejemplo ante mala evolución a las 48–72 h, sospecha de obstrucción por litiasis, inestabilidad o recurrencia. Esta paciente no tiene elementos que lo justifiquen.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::No es necesaria PC imagenológica"
+      ]
+    },
+    {
+      "estudio": "Tomografía computada de abdomen y pelvis",
+      "resultado": "No se realiza.",
+      "indicado": false,
+      "justificacion": "No indicada en una PNA sin complicaciones. La TC se reserva para evaluar complicaciones como absceso renal o pielonefritis enfisematosa (más frecuente en diabéticos) cuando la evolución es mala o hay sospecha clínica de ellas. Agrega radiación sin cambiar la conducta.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::No es necesaria PC imagenológica"
+      ]
+    }
+  ],
+  "diagnostico": {
+    "principal": "ITU alta a modo de pielonefritis aguda derecha en paciente con diabetes mellitus tipo 2",
+    "diferenciales": [
+      "ITU baja (cistitis) aislada",
+      "Cólico renal por litiasis (eventualmente con infección sobreagregada)"
+    ],
+    "fundamento": "Síndrome urinario bajo de 5 días (disuria, polaquiuria, urgencia, tenesmo, dolor suprapúbico) al que se agregan hace 48 h fiebre de 38,8 °C con chuchos, dolor lumbar derecho continuo no cólico sin irradiación y náuseas: síndrome urinario alto. Examen: fiebre 38,6 °C, taquicardia, puntos costovertebral y costomuscular derechos dolorosos y Giordano positivo a derecha. Tirilla con esterasa leucocitaria y nitritos positivos. Es una ITU complicada por el compromiso renal (pielonefritis), en una paciente con DM2 que favorece las complicaciones y que presenta hiperglicemia por la infección (HbA1c previa 7,8 %, fuera de meta). Contra cistitis aislada: fiebre, chuchos y dolor lumbar con Giordano positivo. Contra cólico renal: dolor continuo y no cólico, sin irradiación inguinogenital, sin agitación, sin antecedentes de litiasis ni hematuria macroscópica, con fiebre y piuria marcadas.",
+    "grilla_items": [
+      "33-itu-mujer-diabetica-ex-fisico::Itu alta a modo de PNA en paciente con DM2",
+      "33-itu-mujer-diabetica-ex-fisico::Diag. Dif: ITU baja + Cólico renal por litiasis"
+    ]
+  },
+  "conducta_esperada": [
+    {
+      "accion": "Medidas generales para la ITU: abundante hidratación oral (agua), no retener la orina y orinar con frecuencia, higiene perineal de adelante hacia atrás, reposo relativo mientras dure la fiebre y antitérmico/analgésico (paracetamol).",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Medidas higiénicas y dietéticas para ITU"
+      ]
+    },
+    {
+      "accion": "Medidas para la DM2: mantener la metformina mientras tolere la vía oral y se rehidrate, suspendiéndola transitoriamente si aparecen vómitos, deshidratación marcada o deterioro de la función renal; plan alimentario (priorizar verduras, legumbres, frutas enteras, reducir azúcares y bebidas azucaradas, preferir agua); retomar actividad física una vez resuelta la infección; automonitoreo de glicemia capilar más frecuente mientras dure la enfermedad intercurrente, registrando los valores.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Medidas higiénicas y dietéticas para DM2"
+      ]
+    },
+    {
+      "accion": "Antibiótico empírico activo contra enterobacterias (E. coli es el agente más frecuente), iniciado tras tomar el urocultivo y ajustado luego según el antibiograma. El fármaco concreto debe elegirse según la guía/protocolo vigente y la resistencia local; los apuntes del curso no especifican esquema.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Antibiótico empírico adecuado"
+      ]
+    },
+    {
+      "accion": "Vía oral y manejo ambulatorio, dado que está hemodinámicamente estable, sin vómitos y tolera la vía oral; vía parenteral/internación si hubiera vómitos que impidan la vía oral, inestabilidad hemodinámica, descompensación metabólica o mala evolución. Posología según el fármaco elegido y duración completa de un esquema de pielonefritis (más prolongado que el de una cistitis), según guía vigente.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Vía, posología y duración"
+      ]
+    },
+    {
+      "accion": "Signos de alarma urinarios para reconsultar de inmediato: fiebre que persiste o aumenta a las 48–72 h de iniciado el antibiótico, vómitos que impidan tomar la medicación, dolor lumbar que empeora o pasa a ser cólico, sangre en la orina, disminución marcada de la orina, mareos, desmayo o confusión.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Explica signos de alarma y reconsulta urinarios"
+      ]
+    },
+    {
+      "accion": "Signos de alarma de la diabetes: glicemias capilares persistentemente elevadas pese al tratamiento, mucha sed y orina abundante, signos de deshidratación, somnolencia o confusión (riesgo de estado hiperglicémico hiperosmolar), o hipoglicemias (sudoración, temblor, confusión), poco frecuentes con metformina sola pero posibles si come muy poco.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Explica signos de alarma y reconsulta de DM2"
+      ]
+    },
+    {
+      "accion": "Control evolutivo a las 48–72 h (presencial o telefónico) para valorar la respuesta clínica y ajustar el antibiótico con el resultado del urocultivo; luego control con su médica de referencia para el control metabólico (HbA1c fuera de meta).",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Acuerda control evolutivo"
+      ]
+    },
+    {
+      "accion": "Urocultivo de control: no se indica de rutina si evoluciona favorablemente y queda asintomática; se plantea si persisten o recurren los síntomas.",
+      "grilla_items": [
+        "33-itu-mujer-diabetica-ex-fisico::Plantea posibilidad o no de URO de control"
+      ]
+    }
+  ],
+  "fuentes": [
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Infecciones urinarias y disuria (síntomas; fiebre y dolor lumbar orientan a pielonefritis)",
+      "pagina": 266
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Cistitis, diagnósticos diferenciales en la mujer y etiología (E. coli)",
+      "pagina": 267
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Infecciones urinarias: métodos diagnósticos (examen de orina, tira reactiva, urocultivo)",
+      "pagina": 268
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Urocultivo: no indicado de rutina como control si evoluciona favorablemente",
+      "pagina": 268
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Examen del aparato urinario: puntos renoureterales, maniobra de Guyon, peloteo renal, signo de Giordano",
+      "pagina": 265
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Cólico nefrítico: características del dolor, irradiación y diagnóstico diferencial",
+      "pagina": 271
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Diabetes mellitus: anamnesis (historia, tratamiento, complicaciones)",
+      "pagina": 165
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Diabetes mellitus: complicaciones agudas (estado hiperglicémico hiperosmolar)",
+      "pagina": 167
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Diabetes mellitus: tratamiento integral, meta de HbA1c, alimentación",
+      "pagina": 169
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Diabetes mellitus: metformina, función renal y automonitoreo en enfermedad intercurrente",
+      "pagina": 171
+    },
+    {
+      "archivo": "laboratorio-clinico.md",
+      "seccion": "Infecciones urinarias: clasificación (ITU alta, ITU complicada)",
+      "pagina": 40
+    },
+    {
+      "archivo": "laboratorio-clinico.md",
+      "seccion": "Infecciones urinarias: etiología (E. coli) y patogenia",
+      "pagina": 41
+    },
+    {
+      "archivo": "laboratorio-clinico.md",
+      "seccion": "Síndrome urinario bajo y alto; diagnóstico de laboratorio",
+      "pagina": 42
+    },
+    {
+      "archivo": "laboratorio-clinico.md",
+      "seccion": "Tira reactiva, urocultivo: cuándo solicitarlo",
+      "pagina": 43
+    },
+    {
+      "archivo": "imagenologia.md",
+      "seccion": "Infecciones del aparato urinario: la imagen no es de rutina, se usa para complicaciones",
+      "pagina": 61
+    },
+    {
+      "archivo": "imagenologia.md",
+      "seccion": "Ecografía y TC en complicaciones de ITU (absceso, pionefrosis, pielonefritis enfisematosa)",
+      "pagina": 62
+    },
+    {
+      "archivo": "paraclinica.md",
+      "seccion": "Urinario — Pielonefritis (tira reactiva, examen de orina, urocultivo y antibiograma)",
+      "pagina": null
+    }
+  ]
+}
