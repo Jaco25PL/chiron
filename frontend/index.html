@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chiron · Simulador ECOE</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>Chiron <span class="muted">· simulador ECOE</span></h1>
+    <nav class="tabs" role="tablist">
+      <button role="tab" class="tab active" data-tab="sim">Simulación</button>
+      <button role="tab" class="tab" data-tab="rag">RAG</button>
+    </nav>
+    <span id="backend" class="badge" title="Backend del agente"></span>
+  </header>
+
+  <!-- ============ SIMULACIÓN ============ -->
+  <main id="tab-sim" class="tabpanel">
+    <section id="picker">
+      <div class="row">
+        <label for="materia">Materia</label>
+        <select id="materia">
+          <option value="mpna" selected>MPNA</option>
+          <option value="pediatria" disabled>Pediatría (próximamente)</option>
+        </select>
+      </div>
+      <div id="cases" class="cards"></div>
+    </section>
+
+    <section id="consult" hidden>
+      <div class="consult-layout">
+        <div class="chat-col">
+          <div class="chat-head">
+            <div>
+              <strong id="case-title"></strong>
+              <div id="case-patient" class="muted small"></div>
+            </div>
+            <div class="chat-actions">
+              <span id="timer" class="timer">7:00</span>
+              <button id="btn-debug" class="ghost">Debug</button>
+              <button id="btn-end" class="danger">Terminar consulta</button>
+              <button id="btn-back" class="ghost">Cambiar caso</button>
+            </div>
+          </div>
+          <div id="timer-warn" class="warn" hidden>Se terminaron los 7 minutos. Podés seguir, pero en el ECOE ya sonó el timbre.</div>
+          <div id="chat" class="chat" aria-live="polite"></div>
+          <div id="typing" class="typing" hidden><span></span><span></span><span></span></div>
+          <form id="composer" class="composer">
+            <textarea id="input" rows="2" placeholder="Escribí tu pregunta o maniobra…" autocomplete="off"></textarea>
+            <button id="btn-send" type="submit">Enviar</button>
+          </form>
+          <p class="hint">Preguntá como en una consulta. Para examinar: “Le tomo la presión”, “Ausculto el foco mitral”. Para pedir estudios: “Solicito un ECG”. Enter envía, Shift+Enter hace salto de línea.</p>
+
+          <section id="summary" class="summary" hidden>
+            <h2>Resumen <span class="muted small">(el feedback con grilla llega en el próximo paso)</span></h2>
+            <div class="small">Hechos revelados: <strong id="sum-facts"></strong></div>
+            <div class="progress"><div id="sum-bar"></div></div>
+            <dl>
+              <dt>Examen físico</dt><dd id="sum-exams"></dd>
+              <dt>Estudios solicitados</dt><dd id="sum-studies"></dd>
+              <dt>Diagnóstico propuesto</dt><dd id="sum-dx"></dd>
+            </dl>
+          </section>
+        </div>
+
+        <aside id="debug" class="debug" hidden>
+          <h2>Debug <span class="muted small">por turno</span></h2>
+          <div id="debug-list"></div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ RAG ============ -->
+  <main id="tab-rag" class="tabpanel" hidden>
+    <form id="rag-form" class="rag-form">
+      <input id="rag-q" type="search" placeholder="Ej: ¿qué preguntar ante disnea?" required>
+      <select id="rag-tipo">
+        <option value="">todos</option>
+        <option value="apunte">apunte</option>
+        <option value="grilla">grilla</option>
+        <option value="contexto_ecoe">contexto_ecoe</option>
+      </select>
+      <label class="small">k <input id="rag-k" type="number" min="1" max="30" value="5"></label>
+      <button type="submit">Buscar</button>
+    </form>
+    <div id="rag-status" class="muted small"></div>
+    <div id="rag-results" class="rag-results"></div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

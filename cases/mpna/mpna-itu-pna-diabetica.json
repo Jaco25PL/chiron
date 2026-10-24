@@ -712,7 +712,7 @@
       "ITU baja (cistitis) aislada",
       "Cólico renal por litiasis (eventualmente con infección sobreagregada)"
     ],
-    "fundamento": "Síndrome urinario bajo de 5 días (disuria, polaquiuria, urgencia, tenesmo, dolor suprapúbico) al que se agregan hace 48 h fiebre de 38,8 °C con chuchos, dolor lumbar derecho continuo no cólico sin irradiación y náuseas: síndrome urinario alto. Examen: fiebre 38,6 °C, taquicardia, puntos costovertebral y costomuscular derechos dolorosos y Giordano positivo a derecha. Tirilla con esterasa leucocitaria y nitritos positivos. Es una ITU complicada por el compromiso renal (pielonefritis), en una paciente con DM2 que favorece las complicaciones y que presenta hiperglicemia por la infección (HbA1c previa 7,8 %, fuera de meta). Contra cistitis aislada: fiebre, chuchos y dolor lumbar con Giordano positivo. Contra cólico renal: dolor continuo y no cólico, sin irradiación inguinogenital, sin agitación, sin antecedentes de litiasis ni hematuria macroscópica, con fiebre y piuria marcadas.",
+    "fundamento": "Síndrome urinario bajo de 5 días (disuria, polaquiuria, urgencia, tenesmo, dolor suprapúbico) al que se agregan hace 48 h fiebre de 38,8 °C con chuchos, dolor lumbar derecho continuo no cólico sin irradiación y náuseas: síndrome urinario alto. Examen: fiebre 38,6 °C, taquicardia, puntos costovertebral y costomuscular derechos dolorosos y Giordano positivo a derecha. Tirilla con esterasa leucocitaria y nitritos positivos. Es una ITU complicada por dos motivos: el compromiso renal (pielonefritis) y la diabetes como patología de base (Infecciones urinarias 2026, p. 5) y que presenta hiperglicemia por la infección (HbA1c previa 7,8 %, fuera de meta). Contra cistitis aislada: fiebre, chuchos y dolor lumbar con Giordano positivo. Contra cólico renal: dolor continuo y no cólico, sin irradiación inguinogenital, sin agitación, sin antecedentes de litiasis ni hematuria macroscópica, con fiebre y piuria marcadas.",
     "grilla_items": [
       "33-itu-mujer-diabetica-ex-fisico::Itu alta a modo de PNA en paciente con DM2",
       "33-itu-mujer-diabetica-ex-fisico::Diag. Dif: ITU baja + Cólico renal por litiasis"
@@ -853,6 +853,11 @@
       "archivo": "paraclinica.md",
       "seccion": "Urinario — Pielonefritis (tira reactiva, examen de orina, urocultivo y antibiograma)",
       "pagina": null
+    },
+    {
+      "archivo": "infecciones-urinarias-2026.md",
+      "seccion": "Clasificación (ITU complicada: pacientes con patología de base como diabetes)",
+      "pagina": 5
     }
   ]
 }

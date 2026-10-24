@@ -1,19 +1,35 @@
-"""Consulta rápida al índice para probar el RAG.
+"""Búsqueda en el índice del RAG.
 
-Uso:
+Uso como script:
     python rag/query.py mpna "¿qué preguntar ante un dolor torácico?"
     python rag/query.py mpna "grilla disnea" --tipo grilla
+
+Uso como módulo:
+    from rag.query import search
+    search("mpna", "disuria", k=5, tipo="grilla")
 """
 
 import argparse
+import sys
+from pathlib import Path
 
-from dotenv import load_dotenv
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+from rag.ingest import get_store  # noqa: E402
 
-from ingest import ROOT, get_store
+_stores = {}
+
+
+def search(materia: str, pregunta: str, k: int = 5, tipo: str | None = None) -> list[dict]:
+    """Devuelve [{texto, metadata, score}] ordenado por relevancia (menor score = más cercano)."""
+    if materia not in _stores:
+        _stores[materia] = get_store(materia)
+    where = {"tipo": tipo} if tipo else None
+    results = _stores[materia].similarity_search_with_score(pregunta, k=k, filter=where)
+    return [{"texto": doc.page_content, "metadata": doc.metadata, "score": score} for doc, score in results]
 
 
 def main():
-    load_dotenv(ROOT / ".env")
     p = argparse.ArgumentParser()
     p.add_argument("materia")
     p.add_argument("pregunta")
@@ -21,12 +37,10 @@ def main():
     p.add_argument("--tipo", choices=["apunte", "grilla", "contexto_ecoe"])
     args = p.parse_args()
 
-    store = get_store(args.materia)
-    where = {"tipo": args.tipo} if args.tipo else None
-    for doc, score in store.similarity_search_with_score(args.pregunta, k=args.k, filter=where):
-        m = doc.metadata
-        print(f"[{score:.3f}] {m['fuente']} p.{m.get('pagina', '?')} — {m.get('seccion', '')}")
-        print("   " + doc.page_content[:300].replace("\n", " ") + "…\n")
+    for r in search(args.materia, args.pregunta, args.k, args.tipo):
+        m = r["metadata"]
+        print(f"[{r['score']:.3f}] {m['fuente']} p.{m.get('pagina', '?')} — {m.get('seccion', '')}")
+        print("   " + r["texto"][:300].replace("\n", " ") + "…\n")
 
 
 if __name__ == "__main__":

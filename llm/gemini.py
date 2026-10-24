@@ -9,6 +9,7 @@ andan con cada key y en qué tiempo, para actualizar MODELS.
 
 import os
 import time
+from functools import lru_cache
 from pathlib import Path
 from typing import Callable, TypeVar
 
@@ -19,9 +20,10 @@ load_dotenv(ROOT / ".env")
 
 # Probado el 2026-10-24 en plan gratuito. Los "pro" (3.1-pro, pro-latest, 4-argon) dan 429 con cuota 0.
 # gemini-3.7/3.8-flash y flash-latest andan pero tardaron 30-75 s por respuesta: no sirven para conversar.
+# Con thinking_level="low", gemini-3-flash-preview responde al paciente en ~1 s (3.5-flash: ~1,5-2 s).
 MODELS = {
     # respuestas del paciente: rápido, buena calidad
-    "patient": ["gemini-3.5-flash", "gemini-3-flash-preview", "gemini-3.6-flash"],
+    "patient": ["gemini-3-flash-preview", "gemini-3.5-flash", "gemini-3.6-flash"],
     # router y decisiones cortas: lo más rápido posible
     "router": ["gemini-3.5-flash-lite", "gemini-flash-lite-latest", "gemini-3.1-flash-lite"],
     # juez del feedback: calidad sobre velocidad
@@ -47,6 +49,29 @@ def api_keys() -> list[str]:
 def is_quota_error(exc: Exception) -> bool:
     code = getattr(exc, "code", None) or getattr(exc, "status_code", None)
     return code == 429 or "RESOURCE_EXHAUSTED" in str(exc)
+
+
+@lru_cache(maxsize=None)
+def _client(model: str, key: str, kwargs: tuple):
+    """Instancia de ChatGoogleGenerativeAI compartida (crear cada una tarda ~1 s)."""
+    from langchain_google_genai import ChatGoogleGenerativeAI
+
+    return ChatGoogleGenerativeAI(model=model, google_api_key=key, max_retries=0, **dict(kwargs))
+
+
+def chat_model(task: str, schema: type | None = None, **kwargs):
+    """Modelo de chat de LangChain para la tarea, con fallback por key y por modelo.
+
+    Devuelve un Runnable: el primero es MODELS[task][0] con la primera key; ante
+    cualquier error pasa a la siguiente key y después al siguiente modelo.
+    Con `schema` (clase Pydantic) devuelve salida estructurada.
+    """
+    runnables = []
+    for model in MODELS[task]:
+        for key in api_keys():
+            llm = _client(model, key, tuple(sorted(kwargs.items())))
+            runnables.append(llm.with_structured_output(schema) if schema else llm)
+    return runnables[0].with_fallbacks(runnables[1:])
 
 
 def with_rotation(call: Callable[[str, str], T], task: str, retries: int = 3, wait: float = 30) -> T:
