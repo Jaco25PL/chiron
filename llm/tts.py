@@ -8,8 +8,6 @@ sampler of Gemini voices (flash-lite and flash sounded the same; lite is faster)
 import io
 import wave
 
-from llm.gemini import MODELS, with_rotation
-
 VOICES = {"femenino": "Sulafat", "masculino": "Schedar"}
 SAMPLE_RATE = 24000  # Gemini TTS returns 16-bit mono PCM at 24 kHz
 
@@ -34,8 +32,11 @@ def to_wav(pcm: bytes) -> bytes:
 
 def synthesize(text: str, case: dict) -> bytes:
     """WAV audio of `text` spoken as the case's patient. Rotates keys and models on quota errors."""
+    # imported here so the fake backend (CI E2E installs only fastapi + uvicorn) can use to_wav
     from google import genai
     from google.genai import types
+
+    from llm.gemini import with_rotation
 
     voice = VOICES.get(case["paciente"]["sexo"], VOICES["masculino"])
     config = types.GenerateContentConfig(
