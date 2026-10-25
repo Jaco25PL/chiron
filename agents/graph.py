@@ -59,6 +59,11 @@ class Turn(TypedDict):
     text: str
 
 
+def _timings(old: dict | None, new: dict | None) -> dict:
+    """Per-node milliseconds of the current turn: send() resets them with None on every message."""
+    return {} if new is None else {**(old or {}), **new}
+
+
 class State(TypedDict, total=False):
     case_id: str
     transcript: Annotated[list[Turn], add]
@@ -69,6 +74,7 @@ class State(TypedDict, total=False):
     finished: bool
     intent: Intent
     debug: dict
+    timings: Annotated[dict, _timings]
     owner: str  # email of the student who started the consultation
 
 
@@ -170,12 +176,21 @@ def cierre(state: State) -> dict:
     }
 
 
+def timed(name: str, fn):
+    """The node, recording how long it took (in `timings`) to find where a turn's latency goes."""
+    def node(state: State) -> dict:
+        start = time.perf_counter()
+        out = fn(state)
+        return {**out, "timings": {name: int((time.perf_counter() - start) * 1000)}}
+    return node
+
+
 def build_graph():
     g = StateGraph(State)
-    g.add_node("router", router)
+    g.add_node("router", timed("router", router))
     for name, fn in [("anamnesis", paciente), ("examen", examen), ("paraclinica", paraclinica),
                      ("diagnostico", diagnostico), ("cierre", cierre)]:
-        g.add_node(name, fn)
+        g.add_node(name, timed(name, fn))
         g.add_edge(name, END)
     g.add_edge(START, "router")
     g.add_conditional_edges("router", lambda s: s["intent"])
@@ -229,15 +244,19 @@ def send(session_id: str, text: str, user: User | None = None) -> dict:
         "metadata": {"case_id": current["case_id"], "session_id": session_id},
     }
     start = time.perf_counter()
-    state = GRAPH.invoke({"transcript": [{"role": "estudiante", "text": text}], "debug": {}}, config)
+    state = GRAPH.invoke({"transcript": [{"role": "estudiante", "text": text}], "debug": {}, "timings": None}, config)
     new_turns = state["transcript"][before + 1:]
     latency_ms = int((time.perf_counter() - start) * 1000)
+    # graph = the nodes plus LangGraph's own work (loading and saving the checkpoint in Postgres)
+    timings = {**state.get("timings", {}), "graph": latency_ms}
     debug = state["debug"]
+    t_db = time.perf_counter()
     db.add_turns(session_id, before, [
-        {"role": "estudiante", "text": text, "intent": state["intent"], "latency_ms": latency_ms},
+        {"role": "estudiante", "text": text, "intent": state["intent"], "latency_ms": latency_ms, "timings": timings},
         *({"role": t["role"], "text": t["text"], "facts": debug.get("facts"), "exams": debug.get("exams"),
            "studies": debug.get("studies")} for t in new_turns),
     ])
+    timings["db"] = int((time.perf_counter() - t_db) * 1000)
     return {
         "replies": [{"role": t["role"], "text": t["text"]} for t in new_turns],
         "debug": {
@@ -247,6 +266,7 @@ def send(session_id: str, text: str, user: User | None = None) -> dict:
             "studies": state["debug"].get("studies", []),
             "model": {"router": MODELS["router"][0], "paciente": MODELS["patient"][0]},
             "latency_ms": latency_ms,
+            "timings": timings,
         },
     }
 

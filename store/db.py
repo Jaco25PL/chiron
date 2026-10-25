@@ -4,6 +4,7 @@ Everything is optional: without DATABASE_URL the app keeps consultations in memo
 (local development), and the functions here become no-ops.
 """
 
+import json
 import os
 from functools import lru_cache
 from pathlib import Path
@@ -74,18 +75,19 @@ def create_consultation(consultation_id: str, user_id: int | None, case_id: str,
 
 
 def add_turns(consultation_id: str, first_n: int, turns: list[dict]) -> None:
-    """turns: [{role, text, intent?, facts?, exams?, studies?, latency_ms?}] numbered from first_n."""
+    """turns: [{role, text, intent?, facts?, exams?, studies?, latency_ms?, timings?}] numbered from first_n."""
     if not enabled() or not turns:
         return
     rows = [
         (consultation_id, first_n + i, t["role"], t["text"], t.get("intent"), t.get("facts"),
-         t.get("exams"), t.get("studies"), t.get("latency_ms"))
+         t.get("exams"), t.get("studies"), t.get("latency_ms"),
+         json.dumps(t["timings"]) if t.get("timings") else None)
         for i, t in enumerate(turns)
     ]
     with pool().connection() as conn, conn.cursor() as cur:
         cur.executemany(
-            """INSERT INTO turns (consultation_id, n, role, text, intent, facts, exams, studies, latency_ms)
-               VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) ON CONFLICT DO NOTHING""",
+            """INSERT INTO turns (consultation_id, n, role, text, intent, facts, exams, studies, latency_ms, timings)
+               VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON CONFLICT DO NOTHING""",
             rows,
         )
 

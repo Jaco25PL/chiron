@@ -36,6 +36,10 @@ CREATE TABLE IF NOT EXISTS turns (
     PRIMARY KEY (consultation_id, n)
 );
 
+-- Where a turn's latency went, in ms: router, the node that answered, graph (nodes + checkpoint),
+-- and later tts_first / tts_total for the patient's voice. Added after the table, hence ALTER.
+ALTER TABLE turns ADD COLUMN IF NOT EXISTS timings JSONB;
+
 -- RAG: course material chunks with gemini-embedding-001 vectors truncated to 768 dims
 -- (Matryoshka; ~same top-5 as 3072 dims). Loaded by rag/to_pgvector.py.
 CREATE EXTENSION IF NOT EXISTS vector;
