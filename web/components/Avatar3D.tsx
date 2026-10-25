@@ -98,8 +98,9 @@ export default function Avatar3D({ url, analyser, hablando, onListo, onError, cl
         vrm.scene.updateMatrixWorld(true);
         const cabeza = new Vector3();
         vrm.humanoid.getNormalizedBoneNode("head")?.getWorldPosition(cabeza);
-        camera.position.set(0, cabeza.y - 0.02, cabeza.z + 1.9);
-        camera.lookAt(0, cabeza.y - 0.1, cabeza.z);
+        // like a webcam: room above the head, eyes a bit above the middle, shoulders in frame
+        camera.position.set(0, cabeza.y + 0.02, cabeza.z + 2.2);
+        camera.lookAt(0, cabeza.y + 0.0, cabeza.z);
         if (vrm.lookAt) vrm.lookAt.target = mirada;
         estado.current.onListo();
       })

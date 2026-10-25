@@ -13,7 +13,7 @@ import { CameraOff, Close, Mic, Phone, PhoneDown, Stethoscope } from "./icons";
 const Avatar3D = dynamic(() => import("./Avatar3D"), { ssr: false });
 const AVATAR = "/avatares/generico.vrm"; // generic for now; one per patient later
 
-/** The case's ASCII portrait: public/retratos/<id>.txt, else default.txt, else the generated bust. */
+/** The waiting ASCII portrait: public/retratos/<id>.txt for the case, else the default one (built in). */
 function useRetrato(caseId: string | undefined) {
   const [arte, setArte] = useState(ASCII_FACE);
   useEffect(() => {
