@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { type Caso, type Turno } from "@/lib/api";
@@ -7,6 +8,10 @@ import type { ConVoz } from "@/lib/useConsulta";
 import { ASCII_FACE } from "@/lib/ascii-face";
 import { palabras, useEscucha, useVozPaciente } from "@/lib/voz";
 import { CameraOff, Close, Mic, Phone, PhoneDown, Stethoscope } from "./icons";
+
+// three.js only downloads when face to face opens; the ASCII portrait covers the wait
+const Avatar3D = dynamic(() => import("./Avatar3D"), { ssr: false });
+const AVATAR = "/avatares/generico.vrm"; // generic for now; one per patient later
 
 /** The case's ASCII portrait: public/retratos/<id>.txt, else default.txt, else the generated bust. */
 function useRetrato(caseId: string | undefined) {
@@ -126,31 +131,56 @@ export function FaceView({
   };
 
   const enLlamada = escucha.activa;
+  const [avatar, setAvatar] = useState<"cargando" | "listo" | "error">("cargando");
+  const conAvatar = avatar === "listo";
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3 px-3 pb-[max(12px,env(safe-area-inset-bottom))] sm:px-6">
       {/* escenario */}
       <div className="relative min-h-0 flex-1 overflow-hidden rounded-[28px] border border-line bg-[radial-gradient(ellipse_at_50%_35%,var(--accent-fondo)_0%,var(--bg)_70%)] [container-type:size]">
-        <pre
-          aria-label={`Retrato de ${nombre}`}
-          className={`pointer-events-none absolute left-1/2 top-[52%] -translate-x-1/2 -translate-y-1/2 select-none font-mono leading-none transition-opacity duration-300 ease-out [mask-image:radial-gradient(ellipse_70%_75%_at_50%_45%,#000_55%,transparent_100%)] ${
-            enLlamada ? "opacity-100" : "opacity-35"
-          }`}
-          style={{
-            // a monospace character is ~0.6em wide. Height drives the size; on narrow (mobile) screens
-            // the shoulders may overflow the sides so the face stays large
-            fontSize: `min(calc(150cqw / ${cols * 0.6}), calc(90cqh / ${filas}))`,
-            backgroundImage:
-              "linear-gradient(180deg,var(--accent-claro) 0%,var(--accent) 45%,var(--accent-oscuro) 100%)",
-            WebkitBackgroundClip: "text",
-            backgroundClip: "text",
-            color: "transparent",
-          }}
-        >
-          {arte}
-        </pre>
-        {/* líneas de barrido fijas */}
-        <div className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(0deg,rgb(0_0_0/0.18)_0px,rgb(0_0_0/0.18)_1px,transparent_1px,transparent_3px)]" />
+        {avatar !== "error" && (
+          <div
+            role="img"
+            aria-label={conAvatar ? `Retrato de ${nombre}` : undefined}
+            aria-hidden={!conAvatar}
+            className={`absolute inset-0 transition-opacity duration-300 ease-out ${
+              conAvatar ? (enLlamada ? "opacity-100" : "opacity-40") : "opacity-0"
+            }`}
+          >
+            <Avatar3D
+              url={AVATAR}
+              analyser={voz.analyser}
+              hablando={voz.hablando}
+              onListo={() => setAvatar("listo")}
+              onError={() => setAvatar("error")}
+              className="size-full"
+            />
+          </div>
+        )}
+        {!conAvatar && (
+          <pre
+            aria-label={`Retrato de ${nombre}`}
+            className={`pointer-events-none absolute left-1/2 top-[52%] -translate-x-1/2 -translate-y-1/2 select-none font-mono leading-none transition-opacity duration-300 ease-out [mask-image:radial-gradient(ellipse_70%_75%_at_50%_45%,#000_55%,transparent_100%)] ${
+              enLlamada ? "opacity-100" : "opacity-35"
+            }`}
+            style={{
+              // a monospace character is ~0.6em wide. Height drives the size; on narrow (mobile) screens
+              // the shoulders may overflow the sides so the face stays large
+              fontSize: `min(calc(150cqw / ${cols * 0.6}), calc(90cqh / ${filas}))`,
+              backgroundImage:
+                "linear-gradient(180deg,var(--accent-claro) 0%,var(--accent) 45%,var(--accent-oscuro) 100%)",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              color: "transparent",
+            }}
+          >
+            {arte}
+          </pre>
+        )}
+        {/* líneas de barrido fijas, solo sobre el retrato ASCII */}
+        {!conAvatar && (
+          <div className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(0deg,rgb(0_0_0/0.18)_0px,rgb(0_0_0/0.18)_1px,transparent_1px,transparent_3px)]" />
+        )}
 
         {/* propia cámara: muestra si el micrófono está abierto */}
         <div className="glass absolute right-3 top-3 grid aspect-[3/4] w-[22%] max-w-36 min-w-20 place-items-center rounded-2xl sm:right-4 sm:top-4">

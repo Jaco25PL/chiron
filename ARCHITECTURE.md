@@ -144,6 +144,13 @@ sequenceDiagram
 - **Only the reply just generated is spoken**, in the same request, for the consultation's owner. There is no endpoint that takes text to speak, so it can't be used as a free TTS service. The voice (Sulafat or Schedar, chosen by ear) is picked by sex, and the style ("mujer uruguaya de 61 años, de Montevideo, acento rioplatense…") is built from the case on the server, so age never reaches the browser. The style goes in `speech_metadata.style`: put inside the text, the model read it aloud.
 - **Latency:** one streamed response (NDJSON) brings the reply and then the voice in chunks as Gemini generates them, so the patient starts talking with the first chunk. It used to be a second request that waited for the whole WAV; voice after text went from 5.4 s to 1.3 s (median, measured with `web/tests/e2e/latencia.spec.ts`; see [FINDINGS #18](docs/FINDINGS.md)). Each turn's per-stage timings are stored in `turns.timings`.
 
+## The avatar
+
+- **VRM + three.js, no React Three Fiber:** one canvas with an imperative loop doesn't need a React renderer, and R3F added ~100 KB gzipped and pinned the React version. three + GLTFLoader + three-vrm is ~200 KB gzipped, downloaded only when face to face opens.
+- **Movement is code, not animation files:** breathing (spine and chest), a sway made of sines at unrelated frequencies so it never loops visibly, blinks every 2–6 s (sometimes double), eye contact with small saccades, and small nods while talking. Nothing to license, nothing to download.
+- **Mouth from the voice that's playing:** the analyser on the call's audio graph gives the loudness (mouth opening, fast attack, slower release) and the zero-crossing rate, a cheap stand-in for how "bright" the vowel is (o/u vs a vs e/i).
+- **Cheap on phones:** 30 fps cap, pixel ratio ≤ 1.5, a narrow lens framed on head and shoulders, the loop pauses with the tab, and everything is disposed on unmount. The generic model (pixiv's VRM 1.0 sample: redistribution allowed, no credit) went from 10.8 to 6.1 MB by shrinking its textures inside the file with `web/scripts/slim_vrm.py`.
+
 ## Grading, beginner level and history
 
 ```mermaid
@@ -226,5 +233,5 @@ chiron/
 ## Not built yet
 
 - **Feedback eval and calibration:** measure the docente's ratings against a medical student's, like the patient judge. RAG-cited tips were left out: the source names (e.g. a guideline title) would give the diagnosis away.
-- **Avatar:** an anime VRM model (three-vrm) whose mouth follows the voice through the analyser that's already wired; a generic model first.
+- **Avatar, next steps:** one VRoid Studio model per patient (age and sex of the case; ours, so no license limits), vowel lip-sync with `wlipsync` instead of loudness, and measuring FPS on a mid-range Android and an older iPhone.
 - **MCP server for exam tools:** dropped for now (the exam is a graph node); revisit if the tools grow.
