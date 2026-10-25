@@ -1,5 +1,7 @@
 # Chiron — Product Brief
 
+[![CI](https://github.com/Jaco25PL/chiron/actions/workflows/ci.yml/badge.svg)](https://github.com/Jaco25PL/chiron/actions/workflows/ci.yml)
+
 ## Name
 
 Chiron is named after the centaur of Greek mythology who taught medicine to Asclepius, the god of medicine, and trained other great healers. He was the teacher of physicians. Chiron doesn't heal patients: it trains the people who will, just like this product.
@@ -61,6 +63,10 @@ Open http://localhost:3000. There are two modes that share the same consultation
 ## Live demo
 
 **https://chiron-nu-two.vercel.app** (Google sign-in; access limited to test users while the OAuth app is in testing). Frontend and backend both deploy on Vercel from `main` on every push; consultations are stored in Neon Postgres.
+
+## Testing
+
+Deterministic tests (31 pytest + 18 Playwright E2E) run in CI on every push; LLM evals run on demand in LangSmith. Risk-by-risk coverage: [docs/TEST_STRATEGY.md](docs/TEST_STRATEGY.md).
 
 ## Findings
 

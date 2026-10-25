@@ -60,6 +60,7 @@ def new_session(case_id: str, user: dict | None = None, mode: str = "chat") -> s
     case = _load_case(case_id)
     sid = uuid.uuid4().hex[:12]
     _sessions[sid] = {
+        "owner": user["email"] if user else "",
         "case": case, "transcript": [], "revealed_facts": [], "exams_done": [],
         "studies_requested": [], "diagnosis_proposed": None, "finished": False,
     }
@@ -75,9 +76,17 @@ def _best(items: list[dict], text_fn, query: set[str]):
     return best
 
 
+def _get(session_id: str, user: dict | None) -> dict:
+    """Same ownership rule as the real backend: KeyError if missing, PermissionError if not yours."""
+    s = _sessions[session_id]
+    if user and s["owner"] and s["owner"] != user["email"]:
+        raise PermissionError(session_id)
+    return s
+
+
 def send(session_id: str, text: str, user: dict | None = None) -> dict:
     t0 = time.perf_counter()
-    s = _sessions[session_id]
+    s = _get(session_id, user)
     case = s["case"]
     q = _tokens(text)
     nt = _norm(text)
@@ -134,7 +143,7 @@ def send(session_id: str, text: str, user: dict | None = None) -> dict:
 
 
 def get_session(session_id: str, user: dict | None = None) -> dict:
-    s = _sessions[session_id]
+    s = _get(session_id, user)
     return {
         "case_id": s["case"]["id"], "transcript": s["transcript"],
         "revealed_facts": s["revealed_facts"], "total_facts": len(s["case"].get("anamnesis", [])),
@@ -144,5 +153,5 @@ def get_session(session_id: str, user: dict | None = None) -> dict:
 
 
 def finish(session_id: str, user: dict | None = None) -> dict:
-    _sessions[session_id]["finished"] = True
-    return get_session(session_id)
+    _get(session_id, user)["finished"] = True
+    return get_session(session_id, user)

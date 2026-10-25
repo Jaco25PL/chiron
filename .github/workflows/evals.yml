@@ -1,0 +1,34 @@
+# LLM evals in LangSmith. Manual only: each run spends Gemini quota (the free tier allows
+# ~180 flash calls a day across the three keys; the patient suite alone uses ~100).
+# Needs repo secrets: GOOGLE_API_KEY_1..3 and LANGSMITH_API_KEY.
+name: Evals
+
+on:
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: Which eval suite to run
+        type: choice
+        options: [router, paciente, adversarial]
+        default: router
+
+jobs:
+  evals:
+    name: LangSmith eval · ${{ inputs.suite }}
+    runs-on: ubuntu-latest
+    env:
+      GOOGLE_API_KEY_1: ${{ secrets.GOOGLE_API_KEY_1 }}
+      GOOGLE_API_KEY_2: ${{ secrets.GOOGLE_API_KEY_2 }}
+      GOOGLE_API_KEY_3: ${{ secrets.GOOGLE_API_KEY_3 }}
+      LANGSMITH_API_KEY: ${{ secrets.LANGSMITH_API_KEY }}
+      LANGSMITH_TRACING: "true"
+      LANGSMITH_PROJECT: chiron
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Run the ${{ inputs.suite }} suite (results appear as an experiment in LangSmith)
+        run: python evals/run.py ${{ inputs.suite }}

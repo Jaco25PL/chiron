@@ -1,9 +1,8 @@
 import { expect, test } from "@playwright/test";
 import { signInAs } from "./session";
 
-// Needs the FastAPI backend reachable from the web server (local dev or CHIRON_API_URL).
-// Opt-in so the auth suite stays runnable against a frontend-only deployment.
-test.skip(!process.env.E2E_BACKEND, "set E2E_BACKEND=1 when a backend is available");
+// The web → backend path: signed requests through the Next proxy, and per-user ownership.
+// Locally/CI it hits the fake backend; with BASE_URL it hits the deployed one.
 
 test.beforeEach(async ({ context, baseURL }) => signInAs(context, baseURL!));
 
