@@ -80,14 +80,20 @@ def _block_seconds(exc: Exception) -> float:
     return 20.0  # per-minute limit
 
 
-def _guarded(runnable, model: str, key: str):
+def _guarded(make_runnable, model: str, key: str):
+    """Wraps one (model, key) option: skips it while blocked and builds the client lazily,
+    on its first real use (building every client up front cost ~20 s per cold start)."""
     from langchain_core.runnables import RunnableLambda
+
+    built = []
 
     def call(value, config):
         if _blocked.get((model, key), 0) > time.time():
             raise QuotaBlocked(f"{model} out of quota")
+        if not built:
+            built.append(make_runnable())
         try:
-            return runnable.invoke(value, config)
+            return built[0].invoke(value, config)
         except Exception as exc:
             if is_quota_error(exc):
                 _blocked[(model, key)] = time.time() + _block_seconds(exc)
@@ -104,11 +110,15 @@ def chat_model(task: str, schema: type | None = None, **kwargs):
     that are out of quota are skipped until it renews (see `_guarded`).
     With `schema` (a Pydantic class) it returns structured output.
     """
-    runnables = []
-    for model in MODELS[task]:
-        for key in api_keys():
-            llm = _client(model, key, tuple(sorted(kwargs.items())))
-            runnables.append(_guarded(llm.with_structured_output(schema) if schema else llm, model, key))
+    frozen = tuple(sorted(kwargs.items()))
+
+    def factory(model: str, key: str):
+        def make():
+            llm = _client(model, key, frozen)
+            return llm.with_structured_output(schema) if schema else llm
+        return make
+
+    runnables = [_guarded(factory(model, key), model, key) for model in MODELS[task] for key in api_keys()]
     # if every key and model fails (e.g. all out of per-minute quota), retry with growing backoff
     return runnables[0].with_fallbacks(runnables[1:]).with_retry(
         stop_after_attempt=4, wait_exponential_jitter=True, exponential_jitter_params={"initial": 5, "max": 40}

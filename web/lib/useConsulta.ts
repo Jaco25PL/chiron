@@ -24,6 +24,7 @@ export function useConsulta(caseId: string, modo: "chat" | "cara" = "chat") {
       .nuevaSesion(caseId, modo)
       .then((r) => setSessionId(r.session_id))
       .catch((e: Error) => toast.error(e.message, { id: "sesion" }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- created once, with the mode the user opened it in
   }, [caseId]);
 
   const enviar = useCallback(
@@ -54,7 +55,10 @@ export function useConsulta(caseId: string, modo: "chat" | "cara" = "chat") {
     }
   }, [sessionId]);
 
-  return { caso, listo: !!sessionId, turnos, pensando, inicio, enviar, terminar, resumen, setResumen };
+  const listo = !!sessionId;
+  // waiting long enough to look stuck: usually the backend cold-starting (Cloud Run scales to zero)
+  const demora = useDemora(!listo || pensando);
+  return { caso, listo, turnos, pensando, demora, inicio, enviar, terminar, resumen, setResumen };
 }
 
 /** Seconds left of the 7 minutes (negative once over). Skips re-renders while the tab is hidden. */
@@ -74,4 +78,18 @@ export function formatoTiempo(s: number) {
   const neg = s < 0;
   const a = Math.abs(s);
   return `${neg ? "−" : ""}${Math.floor(a / 60)}:${String(a % 60).padStart(2, "0")}`;
+}
+
+/** True once `activo` has stayed true for `ms`; resets as soon as it turns false. */
+export function useDemora(activo: boolean, ms = 3500) {
+  const [demora, setDemora] = useState(false);
+  useEffect(() => {
+    if (!activo) return;
+    const id = setTimeout(() => setDemora(true), ms);
+    return () => {
+      clearTimeout(id);
+      setDemora(false); // reset when the wait ends (cleanup, not the effect body)
+    };
+  }, [activo, ms]);
+  return activo && demora;
 }

@@ -1,0 +1,20 @@
+# What `gcloud run deploy --source .` uploads to Cloud Build. Unlike .gitignore, the local
+# RAG index (.chroma/) IS uploaded: the image serves it read-only.
+.git/
+.gitignore
+.gcloudignore
+.env
+.env.*
+secrets/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+web/
+frontend/
+docs/
+tests/
+evals/
+data/

@@ -58,6 +58,12 @@ data/ecoe/
 - `store/db.py`: with `DATABASE_URL` (Neon Postgres) consultations use LangGraph's `PostgresSaver` and `users`/`consultations`/`turns` are recorded (`store/schema.sql`). Without it, everything stays in memory.
 - The RAG index stays in Chroma (shipped with the backend image), not in Postgres.
 
+## Backend deploy (Cloud Run)
+
+- `Dockerfile` + `.gcloudignore` (uploads the local `.chroma/` index, which git ignores) and `deploy/cloudrun.sh`: region `southamerica-east1` (next to Neon), `--min-instances 0` so it costs nothing while idle. Secrets come from Secret Manager (`deploy/cloudrun.sh secrets` uploads them from `.env`).
+- Cold starts are kept short: Gemini clients are built lazily on first use, and the UI shows a "waking up" notice when a request takes more than ~3.5 s.
+- The service is public (`--allow-unauthenticated`) but every `/api` route except `/api/health` requires the HMAC-signed identity from the Next.js proxy.
+
 ## Tests
 
 `python -m pytest` (config in `pytest.ini`). TDD for deterministic logic; LLM behavior is measured with evals.

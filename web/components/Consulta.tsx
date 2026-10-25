@@ -64,6 +64,8 @@ export function Consulta({ caseId, modoInicial }: { caseId: string; modoInicial:
         </div>
       </header>
 
+      {c.demora && <AvisoDemora preparando={!c.listo} />}
+
       {modo === "chat" ? (
         <ChatView caso={c.caso} turnos={c.turnos} pensando={c.pensando} listo={c.listo} onSend={c.enviar} />
       ) : (
@@ -88,6 +90,19 @@ export function Consulta({ caseId, modoInicial }: { caseId: string; modoInicial:
       )}
 
       <SummarySheet resumen={c.resumen} onClose={() => c.setResumen(null)} />
+    </div>
+  );
+}
+
+/** Shown when the first request is slow: the backend scales to zero and may be waking up. */
+function AvisoDemora({ preparando }: { preparando: boolean }) {
+  return (
+    <div role="status" className="pointer-events-none fixed inset-x-0 top-[calc(max(12px,env(safe-area-inset-top))+52px)] z-30 flex justify-center px-4">
+      <div className="glass enter flex items-center gap-2.5 rounded-full bg-bg-2/80 px-4 py-2 text-[13px] text-ink-2">
+        <span className="size-3.5 animate-spin rounded-full border-2 border-line-strong border-t-accent" aria-hidden />
+        {preparando ? "Preparando la consulta…" : "El paciente está tardando…"}
+        <span className="hidden text-ink-3 sm:inline">el servidor se está despertando, puede tardar unos segundos</span>
+      </div>
     </div>
   );
 }
