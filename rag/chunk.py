@@ -4,7 +4,7 @@ Uso:
     python rag/chunk.py mpna
 
 Lee:
-    data/ecoe/<materia>/clean/*.md       apuntes en Markdown
+    data/ecoe/<materia>/clean/**/*.md    apuntes (raíz), guías (guias/) y material de cátedra (catedra/)
     data/ecoe/<materia>/grillas/*.json   grillas de evaluación (una por chunk)
     data/ecoe/contexto-ecoe.md           contexto general del ECOE (común a todas las materias)
 Escribe:
@@ -125,8 +125,11 @@ def main():
     contexto = ROOT / "data" / "ecoe" / "contexto-ecoe.md"
     if contexto.exists():
         chunks += chunk_markdown(contexto, "general", "contexto_ecoe")
-    for md in sorted((base / "clean").glob("*.md")):
-        chunks += chunk_markdown(md, materia, "apunte")
+    # la subcarpeta de clean/ define el tipo: guias/ -> guia, catedra/ -> clase, raíz -> apunte
+    tipos = {"guias": "guia", "catedra": "clase"}
+    for md in sorted((base / "clean").rglob("*.md")):
+        sub = md.parent.relative_to(base / "clean").as_posix()
+        chunks += chunk_markdown(md, materia, tipos.get(sub, "apunte"))
     for gj in sorted((base / "grillas").glob("*.json")):
         if gj.name != "index.json":
             chunks.append(chunk_grilla(gj, materia))

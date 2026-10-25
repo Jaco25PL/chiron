@@ -37,6 +37,10 @@ Practicar cuando quieras, las veces que quieras, con casos variados y feedback i
 
 Ver [ARCHITECTURE.md](ARCHITECTURE.md) (borrador tentativo).
 
+## Hallazgos
+
+Lo que fui encontrando al construirlo (evals, latencia, datos, bugs): [docs/HALLAZGOS.md](docs/HALLAZGOS.md).
+
 ## Decisiones de diseño
 
 ### Jev en español, sin traducción en tiempo real

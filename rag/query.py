@@ -34,7 +34,7 @@ def main():
     p.add_argument("materia")
     p.add_argument("pregunta")
     p.add_argument("-k", type=int, default=5)
-    p.add_argument("--tipo", choices=["apunte", "grilla", "contexto_ecoe"])
+    p.add_argument("--tipo", choices=["apunte", "guia", "clase", "grilla", "contexto_ecoe"])
     args = p.parse_args()
 
     for r in search(args.materia, args.pregunta, args.k, args.tipo):

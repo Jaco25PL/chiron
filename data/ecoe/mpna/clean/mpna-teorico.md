@@ -2540,6 +2540,8 @@ indeterminado.
 
 izquie
 
+- a la
+
 **Desviació**
 
 ```text

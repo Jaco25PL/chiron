@@ -73,7 +73,10 @@ def chat_model(task: str, schema: type | None = None, **kwargs):
         for key in api_keys():
             llm = _client(model, key, tuple(sorted(kwargs.items())))
             runnables.append(llm.with_structured_output(schema) if schema else llm)
-    return runnables[0].with_fallbacks(runnables[1:])
+    # si todas las keys y modelos fallan (p. ej. todas sin cuota por minuto), reintenta con espera creciente
+    return runnables[0].with_fallbacks(runnables[1:]).with_retry(
+        stop_after_attempt=4, wait_exponential_jitter=True, exponential_jitter_params={"initial": 5, "max": 40}
+    )
 
 
 def with_rotation(call: Callable[[str, str], T], task: str, retries: int = 3, wait: float = 30) -> T:

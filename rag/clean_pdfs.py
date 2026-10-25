@@ -4,6 +4,8 @@ Uso:
     python rag/clean_pdfs.py mpna
 
 Lee data/ecoe/<materia>/raw/*.pdf y escribe data/ecoe/<materia>/clean/<nombre>.md.
+Además limpia las fuentes listadas en data/ecoe/<materia>/sources.json (material de EVA)
+a clean/<out>, p. ej. clean/guias/ o clean/catedra/.
 Requiere `pdftotext` (poppler) en el PATH.
 
 La limpieza es determinística (no usa LLM) para no alterar el contenido médico:
@@ -14,6 +16,7 @@ La limpieza es determinística (no usa LLM) para no alterar el contenido médico
 - descarta restos de diagramas (líneas con casi nada de texto)
 """
 
+import json
 import re
 import subprocess
 import sys
@@ -25,7 +28,8 @@ ROOT = Path(__file__).resolve().parent.parent
 # Documentos que no son prosa y se procesan aparte (grillas -> JSON, paraclínica -> tabla).
 SKIP = {"grillas-mpna", "paraclinica"}
 
-BULLET = re.compile(r"^\s*(?:[•●▪◦·]|-(?=\s)|\d+[.)](?=\s))\s*")
+# "n" y los caracteres de uso privado son viñetas de fuentes de símbolos (Wingdings) en diapositivas
+BULLET = re.compile(r"^\s*(?:[•●▪◦·-]|[-n](?=\s)|\d+[.)](?=\s))\s*")
 PAGE_NUMBER = re.compile(r"^\s*\d{1,3}\s*$")
 COLUMN_GAP = re.compile(r"\S {3,}\S")
 LIGATURES = {"ﬁ": "fi", "ﬂ": "fl", "ﬀ": "ff", "ﬃ": "ffi", "ﬄ": "ffl", "​": ""}
@@ -36,6 +40,9 @@ def normalize(text: str) -> str:
         text = text.replace(bad, good)
     # "ı́" (i sin punto + acento combinado) y similares -> forma compuesta
     text = text.replace("ı́", "í")
+    # viñetas de Wingdings: "n" + carácter de uso privado al inicio de línea -> "•"
+    text = re.sub(r"(?m)^(\s*)n?[-]+[  ]*", r"\1• ", text)
+    text = re.sub(r"[-]", "", text)
     return unicodedata.normalize("NFC", text)
 
 
@@ -170,9 +177,10 @@ def clean_page(raw: str) -> list[str]:
     return out
 
 
-def pdf_to_markdown(pdf: Path) -> str:
+def pdf_to_markdown(pdf: Path, layout: bool = True) -> str:
+    """layout=False usa el orden de lectura de pdftotext: mejor para PDFs a dos columnas."""
     raw = subprocess.run(
-        ["pdftotext", "-enc", "UTF-8", "-layout", str(pdf), "-"],
+        ["pdftotext", "-enc", "UTF-8", *(["-layout"] if layout else []), str(pdf), "-"],
         capture_output=True,
         check=True,
     ).stdout.decode("utf-8")
@@ -195,11 +203,19 @@ def main():
     raw_dir = ROOT / "data" / "ecoe" / materia / "raw"
     clean_dir = ROOT / "data" / "ecoe" / materia / "clean"
     clean_dir.mkdir(parents=True, exist_ok=True)
-    for pdf in sorted(raw_dir.glob("*.pdf")):
-        if pdf.stem in SKIP:
+    jobs = [(pdf, clean_dir / f"{pdf.stem}.md", True) for pdf in sorted(raw_dir.glob("*.pdf")) if pdf.stem not in SKIP]
+    manifest = ROOT / "data" / "ecoe" / materia / "sources.json"
+    if manifest.exists():
+        jobs += [
+            (raw_dir / s["raw"], clean_dir / s["out"], s.get("layout", True))
+            for s in json.loads(manifest.read_text(encoding="utf-8"))["sources"]
+        ]
+    for pdf, out, layout in jobs:
+        if not pdf.exists():
+            print(f"FALTA {pdf.relative_to(ROOT)} (se omite)")
             continue
-        md = pdf_to_markdown(pdf)
-        out = clean_dir / f"{pdf.stem}.md"
+        md = pdf_to_markdown(pdf, layout)
+        out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(md, encoding="utf-8")
         print(f"{pdf.name} -> {out.relative_to(ROOT)} ({len(md):,} chars)")
 

@@ -1,0 +1,29 @@
+{
+  "_doc": "Fuentes extra de raw/ (además de raw/*.pdf) que se limpian a clean/<out>. La carpeta de destino define el tipo en el RAG: guias/ -> guia, catedra/ -> clase. layout=false extrae en orden de lectura (PDFs a dos columnas). Origen: EVA, UC15 MPNA 2026. Quedan afuera a propósito: Guía ADA 2025 y guías ALAD 2019 (enormes, en inglés o redundantes; taparían los apuntes de la cátedra), foros, cuestionarios y tareas.",
+  "sources": [
+    {"raw": "eva/carpetas/ut-6-recursos-bibliograficos/Material de Hipertensión Arterial/2017 MSP Guía HTA.pdf", "out": "guias/msp-hta-2017.md", "layout": false},
+    {"raw": "eva/carpetas/ut-6-recursos-bibliograficos/Material de Diabetes Mellitus/Guia Diabetes MSP 2017.pdf", "out": "guias/msp-diabetes-2017.md", "layout": false},
+    {"raw": "eva/carpetas/ut-6-recursos-bibliograficos/Material de Tabaquismo/Guía para el abordaje del Tabaquismo.pdf", "out": "guias/msp-tabaquismo-2009.md", "layout": false},
+
+    {"raw": "eva/carpetas/ut-6-recursos-bibliograficos/Material de Diabetes Mellitus/DM2 educ y automonitoreo.pdf", "out": "catedra/dm2-educacion-automonitoreo.md"},
+    {"raw": "eva/carpetas/ut-6-recursos-bibliograficos/Material de Diabetes Mellitus/DM2 Incretinas.pdf", "out": "catedra/dm2-incretinas.md"},
+    {"raw": "eva/carpetas/ut-6-recursos-bibliograficos/Material de Diabetes Mellitus/DM2 metas.pdf", "out": "catedra/dm2-metas.md"},
+    {"raw": "eva/carpetas/ut-6-recursos-bibliograficos/Material de Diabetes Mellitus/DM2 prevención.pdf", "out": "catedra/dm2-prevencion.md"},
+    {"raw": "eva/carpetas/ut-6-recursos-bibliograficos/Material de Diabetes Mellitus/DM2 tto no farmacol.pdf", "out": "catedra/dm2-tratamiento-no-farmacologico.md"},
+    {"raw": "eva/carpetas/ut-6-recursos-bibliograficos/Material de Tabaquismo/Enfermedades Tabacodependientes_CHLCC.pdf", "out": "catedra/enfermedades-tabacodependientes.md"},
+    {"raw": "eva/carpetas/ut-6-recursos-bibliograficos/Material de Tabaquismo/Motivacion y etapas de cambio.pdf", "out": "catedra/tabaquismo-motivacion-etapas-cambio.md"},
+    {"raw": "eva/carpetas/documentos/Material de Infecciones respiratorias altas/Infecciones respiratorias altas2021.pdf", "out": "catedra/infecciones-respiratorias-altas.md"},
+    {"raw": "eva/carpetas/documentos/Material de Infecciones respiratorios bajas/Taller NAC.pdf", "out": "catedra/taller-nac.md"},
+    {"raw": "eva/carpetas/documentos/Material sobre Asma/ASMA 2021 final.pdf", "out": "catedra/asma.md"},
+    {"raw": "eva/carpetas/ut-8-documentos/Uso racional de estudios paraclinicos.pdf", "out": "catedra/uso-racional-paraclinica.md"},
+    {"raw": "eva/carpetas/ut-8-documentos/Pruebas diagnosticas.pdf", "out": "catedra/pruebas-diagnosticas.md"},
+    {"raw": "eva/carpetas/ut-8-documentos/Prevencion clinica.pdf", "out": "catedra/prevencion-clinica.md"},
+    {"raw": "eva/carpetas/ut-8-documentos/Niveles de prevencion_cuidados centrados en la persona", "out": "catedra/niveles-de-prevencion.md"},
+    {"raw": "eva/archivos/2025_Valoracion-de-la-funcion-renal-CIMGI.pdf", "out": "catedra/laboratorio-funcion-renal.md"},
+    {"raw": "eva/carpetas/material-de-apoyo-de-imagenologia/introduccion a los metodos imagenologicos.pdf", "out": "catedra/imagenologia-introduccion.md"},
+    {"raw": "eva/carpetas/material-de-apoyo-de-imagenologia/RADIOGRAFIA_DE_TORAX_NORMAL.pdf", "out": "catedra/imagenologia-torax-normal.md"},
+    {"raw": "eva/carpetas/material-de-apoyo-de-imagenologia/Torax_Patologicopdf.pdf", "out": "catedra/imagenologia-torax-patologico.md"},
+    {"raw": "eva/carpetas/material-de-apoyo-de-imagenologia/Estudio imagenologico del abdomen.pdf", "out": "catedra/imagenologia-abdomen.md"},
+    {"raw": "eva/carpetas/material-de-apoyo-de-imagenologia/IMAGENOLOGIA_DIGESTIVA.pdf", "out": "catedra/imagenologia-digestiva.md"}
+  ]
+}

@@ -24,6 +24,9 @@ data/ecoe/
     ├── raw/                  PDFs originales (no se tocan, no se versionan)
     │   └── slides/           presentaciones escaneadas; su contenido ya está en los apuntes
     ├── clean/                apuntes limpios en Markdown (con marcas <!-- p. N --> de página)
+    │   ├── guias/            guías clínicas del MSP (tipo "guia" en el RAG)
+    │   └── catedra/          clases y talleres de la cátedra bajados de EVA (tipo "clase")
+    ├── sources.json          qué archivo de raw/eva va a qué archivo de clean/
     ├── grillas/              una grilla de evaluación por JSON + index.json
     └── chunks.jsonl          chunks para el RAG (generado)
 ```
@@ -67,7 +70,8 @@ python rag/query.py mpna "¿qué preguntar ante disnea?"
 ```
 
 - Una colección de Chroma por materia: `ecoe_<materia>`.
-- Metadata de cada chunk: `materia`, `fuente`, `tipo` (`apunte` | `grilla` | `contexto_ecoe`), `seccion`, `pagina`.
+- Metadata de cada chunk: `materia`, `fuente`, `tipo` (`apunte` | `clase` | `guia` | `grilla` | `contexto_ecoe`), `seccion`, `pagina`.
+- Material de EVA (UC15): se baja a `raw/eva/` (no se versiona) y se procesa según `sources.json`. Quedan afuera a propósito la guía ADA 2025 y las ALAD 2019, además de foros, cuestionarios y tareas.
 - Chunking con LangChain (`MarkdownHeaderTextSplitter` + `RecursiveCharacterTextSplitter`).
 
 ## Convenciones

@@ -459,10 +459,9 @@ Microbiología
 
 cuidados de la salud:
 
-###  evitar sv innecesarios
-
- CONSIDERAR MÉTODOS ALTERNATIVOS.  SI resulta imprescindible colocar SV:
-
+- EVITAR SV INNECESARIOS
+- CONSIDERAR MÉTODOS ALTERNATIVOS.
+- SI resulta imprescindible colocar SV:
 - Inserción aséptica x personal adecuadamente entrenado.
 - Mantener el sistema cerrado y desobstruido
 - Precauciones estándar antes y después de manipular el
@@ -479,11 +478,9 @@ vejiga y nunca apoyada en el piso
 
 NO hay evidencia que justifique las siguientes medidas para prevención de IU asociadas a los cuidados de la salud:
 
- Irrigación continua de la vejiga con atb no absorbibles
-
- Profilaxis antibiótica sistémica
-
- Monitoreo bacteriológico
+- Irrigación continua de la vejiga con atb no absorbibles
+- Profilaxis antibiótica sistémica
+- Monitoreo bacteriológico
 
 <!-- p. 47 -->
 
