@@ -8,6 +8,7 @@ andan con cada key y en qué tiempo, para actualizar MODELS.
 """
 
 import os
+import re
 import time
 from functools import lru_cache
 from pathlib import Path
@@ -62,18 +63,52 @@ def _client(model: str, key: str, kwargs: tuple):
     return ChatGoogleGenerativeAI(model=model, google_api_key=key, max_retries=0, **dict(kwargs))
 
 
+class QuotaBlocked(Exception):
+    """El par (modelo, key) se quedó sin cuota hace poco: se saltea sin llamar a la API."""
+
+
+# (modelo, key) -> timestamp hasta el que no se usa. Evita perder ~0,3 s por llamada
+# reintentando combinaciones que ya respondieron "sin cuota por hoy".
+_blocked: dict[tuple[str, str], float] = {}
+
+
+def _block_seconds(exc: Exception) -> float:
+    text = str(exc)
+    if "PerDay" in text:
+        m = re.search(r"retryDelay['\"]?:\s*['\"](\d+)s", text)
+        return float(m.group(1)) if m else 3600.0
+    return 20.0  # límite por minuto
+
+
+def _guarded(runnable, model: str, key: str):
+    from langchain_core.runnables import RunnableLambda
+
+    def call(value, config):
+        if _blocked.get((model, key), 0) > time.time():
+            raise QuotaBlocked(f"{model} sin cuota")
+        try:
+            return runnable.invoke(value, config)
+        except Exception as exc:
+            if is_quota_error(exc):
+                _blocked[(model, key)] = time.time() + _block_seconds(exc)
+            raise
+
+    return RunnableLambda(call, name=model)
+
+
 def chat_model(task: str, schema: type | None = None, **kwargs):
     """Modelo de chat de LangChain para la tarea, con fallback por key y por modelo.
 
     Devuelve un Runnable: el primero es MODELS[task][0] con la primera key; ante
-    cualquier error pasa a la siguiente key y después al siguiente modelo.
+    cualquier error pasa a la siguiente key y después al siguiente modelo. Los pares
+    (modelo, key) sin cuota se saltean hasta que se renueve (ver `_guarded`).
     Con `schema` (clase Pydantic) devuelve salida estructurada.
     """
     runnables = []
     for model in MODELS[task]:
         for key in api_keys():
             llm = _client(model, key, tuple(sorted(kwargs.items())))
-            runnables.append(llm.with_structured_output(schema) if schema else llm)
+            runnables.append(_guarded(llm.with_structured_output(schema) if schema else llm, model, key))
     # si todas las keys y modelos fallan (p. ej. todas sin cuota por minuto), reintenta con espera creciente
     return runnables[0].with_fallbacks(runnables[1:]).with_retry(
         stop_after_attempt=4, wait_exponential_jitter=True, exponential_jitter_params={"initial": 5, "max": 40}

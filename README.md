@@ -37,6 +37,21 @@ Practicar cuando quieras, las veces que quieras, con casos variados y feedback i
 
 Ver [ARCHITECTURE.md](ARCHITECTURE.md) (borrador tentativo).
 
+## Cómo correrlo
+
+Necesitás Python 3.11, Node 20+ y las keys de Gemini en `.env` (`GOOGLE_API_KEY_1`, `_2`, …).
+
+```bash
+# backend: FastAPI + LangGraph (puerto 8000)
+python -m venv .venv && .venv/Scripts/pip install -r requirements.txt
+.venv/Scripts/python -m uvicorn api.main:app --port 8000
+
+# frontend: Next.js (puerto 3000), en otra terminal
+cd web && npm install && npm run dev
+```
+
+Abrí http://localhost:3000. Hay dos modos que comparten la misma consulta: **Chat** y **Cara a cara** (videollamada; por ahora con un retrato ASCII fijo en lugar del avatar).
+
 ## Hallazgos
 
 Lo que fui encontrando al construirlo (evals, latencia, datos, bugs): [docs/HALLAZGOS.md](docs/HALLAZGOS.md).

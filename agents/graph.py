@@ -239,12 +239,15 @@ def get_session(session_id: str) -> dict:
     s = GRAPH.get_state(_config(session_id)).values
     if not s:
         raise KeyError(session_id)
+    case = load_case(s["case_id"])
+    names = {e["id"]: e["maniobra"] for e in prompts.exam_options(case)}
     return {
         "case_id": s["case_id"],
         "transcript": s.get("transcript", []),
         "revealed_facts": s.get("revealed_facts", []),
-        "total_facts": len(load_case(s["case_id"])["anamnesis"]),
+        "total_facts": len(case["anamnesis"]),
         "exams_done": s.get("exams_done", []),
+        "exams_done_labels": [names.get(i, i) for i in s.get("exams_done", [])],
         "studies_requested": s.get("studies_requested", []),
         "diagnosis_proposed": s.get("diagnosis_proposed"),
         "finished": s.get("finished", False),

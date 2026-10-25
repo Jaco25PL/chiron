@@ -12,7 +12,7 @@ Contrato (no cambiar sin actualizar api/):
     finish(session_id) -> get_session(...) con finished=True
     get_session(session_id) -> {
         "case_id": str, "transcript": [{"role": "estudiante" | "paciente" | "docente", "text": str}],
-        "revealed_facts": [ids], "total_facts": int, "exams_done": [ids], "studies_requested": [str],
+        "revealed_facts": [ids], "total_facts": int, "exams_done": [ids], "exams_done_labels": [str], "studies_requested": [str],
         "diagnosis_proposed": str | None, "finished": bool
     }
 """

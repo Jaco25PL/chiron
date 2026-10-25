@@ -42,6 +42,13 @@ data/ecoe/
 - Las respuestas del paciente revelan un solo hecho por pregunta, en lenguaje de paciente, sin nombrar el diagnóstico.
 - Flujo para casos nuevos: un agente escribe el caso, otro con contexto limpio lo revisa contra los apuntes, y `python cases/validate.py` + `pytest` tienen que pasar.
 
+## Frontend (`web/`)
+
+- Next.js 16 (App Router) + Tailwind v4 + Motion, más `vaul` (hoja inferior) y `sonner` (avisos). Ojo: Next 16 tiene cambios de API; leer `web/node_modules/next/dist/docs/` antes de usar algo nuevo.
+- `/api/*` se reescribe al backend FastAPI (`CHIRON_API_URL`, por defecto `http://127.0.0.1:8000`).
+- Dos modos sobre la misma sesión: Chat (`components/ChatView.tsx`) y Cara a cara (`components/FaceView.tsx`). El rostro es un retrato ASCII generado por `web/scripts/ascii_face.py`, placeholder hasta tener avatar.
+- Estilo: oscuro, vidrio, acento menta. Movimiento según las pautas de Emil Kowalski: ease-out fuerte, menos de 300 ms, solo transform/opacity, `scale(0.97)` al presionar y nada animado en acciones de teclado.
+
 ## Tests
 
 `python -m pytest` (config en `pytest.ini`). TDD para lo determinístico; el comportamiento del LLM se mide con evals.

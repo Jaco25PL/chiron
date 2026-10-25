@@ -138,7 +138,7 @@ def get_session(session_id: str) -> dict:
     return {
         "case_id": s["case"]["id"], "transcript": s["transcript"],
         "revealed_facts": s["revealed_facts"], "total_facts": len(s["case"].get("anamnesis", [])),
-        "exams_done": s["exams_done"], "studies_requested": s["studies_requested"],
+        "exams_done": s["exams_done"], "exams_done_labels": s["exams_done"], "studies_requested": s["studies_requested"],
         "diagnosis_proposed": s["diagnosis_proposed"], "finished": s["finished"],
     }
 
