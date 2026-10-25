@@ -123,3 +123,16 @@ def test_voice_style_and_choice_stay_on_the_server():
     case = load_case("mpna-itu-pna-diabetica")
     assert "61 años" in style(case) and "mujer" in style(case)  # age is used for the voice only
     assert VOICES[case["paciente"]["sexo"]] == "Sulafat"
+
+
+def test_tts_audio_keeps_only_the_sound():
+    import struct
+
+    from llm.tts import to_pcm, to_wav
+
+    pcm = b"\x01\x02" * 100
+    assert to_pcm(pcm) == pcm  # models that return raw PCM
+    firma = b"C2PA" + struct.pack("<I", 8) + b"x" * 8  # provenance chunk after the audio
+    wav = to_wav(pcm)
+    wav = wav[:4] + struct.pack("<I", len(wav) - 8 + len(firma)) + wav[8:] + firma
+    assert to_pcm(wav) == pcm  # the signature must not be played as sound

@@ -9,7 +9,7 @@ import io
 import wave
 
 VOICES = {"femenino": "Sulafat", "masculino": "Schedar"}
-SAMPLE_RATE = 24000  # Gemini TTS returns 16-bit mono PCM at 24 kHz
+SAMPLE_RATE = 24000  # Gemini TTS audio is 16-bit mono PCM at 24 kHz
 
 
 def style(case: dict) -> str:
@@ -28,6 +28,15 @@ def to_wav(pcm: bytes) -> bytes:
         w.setframerate(SAMPLE_RATE)
         w.writeframes(pcm)
     return buf.getvalue()
+
+
+def to_pcm(audio: bytes) -> bytes:
+    """Raw PCM from a TTS part. Newer models return a whole WAV whose last chunk is a C2PA provenance
+    signature: wrapped as-is it played as a burst of static at the end, so keep only the data chunk."""
+    if audio[:4] != b"RIFF":
+        return audio
+    with wave.open(io.BytesIO(audio)) as w:
+        return w.readframes(w.getnframes())
 
 
 def synthesize(text: str, case: dict) -> bytes:
@@ -50,7 +59,7 @@ def synthesize(text: str, case: dict) -> bytes:
     def call(key: str, model: str) -> bytes:
         client = genai.Client(api_key=key)  # keep the reference: an inline client is closed before the call
         res = client.models.generate_content(model=model, contents=contents, config=config)
-        pcm = b"".join(p.inline_data.data for p in res.candidates[0].content.parts if p.inline_data)
+        pcm = b"".join(to_pcm(p.inline_data.data) for p in res.candidates[0].content.parts if p.inline_data)
         if not pcm:
             raise RuntimeError(f"{model} returned no audio")
         return pcm
