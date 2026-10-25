@@ -52,6 +52,10 @@ cd web && npm install && npm run dev
 
 Open http://localhost:3000. There are two modes that share the same consultation: **Chat** and **Face to face** (video call; for now with a static ASCII portrait instead of the avatar).
 
+## Live demo
+
+Frontend: **https://chiron-nu-two.vercel.app** (Google sign-in; access limited to test users while the OAuth app is in testing). Deployed on Vercel from `main` on every push. The Python backend is not hosted yet, so the hosted demo shows the UI and login only.
+
 ## Findings
 
 What I found while building it (evals, latency, data, bugs): [docs/FINDINGS.md](docs/FINDINGS.md).
