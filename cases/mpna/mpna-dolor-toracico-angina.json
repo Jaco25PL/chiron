@@ -373,12 +373,22 @@
     },
     {
       "id": "medicacion-habitual",
-      "tema": "Medicación habitual y alergias",
+      "tema": "Medicación habitual",
       "preguntas_ejemplo": [
         "¿Toma alguna medicación?",
-        "¿Es alérgico a algún medicamento?"
+        "¿Toma algún remedio todos los días?"
       ],
-      "respuesta": "Ahora no tomo nada. La pastilla del colesterol la dejé, como le dije. Alergias no tengo.",
+      "respuesta": "No, ahora no tomo nada.",
+      "grilla_items": []
+    },
+    {
+      "id": "alergias",
+      "tema": "Alergias",
+      "preguntas_ejemplo": [
+        "¿Es alérgico a algún medicamento?",
+        "¿Tiene alergias?"
+      ],
+      "respuesta": "No, alergias no tengo.",
       "grilla_items": []
     },
     {
