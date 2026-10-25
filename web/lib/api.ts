@@ -27,6 +27,39 @@ export type Resumen = {
   studies_requested: string[];
   diagnosis_proposed: string | null;
   finished: boolean;
+  feedback: Feedback | null;
+};
+
+/** The grilla scale; null = not rated (the docente's LLM failed and the app can't judge that item). */
+export type Calificacion = "Excelente" | "Bien" | "Regular" | "No realizado";
+
+/** One grilla item as the student sees it: diagnosis and plan items carry a generic texto. */
+export type ItemGrilla = {
+  id: string;
+  texto: string;
+  tipo: "hecho" | "examen" | "estudio" | "conducta" | "plan" | "diagnostico" | "global";
+  calificacion: Calificacion | null;
+  evidencia: boolean;
+};
+
+/** The docente's correction when the consultation ends. Never names the diagnosis. */
+export type Feedback = {
+  score: number; // 0-100, "global" items excluded
+  parcial: boolean; // the docente's LLM failed: coverage only, no tips
+  bien: string[];
+  falto: string[];
+  consejos: string[];
+  items: ItemGrilla[];
+};
+
+/** A finished consultation in the student's history (newest first). */
+export type ConsultaPasada = {
+  id: string;
+  fecha: string; // ISO
+  paciente: Paciente;
+  modo: string;
+  score: number;
+  para_la_proxima: string[];
 };
 
 const SIN_BACKEND =
@@ -60,7 +93,9 @@ export const api = {
     }),
   enviar: (sessionId: string, text: string) =>
     call<Respuesta>(`/api/sessions/${sessionId}/messages`, { method: "POST", body: JSON.stringify({ text }) }),
+  /** Ends the consultation; the docente's correction (one LLM call) can take several seconds. */
   terminar: (sessionId: string) => call<Resumen>(`/api/sessions/${sessionId}/finish`, { method: "POST" }),
+  historial: () => call<ConsultaPasada[]>("/api/historial"),
   /** Face-to-face call: the reply arrives first (onRespuesta) and then the patient's voice, as 24 kHz
    *  16-bit PCM chunks while it is generated (onAudio). Resolves when the voice has fully arrived. */
   enviarConVoz: async (

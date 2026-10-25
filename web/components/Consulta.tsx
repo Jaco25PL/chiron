@@ -23,7 +23,11 @@ export function Consulta({ caseId, modoInicial }: { caseId: string; modoInicial:
     <div className="flex h-dvh flex-col">
       <header className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 pb-3 pt-[max(12px,env(safe-area-inset-top))] sm:px-6">
         <div className="flex min-w-0 items-center gap-2">
-          <Link href="/" aria-label="Volver" className="press glass grid size-9 shrink-0 place-items-center rounded-full text-ink-2 hover:text-ink">
+          <Link
+            href="/"
+            aria-label="Volver"
+            className="press glass grid size-9 shrink-0 place-items-center rounded-full text-ink-2 hover:text-ink"
+          >
             <ChevronLeft width={18} height={18} />
           </Link>
           <div className="hidden min-w-0 sm:block">
@@ -38,8 +42,22 @@ export function Consulta({ caseId, modoInicial }: { caseId: string; modoInicial:
           value={modo}
           onChange={setModo}
           options={[
-            { value: "chat", label: <><Chat width={15} height={15} /> Chat</> },
-            { value: "cara", label: <><Video width={15} height={15} /> Cara a cara</> },
+            {
+              value: "chat",
+              label: (
+                <>
+                  <Chat width={15} height={15} /> Chat
+                </>
+              ),
+            },
+            {
+              value: "cara",
+              label: (
+                <>
+                  <Video width={15} height={15} /> Cara a cara
+                </>
+              ),
+            },
           ]}
         />
 
@@ -56,7 +74,7 @@ export function Consulta({ caseId, modoInicial }: { caseId: string; modoInicial:
           {modo === "chat" && (
             <button
               onClick={c.terminar}
-              disabled={!c.listo}
+              disabled={!c.listo || c.corrigiendo}
               className="press hidden h-9 rounded-full bg-danger/15 px-3.5 text-[13px] font-medium text-danger hover:bg-danger/25 disabled:opacity-40 sm:block"
             >
               Terminar
@@ -83,14 +101,14 @@ export function Consulta({ caseId, modoInicial }: { caseId: string; modoInicial:
       {modo === "chat" && (
         <button
           onClick={c.terminar}
-          disabled={!c.listo}
+          disabled={!c.listo || c.corrigiendo}
           className="press fixed bottom-[calc(max(16px,env(safe-area-inset-bottom))+118px)] right-4 h-9 rounded-full bg-danger/15 px-3.5 text-[13px] font-medium text-danger backdrop-blur disabled:opacity-40 sm:hidden"
         >
           Terminar
         </button>
       )}
 
-      <SummarySheet resumen={c.resumen} onClose={() => c.setResumen(null)} />
+      <SummarySheet resumen={c.resumen} corrigiendo={c.corrigiendo} onClose={() => c.setResumen(null)} />
     </div>
   );
 }
@@ -98,7 +116,10 @@ export function Consulta({ caseId, modoInicial }: { caseId: string; modoInicial:
 /** Shown when the first request is slow: the backend scales to zero and may be waking up. */
 function AvisoDemora({ preparando }: { preparando: boolean }) {
   return (
-    <div role="status" className="pointer-events-none fixed inset-x-0 top-[calc(max(12px,env(safe-area-inset-top))+52px)] z-30 flex justify-center px-4">
+    <div
+      role="status"
+      className="pointer-events-none fixed inset-x-0 top-[calc(max(12px,env(safe-area-inset-top))+52px)] z-30 flex justify-center px-4"
+    >
       <div className="glass enter flex items-center gap-2.5 rounded-full bg-bg-2/80 px-4 py-2 text-[13px] text-ink-2">
         <span className="size-3.5 animate-spin rounded-full border-2 border-line-strong border-t-accent" aria-hidden />
         {preparando ? "Preparando la consulta…" : "El paciente está tardando…"}

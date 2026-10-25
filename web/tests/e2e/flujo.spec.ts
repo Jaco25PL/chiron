@@ -56,15 +56,35 @@ test("a full consultation, from case selection to summary", async ({ page, conte
   await page.getByRole("button", { name: "Contestar" }).click();
   await expect(page.getByText(inicio.respuesta)).toBeVisible();
 
-  // 5. hang up: the summary counts what the student obtained
+  // 5. hang up: the docente grades the consultation against the grilla (the fake backend's
+  // coverage-based correction) and the summary counts what the student obtained
   await page.getByRole("button", { name: "Cortar" }).click();
   const sheet = page.getByRole("dialog");
   await expect(sheet.getByText("Consulta terminada")).toBeVisible();
+  await expect(sheet.getByLabel(/Puntaje: \d+ de 100/)).toBeVisible();
+  await expect(sheet.getByText("Lo que hiciste bien")).toBeVisible();
+  await expect(sheet.getByText("Te faltó")).toBeVisible();
   await expect(sheet).toContainText(`/${caso.anamnesis.length}`);
   await expect(sheet).toContainText(ecg.estudio);
 
-  // the hidden diagnosis never reaches the student's screen
+  // the full grilla is collapsed until asked for, each item with its rating
+  const grilla = sheet.getByRole("button", { name: /Grilla completa/ });
+  await expect(grilla).toHaveAttribute("aria-expanded", "false");
+  await grilla.click();
+  await expect(grilla).toHaveAttribute("aria-expanded", "true");
+  await expect(sheet.getByText("No realizado").first()).toBeVisible();
+
+  // the hidden diagnosis never reaches the student's screen, not even in the correction
   await expect(page.locator("body")).not.toContainText(caso.diagnostico.principal);
+  for (const key of caso.diagnostico.grilla_items ?? []) {
+    await expect(page.locator("body")).not.toContainText(key.split("::")[1]);
+  }
+
+  // and the consultation is now in the student's history, with the public view of the patient only
+  // (other tests may finish consultations in parallel with the same user, so look for this one)
+  const historial: { paciente: object; score: number }[] = await (await page.request.get("/api/historial")).json();
+  expect(historial.map((h) => h.paciente)).toContainEqual({ nombre: caso.paciente.nombre, sexo: caso.paciente.sexo });
+  expect(JSON.stringify(historial)).not.toContain(CASE_ID);
 });
 
 test("random patient: the server picks the case and the student only learns name and sex", async ({
