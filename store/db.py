@@ -6,6 +6,7 @@ Everything is optional: without DATABASE_URL the app keeps consultations in memo
 
 import json
 import os
+from datetime import datetime, timezone
 from functools import lru_cache
 from pathlib import Path
 
@@ -90,6 +91,48 @@ def add_turns(consultation_id: str, first_n: int, turns: list[dict]) -> None:
                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON CONFLICT DO NOTHING""",
             rows,
         )
+
+
+# Without a database: the feedback of finished consultations, so local dev still has a history.
+_memory_feedback: dict[str, dict] = {}
+
+
+def save_feedback(consultation_id: str, feedback: dict, *, owner: str, case_id: str, mode: str) -> None:
+    """Stores the docente's feedback once (a second call keeps the first). owner, case_id and mode are
+    only used in memory: in Postgres they are already in `consultations`."""
+    if not enabled():
+        if owner:
+            _memory_feedback.setdefault(consultation_id, {
+                "id": consultation_id, "owner": owner, "case_id": case_id, "mode": mode,
+                "score": feedback["score"], "resultado": feedback,
+                "fecha": datetime.now(timezone.utc).isoformat(),
+            })
+        return
+    with pool().connection() as conn:
+        # consultations without an owner (no user) have no row: nothing to attach the feedback to
+        conn.execute(
+            """INSERT INTO feedback (consultation_id, score, resultado)
+               SELECT %s, %s, %s WHERE EXISTS (SELECT 1 FROM consultations WHERE id = %s)
+               ON CONFLICT (consultation_id) DO NOTHING""",
+            (consultation_id, feedback["score"], json.dumps(feedback), consultation_id),
+        )
+
+
+def history(email: str) -> list[dict]:
+    """The user's finished consultations with feedback, newest first: [{id, fecha, case_id, mode, score, resultado}]."""
+    if not enabled():
+        rows = [r for r in _memory_feedback.values() if r["owner"] == email]
+        return sorted(({k: v for k, v in r.items() if k != "owner"} for r in rows),
+                      key=lambda r: r["fecha"], reverse=True)
+    with pool().connection() as conn:
+        rows = conn.execute(
+            """SELECT c.id, COALESCE(c.finished_at, f.created_at) AS fecha, c.case_id, c.mode, f.score, f.resultado
+               FROM consultations c JOIN feedback f ON f.consultation_id = c.id JOIN users u ON u.id = c.user_id
+               WHERE u.email = %s ORDER BY fecha DESC LIMIT 200""",
+            (email,),
+        ).fetchall()
+    return [{"id": r[0], "fecha": r[1].isoformat(), "case_id": r[2], "mode": r[3], "score": r[4],
+             "resultado": r[5] if isinstance(r[5], dict) else json.loads(r[5])} for r in rows]
 
 
 def finish_consultation(consultation_id: str) -> None:

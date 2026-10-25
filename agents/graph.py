@@ -20,7 +20,7 @@ from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langgraph.graph import END, START, StateGraph
 from pydantic import BaseModel, Field
 
-from agents import prompts
+from agents import feedback, prompts
 from cases import catalog
 from cases.catalog import load_case
 from llm.gemini import MODELS, chat_model
@@ -77,6 +77,8 @@ class State(TypedDict, total=False):
     debug: dict
     timings: Annotated[dict, _timings]
     owner: str  # email of the student who started the consultation
+    mode: str  # chat | cara, as it was opened
+    feedback: dict  # the docente's feedback, computed once when the consultation ends
 
 
 # --- cases -------------------------------------------------------------------------
@@ -227,7 +229,7 @@ def new_session(case_id: str, user: User | None = None, mode: str = "chat") -> s
     owner = user["email"] if user else ""
     GRAPH.update_state(
         _config(session_id),
-        {"case_id": case_id, "diagnosis_proposed": None, "finished": False, "owner": owner},
+        {"case_id": case_id, "diagnosis_proposed": None, "finished": False, "owner": owner, "mode": mode},
     )
     if user:
         db.create_consultation(session_id, db.upsert_user(user["email"], user.get("name")), case_id, mode)
@@ -285,11 +287,29 @@ def speak(session_id: str, user: User | None = None) -> Iterator[bytes]:
 
 
 def finish(session_id: str, user: User | None = None) -> dict:
-    """Ends the consultation ("Terminar consulta" button) and returns the final state."""
-    _state(session_id, user)
-    GRAPH.update_state(_config(session_id), {"finished": True})
-    db.finish_consultation(session_id)
+    """Ends the consultation ("Terminar consulta" button) and returns the final state with the docente's
+    feedback. Idempotent: the feedback (one LLM call) is computed only the first time."""
+    s = _state(session_id, user)
+    if not s.get("feedback"):
+        fb = feedback.evaluate(load_case(s["case_id"]), s)
+        GRAPH.update_state(_config(session_id), {"finished": True, "feedback": fb})
+        db.finish_consultation(session_id)
+        db.save_feedback(session_id, fb, owner=s.get("owner", ""), case_id=s["case_id"], mode=s.get("mode", "chat"))
     return get_session(session_id, user)
+
+
+def historial(user: User) -> list[dict]:
+    """The user's finished consultations, newest first, as the student may see them: who the patient
+    was (name and sex only), the score and one or two things to remember."""
+    out = []
+    for r in db.history(user["email"]):
+        try:
+            paciente = catalog.public_case(load_case(r["case_id"]))["paciente"]
+        except KeyError:  # a case that no longer exists
+            continue
+        out.append({"id": r["id"], "fecha": r["fecha"], "paciente": paciente, "modo": r["mode"],
+                    "score": r["score"], "para_la_proxima": feedback.para_la_proxima(r["resultado"])})
+    return out
 
 
 def get_session(session_id: str, user: User | None = None) -> dict:
@@ -306,4 +326,5 @@ def get_session(session_id: str, user: User | None = None) -> dict:
         "studies_requested": s.get("studies_requested", []),
         "diagnosis_proposed": s.get("diagnosis_proposed"),
         "finished": s.get("finished", False),
+        "feedback": s.get("feedback"),
     }

@@ -182,6 +182,55 @@ def test_review_is_only_for_listed_reviewers(monkeypatch):
     assert client.get("/api/revision", headers=headers("sofia@example.com")).status_code == 200
 
 
+def _signed(monkeypatch, secret="s"):
+    """Headers for a user as the Next.js server sends them (signed identity)."""
+    import time
+
+    from api.security import sign
+
+    monkeypatch.setenv("CHIRON_BACKEND_SECRET", secret)
+
+    def headers(email):
+        ts = str(int(time.time()))
+        return {"x-chiron-user": email, "x-chiron-name": "", "x-chiron-ts": ts, "x-chiron-sig": sign(secret, email, "", ts)}
+
+    return headers
+
+
+def test_finish_returns_the_docente_feedback_once(case_id):
+    sid = client.post("/api/sessions", json={"case_id": case_id}).json()["session_id"]
+    client.post(f"/api/sessions/{sid}/messages", json={"text": "¿Qué lo trae por acá?"})
+    r = client.post(f"/api/sessions/{sid}/finish")
+    assert r.status_code == 200
+    fb = r.json()["feedback"]
+    assert {"score", "parcial", "bien", "falto", "consejos", "items"} <= fb.keys()
+    assert 0 <= fb["score"] <= 100 and fb["items"]
+    assert {"Excelente", "Bien", "Regular", "No realizado", None} >= {i["calificacion"] for i in fb["items"]}
+    assert client.post(f"/api/sessions/{sid}/finish").json()["feedback"] == fb
+
+
+def test_history_only_lists_the_callers_own_consultations(monkeypatch, case_id):
+    headers = _signed(monkeypatch)
+    ana, beto = headers("ana@example.com"), headers("beto@example.com")
+    sid = client.post("/api/sessions", json={"case_id": case_id, "mode": "cara"}, headers=ana).json()["session_id"]
+    unfinished = client.post("/api/sessions", json={"case_id": case_id}, headers=ana).json()["session_id"]
+    assert client.post(f"/api/sessions/{sid}/finish", headers=beto).status_code == 403
+    client.post(f"/api/sessions/{sid}/finish", headers=ana)
+
+    r = client.get("/api/historial", headers=ana)
+    assert r.status_code == 200
+    items = r.json()
+    assert [i["id"] for i in items] == [sid]  # finished only
+    assert items[0].keys() == {"id", "fecha", "paciente", "modo", "score", "para_la_proxima"}
+    assert items[0]["paciente"].keys() == {"nombre", "sexo"} and items[0]["modo"] == "cara"
+    assert 1 <= len(items[0]["para_la_proxima"]) <= 2
+    for leak in ("mpna-", "titulo", "diagnostico", "grillas", "edad"):
+        assert leak not in r.text
+    assert unfinished not in r.text
+    assert client.get("/api/historial", headers=beto).json() == []
+    assert client.get("/api/historial").status_code == 401
+
+
 def test_review_kappa():
     from evals.review import kappa
 

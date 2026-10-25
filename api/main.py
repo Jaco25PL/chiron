@@ -160,6 +160,12 @@ def finish_session(session_id: str, user: dict = Depends(current_user)):
     return _call(session.finish, session_id, user)
 
 
+@app.get("/api/historial")
+def historial(user: dict = Depends(current_user)):
+    """The caller's finished consultations with their score, newest first (public view of the patient only)."""
+    return _call(session.historial, user)
+
+
 def reviewer(user: dict = Depends(current_user)) -> str:
     """Only the medical reviewers in CHIRON_REVIEWERS (any user in local dev, without the secret):
     the items show the hidden diagnoses."""
