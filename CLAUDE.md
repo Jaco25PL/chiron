@@ -86,6 +86,7 @@ As in the real ECOE, before and during the consultation the student only knows t
 ## Observability (LangSmith)
 
 - With `LANGSMITH_TRACING=true` and `LANGSMITH_API_KEY` in `.env`, every graph turn is traced automatically to the `chiron` project on smith.langchain.com.
+- Judge calibration: `evals/review.py` publishes eval answers to the `/revision` page (`components/Revision.tsx`, `store/review.py`), where reviewers in `CHIRON_REVIEWERS` label them ✓/✗ without seeing the judge; `reporte` measures agreement.
 - Each trace is named `turno N`, carries the `case_id` as a tag, and `case_id` + `session_id` in its metadata. Inside you can see the router, the node, and the exact Gemini prompt and response.
 
 ## RAG

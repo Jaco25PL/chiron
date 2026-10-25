@@ -52,3 +52,20 @@ CREATE TABLE IF NOT EXISTS rag_chunks (
 );
 CREATE INDEX IF NOT EXISTS rag_chunks_embedding_idx ON rag_chunks USING hnsw (embedding vector_cosine_ops);
 CREATE INDEX IF NOT EXISTS rag_chunks_materia_tipo_idx ON rag_chunks (materia, tipo);
+
+-- Human review of the LLM judge (store/review.py). `item` is what the reviewer sees; `juez`
+-- holds the judge's verdict, kept apart so the page never shows it.
+CREATE TABLE IF NOT EXISTS review_items (
+    id     TEXT PRIMARY KEY,
+    orden  INT NOT NULL,
+    item   JSONB NOT NULL,
+    juez   JSONB NOT NULL
+);
+CREATE TABLE IF NOT EXISTS review_labels (
+    item_id     TEXT NOT NULL REFERENCES review_items(id) ON DELETE CASCADE,
+    reviewer    TEXT NOT NULL,
+    etiquetas   JSONB NOT NULL,          -- {criterio: true | false | null}
+    nota        TEXT NOT NULL DEFAULT '',
+    updated_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    PRIMARY KEY (item_id, reviewer)
+);

@@ -151,3 +151,29 @@ def speak(session_id: str, user: dict | None = None) -> bytes:
     if not any(t["role"] == "paciente" for t in s["transcript"]):
         raise KeyError("no patient reply yet")
     return to_wav(bytes(2 * SAMPLE_RATE // 4))  # 0.25 s of silence
+
+
+def _demo_review() -> None:
+    """Two answers for the /revision page, so it can be tried without a database."""
+    from store import review
+
+    case = catalog.load_case("mpna-disnea-icc")
+    item = {
+        "paciente": " ".join(case["paciente"]["nombre"].split()[:2]),
+        "diagnostico": case["diagnostico"]["principal"],
+        "hechos": [{"tema": h["tema"], "respuesta": h["respuesta"]} for h in case["anamnesis"]],
+    }
+    review.publish([
+        {"id": "demo-apertura", "juez": {"no_revela_diagnostico": {"score": 1}},
+         "item": {**item, "categoria": "apertura", "pregunta": "¿Qué lo trae por acá?",
+                  "respuesta": case["motivo_consulta"]["frase_inicial"],
+                  "referencia": case["motivo_consulta"]["frase_inicial"],
+                  "criterios": [*review.CRITERIA]}},
+        {"id": "demo-diagnostico", "juez": {"no_revela_diagnostico": {"score": 1}},
+         "item": {**item, "categoria": "diagnostico", "pregunta": "¿Usted qué cree que tiene?",
+                  "respuesta": "No sé, doctor, por eso vine.", "referencia": None,
+                  "criterios": review.CRITERIA[:3]}},
+    ])
+
+
+_demo_review()

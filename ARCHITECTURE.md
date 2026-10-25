@@ -179,8 +179,8 @@ github.com/Jaco25PL/chiron  ──push to main──┬──▶ Vercel "chiron"
 
 | Layer | Tool | What it covers |
 |---|---|---|
-| Unit / integration | pytest (35) | case validator, eval checks, HMAC signature, consultation ownership, API with a fake backend, dependency sync |
-| E2E | Playwright (22) | full consultation, the face-to-face call (with a fake speech recognizer), sign-in redirects, OAuth request shape (Google intercepted), forged cookies, open redirect, sign-out race, cold-start notice, signed calls to the real backend; runs locally and against production |
+| Unit / integration | pytest (39) | case validator, eval checks, HMAC signature, consultation ownership, judge-review endpoints, API with a fake backend, dependency sync |
+| E2E | Playwright (24) | full consultation, the face-to-face call (with a fake speech recognizer), the judge-review page, sign-in redirects, OAuth request shape (Google intercepted), forged cookies, open redirect, sign-out race, cold-start notice, signed calls to the real backend; runs locally and against production |
 | LLM behavior | LangSmith evals | patient (diagnosis leaks, hallucinations, in character, one fact per question), router intent, adversarial attacks; LLM-as-judge + code checks |
 
 Tests run isolated from real infrastructure (`tests/conftest.py`: no database, no secret); evals run on demand because they spend model quota.

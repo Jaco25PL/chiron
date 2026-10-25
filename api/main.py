@@ -99,6 +99,11 @@ class Message(BaseModel):
     text: str
 
 
+class ReviewLabel(BaseModel):
+    etiquetas: dict[str, bool | None]
+    nota: str = ""
+
+
 @app.get("/api/health")
 def health():
     return {"ok": True, "backend": BACKEND}
@@ -138,6 +143,35 @@ def get_session(session_id: str, user: dict = Depends(current_user)):
 @app.post("/api/sessions/{session_id}/finish")
 def finish_session(session_id: str, user: dict = Depends(current_user)):
     return _call(session.finish, session_id, user)
+
+
+def reviewer(user: dict = Depends(current_user)) -> str:
+    """Only the medical reviewers in CHIRON_REVIEWERS (any user in local dev, without the secret):
+    the items show the hidden diagnoses."""
+    from store import review
+
+    email = (user["email"] or "").lower()
+    if os.environ.get("CHIRON_BACKEND_SECRET") and email not in review.reviewers():
+        raise AgentError(403, "Esta página es solo para quienes revisan el corrector.")
+    return email
+
+
+@app.get("/api/revision")
+def review_items(email: str = Depends(reviewer)):
+    """The judge's answers to label (without its verdict), with this reviewer's labels so far."""
+    from store import review
+
+    return {"criterios": review.CRITERIA, "items": _call(review.items_for, email)}
+
+
+@app.post("/api/revision/{item_id}")
+def review_label(item_id: str, body: ReviewLabel, email: str = Depends(reviewer)):
+    from store import review
+
+    if not set(body.etiquetas) <= set(review.CRITERIA):
+        raise AgentError(400, f"Criterio desconocido: {sorted(set(body.etiquetas) - set(review.CRITERIA))}")
+    _call(review.save, item_id, email, body.etiquetas, body.nota[:2000])
+    return {"ok": True}
 
 
 @app.get("/api/rag/search")

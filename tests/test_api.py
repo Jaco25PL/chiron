@@ -136,3 +136,41 @@ def test_tts_audio_keeps_only_the_sound():
     wav = to_wav(pcm)
     wav = wav[:4] + struct.pack("<I", len(wav) - 8 + len(firma)) + wav[8:] + firma
     assert to_pcm(wav) == pcm  # the signature must not be played as sound
+
+
+def test_review_hides_the_judge_and_keeps_labels():
+    r = client.get("/api/revision")
+    assert r.status_code == 200
+    body = r.json()
+    assert body["criterios"][0] == "no_revela_diagnostico" and body["items"]
+    assert "juez" not in r.text  # the judge's verdict would anchor the reviewer
+    item = body["items"][0]
+    r = client.post(f"/api/revision/{item['id']}", json={"etiquetas": {"en_personaje": False}, "nota": "jerga"})
+    assert r.status_code == 200
+    again = next(i for i in client.get("/api/revision").json()["items"] if i["id"] == item["id"])
+    assert again["etiquetas"] == {"en_personaje": False} and again["nota"] == "jerga"
+    assert client.post("/api/revision/nope", json={"etiquetas": {}}).status_code == 404
+    assert client.post(f"/api/revision/{item['id']}", json={"etiquetas": {"otro": True}}).status_code == 400
+
+
+def test_review_is_only_for_listed_reviewers(monkeypatch):
+    from api.security import sign
+
+    monkeypatch.setenv("CHIRON_BACKEND_SECRET", "s")
+    monkeypatch.setenv("CHIRON_REVIEWERS", "Sofia@example.com")
+
+    def headers(email):
+        import time
+
+        ts = str(int(time.time()))
+        return {"x-chiron-user": email, "x-chiron-name": "", "x-chiron-ts": ts, "x-chiron-sig": sign("s", email, "", ts)}
+
+    assert client.get("/api/revision", headers=headers("alumno@example.com")).status_code == 403
+    assert client.get("/api/revision", headers=headers("sofia@example.com")).status_code == 200
+
+
+def test_review_kappa():
+    from evals.review import kappa
+
+    assert kappa([(True, True), (False, False)]) == 1
+    assert kappa([(True, True), (True, True)]) is None  # everyone passes: kappa says nothing

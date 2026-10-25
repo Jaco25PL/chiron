@@ -69,6 +69,27 @@ export const api = {
   },
 };
 
+/** One patient answer from the evals, for the medical reviewer to label (/revision). */
+export type ItemRevision = {
+  id: string;
+  paciente: string;
+  diagnostico: string;
+  categoria: "hecho" | "apertura" | "diagnostico" | "inexistente" | "personaje";
+  pregunta: string;
+  respuesta: string;
+  referencia: string | null;
+  hechos: { tema: string; respuesta: string }[];
+  criterios: string[];
+  etiquetas: Record<string, boolean | null>;
+  nota: string;
+};
+
+export const revision = {
+  items: () => call<{ criterios: string[]; items: ItemRevision[] }>("/api/revision"),
+  guardar: (id: string, etiquetas: ItemRevision["etiquetas"], nota: string) =>
+    call<{ ok: true }>(`/api/revision/${id}`, { method: "POST", body: JSON.stringify({ etiquetas, nota }) }),
+};
+
 export const ALEATORIO = "aleatorio";
 
 export function sexoLabel(sexo: string) {

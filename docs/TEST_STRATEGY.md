@@ -64,7 +64,7 @@ The rule of thumb: if something can be checked with code, it's a test or a code 
 
 - **Code evaluators first:** facts used, intent, prompt leakage, "gave everything away". Cheap, exact, never wrong about what they measure.
 - **LLM-as-judge** for judgment calls (leaks, hallucinations, character), with the case and hidden diagnosis in its prompt and a one-line justification per verdict.
-- **Known gap:** the judge hasn't been calibrated against a human yet. Next step: a medical student labels ~20 answers and we measure judge–human agreement.
+- **Calibration against a human (in progress):** `python evals/review.py publicar` loads ~30 answers from the latest experiment; a medical student labels them on the app's `/revision` page (✓/✗ per criterion, without seeing the judge's verdict so it doesn't anchor her), and `python evals/review.py reporte` gives agreement and Cohen's kappa per criterion plus every disagreement. Only the emails in `CHIRON_REVIEWERS` (env var of `chiron-api`) can open it, since the items show the hidden diagnoses.
 
 ## What's next
 
