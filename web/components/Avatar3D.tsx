@@ -56,6 +56,16 @@ export default function Avatar3D({ url, analyser, hablando, onListo, onError, cl
       estado.current.onError(); // no (hardware) WebGL: the ASCII portrait stays
       return;
     }
+    // some browsers still hand out a software renderer (Chrome's SwiftShader on Linux without a GPU)
+    const gl = renderer.getContext();
+    const info = gl.getExtension("WEBGL_debug_renderer_info");
+    const gpu = info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : "";
+    if (/swiftshader|llvmpipe|softpipe|software|basic render/i.test(gpu)) {
+      renderer.dispose();
+      renderer.forceContextLoss();
+      estado.current.onError();
+      return;
+    }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.outputColorSpace = SRGBColorSpace;
 
