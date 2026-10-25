@@ -56,7 +56,7 @@ def list_cases(materia: str) -> list[dict]:
     return out
 
 
-def new_session(case_id: str) -> str:
+def new_session(case_id: str, user: dict | None = None, mode: str = "chat") -> str:
     case = _load_case(case_id)
     sid = uuid.uuid4().hex[:12]
     _sessions[sid] = {
@@ -75,7 +75,7 @@ def _best(items: list[dict], text_fn, query: set[str]):
     return best
 
 
-def send(session_id: str, text: str) -> dict:
+def send(session_id: str, text: str, user: dict | None = None) -> dict:
     t0 = time.perf_counter()
     s = _sessions[session_id]
     case = s["case"]
@@ -133,7 +133,7 @@ def send(session_id: str, text: str) -> dict:
     }
 
 
-def get_session(session_id: str) -> dict:
+def get_session(session_id: str, user: dict | None = None) -> dict:
     s = _sessions[session_id]
     return {
         "case_id": s["case"]["id"], "transcript": s["transcript"],
@@ -143,6 +143,6 @@ def get_session(session_id: str) -> dict:
     }
 
 
-def finish(session_id: str) -> dict:
+def finish(session_id: str, user: dict | None = None) -> dict:
     _sessions[session_id]["finished"] = True
     return get_session(session_id)

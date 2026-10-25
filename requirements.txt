@@ -10,3 +10,5 @@ uvicorn[standard]
 langgraph
 httpx
 pillow
+langgraph-checkpoint-postgres
+psycopg[binary,pool]

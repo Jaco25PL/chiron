@@ -7,7 +7,7 @@ import { api, type Caso, type Resumen, type Turno } from "./api";
 export const DURACION_S = 7 * 60;
 
 /** Consultation state: backend session, transcript, timer and closing. */
-export function useConsulta(caseId: string) {
+export function useConsulta(caseId: string, modo: "chat" | "cara" = "chat") {
   const [caso, setCaso] = useState<Caso | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [turnos, setTurnos] = useState<Turno[]>([]);
@@ -21,7 +21,7 @@ export function useConsulta(caseId: string) {
     creada.current = true;
     api.casos().then((cs) => setCaso(cs.find((c) => c.id === caseId) ?? null)).catch(() => {});
     api
-      .nuevaSesion(caseId)
+      .nuevaSesion(caseId, modo)
       .then((r) => setSessionId(r.session_id))
       .catch((e: Error) => toast.error(e.message, { id: "sesion" }));
   }, [caseId]);

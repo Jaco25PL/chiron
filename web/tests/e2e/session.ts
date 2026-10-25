@@ -27,8 +27,8 @@ export async function signInAs(
 ) {
   const name = cookieName(baseURL);
   const value = await encode({ token: { ...user, sub: "test-user" }, secret, salt: name, maxAge: 3600 });
-  const { hostname, protocol } = new URL(baseURL);
+  // `url` (not `domain`) makes a host-only cookie, exactly what Auth.js sets and later deletes
   await context.addCookies([
-    { name, value, domain: hostname, path: "/", httpOnly: true, secure: protocol === "https:", sameSite: "Lax" },
+    { name, value, url: baseURL, httpOnly: true, secure: baseURL.startsWith("https://"), sameSite: "Lax" },
   ]);
 }

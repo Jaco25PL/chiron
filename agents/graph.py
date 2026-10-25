@@ -17,12 +17,12 @@ from pathlib import Path
 from typing import Annotated, Literal, TypedDict
 
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
-from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, StateGraph
 from pydantic import BaseModel, Field
 
 from agents import prompts
 from llm.gemini import MODELS, chat_model
+from store import db
 
 ROOT = Path(__file__).resolve().parent.parent
 HISTORY_TURNS = 16  # previous messages the patient sees
@@ -68,6 +68,7 @@ class State(TypedDict, total=False):
     finished: bool
     intent: Intent
     debug: dict
+    owner: str  # email of the student who started the consultation
 
 
 # --- cases -------------------------------------------------------------------------
@@ -183,7 +184,7 @@ def build_graph():
         g.add_edge(name, END)
     g.add_edge(START, "router")
     g.add_conditional_edges("router", lambda s: s["intent"])
-    return g.compile(checkpointer=MemorySaver())
+    return g.compile(checkpointer=db.checkpointer())
 
 
 GRAPH = build_graph()
@@ -195,16 +196,35 @@ def _config(session_id: str) -> dict:
     return {"configurable": {"thread_id": session_id}}
 
 
-def new_session(case_id: str) -> str:
+User = dict  # {"email": str, "name": str | None}
+
+
+def _state(session_id: str, user: User | None) -> dict:
+    """The consultation's state; KeyError if it doesn't exist, PermissionError if it isn't the user's."""
+    s = GRAPH.get_state(_config(session_id)).values
+    if not s:
+        raise KeyError(session_id)
+    if user and s.get("owner") and s["owner"] != user["email"]:
+        raise PermissionError(session_id)
+    return s
+
+
+def new_session(case_id: str, user: User | None = None, mode: str = "chat") -> str:
     load_case(case_id)  # fail early if the case doesn't exist
     session_id = uuid.uuid4().hex[:12]
-    GRAPH.update_state(_config(session_id), {"case_id": case_id, "diagnosis_proposed": None, "finished": False})
+    owner = user["email"] if user else ""
+    GRAPH.update_state(
+        _config(session_id),
+        {"case_id": case_id, "diagnosis_proposed": None, "finished": False, "owner": owner},
+    )
+    if user:
+        db.create_consultation(session_id, db.upsert_user(user["email"], user.get("name")), case_id, mode)
     return session_id
 
 
-def send(session_id: str, text: str) -> dict:
+def send(session_id: str, text: str, user: User | None = None) -> dict:
     config = _config(session_id)
-    current = GRAPH.get_state(config).values
+    current = _state(session_id, user)
     before = len(current.get("transcript", []))
     # name, tags and metadata to find the turn in LangSmith
     config |= {
@@ -215,6 +235,13 @@ def send(session_id: str, text: str) -> dict:
     start = time.perf_counter()
     state = GRAPH.invoke({"transcript": [{"role": "estudiante", "text": text}], "debug": {}}, config)
     new_turns = state["transcript"][before + 1:]
+    latency_ms = int((time.perf_counter() - start) * 1000)
+    debug = state["debug"]
+    db.add_turns(session_id, before, [
+        {"role": "estudiante", "text": text, "intent": state["intent"], "latency_ms": latency_ms},
+        *({"role": t["role"], "text": t["text"], "facts": debug.get("facts"), "exams": debug.get("exams"),
+           "studies": debug.get("studies")} for t in new_turns),
+    ])
     return {
         "replies": [{"role": t["role"], "text": t["text"]} for t in new_turns],
         "debug": {
@@ -223,22 +250,21 @@ def send(session_id: str, text: str) -> dict:
             "exams": state["debug"].get("exams", []),
             "studies": state["debug"].get("studies", []),
             "model": {"router": MODELS["router"][0], "paciente": MODELS["patient"][0]},
-            "latency_ms": int((time.perf_counter() - start) * 1000),
+            "latency_ms": latency_ms,
         },
     }
 
 
-def finish(session_id: str) -> dict:
+def finish(session_id: str, user: User | None = None) -> dict:
     """Ends the consultation ("Terminar consulta" button) and returns the final state."""
-    get_session(session_id)
+    _state(session_id, user)
     GRAPH.update_state(_config(session_id), {"finished": True})
-    return get_session(session_id)
+    db.finish_consultation(session_id)
+    return get_session(session_id, user)
 
 
-def get_session(session_id: str) -> dict:
-    s = GRAPH.get_state(_config(session_id)).values
-    if not s:
-        raise KeyError(session_id)
+def get_session(session_id: str, user: User | None = None) -> dict:
+    s = _state(session_id, user)
     case = load_case(s["case_id"])
     names = {e["id"]: e["maniobra"] for e in prompts.exam_options(case)}
     return {

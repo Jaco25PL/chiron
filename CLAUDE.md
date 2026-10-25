@@ -51,6 +51,13 @@ data/ecoe/
 - Deploy: Vercel project `chiron` (root directory `web/`), live at https://chiron-nu-two.vercel.app. Every push to `main` deploys automatically. The backend is not hosted yet, so case data only works locally.
 - Style: dark, glass, mint accent. Motion follows Emil Kowalski's guidelines: strong ease-out, under 300 ms, transform/opacity only, `scale(0.97)` on press, and nothing animated on keyboard actions.
 
+## Backend security and persistence
+
+- The browser never calls FastAPI directly: `web/app/api/[...path]/route.ts` checks the Google session and forwards with the user's identity signed with `CHIRON_BACKEND_SECRET` (HMAC; see `api/security.py`). The same secret must be set on both sides; without it (local dev) the backend accepts unsigned requests.
+- Each consultation stores its owner; other users get 403.
+- `store/db.py`: with `DATABASE_URL` (Neon Postgres) consultations use LangGraph's `PostgresSaver` and `users`/`consultations`/`turns` are recorded (`store/schema.sql`). Without it, everything stays in memory.
+- The RAG index stays in Chroma (shipped with the backend image), not in Postgres.
+
 ## Tests
 
 `python -m pytest` (config in `pytest.ini`). TDD for deterministic logic; LLM behavior is measured with evals.

@@ -14,8 +14,8 @@ test.describe("signed out", () => {
 
   test("backend API is not reachable without a session", async ({ request }) => {
     const res = await request.get("/api/cases", { maxRedirects: 0 });
-    expect(res.status()).toBe(307);
-    expect(res.headers()["location"]).toContain("/login");
+    expect(res.status()).toBe(401);
+    expect((await res.json()).error).toBeTruthy();
   });
 
   test("session endpoint reports no user", async ({ request }) => {
@@ -79,11 +79,21 @@ test.describe("signed in", () => {
     await expect(page).toHaveURL(/\/steal$/); // only the path survives, on our own origin
   });
 
-  test("signing out clears the session", async ({ page }) => {
+  test("signing out clears the session, even with an API call still in flight", async ({ page }) => {
+    // hold the cases request until after sign-out: its late response must not restore the session
+    let release!: () => void;
+    const held = new Promise<void>((r) => (release = r));
+    await page.route("**/api/cases**", async (route) => {
+      await held;
+      await route.continue();
+    });
     await page.goto("/");
     await page.getByRole("button", { name: "Cuenta" }).click();
     await page.getByRole("button", { name: "Cerrar sesión" }).click();
-    await expect(page).toHaveURL(/\/login/);
+    // sign-out is a server action; in dev its first call compiles on demand, which can exceed 5s
+    await expect(page).toHaveURL(/\/login/, { timeout: 20_000 });
+    release();
+    await page.waitForTimeout(500);
     await page.goto("/");
     await expect(page).toHaveURL(/\/login/);
   });

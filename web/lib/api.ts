@@ -55,8 +55,8 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const api = {
   casos: (materia = "mpna") => call<Caso[]>(`/api/cases?materia=${materia}`),
-  nuevaSesion: (caseId: string) =>
-    call<{ session_id: string }>("/api/sessions", { method: "POST", body: JSON.stringify({ case_id: caseId }) }),
+  nuevaSesion: (caseId: string, mode: "chat" | "cara" = "chat") =>
+    call<{ session_id: string }>("/api/sessions", { method: "POST", body: JSON.stringify({ case_id: caseId, mode }) }),
   enviar: (sessionId: string, text: string) =>
     call<Respuesta>(`/api/sessions/${sessionId}/messages`, { method: "POST", body: JSON.stringify({ text }) }),
   terminar: (sessionId: string) => call<Resumen>(`/api/sessions/${sessionId}/finish`, { method: "POST" }),

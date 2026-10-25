@@ -109,6 +109,15 @@ A log of what I ran into while building Chiron: what showed up, how I caught it,
 
 ---
 
+## 14. A flaky test exposed a sign-out race condition
+
+- **Context:** Google sign-in with Auth.js; the Next.js proxy (middleware) re-issues the session cookie on every response.
+- **Finding:** the "sign out clears the session" E2E test passed alone and failed when tests ran in parallel. It looked like a flaky test, but it was a real race: the home page's `/api/cases` request was still in flight when the user signed out, and its late response re-set the session cookie, signing the user back in.
+- **How I found it:** instead of raising timeouts, I traced the network during sign-out, then reproduced it deterministically by holding the API response until after sign-out.
+- **What I did:** excluded `/api/*` from the session-refreshing proxy (API routes check the session themselves and return 401), and kept the "held request" scenario as a regression test.
+- **Result:** 15/15 E2E tests, and the sign-out test passes repeatedly in parallel.
+- **Lesson:** a test that fails only under load is often telling the truth about production, where requests do overlap.
+
 ## Short version for LinkedIn
 
 > I'm building **Chiron**, an AI patient simulator that helps medical students practice for the ECOE (the Spanish-language OSCE, the hands-on clinical exam). The most interesting part wasn't getting the patient to talk, but **measuring that it behaves the way it should**.
