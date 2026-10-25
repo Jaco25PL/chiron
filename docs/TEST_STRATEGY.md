@@ -48,6 +48,7 @@ The rule of thumb: if something can be checked with code, it's a test or a code 
 | Misconfigured Google OAuth (`redirect_uri_mismatch`) | asserts the exact `redirect_uri`, scopes and PKCE the app sends (Google intercepted) | E2E |
 | Sign-out undone by a late API response | test holds an API call in flight across sign-out | E2E |
 | The main journey breaks | pick case → interview → exam → study → face to face → end → summary | E2E |
+| The beginner checklist leaks the grilla or the diagnosis | checklist only in "principiante" (absent from every response in "normal"), never diagnosis items, ticks after the matching question; level remembered, panel on desktop, bottom sheet on a phone | pytest + E2E |
 | Cold start looks like a hang | slow backend shows the "waking up" notice; fast one never does | E2E |
 | Missing backend shown as a bare 404 | clear message, user stays signed in | E2E |
 | Server deps drift from dev deps | `test_dependencies.py` | pytest |

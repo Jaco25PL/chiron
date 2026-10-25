@@ -7,12 +7,34 @@ import { Chat, Video } from "@/components/icons";
 import { Logo } from "@/components/Logo";
 import { Segmented } from "@/components/Segmented";
 import { UserMenu, type Usuario } from "@/components/UserMenu";
-import { ALEATORIO, api, iniciales, sexoLabel, type Caso } from "@/lib/api";
+import { ALEATORIO, api, iniciales, sexoLabel, type Caso, type Nivel } from "@/lib/api";
 
 type Materia = "mpna" | "pediatria";
 
+const NIVEL_KEY = "chiron.nivel";
+
+/** The level, remembered per browser. Storage may be unavailable (private mode, blocked): then "normal". */
+function useNivel() {
+  const [nivel, setNivel] = useState<Nivel>("normal");
+  useEffect(() => {
+    try {
+      // localStorage needs window, so it is read after hydration
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      if (localStorage.getItem(NIVEL_KEY) === "principiante") setNivel("principiante");
+    } catch {}
+  }, []);
+  const elegir = (n: Nivel) => {
+    setNivel(n);
+    try {
+      localStorage.setItem(NIVEL_KEY, n);
+    } catch {}
+  };
+  return [nivel, elegir] as const;
+}
+
 export function Home({ usuario }: { usuario: Usuario }) {
   const [materia, setMateria] = useState<Materia>("mpna");
+  const [nivel, setNivel] = useNivel();
   const [casos, setCasos] = useState<Caso[] | null>(null);
 
   useEffect(() => {
@@ -46,21 +68,40 @@ export function Home({ usuario }: { usuario: Usuario }) {
       <section className="flex flex-col gap-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-lg font-semibold tracking-tight">Elegí un paciente</h2>
-          <Segmented
-            id="materia"
-            value={materia}
-            onChange={setMateria}
-            options={[
-              { value: "mpna", label: "MPNA" },
-              { value: "pediatria", label: "Pediatría", disabled: true, hint: "Próximamente" },
-            ]}
-          />
+          <div className="flex flex-wrap items-center gap-2">
+            <Segmented
+              id="materia"
+              value={materia}
+              onChange={setMateria}
+              options={[
+                { value: "mpna", label: "MPNA" },
+                { value: "pediatria", label: "Pediatría", disabled: true, hint: "Próximamente" },
+              ]}
+            />
+            <Segmented
+              id="nivel"
+              value={nivel}
+              onChange={setNivel}
+              options={[
+                { value: "principiante", label: "Principiante" },
+                { value: "normal", label: "Normal" },
+              ]}
+            />
+          </div>
         </div>
+        <p className="-mt-2 text-pretty text-sm text-ink-3">
+          {nivel === "principiante"
+            ? "Principiante: durante la consulta ves la lista de lo que no te podés olvidar, y se tacha sola a medida que lo hacés."
+            : "Normal: como en el examen, sin ayuda. El mismo paciente, sin la lista."}
+        </p>
 
         <div className="grid gap-3 sm:grid-cols-2">
           {casos === null
             ? [0, 1, 2, 3].map((i) => <div key={i} className="glass h-[150px] animate-pulse rounded-3xl" />)
-            : [<RandomCard key={ALEATORIO} index={0} />, ...casos.map((c, i) => <CaseCard key={c.id} caso={c} index={i + 1} />)]}
+            : [
+                <RandomCard key={ALEATORIO} index={0} nivel={nivel} />,
+                ...casos.map((c, i) => <CaseCard key={c.id} caso={c} index={i + 1} nivel={nivel} />),
+              ]}
         </div>
       </section>
     </main>
@@ -68,10 +109,10 @@ export function Home({ usuario }: { usuario: Usuario }) {
 }
 
 /** A patient card shows what the student knows at the door: name and sex. */
-function CaseCard({ caso, index }: { caso: Caso; index: number }) {
+function CaseCard({ caso, index, nivel }: { caso: Caso; index: number; nivel: Nivel }) {
   const p = caso.paciente;
   return (
-    <Card index={index} href={caso.id}>
+    <Card index={index} href={caso.id} nivel={nivel}>
       <div className="grid size-11 shrink-0 place-items-center rounded-full bg-glass-strong font-mono text-sm text-accent">
         {iniciales(p.nombre)}
       </div>
@@ -84,9 +125,9 @@ function CaseCard({ caso, index }: { caso: Caso; index: number }) {
 }
 
 /** Closest to the real exam: you don't know who is waiting until you walk in. */
-function RandomCard({ index }: { index: number }) {
+function RandomCard({ index, nivel }: { index: number; nivel: Nivel }) {
   return (
-    <Card index={index} href={ALEATORIO} destacada>
+    <Card index={index} href={ALEATORIO} nivel={nivel} destacada>
       <div className="grid size-11 shrink-0 place-items-center rounded-full border border-dashed border-accent/60 font-mono text-lg text-accent">
         ?
       </div>
@@ -101,11 +142,13 @@ function RandomCard({ index }: { index: number }) {
 function Card({
   index,
   href,
+  nivel,
   destacada,
   children,
 }: {
   index: number;
   href: string;
+  nivel: Nivel;
   destacada?: boolean;
   children: React.ReactNode;
 }) {
@@ -117,13 +160,13 @@ function Card({
       <div className="flex items-center gap-3">{children}</div>
       <div className="mt-auto grid grid-cols-2 gap-2">
         <Link
-          href={`/consulta/${href}?modo=chat`}
+          href={`/consulta/${href}?modo=chat&nivel=${nivel}`}
           className="press flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-line-strong text-sm font-medium text-ink hover:bg-glass-strong"
         >
           <Chat width={17} height={17} /> Chat
         </Link>
         <Link
-          href={`/consulta/${href}?modo=cara`}
+          href={`/consulta/${href}?modo=cara&nivel=${nivel}`}
           className="press flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ink text-sm font-medium text-bg hover:bg-white"
         >
           <Video width={17} height={17} /> Cara a cara
