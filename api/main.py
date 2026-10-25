@@ -203,6 +203,27 @@ def rag_search(q: str, materia: str = "mpna", k: int = Query(5, ge=1, le=30), ti
     return [{**r, "score": float(r["score"])} for r in results]
 
 
+class Preferencias(BaseModel):
+    acento: str
+
+
+@app.get("/api/preferencias")
+def get_preferencias(user: dict = Depends(current_user)):
+    from store import db  # imported here, like the routes above
+
+    return {"acento": _call(db.get_acento, user["email"])}
+
+
+@app.post("/api/preferencias")
+def set_preferencias(body: Preferencias, user: dict = Depends(current_user)):
+    from store import db
+
+    if body.acento not in db.ACENTOS:
+        raise AgentError(400, f"Color desconocido: {body.acento}")
+    _call(db.set_acento, user["email"], user.get("name"), body.acento)
+    return {"acento": body.acento}
+
+
 # Legacy debug UI (chat + RAG explorer), local development only: it can't sign requests.
 if not os.environ.get("CHIRON_BACKEND_SECRET") and (ROOT / "frontend").is_dir():
     app.mount("/", StaticFiles(directory=ROOT / "frontend", html=True), name="frontend")

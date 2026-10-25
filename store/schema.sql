@@ -73,3 +73,6 @@ CREATE TABLE IF NOT EXISTS review_labels (
     updated_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
     PRIMARY KEY (item_id, reviewer)
 );
+
+-- Per-user preferences: the accent color picked in the user menu (menta | rosa | gris | azul).
+ALTER TABLE users ADD COLUMN IF NOT EXISTS acento TEXT NOT NULL DEFAULT 'menta';
