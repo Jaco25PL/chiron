@@ -39,14 +39,14 @@ def criteria(categoria: str) -> list[str]:
 
 def publicar(experiment: str | None) -> None:
     client = Client()
+    ds = client.read_dataset(dataset_name=PACIENTE)
     if experiment is None:
-        ds = client.read_dataset(dataset_name=PACIENTE)
         experiment = max(client.list_projects(reference_dataset_id=ds.id), key=lambda p: p.start_time).name
     runs = [r for r in client.list_runs(project_name=experiment, is_root=True) if r.outputs]
     feedback = defaultdict(dict)
     for f in client.list_feedback(run_ids=[r.id for r in runs]):
         feedback[str(f.run_id)][f.key] = {"score": f.score, "comentario": f.comment}
-    examples = {str(e.id): e for e in client.list_examples(dataset_id=runs[0].reference_dataset_id)} if runs else {}
+    examples = {str(e.id): e for e in client.list_examples(dataset_id=ds.id)}
 
     by_cat = defaultdict(list)
     for r in runs:
