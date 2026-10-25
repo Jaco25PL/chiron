@@ -155,6 +155,14 @@ A log of what I ran into while building Chiron: what showed up, how I caught it,
 - **What the measurement also showed:** the next bottleneck isn't the voice. In 2 of 8 baseline turns and 4 of 8 after the change, a single call to the patient model (`gemini-3-flash-preview`, and `gemini-3.5-flash` after the preview ran out of quota) took **7–12 s instead of ~1 s**, with no error or retry (seen in LangSmith). The router on flash-lite was never slow. That's free-tier variance on the larger models; options are a faster patient model (it would need the evals re-run) or racing a second request when the first one is slow (it costs quota).
 - **Lesson:** measure each stage before optimizing. The obvious suspect (the LLM) wasn't where most of the wait was; a second request plus waiting for a whole file was. And keep the medians *and* the outliers: the median hid that half the slow turns had a different cause.
 
+## 19. The first query after a quiet spell failed
+
+- **Context:** the backend is a serverless function that keeps a small Postgres connection pool to Neon.
+- **Finding:** opening the history right after deploying showed `OperationalError: consuming input failed: SSL connection has been closed unexpectedly`. Neon (and its PgBouncer endpoint) closes idle connections, but the function instance lives on and its pool handed out a connection that was already dead. Any endpoint could hit it, including a consultation's first message.
+- **How I caught it:** the user saw it in production. I reproduced it locally by cutting the socket under an idle pooled connection: same error.
+- **What I did:** `ConnectionPool(check=ConnectionPool.check_connection, max_idle=120)`: each connection is checked when taken from the pool and replaced if dead, and idle ones are closed before Neon does it. The same reproduction then passes.
+- **Lesson:** a pool assumes connections stay alive; serverless databases don't promise that. Reproduce the failure before trusting the fix.
+
 ## Short version for LinkedIn
 
 > I'm building **Chiron**, an AI patient simulator that helps medical students practice for the ECOE (the Spanish-language OSCE, the hands-on clinical exam). The most interesting part wasn't getting the patient to talk, but **measuring that it behaves the way it should**.
