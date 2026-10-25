@@ -79,7 +79,6 @@ export function FaceView({
         <div className="glass absolute left-3 top-3 flex items-center gap-2 rounded-full py-1.5 pl-2.5 pr-3.5 sm:left-4 sm:top-4">
           <span className="size-2 rounded-full bg-live shadow-[0_0_10px_var(--live)]" />
           <span className="text-[13px] font-medium">{nombre}</span>
-          {caso && <span className="text-[13px] text-ink-3">{caso.paciente.edad}</span>}
         </div>
 
         {/* informe del docente */}

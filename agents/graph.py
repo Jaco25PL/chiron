@@ -8,7 +8,6 @@ one thread per session. The whole case goes into the patient prompt (no RAG):
 it's small, and that's more reliable.
 """
 
-import json
 import time
 import uuid
 from functools import lru_cache
@@ -21,6 +20,8 @@ from langgraph.graph import END, START, StateGraph
 from pydantic import BaseModel, Field
 
 from agents import prompts
+from cases import catalog
+from cases.catalog import load_case
 from llm.gemini import MODELS, chat_model
 from store import db
 
@@ -73,15 +74,9 @@ class State(TypedDict, total=False):
 
 # --- cases -------------------------------------------------------------------------
 
-@lru_cache
-def load_case(case_id: str) -> dict:
-    materia = case_id.split("-", 1)[0]
-    return json.loads((ROOT / "cases" / materia / f"{case_id}.json").read_text(encoding="utf-8"))
-
-
 def list_cases(materia: str = "mpna") -> list[dict]:
-    paths = sorted((ROOT / "cases" / materia).glob("*.json"))
-    return [prompts.public_case(load_case(p.stem)) for p in paths]
+    """Public view only: opaque id, name and sex (see cases/catalog.py)."""
+    return catalog.list_public(materia)
 
 
 # --- models (created once) --------------------------------------------------------
@@ -210,7 +205,8 @@ def _state(session_id: str, user: User | None) -> dict:
 
 
 def new_session(case_id: str, user: User | None = None, mode: str = "chat") -> str:
-    load_case(case_id)  # fail early if the case doesn't exist
+    """case_id: public id, internal id or "aleatorio" (random case, picked here on the server)."""
+    case_id = catalog.resolve(case_id)  # KeyError if it doesn't exist
     session_id = uuid.uuid4().hex[:12]
     owner = user["email"] if user else ""
     GRAPH.update_state(
@@ -268,7 +264,7 @@ def get_session(session_id: str, user: User | None = None) -> dict:
     case = load_case(s["case_id"])
     names = {e["id"]: e["maniobra"] for e in prompts.exam_options(case)}
     return {
-        "case_id": s["case_id"],
+        "case": catalog.public_case(case),  # never the internal id: it spells out the diagnosis
         "transcript": s.get("transcript", []),
         "revealed_facts": s.get("revealed_facts", []),
         "total_facts": len(case["anamnesis"]),

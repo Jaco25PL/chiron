@@ -111,7 +111,10 @@ def cases(materia: str = "mpna", user: dict = Depends(current_user)):
 
 @app.post("/api/sessions")
 def create_session(body: NewSession, user: dict = Depends(current_user)):
-    return {"session_id": _call(session.new_session, body.case_id, user, body.mode)}
+    """case_id: a public id from /api/cases, or "aleatorio". Returns who the patient is (name and
+    sex only), so the UI learns it here even for a random case."""
+    sid = _call(session.new_session, body.case_id, user, body.mode)
+    return {"session_id": sid, "case": _call(session.get_session, sid, user)["case"]}
 
 
 @app.post("/api/sessions/{session_id}/messages")

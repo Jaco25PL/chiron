@@ -71,6 +71,10 @@ data/ecoe/
 
 Web E2E (Playwright, `web/tests/e2e/`): `cd web && npm run test:e2e` starts its own fake backend (port 8001) and a production build (port 3100), so it doesn't depend on running dev servers. CI (`.github/workflows/ci.yml`) runs pytest, case validation, lint, types and E2E on every push; `evals.yml` runs LangSmith evals manually. Coverage map: `docs/TEST_STRATEGY.md`. Deterministic auth tests: signed-out redirects, the OAuth request sent to Google (intercepted, never contacted), forged/expired session cookies, open-redirect protection, sign-out, and the no-backend message. Run them against production with `BASE_URL=https://chiron-nu-two.vercel.app npm run test:e2e`.
 
+## What the student may see
+
+As in the real ECOE, before and during the consultation the student only knows the patient's **name and sex**. `cases/catalog.py` is the single place that builds the public view (`{id, materia, paciente: {nombre, sexo}}`) and the opaque public id (a hash; internal ids spell out diagnoses). Never send titles, age, difficulty, grillas or internal ids to the browser; "aleatorio" lets the server pick the case.
+
 ## Gemini
 
 - Keys in `.env` as `GOOGLE_API_KEY_1`, `_2`, `_3` (separate accounts). `llm/gemini.py` rotates keys on 429 and waits if all of them hit the per-minute limit.

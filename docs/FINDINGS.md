@@ -133,6 +133,13 @@ A log of what I ran into while building Chiron: what showed up, how I caught it,
 - **What I did:** keep the frontend out of the backend bundle with the function's `excludeFiles` instead, and documented the trap in the ignore file itself.
 - **Lesson:** run the E2E suite against production after every infrastructure change; it turned a silent outage into a 2-minute fix.
 
+## 17. The URL was giving away the diagnosis
+
+- **Context:** a medical student pointed out that in the real exam you only know the patient's name and sex when you walk in.
+- **Finding:** the app showed much more: the case card said "Disnea de esfuerzo progresiva" (the chief complaint) plus age and difficulty, and the API sent title, difficulty and rubric list to the browser even where they weren't displayed. Worse, case ids were readable slugs, so the address bar read `/consulta/mpna-itu-pna-diabetica` ("pna" = pyelonephritis), and so did the portrait file names.
+- **What I did:** a case catalog that exposes only `{opaque id, name, sex}` (ids are hashes), the patient's identity returned when the consultation starts, and a "random patient" card where the server picks the case, like the real station. Tests assert the payloads and the screen never carry anything else.
+- **Lesson:** hiding something in the UI isn't hiding it. Whatever reaches the browser (URLs, API payloads, static file names) is visible to the user.
+
 ## Short version for LinkedIn
 
 > I'm building **Chiron**, an AI patient simulator that helps medical students practice for the ECOE (the Spanish-language OSCE, the hands-on clinical exam). The most interesting part wasn't getting the patient to talk, but **measuring that it behaves the way it should**.

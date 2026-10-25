@@ -1,13 +1,11 @@
 // Chiron backend client (see agents/session.py for the contract).
 
-export type Paciente = { nombre: string; edad: number; sexo: string };
+// What the student may know before the consultation, as in the real exam: name and sex.
+export type Paciente = { nombre: string; sexo: string };
 
 export type Caso = {
   id: string;
   materia: string;
-  titulo: string;
-  dificultad: "basico" | "intermedio" | "avanzado";
-  grillas: string[];
   paciente: Paciente;
 };
 
@@ -20,7 +18,7 @@ export type Respuesta = {
 };
 
 export type Resumen = {
-  case_id: string;
+  case: Caso;
   transcript: Turno[];
   revealed_facts: string[];
   total_facts: number;
@@ -56,17 +54,20 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
 export const api = {
   casos: (materia = "mpna") => call<Caso[]>(`/api/cases?materia=${materia}`),
   nuevaSesion: (caseId: string, mode: "chat" | "cara" = "chat") =>
-    call<{ session_id: string }>("/api/sessions", { method: "POST", body: JSON.stringify({ case_id: caseId, mode }) }),
+    call<{ session_id: string; case: Caso }>("/api/sessions", {
+      method: "POST",
+      body: JSON.stringify({ case_id: caseId, mode }),
+    }),
   enviar: (sessionId: string, text: string) =>
     call<Respuesta>(`/api/sessions/${sessionId}/messages`, { method: "POST", body: JSON.stringify({ text }) }),
   terminar: (sessionId: string) => call<Resumen>(`/api/sessions/${sessionId}/finish`, { method: "POST" }),
 };
 
-export const DIFICULTAD: Record<Caso["dificultad"], string> = {
-  basico: "Básico",
-  intermedio: "Intermedio",
-  avanzado: "Avanzado",
-};
+export const ALEATORIO = "aleatorio";
+
+export function sexoLabel(sexo: string) {
+  return sexo === "femenino" ? "Paciente femenina" : "Paciente masculino";
+}
 
 export function iniciales(nombre: string) {
   return nombre

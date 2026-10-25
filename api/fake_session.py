@@ -12,8 +12,9 @@ import unicodedata
 import uuid
 from pathlib import Path
 
+from cases import catalog
+
 ROOT = Path(__file__).resolve().parent.parent
-CASES_DIR = ROOT / "cases"
 
 _sessions: dict[str, dict] = {}
 
@@ -37,27 +38,12 @@ def _tokens(s: str) -> set[str]:
     return {w for w in re.findall(r"[a-z0-9]+", _norm(s)) if len(w) > 2 and w not in _STOP}
 
 
-def _load_case(case_id: str) -> dict:
-    for path in CASES_DIR.glob(f"*/{case_id}.json"):
-        return json.loads(path.read_text(encoding="utf-8"))
-    raise KeyError(f"Case not found: {case_id}")
-
-
 def list_cases(materia: str) -> list[dict]:
-    out = []
-    for path in sorted((CASES_DIR / materia).glob("*.json")):
-        c = json.loads(path.read_text(encoding="utf-8"))
-        p = c.get("paciente", {})
-        out.append({
-            "id": c["id"], "materia": c["materia"], "titulo": c["titulo"],
-            "dificultad": c.get("dificultad"), "grillas": c.get("grillas", []),
-            "paciente": {"nombre": p.get("nombre"), "edad": p.get("edad"), "sexo": p.get("sexo")},
-        })
-    return out
+    return catalog.list_public(materia)
 
 
 def new_session(case_id: str, user: dict | None = None, mode: str = "chat") -> str:
-    case = _load_case(case_id)
+    case = catalog.load_case(catalog.resolve(case_id))
     sid = uuid.uuid4().hex[:12]
     _sessions[sid] = {
         "owner": user["email"] if user else "",
@@ -145,7 +131,7 @@ def send(session_id: str, text: str, user: dict | None = None) -> dict:
 def get_session(session_id: str, user: dict | None = None) -> dict:
     s = _get(session_id, user)
     return {
-        "case_id": s["case"]["id"], "transcript": s["transcript"],
+        "case": catalog.public_case(s["case"]), "transcript": s["transcript"],
         "revealed_facts": s["revealed_facts"], "total_facts": len(s["case"].get("anamnesis", [])),
         "exams_done": s["exams_done"], "exams_done_labels": s["exams_done"], "studies_requested": s["studies_requested"],
         "diagnosis_proposed": s["diagnosis_proposed"], "finished": s["finished"],

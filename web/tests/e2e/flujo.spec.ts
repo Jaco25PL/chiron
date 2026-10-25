@@ -16,11 +16,14 @@ test.skip(!!process.env.BASE_URL, "uses the deterministic fake backend; prod is 
 test("a full consultation, from case selection to summary", async ({ page, context, baseURL }) => {
   await signInAs(context, baseURL!);
 
-  // 1. pick the case
+  // 1. pick the patient: the card only says who they are, never what they have
   await page.goto("/");
-  const card = page.locator("article").filter({ hasText: caso.titulo });
+  const nombre = caso.paciente.nombre.split(" ").slice(0, 2).join(" ");
+  const card = page.locator("article").filter({ hasText: nombre });
+  await expect(card).not.toContainText(caso.titulo);
+  await expect(card).not.toContainText(String(caso.paciente.edad));
   await card.getByRole("link", { name: "Chat" }).click();
-  await expect(page).toHaveURL(new RegExp(`/consulta/${CASE_ID}`));
+  await expect(page).toHaveURL(/\/consulta\/[0-9a-f]{10}\?/); // opaque id, not "mpna-disnea-icc"
 
   const send = async (text: string) => {
     await page.locator("#mensaje").fill(text);
@@ -56,3 +59,20 @@ test("a full consultation, from case selection to summary", async ({ page, conte
   // the hidden diagnosis never reaches the student's screen
   await expect(page.locator("body")).not.toContainText(caso.diagnostico.principal);
 });
+
+test("random patient: the server picks the case and the student only learns name and sex", async ({ page, context, baseURL }) => {
+  await signInAs(context, baseURL!);
+  await page.goto("/");
+  const card = page.locator("article").filter({ hasText: "Paciente aleatorio" });
+  await card.getByRole("link", { name: "Cara a cara" }).click();
+  await expect(page).toHaveURL(/\/consulta\/aleatorio\?modo=cara/);
+  const header = page.locator("header");
+  await expect(header).toContainText(/Paciente (masculino|femenina)/);
+  await expect(page.getByLabel(/Retrato de/)).toBeVisible();
+  // nothing beyond name and sex: no title, age, rubric or diagnosis anywhere on screen
+  const body = await page.locator("body").innerText();
+  for (const leak of ["Disnea de esfuerzo", "Dolor en el pecho", "Ardor al orinar", "grillas", "años"]) {
+    expect(body).not.toContain(leak);
+  }
+});
+

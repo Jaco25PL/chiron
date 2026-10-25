@@ -19,10 +19,13 @@ export function useConsulta(caseId: string, modo: "chat" | "cara" = "chat") {
   useEffect(() => {
     if (creada.current) return; // React mounts twice in dev: create a single session
     creada.current = true;
-    api.casos().then((cs) => setCaso(cs.find((c) => c.id === caseId) ?? null)).catch(() => {});
+    // the backend tells us who the patient is (also for "aleatorio", picked on the server)
     api
       .nuevaSesion(caseId, modo)
-      .then((r) => setSessionId(r.session_id))
+      .then((r) => {
+        setCaso(r.case);
+        setSessionId(r.session_id);
+      })
       .catch((e: Error) => toast.error(e.message, { id: "sesion" }));
     // eslint-disable-next-line react-hooks/exhaustive-deps -- created once, with the mode the user opened it in
   }, [caseId]);

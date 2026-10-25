@@ -88,6 +88,7 @@ flowchart TD
 | A student reads another student's consultation | Each consultation stores its owner; others get 403 |
 | Open redirect after login | `callbackUrl` reduced to path + query on our own origin |
 | A slow API response restores a signed-out session | `/api` is excluded from the session-refreshing proxy (found by a flaky E2E test, see [FINDINGS #14](docs/FINDINGS.md)) |
+| The student learns the case before the consultation | Only `{opaque id, name, sex}` ever reaches the browser (`cases/catalog.py`); ids are hashes, since readable ids like `mpna-itu-pna-diabetica` leaked the diagnosis through the URL ([FINDINGS #17](docs/FINDINGS.md)); a random-patient option picks the case on the server |
 | Prompt injection / jailbreak | Adversarial eval suite (`chiron-adversarial`, 48 attacks) + the patient never receives the diagnosis |
 
 ## RAG pipeline

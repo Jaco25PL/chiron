@@ -22,9 +22,27 @@ def test_list_cases_no_revela_diagnostico():
     cases = r.json()
     assert cases
     for c in cases:
-        assert {"id", "materia", "titulo", "dificultad", "grillas", "paciente"} <= c.keys()
-        assert {"nombre", "edad", "sexo"} <= c["paciente"].keys()
-        assert "diagnostico" not in c
+        # like the real exam: the student only knows the patient's name and sex
+        assert c.keys() == {"id", "materia", "paciente"}
+        assert c["paciente"].keys() == {"nombre", "sexo"}
+        # the id is opaque: internal ids (e.g. "mpna-itu-pna-diabetica") spell out the diagnosis
+        assert "-" not in c["id"] and not c["id"].startswith("mpna")
+
+
+def test_random_case_picks_one_on_the_server(case_id):
+    r = client.post("/api/sessions", json={"case_id": "aleatorio"})
+    assert r.status_code == 200
+    body = r.json()
+    public_ids = {c["id"] for c in client.get("/api/cases").json()}
+    assert body["case"]["id"] in public_ids
+    assert body["case"]["paciente"].keys() == {"nombre", "sexo"}
+
+
+def test_session_payload_never_exposes_internal_case_data(case_id):
+    sid = client.post("/api/sessions", json={"case_id": case_id}).json()["session_id"]
+    raw = client.get(f"/api/sessions/{sid}").text
+    for leak in ("mpna-", "titulo", "dificultad", "diagnostico", "grillas"):
+        assert leak not in raw
 
 
 def test_create_session(case_id):
@@ -52,7 +70,7 @@ def test_send_message_y_get_session(case_id):
     assert r.json()["replies"][0]["role"] == "docente"
 
     s = client.get(f"/api/sessions/{sid}").json()
-    assert s["case_id"] == case_id
+    assert s["case"]["id"] == case_id
     assert [m["role"] for m in s["transcript"]][:2] == ["estudiante", "paciente"]
     assert s["total_facts"] > 0
     assert len(s["revealed_facts"]) >= 1

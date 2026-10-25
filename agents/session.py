@@ -2,8 +2,8 @@
 
 Contract (don't change it without updating api/):
 
-    list_cases(materia) -> [{id, materia, titulo, dificultad, grillas, paciente: {nombre, edad, sexo}}]
-    new_session(case_id, user=None, mode="chat") -> session_id     # user = {email, name}
+    list_cases(materia) -> [{id, materia, paciente: {nombre, sexo}}]   # id is opaque; see cases/catalog.py
+    new_session(case_ref, user=None, mode="chat") -> session_id     # public id, internal id or "aleatorio"
     send(session_id, text, user=None) -> {
         "replies": [{"role": "paciente" | "docente", "text": str}],
         "debug": {"intent": str, "facts": [ids], "exams": [ids], "studies": [str],
@@ -11,7 +11,7 @@ Contract (don't change it without updating api/):
     }
     finish(session_id, user=None) -> get_session(...) with finished=True
     get_session(session_id, user=None) -> {
-        "case_id": str, "transcript": [{"role": "estudiante" | "paciente" | "docente", "text": str}],
+        "case": {id, materia, paciente: {nombre, sexo}}, "transcript": [{"role": "estudiante" | "paciente" | "docente", "text": str}],
         "revealed_facts": [ids], "total_facts": int, "exams_done": [ids], "exams_done_labels": [str], "studies_requested": [str],
         "diagnosis_proposed": str | None, "finished": bool
     }

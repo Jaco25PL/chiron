@@ -3,13 +3,15 @@ import { signInAs } from "./session";
 
 // UI behavior of the consultation screen with the backend mocked (deterministic, no LLM).
 
+const SESSION = { session_id: "s1", case: { id: "abc123def0", materia: "mpna", paciente: { nombre: "Ana Pérez", sexo: "femenino" } } };
+
 test.beforeEach(async ({ context, baseURL }) => signInAs(context, baseURL!));
 
 test("a slow cold start shows a 'waking up' notice, which goes away once ready", async ({ page }) => {
   await page.route("**/api/cases**", (route) => route.fulfill({ json: [] }));
   await page.route("**/api/sessions", async (route) => {
     await new Promise((r) => setTimeout(r, 5000)); // backend scaled to zero, starting up
-    await route.fulfill({ json: { session_id: "s1" } });
+    await route.fulfill({ json: SESSION });
   });
   await page.goto("/consulta/mpna-disnea-icc?modo=chat");
   await expect(page.getByRole("status")).toContainText("Preparando la consulta", { timeout: 6000 });
@@ -18,7 +20,7 @@ test("a slow cold start shows a 'waking up' notice, which goes away once ready",
 
 test("a fast backend never shows the notice", async ({ page }) => {
   await page.route("**/api/cases**", (route) => route.fulfill({ json: [] }));
-  await page.route("**/api/sessions", (route) => route.fulfill({ json: { session_id: "s1" } }));
+  await page.route("**/api/sessions", (route) => route.fulfill({ json: SESSION }));
   await page.goto("/consulta/mpna-disnea-icc?modo=chat");
   await page.waitForTimeout(4500);
   await expect(page.getByRole("status")).toHaveCount(0);

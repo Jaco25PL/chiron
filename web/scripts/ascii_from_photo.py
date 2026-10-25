@@ -15,6 +15,7 @@ Follows the recommendations of generators like ScreenSnap/ASCIIFY:
 """
 
 import argparse
+import sys
 from pathlib import Path
 
 from PIL import Image, ImageFilter, ImageOps
@@ -78,7 +79,12 @@ def main():
         ap_img = remove_background(ap_img, args.modelo)
         ap_img.save(args.foto.with_name(args.foto.stem + "-sin-fondo.png"))
     art = to_ascii(ap_img, args.cols, alto=args.alto, plano=args.plano)
-    out = Path(__file__).resolve().parent.parent / "public" / "retratos" / f"{args.foto.stem}.txt"
+    # served under the case's opaque public id: the internal id (file stem) spells out the diagnosis
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    from cases.catalog import public_id
+
+    name = public_id(args.foto.stem) if args.foto.stem.startswith("mpna-") else args.foto.stem
+    out = Path(__file__).resolve().parent.parent / "public" / "retratos" / f"{name}.txt"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(art + "\n", encoding="utf-8")
     print(f"{out} ({len(art.splitlines())} lines x {args.cols} columns)")

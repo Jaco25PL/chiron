@@ -111,18 +111,5 @@ def labs_prompt(case: dict) -> str:
     return LABS.format(estudios="\n".join(f"- {i}: {e['estudio']}" for i, e in enumerate(case["paraclinica"])))
 
 
-def public_case(case: dict) -> dict:
-    """What the student can see of the case (no diagnosis or findings)."""
-    p = case["paciente"]
-    return {
-        "id": case["id"],
-        "materia": case["materia"],
-        "titulo": case["titulo"],
-        "dificultad": case["dificultad"],
-        "grillas": case["grillas"],
-        "paciente": {"nombre": p["nombre"], "edad": p["edad"], "sexo": p["sexo"]},
-    }
-
-
 def dump(obj) -> str:
     return json.dumps(obj, ensure_ascii=False)

@@ -7,7 +7,7 @@ import { Chat, Video } from "@/components/icons";
 import { Logo } from "@/components/Logo";
 import { Segmented } from "@/components/Segmented";
 import { UserMenu, type Usuario } from "@/components/UserMenu";
-import { api, DIFICULTAD, iniciales, type Caso } from "@/lib/api";
+import { ALEATORIO, api, iniciales, sexoLabel, type Caso } from "@/lib/api";
 
 type Materia = "mpna" | "pediatria";
 
@@ -45,7 +45,7 @@ export function Home({ usuario }: { usuario: Usuario }) {
 
       <section className="flex flex-col gap-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-lg font-semibold tracking-tight">Elegí un caso</h2>
+          <h2 className="text-lg font-semibold tracking-tight">Elegí un paciente</h2>
           <Segmented
             id="materia"
             value={materia}
@@ -57,51 +57,73 @@ export function Home({ usuario }: { usuario: Usuario }) {
           />
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {casos === null
-            ? [0, 1, 2].map((i) => <div key={i} className="glass h-[214px] animate-pulse rounded-3xl" />)
-            : casos.map((c, i) => <CaseCard key={c.id} caso={c} index={i} />)}
+            ? [0, 1, 2, 3].map((i) => <div key={i} className="glass h-[150px] animate-pulse rounded-3xl" />)
+            : [<RandomCard key={ALEATORIO} index={0} />, ...casos.map((c, i) => <CaseCard key={c.id} caso={c} index={i + 1} />)]}
         </div>
       </section>
     </main>
   );
 }
 
+/** A patient card shows what the student knows at the door: name and sex. */
 function CaseCard({ caso, index }: { caso: Caso; index: number }) {
   const p = caso.paciente;
   return (
+    <Card index={index} href={caso.id}>
+      <div className="grid size-11 shrink-0 place-items-center rounded-full bg-glass-strong font-mono text-sm text-accent">
+        {iniciales(p.nombre)}
+      </div>
+      <div className="min-w-0">
+        <h3 className="truncate text-[17px] font-semibold tracking-tight">{p.nombre.split(" ").slice(0, 2).join(" ")}</h3>
+        <p className="truncate text-sm text-ink-2">{sexoLabel(p.sexo)}</p>
+      </div>
+    </Card>
+  );
+}
+
+/** Closest to the real exam: you don't know who is waiting until you walk in. */
+function RandomCard({ index }: { index: number }) {
+  return (
+    <Card index={index} href={ALEATORIO} destacada>
+      <div className="grid size-11 shrink-0 place-items-center rounded-full border border-dashed border-accent/60 font-mono text-lg text-accent">
+        ?
+      </div>
+      <div className="min-w-0">
+        <h3 className="truncate text-[17px] font-semibold tracking-tight">Paciente aleatorio</h3>
+        <p className="truncate text-sm text-ink-2">Como en el ECOE: no sabés quién te toca</p>
+      </div>
+    </Card>
+  );
+}
+
+function Card({
+  index,
+  href,
+  destacada,
+  children,
+}: {
+  index: number;
+  href: string;
+  destacada?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
     <article
-      className="glass enter group flex flex-col gap-5 rounded-3xl p-5"
+      className={`glass enter flex flex-col gap-5 rounded-3xl p-5 ${destacada ? "border-accent/30 bg-accent/[0.04]" : ""}`}
       style={{ animationDelay: `${index * 50}ms` }}
     >
-      <div className="flex items-center justify-between">
-        <span className="rounded-full border border-line px-2.5 py-1 text-[11px] font-medium text-ink-2">
-          {DIFICULTAD[caso.dificultad]}
-        </span>
-        <span className="font-mono text-[11px] text-ink-3">{caso.grillas.length} grillas</span>
-      </div>
-
-      <div className="flex items-center gap-3">
-        <div className="grid size-11 shrink-0 place-items-center rounded-full bg-glass-strong font-mono text-sm text-accent">
-          {iniciales(p.nombre)}
-        </div>
-        <div className="min-w-0">
-          <h3 className="truncate text-[17px] font-semibold tracking-tight">{caso.titulo}</h3>
-          <p className="truncate text-sm text-ink-2">
-            {p.nombre.split(" ").slice(0, 2).join(" ")}, {p.edad} años
-          </p>
-        </div>
-      </div>
-
+      <div className="flex items-center gap-3">{children}</div>
       <div className="mt-auto grid grid-cols-2 gap-2">
         <Link
-          href={`/consulta/${caso.id}?modo=chat`}
+          href={`/consulta/${href}?modo=chat`}
           className="press flex h-10 items-center justify-center gap-2 rounded-full border border-line-strong text-sm font-medium text-ink hover:bg-glass-strong"
         >
           <Chat width={17} height={17} /> Chat
         </Link>
         <Link
-          href={`/consulta/${caso.id}?modo=cara`}
+          href={`/consulta/${href}?modo=cara`}
           className="press flex h-10 items-center justify-center gap-2 rounded-full bg-ink text-sm font-medium text-bg hover:bg-white"
         >
           <Video width={17} height={17} /> Cara a cara

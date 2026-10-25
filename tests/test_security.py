@@ -52,7 +52,7 @@ def test_only_the_owner_can_read_a_consultation():
 
     ana, bob = {"email": "ana@example.com", "name": "Ana"}, {"email": "bob@example.com", "name": "Bob"}
     sid = new_session("mpna-disnea-icc", ana)
-    assert get_session(sid, ana)["case_id"] == "mpna-disnea-icc"
+    assert get_session(sid, ana)["case"]["paciente"]["nombre"] == "Washington Ferreira Olivera"
     with pytest.raises(PermissionError):
         get_session(sid, bob)
 

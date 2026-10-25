@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { sexoLabel } from "@/lib/api";
 import { formatoTiempo, useConsulta, useCuentaRegresiva } from "@/lib/useConsulta";
 import { ChatView } from "./ChatView";
 import { FaceView } from "./FaceView";
@@ -27,7 +28,7 @@ export function Consulta({ caseId, modoInicial }: { caseId: string; modoInicial:
           </Link>
           <div className="hidden min-w-0 sm:block">
             <p className="truncate text-sm font-medium">{nombre ?? " "}</p>
-            <p className="truncate text-xs text-ink-3">{c.caso?.titulo ?? " "}</p>
+            <p className="truncate text-xs text-ink-3">{c.caso ? sexoLabel(c.caso.paciente.sexo) : " "}</p>
           </div>
         </div>
 
