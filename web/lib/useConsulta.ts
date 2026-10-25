@@ -6,7 +6,7 @@ import { api, type Caso, type Resumen, type Turno } from "./api";
 
 export const DURACION_S = 7 * 60;
 
-/** Estado de una consulta: sesión en el backend, transcripción, temporizador y cierre. */
+/** Consultation state: backend session, transcript, timer and closing. */
 export function useConsulta(caseId: string) {
   const [caso, setCaso] = useState<Caso | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -17,13 +17,13 @@ export function useConsulta(caseId: string) {
   const creada = useRef(false);
 
   useEffect(() => {
-    if (creada.current) return; // en desarrollo React monta dos veces: una sola sesión
+    if (creada.current) return; // React mounts twice in dev: create a single session
     creada.current = true;
     api.casos().then((cs) => setCaso(cs.find((c) => c.id === caseId) ?? null)).catch(() => {});
     api
       .nuevaSesion(caseId)
       .then((r) => setSessionId(r.session_id))
-      .catch((e: Error) => toast.error(e.message));
+      .catch((e: Error) => toast.error(e.message, { id: "sesion" }));
   }, [caseId]);
 
   const enviar = useCallback(
@@ -57,7 +57,7 @@ export function useConsulta(caseId: string) {
   return { caso, listo: !!sessionId, turnos, pensando, inicio, enviar, terminar, resumen, setResumen };
 }
 
-/** Segundos restantes de los 7 minutos (negativo si se pasó). Pausa el render cuando la pestaña está oculta. */
+/** Seconds left of the 7 minutes (negative once over). Skips re-renders while the tab is hidden. */
 export function useCuentaRegresiva(inicio: number | null) {
   const [ahora, setAhora] = useState(() => Date.now());
   useEffect(() => {

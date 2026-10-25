@@ -11,7 +11,7 @@ import { SummarySheet } from "./SummarySheet";
 
 type Modo = "chat" | "cara";
 
-/** Pantalla de consulta. Chat y cara a cara comparten la misma sesión: se puede cambiar en cualquier momento. */
+/** Consultation screen. Chat and face-to-face share the same session, so the mode can switch at any time. */
 export function Consulta({ caseId, modoInicial }: { caseId: string; modoInicial: Modo }) {
   const [modo, setModo] = useState<Modo>(modoInicial);
   const c = useConsulta(caseId);

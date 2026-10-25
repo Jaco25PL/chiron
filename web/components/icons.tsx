@@ -1,4 +1,4 @@
-// Iconos de línea a 1.75px, estilo SF Symbols. Heredan el color del texto.
+// 1.75px line icons, SF Symbols style. They inherit the text color.
 import type { SVGProps } from "react";
 
 type P = SVGProps<SVGSVGElement>;

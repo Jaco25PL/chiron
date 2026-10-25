@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
-/* Chiron: oscuro por diseño (metáfora de videollamada), superficies de vidrio y un
-   único acento menta. Movimiento según las pautas de Emil Kowalski: ease-out fuerte,
-   UI por debajo de 300ms, solo transform y opacity. */
+/* Chiron: dark by design (video-call metaphor), glass surfaces and a
+   single mint accent. Motion follows Emil Kowalski's guidelines: strong ease-out,
+   UI under 300ms, transform and opacity only. */
 
 :root {
   --bg: #050607;
@@ -64,10 +64,10 @@ body {
   background: rgb(110 231 210 / 0.3);
 }
 
-/* Las clases propias van en capas de Tailwind para que las utilidades (bg-*, outline-none…)
-   puedan sobrescribirlas: el CSS sin capa le gana a cualquier capa. */
+/* Custom classes live in Tailwind layers so utilities (bg-*, outline-none…)
+   can override them: unlayered CSS beats any layer. */
 @layer components {
-/* Vidrio: blur moderado (el blur fuerte es caro en Safari) */
+/* Glass: moderate blur (heavy blur is expensive in Safari) */
 .glass {
   background: var(--glass);
   border: 1px solid var(--line);
@@ -75,7 +75,7 @@ body {
   -webkit-backdrop-filter: blur(20px) saturate(140%);
 }
 
-/* Feedback de presión: 0.97 con ease-out, 160ms */
+/* Press feedback: 0.97 with ease-out, 160ms */
 .press {
   transition:
     transform 160ms var(--ease-out),
@@ -86,7 +86,7 @@ body {
   transform: scale(0.97);
 }
 
-/* Entradas: desde opacidad 0 y escala 0.98, nunca desde scale(0) */
+/* Entrances: from opacity 0 and scale 0.98, never from scale(0) */
 @keyframes enter {
   from {
     opacity: 0;
@@ -110,7 +110,7 @@ body {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
-  /* el foco del campo de texto lo marca su contenedor */
+  /* the textarea's focus is shown by its container */
   textarea:focus-visible {
     outline: none;
   }

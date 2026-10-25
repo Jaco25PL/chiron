@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 
 type Option<T extends string> = { value: T; label: ReactNode; disabled?: boolean; hint?: string };
 
-/** Control segmentado estilo iOS: la píldora se desliza entre opciones (morph = ease-in-out). */
+/** iOS-style segmented control: the pill slides between options (morph = ease-in-out). */
 export function Segmented<T extends string>({
   value,
   onChange,

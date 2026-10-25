@@ -6,7 +6,7 @@ import { ASCII_FACE } from "@/lib/ascii-face";
 import { Composer } from "./Composer";
 import { CameraOff, Close, Mic, PhoneDown, Stethoscope } from "./icons";
 
-/** Retrato ASCII del caso: public/retratos/<id>.txt, si no default.txt, si no el busto generado. */
+/** The case's ASCII portrait: public/retratos/<id>.txt, else default.txt, else the generated bust. */
 function useRetrato(caseId: string | undefined) {
   const [arte, setArte] = useState(ASCII_FACE);
   useEffect(() => {
@@ -22,7 +22,7 @@ function useRetrato(caseId: string | undefined) {
   return { arte, cols, filas: lineas.length };
 }
 
-/** Vista "cara a cara": una videollamada con el paciente. Por ahora el rostro es un retrato ASCII fijo. */
+/** "Face to face" view: a video call with the patient. For now the face is a static ASCII portrait. */
 export function FaceView({
   caso,
   turnos,
@@ -53,8 +53,8 @@ export function FaceView({
           aria-label={`Retrato de ${nombre}`}
           className="pointer-events-none absolute left-1/2 top-[52%] -translate-x-1/2 -translate-y-1/2 select-none font-mono leading-none [mask-image:radial-gradient(ellipse_70%_75%_at_50%_45%,#000_55%,transparent_100%)]"
           style={{
-            // un carácter monoespaciado mide ~0.6em de ancho. Manda la altura; en pantallas angostas
-            // (mobile) se deja que los hombros se salgan por los costados para que la cara se vea grande
+            // a monospace character is ~0.6em wide. Height drives the size; on narrow (mobile) screens
+            // the shoulders may overflow the sides so the face stays large
             fontSize: `min(calc(150cqw / ${cols * 0.6}), calc(90cqh / ${filas}))`,
             backgroundImage: "linear-gradient(180deg,#eafffb 0%,#6ee7d2 45%,#2b8c7e 100%)",
             WebkitBackgroundClip: "text",

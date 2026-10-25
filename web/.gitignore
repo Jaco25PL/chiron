@@ -45,3 +45,7 @@ scripts/retratos/
 
 .vercel
 .env*
+
+# Playwright
+/test-results/
+/playwright-report/

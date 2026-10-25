@@ -18,7 +18,7 @@ export function Home({ usuario }: { usuario: Usuario }) {
   useEffect(() => {
     api.casos(materia).then(setCasos).catch((e: Error) => {
       setCasos([]);
-      toast.error(e.message);
+      toast.error(e.message, { id: "casos" }); // id: no duplicate toast if the effect runs twice
     });
   }, [materia]);
 

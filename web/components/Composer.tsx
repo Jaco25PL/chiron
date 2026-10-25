@@ -3,10 +3,10 @@
 import { useRef, useState, type ReactNode } from "react";
 import { ArrowUp } from "./icons";
 
-// Genéricas a propósito: sirven en cualquier caso sin dar pistas de qué examinar.
+// Generic on purpose: they fit any case without hinting at what to examine.
 export const SUGERENCIAS = ["Le tomo los signos vitales", "Le voy a hacer el examen físico", "Solicito estudios"];
 
-/** Campo de mensaje: Enter envía, Shift+Enter agrega una línea. Sin animaciones (es una acción de teclado). */
+/** Message field: Enter sends, Shift+Enter adds a line. No animation (it is a keyboard action). */
 export function Composer({
   onSend,
   disabled,

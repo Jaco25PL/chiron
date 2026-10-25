@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Drawer } from "vaul";
 import type { Resumen } from "@/lib/api";
 
-/** Hoja inferior con el resumen de la consulta (vaul: se cierra arrastrando, también en desktop). */
+/** Bottom sheet with the consultation summary (vaul: drag to dismiss, desktop too). */
 export function SummarySheet({ resumen, onClose }: { resumen: Resumen | null; onClose: () => void }) {
   const pct = resumen ? Math.round((resumen.revealed_facts.length / Math.max(resumen.total_facts, 1)) * 100) : 0;
   return (

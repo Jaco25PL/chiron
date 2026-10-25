@@ -55,6 +55,8 @@ data/ecoe/
 
 `python -m pytest` (config in `pytest.ini`). TDD for deterministic logic; LLM behavior is measured with evals.
 
+Web E2E (Playwright, `web/tests/e2e/`): `cd web && npm run test:e2e`. Deterministic auth tests: signed-out redirects, the OAuth request sent to Google (intercepted, never contacted), forged/expired session cookies, open-redirect protection, sign-out, and the no-backend message. Run them against production with `BASE_URL=https://chiron-nu-two.vercel.app npm run test:e2e`.
+
 ## Gemini
 
 - Keys in `.env` as `GOOGLE_API_KEY_1`, `_2`, `_3` (separate accounts). `llm/gemini.py` rotates keys on 429 and waits if all of them hit the per-minute limit.

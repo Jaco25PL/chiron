@@ -1,4 +1,4 @@
-// Cliente del backend de Chiron (ver agents/session.py para el contrato).
+// Chiron backend client (see agents/session.py for the contract).
 
 export type Paciente = { nombre: string; edad: number; sexo: string };
 
@@ -31,6 +31,9 @@ export type Resumen = {
   finished: boolean;
 };
 
+const SIN_BACKEND =
+  "El servidor de casos no está disponible en este momento. En la versión online todavía no está desplegado; probalo en local.";
+
 async function call<T>(path: string, init?: RequestInit): Promise<T> {
   let res: Response;
   try {
@@ -39,10 +42,14 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
       headers: { "Content-Type": "application/json", ...init?.headers },
     });
   } catch {
-    throw new Error("No hay conexión con el servidor de Chiron. ¿Está corriendo el backend en el puerto 8000?");
+    throw new Error(SIN_BACKEND);
   }
-  const body = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(body.error ?? `Error ${res.status}`);
+  const body = await res.json().catch(() => null);
+  if (!res.ok) {
+    // An error without our {error} JSON means the backend itself didn't answer (not deployed / down).
+    if (!body?.error && [404, 502, 503, 504].includes(res.status)) throw new Error(SIN_BACKEND);
+    throw new Error(body?.error ?? `Error ${res.status}`);
+  }
   return body as T;
 }
 
