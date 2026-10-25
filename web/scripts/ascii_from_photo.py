@@ -25,21 +25,22 @@ RAMP = " .:-=+*#%@"
 CHAR_ASPECT = 0.5  # una celda monoespaciada es ~el doble de alta que ancha
 
 
-def remove_background(img: Image.Image) -> Image.Image:
+def remove_background(img: Image.Image, modelo: str = "u2net_human_seg") -> Image.Image:
     """Recorta a la persona con un modelo de segmentación (rembg / U²-Net, corre local) y pone
     el fondo en negro. Probé antes con heurísticas de color y fallaban con fondos en degradé
     o ropa del mismo tono que el fondo."""
     from rembg import new_session, remove
 
-    cut = remove(img, session=new_session("u2net_human_seg"))
+    cut = remove(img, session=new_session(modelo))
     black = Image.new("RGB", img.size, "black")
     black.paste(cut, mask=cut.getchannel("A"))
     return black
 
 
-def to_ascii(img: Image.Image, cols: int, alto: float = 0.78, gamma: float = 0.8) -> str:
+def to_ascii(img: Image.Image, cols: int, alto: float = 0.78, gamma: float = 0.8, plano: bool = False) -> str:
     """alto: fracción de la figura que se conserva desde arriba (recorte a cabeza y hombros).
-    gamma < 1 levanta los medios tonos, donde están los rasgos de la cara."""
+    gamma < 1 levanta los medios tonos, donde están los rasgos de la cara.
+    plano=True para ilustraciones de colores planos: sin ecualizar ni enfocar (las arruinan)."""
     gray = ImageOps.grayscale(img)
     # recorte: todo lo que no es fondo negro
     bbox = gray.point(lambda v: 255 if v > 18 else 0).getbbox()
@@ -48,10 +49,12 @@ def to_ascii(img: Image.Image, cols: int, alto: float = 0.78, gamma: float = 0.8
         gray = gray.crop((x0, y0, x1, y0 + int((y1 - y0) * alto)))
     person = gray.point(lambda v: 255 if v > 12 else 0)
     # ecualizar solo sobre la persona: si no, el fondo negro se come el rango y la cara queda plana
-    gray = ImageOps.equalize(gray, mask=person)
-    gray = gray.point(lambda v: round(255 * (v / 255) ** gamma))
+    if not plano:
+        gray = ImageOps.equalize(gray, mask=person)
+        gray = gray.point(lambda v: round(255 * (v / 255) ** gamma))
     gray = Image.composite(gray, Image.new("L", gray.size, 0), person)
-    gray = gray.filter(ImageFilter.UnsharpMask(radius=3, percent=120, threshold=3))  # define rasgos
+    if not plano:
+        gray = gray.filter(ImageFilter.UnsharpMask(radius=3, percent=120, threshold=3))  # define rasgos
     rows = max(1, round(cols * gray.height / gray.width * CHAR_ASPECT))
     small = gray.resize((cols, rows), Image.Resampling.LANCZOS)
     lines = []
@@ -65,13 +68,16 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("foto", type=Path)
     ap.add_argument("--cols", type=int, default=110)
+    ap.add_argument("--alto", type=float, default=0.78, help="fracción de la figura a conservar desde arriba")
+    ap.add_argument("--modelo", default="u2net_human_seg", help="modelo de rembg (u2net para no-personas)")
+    ap.add_argument("--plano", action="store_true", help="ilustración de colores planos (no foto)")
     ap.add_argument("--fondo-negro", action="store_true", help="la foto ya tiene fondo negro: no recortar fondo")
     args = ap.parse_args()
     ap_img = Image.open(args.foto).convert("RGB")
     if not args.fondo_negro:
-        ap_img = remove_background(ap_img)
+        ap_img = remove_background(ap_img, args.modelo)
         ap_img.save(args.foto.with_name(args.foto.stem + "-sin-fondo.png"))
-    art = to_ascii(ap_img, args.cols)
+    art = to_ascii(ap_img, args.cols, alto=args.alto, plano=args.plano)
     out = Path(__file__).resolve().parent.parent / "public" / "retratos" / f"{args.foto.stem}.txt"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(art + "\n", encoding="utf-8")
