@@ -7,6 +7,7 @@
 export { auth as proxy } from "@/auth";
 
 export const config = {
-  // public assets (logo, favicon, portraits) must load on /login too, before signing in
-  matcher: ["/((?!api/|_next/static|_next/image|favicon.ico|icon.png|apple-icon.png|logo.png|retratos/).*)"],
+  // public assets (logo, favicon, portraits, avatar models) skip the session check: they must load on
+  // /login too, and the 6 MB models should be cached by the CDN
+  matcher: ["/((?!api/|_next/static|_next/image|favicon.ico|icon.png|apple-icon.png|logo.png|retratos/|avatares/).*)"],
 };
