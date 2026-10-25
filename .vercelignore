@@ -1,6 +1,6 @@
 # Files kept out of the backend deployment (Vercel project "chiron-api", root = repo root).
-# The frontend is a separate Vercel project rooted at web/.
-web/
+# CAREFUL: Vercel applies this repo-root file to EVERY project built from this repo, including
+# the frontend (root web/). Never list web/ here; the backend bundle drops it via vercel.json.
 frontend/
 data/
 docs/
