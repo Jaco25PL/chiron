@@ -130,7 +130,7 @@ export function FaceView({
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3 px-3 pb-[max(12px,env(safe-area-inset-bottom))] sm:px-6">
       {/* escenario */}
-      <div className="relative min-h-0 flex-1 overflow-hidden rounded-[28px] border border-line bg-[radial-gradient(ellipse_at_50%_35%,#0f1716_0%,#050607_70%)] [container-type:size]">
+      <div className="relative min-h-0 flex-1 overflow-hidden rounded-[28px] border border-line bg-[radial-gradient(ellipse_at_50%_35%,var(--accent-fondo)_0%,var(--bg)_70%)] [container-type:size]">
         <pre
           aria-label={`Retrato de ${nombre}`}
           className={`pointer-events-none absolute left-1/2 top-[52%] -translate-x-1/2 -translate-y-1/2 select-none font-mono leading-none transition-opacity duration-300 ease-out [mask-image:radial-gradient(ellipse_70%_75%_at_50%_45%,#000_55%,transparent_100%)] ${
@@ -140,7 +140,8 @@ export function FaceView({
             // a monospace character is ~0.6em wide. Height drives the size; on narrow (mobile) screens
             // the shoulders may overflow the sides so the face stays large
             fontSize: `min(calc(150cqw / ${cols * 0.6}), calc(90cqh / ${filas}))`,
-            backgroundImage: "linear-gradient(180deg,#eafffb 0%,#6ee7d2 45%,#2b8c7e 100%)",
+            backgroundImage:
+              "linear-gradient(180deg,var(--accent-claro) 0%,var(--accent) 45%,var(--accent-oscuro) 100%)",
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
             color: "transparent",

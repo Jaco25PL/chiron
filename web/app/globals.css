@@ -1,8 +1,10 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
 /* Chiron: dark by design (video-call metaphor), glass surfaces and a
-   single mint accent. Motion follows Emil Kowalski's guidelines: strong ease-out,
-   UI under 300ms, transform and opacity only. */
+   single accent the student picks (mint by default). Motion follows Emil Kowalski's
+   guidelines: strong ease-out, UI under 300ms, transform and opacity only. */
 
 :root {
   --bg: #050607;
@@ -14,8 +16,6 @@
   --ink: #f5f5f7;
   --ink-2: #a8abb3;
   --ink-3: #6c707a;
-  --accent: #6ee7d2;
-  --accent-ink: #04221d;
   --danger: #ff453a;
   --live: #30d158;
 
@@ -23,6 +23,60 @@
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
   color-scheme: dark;
+
+  /* shadcn/ui tokens mapped onto ours. shadcn's `accent` (a subtle hover background) is
+     deliberately NOT defined: `accent` here is the brand color, so the copied components in
+     components/ui use bg-glass-strong / text-ink for their hover and focus states instead. */
+  --background: var(--bg);
+  --foreground: var(--ink);
+  --card: var(--bg-2);
+  --card-foreground: var(--ink);
+  --popover: var(--bg-2);
+  --popover-foreground: var(--ink);
+  --primary: var(--accent);
+  --primary-foreground: var(--accent-ink);
+  --secondary: var(--glass-strong);
+  --secondary-foreground: var(--ink);
+  --muted: var(--glass-strong);
+  --muted-foreground: var(--ink-3);
+  --destructive: var(--danger);
+  --border: var(--line);
+  --input: var(--line-strong);
+  --ring: var(--accent);
+}
+
+/* Accent palette, chosen in the user menu and set as <html data-acento> by the server
+   (app/layout.tsx), so the first paint already has it. All four share mint's OKLCH lightness
+   (L 0.85) and read on --bg at ~12-13.5:1. --accent-ink is text on an accent background
+   (>= 10:1 on its accent); claro/oscuro/fondo are the face-to-face portrait gradient and stage. */
+:root,
+[data-acento="menta"] {
+  --accent: #6ee7d2;
+  --accent-ink: #04221d;
+  --accent-claro: #eafffb;
+  --accent-oscuro: #2b8c7e;
+  --accent-fondo: #0f1716;
+}
+[data-acento="rosa"] {
+  --accent: #ffb0d6;
+  --accent-ink: #2a111d;
+  --accent-claro: #fff5fb;
+  --accent-oscuro: #a0667f;
+  --accent-fondo: #1a1114;
+}
+[data-acento="gris"] {
+  --accent: #c9cfd6;
+  --accent-ink: #171b20;
+  --accent-claro: #f9fafc;
+  --accent-oscuro: #777b80;
+  --accent-fondo: #131415;
+}
+[data-acento="azul"] {
+  --accent: #90d8ff;
+  --accent-ink: #031d2d;
+  --accent-claro: #effcff;
+  --accent-oscuro: #4f80a2;
+  --accent-fondo: #0e151a;
 }
 
 @theme inline {
@@ -39,6 +93,26 @@
   --color-accent-ink: var(--accent-ink);
   --color-danger: var(--danger);
   --color-live: var(--live);
+  --color-accent-claro: var(--accent-claro);
+  --color-accent-oscuro: var(--accent-oscuro);
+  --color-accent-fondo: var(--accent-fondo);
+  /* shadcn/ui (see :root); no --color-accent-foreground on purpose */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
   --font-sans: var(--font-geist-sans), -apple-system, "SF Pro Text", system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), "SF Mono", ui-monospace, monospace;
 }
@@ -50,7 +124,7 @@ body {
 
 body {
   background:
-    radial-gradient(60rem 30rem at 50% -10%, rgb(110 231 210 / 0.07), transparent 70%),
+    radial-gradient(60rem 30rem at 50% -10%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 70%),
     radial-gradient(40rem 30rem at 100% 110%, rgb(120 140 255 / 0.05), transparent 70%),
     var(--bg);
   background-attachment: fixed;
@@ -61,7 +135,7 @@ body {
 }
 
 ::selection {
-  background: rgb(110 231 210 / 0.3);
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
 }
 
 /* Custom classes live in Tailwind layers so utilities (bg-*, outline-none…)
@@ -86,15 +160,16 @@ body {
   transform: scale(0.97);
 }
 
-/* Entrances: from opacity 0 and scale 0.98, never from scale(0) */
-@keyframes enter {
+/* Entrances: from opacity 0 and scale 0.98, never from scale(0). Not named `enter`:
+   tw-animate-css (shadcn's animate-in) defines its own `enter` keyframes. */
+@keyframes chiron-enter {
   from {
     opacity: 0;
     transform: translateY(6px) scale(0.98);
   }
 }
 .enter {
-  animation: enter 240ms var(--ease-out) both;
+  animation: chiron-enter 240ms var(--ease-out) both;
 }
 
 .no-scrollbar {
@@ -122,5 +197,10 @@ body {
   }
   .press:active:not(:disabled) {
     transform: none;
+  }
+  /* shadcn/ui menus and sheets (tw-animate-css) */
+  [data-slot$="-content"],
+  [data-slot="sheet-overlay"] {
+    animation: none;
   }
 }

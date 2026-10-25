@@ -86,3 +86,6 @@ CREATE TABLE IF NOT EXISTS feedback (
     resultado        JSONB NOT NULL,
     created_at       TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+-- Per-user preferences: the accent color picked in the user menu (menta | rosa | gris | azul).
+ALTER TABLE users ADD COLUMN IF NOT EXISTS acento TEXT NOT NULL DEFAULT 'menta';

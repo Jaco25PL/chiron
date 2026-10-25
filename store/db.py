@@ -10,10 +10,13 @@ from datetime import datetime, timezone
 from functools import lru_cache
 from pathlib import Path
 
-from dotenv import load_dotenv
-
 ROOT = Path(__file__).resolve().parent.parent
-load_dotenv(ROOT / ".env")
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv(ROOT / ".env")
+except ImportError:  # the CI fake backend installs only fastapi + uvicorn (and has no database)
+    pass
 
 SCHEMA = (Path(__file__).parent / "schema.sql").read_text(encoding="utf-8")
 
@@ -143,4 +146,34 @@ def finish_consultation(consultation_id: str) -> None:
         conn.execute(
             "UPDATE consultations SET finished_at = COALESCE(finished_at, now()) WHERE id = %s",
             (consultation_id,),
+        )
+
+
+# --- Per-user preferences ---------------------------------------------------------------
+
+ACENTOS = ("menta", "rosa", "gris", "azul")  # accent colors offered in the user menu
+_acentos: dict[str, str] = {}  # in-memory fallback without DATABASE_URL: email -> acento
+
+
+def get_acento(email: str) -> str:
+    if not enabled():
+        return _acentos.get(email, ACENTOS[0])
+    with pool().connection() as conn:
+        row = conn.execute("SELECT acento FROM users WHERE email = %s", (email,)).fetchone()
+    return row[0] if row else ACENTOS[0]
+
+
+def set_acento(email: str, name: str | None, acento: str) -> None:
+    """Saves the user's accent color, creating the user if this is their first request."""
+    if acento not in ACENTOS:
+        raise ValueError(f"unknown accent: {acento!r}")
+    if not enabled():
+        _acentos[email] = acento
+        return
+    with pool().connection() as conn:
+        conn.execute(
+            """INSERT INTO users (email, name, acento) VALUES (%s, %s, %s)
+               ON CONFLICT (email) DO UPDATE SET acento = EXCLUDED.acento,
+                   name = COALESCE(EXCLUDED.name, users.name), last_seen = now()""",
+            (email, name, acento),
         )
