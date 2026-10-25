@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# fotos fuente de los retratos (solo se versiona el .txt generado en public/retratos)
+scripts/retratos/

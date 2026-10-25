@@ -1,10 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Caso, Turno } from "@/lib/api";
 import { ASCII_FACE } from "@/lib/ascii-face";
 import { Composer } from "./Composer";
 import { CameraOff, Close, Mic, PhoneDown, Stethoscope } from "./icons";
+
+/** Retrato ASCII del caso (public/retratos/<id>.txt); si no existe, usa el genérico. */
+function useRetrato(caseId: string | undefined) {
+  const [arte, setArte] = useState(ASCII_FACE);
+  useEffect(() => {
+    if (!caseId) return;
+    fetch(`/retratos/${caseId}.txt`)
+      .then((r) => (r.ok ? r.text() : null))
+      .then((t) => t && setArte(t.replace(/\s+$/, "")))
+      .catch(() => {});
+  }, [caseId]);
+  const lineas = arte.split("\n");
+  const cols = Math.max(...lineas.map((l) => l.length));
+  return { arte, cols, filas: lineas.length };
+}
 
 /** Vista "cara a cara": una videollamada con el paciente. Por ahora el rostro es un retrato ASCII fijo. */
 export function FaceView({
@@ -27,6 +42,7 @@ export function FaceView({
   const ultimoDocente = turnos[ultimoIdx]?.role === "docente" ? turnos[ultimoIdx] : null;
   const [cerrado, setCerrado] = useState<number | null>(null);
   const nombre = caso?.paciente.nombre.split(" ").slice(0, 2).join(" ") ?? "Paciente";
+  const { arte, cols, filas } = useRetrato(caso?.id);
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3 px-3 pb-[max(12px,env(safe-area-inset-bottom))] sm:px-6">
@@ -34,15 +50,17 @@ export function FaceView({
       <div className="relative min-h-0 flex-1 overflow-hidden rounded-[28px] border border-line bg-[radial-gradient(ellipse_at_50%_35%,#0f1716_0%,#050607_70%)] [container-type:size]">
         <pre
           aria-label={`Retrato de ${nombre}`}
-          className="pointer-events-none absolute left-1/2 top-[52%] -translate-x-1/2 -translate-y-1/2 select-none font-mono leading-none [font-size:min(calc(100cqw/50),calc(100cqh/47))] [mask-image:radial-gradient(ellipse_70%_75%_at_50%_45%,#000_55%,transparent_100%)]"
+          className="pointer-events-none absolute left-1/2 top-[52%] -translate-x-1/2 -translate-y-1/2 select-none font-mono leading-none [mask-image:radial-gradient(ellipse_70%_75%_at_50%_45%,#000_55%,transparent_100%)]"
           style={{
+            // el ancho de un carácter monoespaciado es ~0.6em: el retrato entra entero en el escenario
+            fontSize: `min(calc(92cqw / ${cols * 0.6}), calc(90cqh / ${filas}))`,
             backgroundImage: "linear-gradient(180deg,#eafffb 0%,#6ee7d2 45%,#2b8c7e 100%)",
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
             color: "transparent",
           }}
         >
-          {ASCII_FACE}
+          {arte}
         </pre>
         {/* líneas de barrido fijas */}
         <div className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(0deg,rgb(0_0_0/0.18)_0px,rgb(0_0_0/0.18)_1px,transparent_1px,transparent_3px)]" />
