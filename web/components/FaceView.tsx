@@ -6,13 +6,14 @@ import { ASCII_FACE } from "@/lib/ascii-face";
 import { Composer } from "./Composer";
 import { CameraOff, Close, Mic, PhoneDown, Stethoscope } from "./icons";
 
-/** Retrato ASCII del caso (public/retratos/<id>.txt); si no existe, usa el genérico. */
+/** Retrato ASCII del caso: public/retratos/<id>.txt, si no default.txt, si no el busto generado. */
 function useRetrato(caseId: string | undefined) {
   const [arte, setArte] = useState(ASCII_FACE);
   useEffect(() => {
     if (!caseId) return;
-    fetch(`/retratos/${caseId}.txt`)
-      .then((r) => (r.ok ? r.text() : null))
+    const leer = (f: string) => fetch(`/retratos/${f}.txt`).then((r) => (r.ok ? r.text() : null));
+    leer(caseId)
+      .then((t) => t ?? leer("default"))
       .then((t) => t && setArte(t.replace(/\s+$/, "")))
       .catch(() => {});
   }, [caseId]);
@@ -52,8 +53,9 @@ export function FaceView({
           aria-label={`Retrato de ${nombre}`}
           className="pointer-events-none absolute left-1/2 top-[52%] -translate-x-1/2 -translate-y-1/2 select-none font-mono leading-none [mask-image:radial-gradient(ellipse_70%_75%_at_50%_45%,#000_55%,transparent_100%)]"
           style={{
-            // el ancho de un carácter monoespaciado es ~0.6em: el retrato entra entero en el escenario
-            fontSize: `min(calc(92cqw / ${cols * 0.6}), calc(90cqh / ${filas}))`,
+            // un carácter monoespaciado mide ~0.6em de ancho. Manda la altura; en pantallas angostas
+            // (mobile) se deja que los hombros se salgan por los costados para que la cara se vea grande
+            fontSize: `min(calc(150cqw / ${cols * 0.6}), calc(90cqh / ${filas}))`,
             backgroundImage: "linear-gradient(180deg,#eafffb 0%,#6ee7d2 45%,#2b8c7e 100%)",
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
