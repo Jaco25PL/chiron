@@ -118,6 +118,21 @@ A log of what I ran into while building Chiron: what showed up, how I caught it,
 - **Result:** 15/15 E2E tests, and the sign-out test passes repeatedly in parallel.
 - **Lesson:** a test that fails only under load is often telling the truth about production, where requests do overlap.
 
+## 15. A piped command hid a failed re-index for a whole day
+
+- **Finding:** while moving the RAG to Postgres, the copy reported 1,200 chunks instead of 1,336. The missing 136 were exactly the most valuable ones: all 37 evaluation rubrics and the lab/imaging decision table.
+- **Cause:** the overnight re-index had stopped on a quota error in its last batches, but I ran it as `ingest.py | tail -2`: the pipe's exit code is `tail`'s, so the failure looked like success.
+- **What I did:** a backfill that embeds only the missing chunks, and I stopped piping long jobs through `tail` (or check `PIPESTATUS`).
+- **Lesson:** verify data pipelines by counting what arrived, not by the absence of errors.
+
+## 16. One ignore file, two deployments
+
+- **Context:** the repo deploys as two Vercel projects: the Next.js frontend (root `web/`) and the FastAPI backend (repo root).
+- **Finding:** right after adding the backend, the whole frontend started returning 404. The build log showed why: Vercel applies the repo-root `.vercelignore` to *every* project from the repo, and I had listed `web/` there to keep it out of the Python bundle.
+- **How I caught it:** the production E2E suite failed 17/17 within a minute of the deploy, including tests that don't touch the backend, which pointed at the frontend build rather than the API.
+- **What I did:** keep the frontend out of the backend bundle with the function's `excludeFiles` instead, and documented the trap in the ignore file itself.
+- **Lesson:** run the E2E suite against production after every infrastructure change; it turned a silent outage into a 2-minute fix.
+
 ## Short version for LinkedIn
 
 > I'm building **Chiron**, an AI patient simulator that helps medical students practice for the ECOE (the Spanish-language OSCE, the hands-on clinical exam). The most interesting part wasn't getting the patient to talk, but **measuring that it behaves the way it should**.
