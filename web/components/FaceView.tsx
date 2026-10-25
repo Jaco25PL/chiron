@@ -2,8 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
-import { api, type Caso, type Turno } from "@/lib/api";
+import { type Caso, type Turno } from "@/lib/api";
+import type { ConVoz } from "@/lib/useConsulta";
 import { ASCII_FACE } from "@/lib/ascii-face";
 import { palabras, useEscucha, useVozPaciente } from "@/lib/voz";
 import { CameraOff, Close, Mic, Phone, PhoneDown, Stethoscope } from "./icons";
@@ -30,7 +30,6 @@ function useRetrato(caseId: string | undefined) {
  *  interrupts them. Exams and studies are asked for by voice too. For now the face is an ASCII portrait. */
 export function FaceView({
   caso,
-  sessionId,
   turnos,
   pensando,
   listo,
@@ -38,11 +37,10 @@ export function FaceView({
   onEnd,
 }: {
   caso: Caso | null;
-  sessionId: string | null;
   turnos: Turno[];
   pensando: boolean;
   listo: boolean;
-  onSend: (t: string) => void;
+  onSend: (t: string, voz: ConVoz) => void;
   onEnd: () => void;
 }) {
   const router = useRouter();
@@ -54,7 +52,7 @@ export function FaceView({
   const { arte, cols, filas } = useRetrato(caso?.id);
 
   const voz = useVozPaciente();
-  const { callar, reproducir } = voz;
+  const { callar, hablar } = voz;
 
   // the patient's voice can come back through the speakers: what is heard while (or right after)
   // they speak, made of their own words, is echo and neither interrupts nor gets sent
@@ -71,6 +69,25 @@ export function FaceView({
     return !oidas.length || oidas.filter((w) => dichas.has(w)).length / oidas.length >= 0.6;
   }, []);
 
+  // each phrase goes with its reply's voice: the text arrives first, then the audio streams in and
+  // plays as it arrives. Only the patient speaks; the docente's reports stay on the card.
+  const decir = useCallback(
+    (t: string) => {
+      let voces: ReturnType<typeof hablar> | null = null;
+      onSend(t, {
+        alResponder: (replies) => {
+          const paciente = replies.findLast((r) => r.role === "paciente");
+          if (!paciente) return;
+          sonando.current.texto = paciente.text; // before the audio, so its echo is recognized
+          voces = hablar();
+        },
+        alAudio: (pcm) => voces?.encolar(pcm),
+        alTerminar: () => voces?.terminar(),
+      });
+    },
+    [onSend, hablar],
+  );
+
   // a phrase finished while the patient is still "thinking" waits and goes right after
   const pendiente = useRef("");
   const ocupado = useRef(pensando);
@@ -79,14 +96,14 @@ export function FaceView({
     if (!pensando && pendiente.current) {
       const t = pendiente.current;
       pendiente.current = "";
-      onSend(t);
+      decir(t);
     }
-  }, [pensando, onSend]);
+  }, [pensando, decir]);
 
   const escucha = useEscucha({
     onFrase: (t) => {
       if (ocupado.current) pendiente.current = `${pendiente.current} ${t}`.trim();
-      else onSend(t);
+      else decir(t);
     },
     onVoz: (t) => {
       if (sonando.current.hablando && palabras(t).length >= 2) callar(); // the student talks over the patient
@@ -94,19 +111,7 @@ export function FaceView({
     esEco,
   });
 
-  // speak each new patient reply during the call (not the ones from before it started)
   const idxPaciente = ultimoPaciente ? turnos.lastIndexOf(ultimoPaciente) : -1;
-  const hablado = useRef(idxPaciente);
-  useEffect(() => {
-    if (idxPaciente <= hablado.current || !sessionId || !ultimoPaciente) return;
-    hablado.current = idxPaciente;
-    if (!escucha.activa) return;
-    sonando.current.texto = ultimoPaciente.text;
-    api
-      .voz(sessionId)
-      .then(reproducir)
-      .catch(() => toast.error("No se pudo reproducir la voz del paciente; seguí con los subtítulos.", { id: "voz" }));
-  }, [idxPaciente, sessionId, ultimoPaciente, escucha.activa, reproducir]);
 
   const contestar = () => {
     voz.desbloquear(); // inside the tap: iOS only allows audio after a gesture
@@ -115,7 +120,8 @@ export function FaceView({
   const cortar = () => {
     escucha.colgar();
     callar();
-    if (turnos.length) onEnd(); // ends the consultation and shows the summary
+    if (turnos.length)
+      onEnd(); // ends the consultation and shows the summary
     else router.push("/"); // declined before saying anything
   };
 
@@ -175,7 +181,11 @@ export function FaceView({
               <span className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-accent">
                 <Stethoscope width={14} height={14} /> Docente
               </span>
-              <button aria-label="Cerrar informe" onClick={() => setCerrado(ultimoIdx)} className="press text-ink-3 hover:text-ink">
+              <button
+                aria-label="Cerrar informe"
+                onClick={() => setCerrado(ultimoIdx)}
+                className="press text-ink-3 hover:text-ink"
+              >
                 <Close width={16} height={16} />
               </button>
             </div>
@@ -205,7 +215,9 @@ export function FaceView({
                 {escucha.parcial}
               </p>
             ) : pensando ? (
-              <span className="rounded-full bg-black/55 px-4 py-2 text-[13px] text-ink-2 backdrop-blur-md">{nombre.split(" ")[0]} está pensando…</span>
+              <span className="rounded-full bg-black/55 px-4 py-2 text-[13px] text-ink-2 backdrop-blur-md">
+                {nombre.split(" ")[0]} está pensando…
+              </span>
             ) : ultimoPaciente ? (
               <p
                 key={idxPaciente}
@@ -214,7 +226,9 @@ export function FaceView({
                 {ultimoPaciente.text}
               </p>
             ) : (
-              <span className="rounded-full bg-black/55 px-4 py-2 text-[13px] text-ink-2 backdrop-blur-md">Conectado · saludá para empezar</span>
+              <span className="rounded-full bg-black/55 px-4 py-2 text-[13px] text-ink-2 backdrop-blur-md">
+                Conectado · saludá para empezar
+              </span>
             )}
           </div>
         )}

@@ -6,6 +6,8 @@ With CHIRON_FAKE=1 it uses api/fake_session.py (no LLM). Otherwise it uses agent
 and, if that can't be imported, falls back to the fake with a console warning.
 """
 
+import base64
+import json
 import logging
 import os
 import sys
@@ -18,7 +20,7 @@ if str(ROOT) not in sys.path:
 
 from fastapi import Depends, FastAPI, Query, Request  # noqa: E402
 from fastapi.exceptions import RequestValidationError  # noqa: E402
-from fastapi.responses import JSONResponse, Response  # noqa: E402
+from fastapi.responses import JSONResponse, StreamingResponse  # noqa: E402
 from fastapi.staticfiles import StaticFiles  # noqa: E402
 from pydantic import BaseModel  # noqa: E402
 
@@ -123,16 +125,29 @@ def create_session(body: NewSession, user: dict = Depends(current_user)):
 
 
 @app.post("/api/sessions/{session_id}/messages")
-def send_message(session_id: str, body: Message, user: dict = Depends(current_user)):
+def send_message(session_id: str, body: Message, voz: bool = False, user: dict = Depends(current_user)):
+    """With voz=1 (the face-to-face call) the reply is streamed as NDJSON together with the patient's voice."""
     if not body.text.strip():
         raise AgentError(400, "Mensaje vacío")
-    return _call(session.send, session_id, body.text, user)
+    result = _call(session.send, session_id, body.text, user)
+    if not voz:
+        return result
+    return StreamingResponse(_with_voice(session_id, user, result), media_type="application/x-ndjson")
 
 
-@app.post("/api/sessions/{session_id}/voz")
-def speak(session_id: str, user: dict = Depends(current_user)):
-    """The patient's last reply as audio. Only the owner's own consultation, never arbitrary text."""
-    return Response(_call(session.speak, session_id, user), media_type="audio/wav")
+def _with_voice(session_id: str, user: dict, result: dict):
+    """One line per event: the reply first (shown at once), then the patient's voice as base64 PCM
+    (24 kHz, 16-bit mono) while Gemini generates it, so it starts playing with the first chunk instead
+    of after a second request and the whole file. Only the reply just generated is ever spoken."""
+    yield json.dumps({"tipo": "respuesta", **result}) + "\n"
+    if result["replies"] and result["replies"][-1]["role"] == "paciente":
+        try:
+            for pcm in session.speak(session_id, user):
+                yield json.dumps({"tipo": "audio", "pcm": base64.b64encode(pcm).decode()}) + "\n"
+        except Exception as e:  # noqa: BLE001  the text already arrived: the call goes on with subtitles
+            traceback.print_exc()
+            yield json.dumps({"tipo": "error", "error": f"{type(e).__name__}: {e}"}) + "\n"
+    yield json.dumps({"tipo": "fin"}) + "\n"
 
 
 @app.get("/api/sessions/{session_id}")

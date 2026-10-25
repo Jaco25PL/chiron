@@ -7,6 +7,7 @@ sampler of Gemini voices (flash-lite and flash sounded the same; lite is faster)
 
 import io
 import wave
+from collections.abc import Iterator
 
 VOICES = {"femenino": "Sulafat", "masculino": "Schedar"}
 SAMPLE_RATE = 24000  # Gemini TTS audio is 16-bit mono PCM at 24 kHz
@@ -39,9 +40,18 @@ def to_pcm(audio: bytes) -> bytes:
         return w.readframes(w.getnframes())
 
 
-def synthesize(text: str, case: dict) -> bytes:
-    """WAV audio of `text` spoken as the case's patient. Rotates keys and models on quota errors."""
-    # imported here so the fake backend (CI E2E installs only fastapi + uvicorn) can use to_wav
+def _audio(chunks) -> Iterator[bytes]:
+    for chunk in chunks:
+        content = chunk.candidates[0].content if chunk.candidates else None
+        for part in content.parts if content and content.parts else []:
+            if part.inline_data and part.inline_data.data:
+                yield to_pcm(part.inline_data.data)
+
+
+def stream(text: str, case: dict) -> Iterator[bytes]:
+    """PCM chunks of `text` spoken as the case's patient, as Gemini generates them (faster than they
+    play: the first one arrives in about a second). Rotates keys and models on quota errors."""
+    # imported here so the fake backend (CI E2E installs only fastapi + uvicorn) can import this module
     from google import genai
     from google.genai import types
 
@@ -56,12 +66,14 @@ def synthesize(text: str, case: dict) -> bytes:
     contents = [types.Content(role="user", parts=[
         types.Part(text=text, speech_metadata=types.SpeechMetadata(style=style(case)))])]
 
-    def call(key: str, model: str) -> bytes:
+    def call(key: str, model: str):
         client = genai.Client(api_key=key)  # keep the reference: an inline client is closed before the call
-        res = client.models.generate_content(model=model, contents=contents, config=config)
-        pcm = b"".join(to_pcm(p.inline_data.data) for p in res.candidates[0].content.parts if p.inline_data)
-        if not pcm:
+        audio = _audio(client.models.generate_content_stream(model=model, contents=contents, config=config))
+        first = next(audio, None)  # quota errors surface here, where with_rotation can still switch keys
+        if first is None:
             raise RuntimeError(f"{model} returned no audio")
-        return pcm
+        return client, first, audio
 
-    return to_wav(with_rotation(call, "tts", retries=0))
+    _client, first, audio = with_rotation(call, "tts", retries=0)
+    yield first
+    yield from audio

@@ -4,6 +4,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { api, type Caso, type Resumen, type Turno } from "./api";
 
+/** How the face-to-face call hears back: the reply's text, then the patient's voice in chunks. */
+export type ConVoz = {
+  alResponder: (replies: Turno[]) => void;
+  alAudio: (pcm: ArrayBuffer) => void;
+  alTerminar: () => void;
+};
+
 export const DURACION_S = 7 * 60;
 
 /** Consultation state: backend session, transcript, timer and closing. */
@@ -31,18 +38,33 @@ export function useConsulta(caseId: string, modo: "chat" | "cara" = "chat") {
   }, [caseId]);
 
   const enviar = useCallback(
-    async (texto: string) => {
+    async (texto: string, voz?: ConVoz) => {
       const text = texto.trim();
       if (!text || !sessionId || pensando) return;
       setInicio((t) => t ?? Date.now());
       setTurnos((ts) => [...ts, { role: "estudiante", text }]);
       setPensando(true);
+      let respondio = false;
       try {
-        const r = await api.enviar(sessionId, text);
-        setTurnos((ts) => [...ts, ...r.replies]);
+        if (voz) {
+          await api.enviarConVoz(sessionId, text, {
+            onRespuesta: (r) => {
+              respondio = true;
+              setTurnos((ts) => [...ts, ...r.replies]);
+              setPensando(false); // the student may talk again while the patient's voice is still arriving
+              voz.alResponder(r.replies);
+            },
+            onAudio: voz.alAudio,
+          });
+        } else {
+          const r = await api.enviar(sessionId, text);
+          setTurnos((ts) => [...ts, ...r.replies]);
+        }
       } catch (e) {
-        toast.error((e as Error).message);
+        if (!respondio) toast.error((e as Error).message);
+        else toast.error("No se pudo reproducir la voz del paciente; seguí con los subtítulos.", { id: "voz" });
       } finally {
+        voz?.alTerminar();
         setPensando(false);
       }
     },

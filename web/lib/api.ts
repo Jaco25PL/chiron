@@ -61,11 +61,42 @@ export const api = {
   enviar: (sessionId: string, text: string) =>
     call<Respuesta>(`/api/sessions/${sessionId}/messages`, { method: "POST", body: JSON.stringify({ text }) }),
   terminar: (sessionId: string) => call<Resumen>(`/api/sessions/${sessionId}/finish`, { method: "POST" }),
-  /** The patient's last reply as WAV audio. */
-  voz: async (sessionId: string) => {
-    const res = await fetch(`/api/sessions/${sessionId}/voz`, { method: "POST" });
-    if (!res.ok) throw new Error(`Voz: error ${res.status}`);
-    return res.arrayBuffer();
+  /** Face-to-face call: the reply arrives first (onRespuesta) and then the patient's voice, as 24 kHz
+   *  16-bit PCM chunks while it is generated (onAudio). Resolves when the voice has fully arrived. */
+  enviarConVoz: async (
+    sessionId: string,
+    text: string,
+    { onRespuesta, onAudio }: { onRespuesta: (r: Respuesta) => void; onAudio: (pcm: ArrayBuffer) => void },
+  ) => {
+    let res: Response;
+    try {
+      res = await fetch(`/api/sessions/${sessionId}/messages?voz=1`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+    } catch {
+      throw new Error(SIN_BACKEND);
+    }
+    if (!res.ok || !res.body) {
+      const body = await res.json().catch(() => null);
+      throw new Error(body?.error ?? SIN_BACKEND);
+    }
+    const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
+    let buf = "";
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += value;
+      let i;
+      while ((i = buf.indexOf("\n")) >= 0) {
+        const linea = JSON.parse(buf.slice(0, i));
+        buf = buf.slice(i + 1);
+        if (linea.tipo === "respuesta") onRespuesta(linea);
+        else if (linea.tipo === "audio") onAudio(Uint8Array.from(atob(linea.pcm), (c) => c.charCodeAt(0)).buffer);
+        else if (linea.tipo === "error") throw new Error(`Voz: ${linea.error}`);
+      }
+    }
   },
 };
 

@@ -72,7 +72,6 @@ export function Consulta({ caseId, modoInicial }: { caseId: string; modoInicial:
       ) : (
         <FaceView
           caso={c.caso}
-          sessionId={c.sessionId}
           turnos={c.turnos}
           pensando={c.pensando}
           listo={c.listo}

@@ -106,14 +106,27 @@ def test_frontend_servido():
 
 # --- voice (face-to-face mode) ---------------------------------------------------------
 
-def test_voice_speaks_the_last_patient_reply(case_id):
+def test_call_streams_the_reply_and_then_the_voice(case_id):
+    import base64
+    import json
+
     sid = client.post("/api/sessions", json={"case_id": case_id}).json()["session_id"]
-    assert client.post(f"/api/sessions/{sid}/voz").status_code == 404  # nothing said yet
-    client.post(f"/api/sessions/{sid}/messages", json={"text": "Hola, buenas tardes"})
-    r = client.post(f"/api/sessions/{sid}/voz")
-    assert r.status_code == 200
-    assert r.headers["content-type"] == "audio/wav"
-    assert r.content[:4] == b"RIFF" and r.content[8:12] == b"WAVE"
+    r = client.post(f"/api/sessions/{sid}/messages", params={"voz": 1}, json={"text": "Hola, buenas tardes"})
+    assert r.status_code == 200 and r.headers["content-type"] == "application/x-ndjson"
+    lines = [json.loads(line) for line in r.text.splitlines()]
+    assert [x["tipo"] for x in lines] == ["respuesta", "audio", "audio", "fin"]  # text first, then the voice
+    assert lines[0]["replies"][0]["role"] == "paciente"
+    assert len(base64.b64decode(lines[1]["pcm"])) % 2 == 0  # whole 16-bit samples
+
+    # the docente's reports are read, not spoken
+    r = client.post(f"/api/sessions/{sid}/messages", params={"voz": 1}, json={"text": "Le tomo la presión arterial"})
+    assert [json.loads(x)["tipo"] for x in r.text.splitlines()] == ["respuesta", "fin"]
+
+
+def test_chat_replies_stay_plain_json(case_id):
+    sid = client.post("/api/sessions", json={"case_id": case_id}).json()["session_id"]
+    r = client.post(f"/api/sessions/{sid}/messages", json={"text": "Hola"})
+    assert r.headers["content-type"] == "application/json" and r.json()["replies"]
 
 
 def test_voice_style_and_choice_stay_on_the_server():

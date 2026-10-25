@@ -27,9 +27,13 @@ test("a full consultation, from case selection to summary", async ({ page, conte
   await card.getByRole("link", { name: "Chat" }).click();
   await expect(page).toHaveURL(/\/consulta\/[0-9a-f]{10}\?/); // opaque id, not "mpna-disnea-icc"
 
+  // Enter is ignored until the session exists (it's created on load): retry until the box empties
   const send = async (text: string) => {
     await page.locator("#mensaje").fill(text);
-    await page.keyboard.press("Enter");
+    await expect(async () => {
+      await page.locator("#mensaje").press("Enter");
+      await expect(page.locator("#mensaje")).toHaveValue("", { timeout: 500 });
+    }).toPass();
   };
 
   // 2. greet and interview: the patient answers only what is asked
@@ -63,7 +67,11 @@ test("a full consultation, from case selection to summary", async ({ page, conte
   await expect(page.locator("body")).not.toContainText(caso.diagnostico.principal);
 });
 
-test("random patient: the server picks the case and the student only learns name and sex", async ({ page, context, baseURL }) => {
+test("random patient: the server picks the case and the student only learns name and sex", async ({
+  page,
+  context,
+  baseURL,
+}) => {
   await signInAs(context, baseURL!);
   await page.goto("/");
   const card = page.locator("article").filter({ hasText: "Paciente aleatorio" });
@@ -79,12 +87,19 @@ test("random patient: the server picks the case and the student only learns name
   }
 });
 
-
-test("face to face is a call: answer, talk hands-free, the patient speaks, hang up", async ({ page, context, baseURL }) => {
+test("face to face is a call: answer, talk hands-free, the patient speaks, hang up", async ({
+  page,
+  context,
+  baseURL,
+}) => {
   await signInAs(context, baseURL!);
   await microfonoFalso(context);
-  const voces: number[] = [];
-  page.on("response", (r) => r.url().endsWith("/voz") && voces.push(r.status()));
+  // every phrase goes as one streamed request that brings the reply and then the voice
+  const llamadas: string[] = [];
+  page.on(
+    "response",
+    (r) => r.url().includes("/messages?voz=1") && llamadas.push(`${r.status()} ${r.headers()["content-type"]}`),
+  );
   await page.goto("/consulta/aleatorio?modo=cara");
 
   // like a phone call: two buttons, no text box and no shortcut chips
@@ -97,16 +112,16 @@ test("face to face is a call: answer, talk hands-free, the patient speaks, hang 
   await expect(page.getByRole("button", { name: "Contestar" })).toHaveCount(0);
   await expect(page.getByText("Conectado · saludá para empezar")).toBeVisible();
 
-  // a phrase is sent when the student pauses; the reply is spoken (the fake backend returns a silent WAV)
+  // a phrase is sent when the student pauses; the reply is spoken (the fake backend streams silence)
   await decir(page, "Hola, buenas tardes");
   await expect(page.getByText("Buenas, doctor.")).toBeVisible();
-  await expect.poll(() => voces).toEqual([200]);
+  await expect.poll(() => llamadas).toEqual(["200 application/x-ndjson"]);
   await expect(page.getByText("No se pudo reproducir")).toHaveCount(0);
 
-  // the exam is asked for out loud too; the teacher answers in writing, the patient's voice isn't used
+  // the exam is asked for out loud too; the teacher answers in writing (the backend sends no audio for it)
   await decir(page, "Le tomo la presión arterial");
   await expect(page.getByText("Docente")).toBeVisible();
-  expect(voces).toEqual([200]);
+  await expect(page.getByText("No se pudo reproducir")).toHaveCount(0);
 
   await page.getByRole("button", { name: "Cortar" }).click();
   await expect(page.getByRole("dialog").getByText("Consulta terminada")).toBeVisible();

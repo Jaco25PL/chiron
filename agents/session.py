@@ -9,7 +9,7 @@ Contract (don't change it without updating api/):
         "debug": {"intent": str, "facts": [ids], "exams": [ids], "studies": [str],
                   "model": str, "latency_ms": int}
     }
-    speak(session_id, user=None) -> bytes                          # WAV of the patient's last reply
+    speak(session_id, user=None) -> Iterator[bytes]                # the patient's last reply as 24 kHz PCM chunks
     finish(session_id, user=None) -> get_session(...) with finished=True
     get_session(session_id, user=None) -> {
         "case": {id, materia, paciente: {nombre, sexo}}, "transcript": [{"role": "estudiante" | "paciente" | "docente", "text": str}],

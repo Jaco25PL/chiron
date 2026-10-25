@@ -10,6 +10,7 @@ it's small, and that's more reliable.
 
 import time
 import uuid
+from collections.abc import Iterator
 from functools import lru_cache
 from operator import add
 from pathlib import Path
@@ -271,15 +272,16 @@ def send(session_id: str, text: str, user: User | None = None) -> dict:
     }
 
 
-def speak(session_id: str, user: User | None = None) -> bytes:
-    """The patient's last reply as WAV audio, in the case's voice (face-to-face mode)."""
-    from llm.tts import synthesize
+def speak(session_id: str, user: User | None = None) -> Iterator[bytes]:
+    """The patient's last reply spoken in the case's voice (face-to-face mode), as PCM chunks while
+    they are generated. Checks the owner before returning: only the audio itself is lazy."""
+    from llm.tts import stream
 
     s = _state(session_id, user)
     replies = [t["text"] for t in s.get("transcript", []) if t["role"] == "paciente"]
     if not replies:
         raise KeyError("no patient reply yet")
-    return synthesize(replies[-1], load_case(s["case_id"]))
+    return stream(replies[-1], load_case(s["case_id"]))
 
 
 def finish(session_id: str, user: User | None = None) -> dict:

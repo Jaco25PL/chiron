@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 // Voice for face-to-face mode. Speech to text runs in the browser (Web Speech API: free, no quota);
-// the patient's voice comes from the backend (/api/sessions/{id}/voz, Gemini TTS).
+// the patient's voice streams back with the reply (POST /api/sessions/{id}/messages?voz=1, Gemini TTS).
 
 // The Web Speech API isn't in TypeScript's DOM types yet: the minimal surface we use.
 type Reconocimiento = {
@@ -136,11 +136,18 @@ export function useEscucha({ onFrase, onVoz, esEco }: Escucha) {
   return { soportado, activa, parcial, contestar, colgar };
 }
 
-/** Plays the patient's audio through one AudioContext, with an analyser the avatar can read for lip-sync. */
+const PCM_RATE = 24000; // Gemini TTS: 16-bit mono
+
+/** Plays the patient's voice as it streams in, through one AudioContext, with an analyser the avatar
+ *  can read for lip-sync. Each chunk is scheduled right after the previous one, so it plays seamlessly
+ *  while the rest is still being generated. */
 export function useVozPaciente() {
   const ctx = useRef<AudioContext | null>(null);
   const analyser = useRef<AnalyserNode | null>(null);
-  const fuente = useRef<AudioBufferSourceNode | null>(null);
+  const fuentes = useRef(new Set<AudioBufferSourceNode>());
+  const hasta = useRef(0); // when the audio queued so far ends (AudioContext time)
+  const abierta = useRef(false); // more chunks of this utterance may still arrive
+  const generacion = useRef(0); // bumped by callar(): chunks of an interrupted utterance are dropped
   const [hablando, setHablando] = useState(false);
 
   /** Creates or resumes the AudioContext. Call it from a tap or key press: iOS only allows audio after a gesture. */
@@ -157,34 +164,51 @@ export function useVozPaciente() {
   }, []);
 
   const callar = useCallback(() => {
-    fuente.current?.stop();
-    fuente.current = null;
+    generacion.current++;
+    abierta.current = false;
+    for (const f of fuentes.current) f.stop();
+    fuentes.current.clear();
+    hasta.current = 0;
     setHablando(false);
   }, []);
 
-  const reproducir = useCallback(
-    async (wav: ArrayBuffer) => {
-      desbloquear();
-      const c = ctx.current!;
-      const buffer = await c.decodeAudioData(wav);
-      callar();
-      const src = c.createBufferSource();
-      src.buffer = buffer;
-      src.connect(analyser.current!);
-      src.onended = () => {
-        if (fuente.current === src) {
-          fuente.current = null;
-          setHablando(false);
-        }
-      };
-      fuente.current = src;
-      setHablando(true);
-      src.start();
-    },
-    [desbloquear, callar],
-  );
+  /** Starts a new utterance (cutting the current one). Returns where its chunks go and how it ends. */
+  const hablar = useCallback(() => {
+    callar();
+    desbloquear();
+    const gen = generacion.current;
+    abierta.current = true;
+    const vigente = () => gen === generacion.current;
+    return {
+      encolar(pcm: ArrayBuffer) {
+        if (!vigente()) return;
+        const c = ctx.current!;
+        const muestras = new Int16Array(pcm);
+        const buffer = c.createBuffer(1, muestras.length, PCM_RATE);
+        const canal = buffer.getChannelData(0);
+        for (let i = 0; i < muestras.length; i++) canal[i] = muestras[i] / 32768;
+        const src = c.createBufferSource();
+        src.buffer = buffer;
+        src.connect(analyser.current!);
+        const inicio = Math.max(c.currentTime + 0.05, hasta.current);
+        src.start(inicio);
+        hasta.current = inicio + buffer.duration;
+        fuentes.current.add(src);
+        src.onended = () => {
+          fuentes.current.delete(src);
+          if (vigente() && !fuentes.current.size && !abierta.current) setHablando(false);
+        };
+        setHablando(true);
+      },
+      terminar() {
+        if (!vigente()) return;
+        abierta.current = false;
+        if (!fuentes.current.size) setHablando(false);
+      },
+    };
+  }, [callar, desbloquear]);
 
   useEffect(() => () => void ctx.current?.close(), []);
 
-  return { hablando, analyser, desbloquear, reproducir, callar };
+  return { hablando, analyser, desbloquear, hablar, callar };
 }

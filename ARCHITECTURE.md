@@ -128,20 +128,21 @@ sequenceDiagram
     participant G as LangGraph
     participant T as Gemini TTS
     B->>B: Web Speech API (es-UY) turns the student's speech into text
-    B->>A: POST /messages {text}  (same path as typing)
+    B->>A: POST /messages?voz=1 {text}  (same graph as typing)
     A->>G: router → patient
-    A-->>B: patient reply (caption)
-    B->>A: POST /sessions/{id}/voz
-    A->>T: last patient reply + voice by sex + style from the case
-    T-->>A: PCM 24 kHz
-    A-->>B: WAV → AudioContext (+ analyser for the future avatar's lip-sync)
+    A-->>B: line 1: patient reply (caption)
+    A->>T: that reply + voice by sex + style from the case (streamed)
+    loop while Gemini generates
+        T-->>A: PCM chunk (24 kHz)
+        A-->>B: audio line → scheduled on the AudioContext (+ analyser for lip-sync)
+    end
 ```
 
 - **Why not Gemini Live**, which would be faster: it writes its own replies, so it would bypass the LangGraph patient and everything the evals measure (no diagnosis leaks, one fact per question). Here voice is only input and output; the patient's words still come from the same graph.
 - **It's a call, not voice messages:** like the voice mode of ChatGPT or Claude, there are only two buttons, answer and hang up. Once answered the microphone stays open; the browser's end-of-phrase detection is the turn-taking, and talking over the patient cuts their audio. Exams and studies are asked for out loud too. When the patient's voice comes back through the speakers, phrases made of the patient's own words (while they talk or 1.5 s after) are treated as echo: they neither interrupt nor get sent.
 - **Speech to text in the browser:** free, no quota, near-zero latency (Chrome, Edge, Android, Safari). Firefox has no dictation, so the call can't be answered there and the Chat mode remains.
-- **The voice endpoint only speaks the consultation's last patient reply**, for its owner. It never takes arbitrary text, so it can't be used as a free TTS service. The voice (Sulafat or Schedar, chosen by ear) is picked by sex, and the style ("mujer uruguaya de 61 años, de Montevideo, acento rioplatense…") is built from the case on the server, so age never reaches the browser. The style goes in `speech_metadata.style`: put inside the text, the model read it aloud.
-- **Latency:** the reply text appears first and the audio follows ~1–3 s later. Streaming the audio is the next improvement.
+- **Only the reply just generated is spoken**, in the same request, for the consultation's owner. There is no endpoint that takes text to speak, so it can't be used as a free TTS service. The voice (Sulafat or Schedar, chosen by ear) is picked by sex, and the style ("mujer uruguaya de 61 años, de Montevideo, acento rioplatense…") is built from the case on the server, so age never reaches the browser. The style goes in `speech_metadata.style`: put inside the text, the model read it aloud.
+- **Latency:** one streamed response (NDJSON) brings the reply and then the voice in chunks as Gemini generates them, so the patient starts talking with the first chunk. It used to be a second request that waited for the whole WAV; that cut the wait from ~10 s to ~5 s (measured with `web/tests/e2e/latencia.spec.ts`, see [FINDINGS](docs/FINDINGS.md)). Each turn's per-stage timings are stored in `turns.timings`.
 
 ## Deployment: why Vercel + Neon
 
