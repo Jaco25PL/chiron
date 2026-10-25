@@ -2,7 +2,13 @@
 # CAREFUL: Vercel applies this repo-root file to EVERY project built from this repo, including
 # the frontend (root web/). Never list web/ here; the backend bundle drops it via vercel.json.
 frontend/
-data/
+# data/: only the grillas ship (agents/grilla.py grades against them); course notes, audio and chunks stay out
+data/ecoe/audios/
+data/ecoe/*/clean/
+data/ecoe/*/raw/
+data/ecoe/*/chunks.jsonl
+data/ecoe/*/sources.json
+data/ecoe/contexto-ecoe.md
 docs/
 evals/
 tests/
