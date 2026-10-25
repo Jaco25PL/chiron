@@ -1,11 +1,11 @@
-"""Grafo del paciente virtual (LangGraph).
+"""Virtual patient graph (LangGraph).
 
     START -> router -> paciente | examen | paraclinica | diagnostico | cierre -> END
 
-Cada mensaje del estudiante es una invocación del grafo. El estado de la sesión
-(transcripción, hechos revelados, exámenes y estudios pedidos) vive en el
-checkpointer, con un thread por sesión. El caso entra entero en el prompt del
-paciente (sin RAG): es chico y así es más confiable.
+Each student message is one graph invocation. Session state (transcript,
+revealed facts, exams done and studies ordered) lives in the checkpointer, with
+one thread per session. The whole case goes into the patient prompt (no RAG):
+it's small, and that's more reliable.
 """
 
 import json
@@ -25,12 +25,12 @@ from agents import prompts
 from llm.gemini import MODELS, chat_model
 
 ROOT = Path(__file__).resolve().parent.parent
-HISTORY_TURNS = 16  # mensajes previos que ve el paciente
+HISTORY_TURNS = 16  # previous messages the patient sees
 
 Intent = Literal["anamnesis", "examen", "paraclinica", "diagnostico", "cierre"]
 
 
-# --- salidas estructuradas ---------------------------------------------------
+# --- structured outputs ------------------------------------------------------
 
 class Route(BaseModel):
     intent: Intent
@@ -51,7 +51,7 @@ class LabPick(BaseModel):
     no_disponible: list[str] = Field(default_factory=list)
 
 
-# --- estado --------------------------------------------------------------------
+# --- state ---------------------------------------------------------------------
 
 class Turn(TypedDict):
     role: Literal["estudiante", "paciente", "docente"]
@@ -70,7 +70,7 @@ class State(TypedDict, total=False):
     debug: dict
 
 
-# --- casos -------------------------------------------------------------------------
+# --- cases -------------------------------------------------------------------------
 
 @lru_cache
 def load_case(case_id: str) -> dict:
@@ -83,7 +83,7 @@ def list_cases(materia: str = "mpna") -> list[dict]:
     return [prompts.public_case(load_case(p.stem)) for p in paths]
 
 
-# --- modelos (se crean una vez) ---------------------------------------------------
+# --- models (created once) --------------------------------------------------------
 
 @lru_cache
 def models():
@@ -99,7 +99,7 @@ def last_student(state: State) -> str:
     return next(t["text"] for t in reversed(state["transcript"]) if t["role"] == "estudiante")
 
 
-# --- nodos -------------------------------------------------------------------------
+# --- nodes -------------------------------------------------------------------------
 
 def router(state: State) -> dict:
     recent = "\n".join(f"{t['role']}: {t['text']}" for t in state["transcript"][-6:])
@@ -117,7 +117,7 @@ def paciente(state: State) -> dict:
             history.append(HumanMessage(t["text"]))
         elif t["role"] == "paciente":
             history.append(AIMessage(t["text"]))
-        else:  # lo que informa el docente también lo "vivió" el paciente
+        else:  # what the teacher reports was also "experienced" by the patient
             history.append(HumanMessage(f"[El docente informa: {t['text']}]"))
     reply = models()["patient"].invoke([SystemMessage(prompts.patient_prompt(case)), *history])
     valid = {h["id"] for h in case["anamnesis"]}
@@ -189,14 +189,14 @@ def build_graph():
 GRAPH = build_graph()
 
 
-# --- interfaz pública (ver agents/session.py) --------------------------------------
+# --- public interface (see agents/session.py) --------------------------------------
 
 def _config(session_id: str) -> dict:
     return {"configurable": {"thread_id": session_id}}
 
 
 def new_session(case_id: str) -> str:
-    load_case(case_id)  # falla temprano si el caso no existe
+    load_case(case_id)  # fail early if the case doesn't exist
     session_id = uuid.uuid4().hex[:12]
     GRAPH.update_state(_config(session_id), {"case_id": case_id, "diagnosis_proposed": None, "finished": False})
     return session_id
@@ -206,7 +206,7 @@ def send(session_id: str, text: str) -> dict:
     config = _config(session_id)
     current = GRAPH.get_state(config).values
     before = len(current.get("transcript", []))
-    # nombre, tags y metadata para encontrar el turno en LangSmith
+    # name, tags and metadata to find the turn in LangSmith
     config |= {
         "run_name": f"turno {before // 2 + 1}",
         "tags": [current["case_id"]],
@@ -229,7 +229,7 @@ def send(session_id: str, text: str) -> dict:
 
 
 def finish(session_id: str) -> dict:
-    """Cierra la consulta (botón "Terminar consulta") y devuelve el estado final."""
+    """Ends the consultation ("Terminar consulta" button) and returns the final state."""
     get_session(session_id)
     GRAPH.update_state(_config(session_id), {"finished": True})
     return get_session(session_id)

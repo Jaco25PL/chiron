@@ -1,4 +1,5 @@
-"""Prompts del simulador. Todo en español: el paciente, el docente y el router."""
+"""Simulator prompts. All in Spanish, since the student interacts in Spanish: the patient,
+the docente (teacher/examiner) and the router."""
 
 import json
 
@@ -94,7 +95,7 @@ VITAL_NAMES = {
 
 
 def exam_options(case: dict) -> list[dict]:
-    """Hallazgos del examen físico más los signos vitales como opciones elegibles."""
+    """Physical exam findings plus vital signs, as selectable options."""
     vitals = [
         {"id": f"sv-{k}", "maniobra": VITAL_NAMES.get(k, k.replace("_", " ").capitalize()), "hallazgo": str(v)}
         for k, v in case["signos_vitales"].items()
@@ -111,7 +112,7 @@ def labs_prompt(case: dict) -> str:
 
 
 def public_case(case: dict) -> dict:
-    """Lo que el estudiante puede ver del caso (sin diagnóstico ni hallazgos)."""
+    """What the student can see of the case (no diagnosis or findings)."""
     p = case["paciente"]
     return {
         "id": case["id"],

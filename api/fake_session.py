@@ -1,8 +1,8 @@
-"""Implementación falsa del contrato de agents/session.py, para probar la API y el front
-sin LLM. Se activa con CHIRON_FAKE=1.
+"""Fake implementation of the agents/session.py contract, for testing the API and the
+frontend without an LLM. Enabled with CHIRON_FAKE=1.
 
-Lee los casos reales de cases/<materia>/*.json y responde con matching de palabras clave
-(sin Gemini): suficiente para ejercitar la UI, no para evaluar el agente.
+Reads the real cases from cases/<materia>/*.json and replies via keyword matching
+(no Gemini): enough to exercise the UI, not to evaluate the agent.
 """
 
 import json
@@ -40,7 +40,7 @@ def _tokens(s: str) -> set[str]:
 def _load_case(case_id: str) -> dict:
     for path in CASES_DIR.glob(f"*/{case_id}.json"):
         return json.loads(path.read_text(encoding="utf-8"))
-    raise KeyError(f"Caso no encontrado: {case_id}")
+    raise KeyError(f"Case not found: {case_id}")
 
 
 def list_cases(materia: str) -> list[dict]:

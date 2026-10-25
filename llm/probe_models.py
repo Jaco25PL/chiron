@@ -1,8 +1,8 @@
-"""Prueba qué modelos de Gemini andan con cada key y cuánto tardan.
+"""Checks which Gemini models work with each key and how long they take.
 
-Uso:
-    python llm/probe_models.py           # modelos de MODELS + candidatos nuevos
-    python llm/probe_models.py --all     # todo lo que lista la API (más lento)
+Usage:
+    python llm/probe_models.py           # models in MODELS + new candidates
+    python llm/probe_models.py --all     # everything the API lists (slower)
 """
 
 import sys
@@ -24,9 +24,9 @@ def probe(key: str, model: str) -> str:
         else:
             client.models.generate_content(model=model, contents="Respondé solo: OK")
         return f"OK {time.time() - start:5.1f}s"
-    except Exception as exc:  # noqa: BLE001 - queremos ver cualquier falla
+    except Exception as exc:  # noqa: BLE001 - we want to see any failure
         code = getattr(exc, "code", "?")
-        return f"FAIL {code}" + (" sin cuota" if "limit: 0" in str(exc) else "")
+        return f"FAIL {code}" + (" no quota" if "limit: 0" in str(exc) else "")
 
 
 def main():
@@ -47,7 +47,7 @@ def main():
 
     missing = configured - listed
     if missing:
-        print("Configurados pero ya no listados:", ", ".join(sorted(missing)))
+        print("Configured but no longer listed:", ", ".join(sorted(missing)))
 
     with ThreadPoolExecutor(8) as ex:
         results = list(ex.map(lambda a: probe(*a), [(k, m) for m in models for k in keys]))
@@ -55,7 +55,7 @@ def main():
         row = results[i * len(keys) : (i + 1) * len(keys)]
         mark = "*" if model in configured else " "
         print(f"{mark} {model:32s} | " + " | ".join(r.ljust(18) for r in row))
-    print("\n* = en MODELS")
+    print("\n* = in MODELS")
 
 
 if __name__ == "__main__":

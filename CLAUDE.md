@@ -1,87 +1,87 @@
 # Chiron
 
-Simulador de pacientes virtuales para que estudiantes de medicina practiquen el ECOE: anamnesis y examen físico frente a un paciente con IA, y después feedback contra la grilla oficial. Ver [README.md](README.md) (producto) y [ARCHITECTURE.md](ARCHITECTURE.md) (arquitectura tentativa).
+Virtual patient simulator for medical students preparing the ECOE (the Spanish-language name of the OSCE): history taking (anamnesis) and physical exam with an AI patient, followed by feedback against the official grilla (evaluation rubric). See [README.md](README.md) (product), [ARCHITECTURE.md](ARCHITECTURE.md) (tentative architecture) and [docs/FINDINGS.md](docs/FINDINGS.md) (engineering findings).
 
-## Dominio: el ECOE
+## Domain: the ECOE
 
-Ver el detalle en [data/ecoe/contexto-ecoe.md](data/ecoe/contexto-ecoe.md). Lo esencial:
+Details in [data/ecoe/contexto-ecoe.md](data/ecoe/contexto-ecoe.md). The essentials:
 
-- **ECOE** = Evaluación Clínica Objetiva Estructurada, examen práctico por estaciones.
-- **Estación clínica (~7 min):** anamnesis **o** examen físico con un actor o paciente real.
-- **Paraclínica e imagenología:** interpretar estudios y saber cuándo pedirlos y cuándo no.
-- **Evaluación:** el docente puntúa cada ítem de una **grilla** como Excelente / Bien / Regular / No realizado. También cuentan las formalidades (saludar, presentarse, ficha patronímica).
-- **El paciente solo responde lo que se le pregunta.** No se adelanta, no ayuda y no revela el diagnóstico. El examen mide que el estudiante no se olvide de preguntar.
+- **ECOE** = Evaluación Clínica Objetiva Estructurada (Objective Structured Clinical Examination), a practical exam made of stations.
+- **Clinical station (~7 min):** anamnesis **or** physical exam with an actor or a real patient.
+- **Paraclínica (lab and imaging studies) and imaging:** interpret studies and know when to order them and when not to.
+- **Grading:** the examiner scores each item of a **grilla** as Excelente / Bien / Regular / No realizado (Excellent / Good / Fair / Not done). Formalities also count (greeting, introducing yourself, collecting the patient's identification data, "ficha patronímica").
+- **The patient only answers what is asked.** They don't volunteer information, don't help, and don't reveal the diagnosis. The exam measures that the student doesn't forget to ask.
 
-Materias: **MPNA** (Medicina en el Primer Nivel de Atención, adultos) por ahora; después **Pediatría**. El estudiante elige para qué materia practica.
+Subjects (materias): **MPNA** (Medicina en el Primer Nivel de Atención, adult primary care) for now; **Pediatrics** later. The student picks which subject to practice.
 
-## Datos
+## Data
 
 ```
 data/ecoe/
-├── contexto-ecoe.md          qué es el ECOE (común a todas las materias)
-├── audios/                   audios originales + transcripciones.md
-└── <materia>/                p. ej. mpna/
-    ├── raw/                  PDFs originales (no se tocan, no se versionan)
-    │   └── slides/           presentaciones escaneadas; su contenido ya está en los apuntes
-    ├── clean/                apuntes limpios en Markdown (con marcas <!-- p. N --> de página)
-    │   ├── guias/            guías clínicas del MSP (tipo "guia" en el RAG)
-    │   └── catedra/          clases y talleres de la cátedra bajados de EVA (tipo "clase")
-    ├── sources.json          qué archivo de raw/eva va a qué archivo de clean/
-    ├── grillas/              una grilla de evaluación por JSON + index.json
-    └── chunks.jsonl          chunks para el RAG (generado)
+├── contexto-ecoe.md          what the ECOE is (shared by all subjects)
+├── audios/                   original audio + transcripciones.md
+└── <materia>/                e.g. mpna/
+    ├── raw/                  original PDFs (untouched, not versioned)
+    │   └── slides/           scanned presentations; their content is already in the notes
+    ├── clean/                cleaned notes in Markdown (with <!-- p. N --> page markers)
+    │   ├── guias/            MSP clinical guidelines ("guia" type in the RAG)
+    │   └── catedra/          course lectures and workshops downloaded from EVA ("clase" type)
+    ├── sources.json          which raw/eva file maps to which clean/ file
+    ├── grillas/              one evaluation grilla per JSON + index.json
+    └── chunks.jsonl          RAG chunks (generated)
 ```
 
-- Solo se versiona lo procesado. `raw/` y los `.ogg` están en `.gitignore`: los PDFs y audios originales viven solo en local.
-- Las **grillas** son la fuente de verdad de la rúbrica. Su texto es literal del PDF: no parafrasearlo.
-- El contenido médico no se reescribe con LLM. La limpieza de PDFs es determinística (`rag/clean_pdfs.py`).
+- Only processed data is versioned. `raw/` and the `.ogg` files are in `.gitignore`: the original PDFs and audio live only locally.
+- The **grillas** are the source of truth for the rubric. Their text is verbatim from the PDF: don't paraphrase it.
+- Medical content is never rewritten with an LLM. PDF cleaning is deterministic (`rag/clean_pdfs.py`).
 
-## Casos clínicos
+## Clinical cases
 
-- Spec en [cases/SPEC.md](cases/SPEC.md); casos en `cases/<materia>/<id>.json`, cada uno armado a partir de una o más grillas.
-- Cada ítem evaluable de la grilla tiene que estar cubierto (`grilla_items: ["<grilla_id>::<texto literal>"]`), incluidos los negativos pertinentes.
-- Las respuestas del paciente revelan un solo hecho por pregunta, en lenguaje de paciente, sin nombrar el diagnóstico.
-- Flujo para casos nuevos: un agente escribe el caso, otro con contexto limpio lo revisa contra los apuntes, y `python cases/validate.py` + `pytest` tienen que pasar.
+- Spec in [cases/SPEC.md](cases/SPEC.md); cases in `cases/<materia>/<id>.json`, each built from one or more grillas.
+- Every gradable grilla item must be covered (`grilla_items: ["<grilla_id>::<verbatim text>"]`), including pertinent negatives.
+- Patient answers reveal a single fact per question, in lay language, without naming the diagnosis.
+- Workflow for new cases: one agent writes the case, another with a clean context reviews it against the course notes, and `python cases/validate.py` + `pytest` must pass.
 
 ## Frontend (`web/`)
 
-- Next.js 16 (App Router) + Tailwind v4 + Motion, más `vaul` (hoja inferior) y `sonner` (avisos). Ojo: Next 16 tiene cambios de API; leer `web/node_modules/next/dist/docs/` antes de usar algo nuevo.
-- `/api/*` se reescribe al backend FastAPI (`CHIRON_API_URL`, por defecto `http://127.0.0.1:8000`).
-- Dos modos sobre la misma sesión: Chat (`components/ChatView.tsx`) y Cara a cara (`components/FaceView.tsx`). El rostro es un retrato ASCII generado por `web/scripts/ascii_face.py`, placeholder hasta tener avatar.
-- Estilo: oscuro, vidrio, acento menta. Movimiento según las pautas de Emil Kowalski: ease-out fuerte, menos de 300 ms, solo transform/opacity, `scale(0.97)` al presionar y nada animado en acciones de teclado.
+- Next.js 16 (App Router) + Tailwind v4 + Motion, plus `vaul` (bottom sheet) and `sonner` (toasts). Note: Next 16 has API changes; read `web/node_modules/next/dist/docs/` before using anything new.
+- `/api/*` is rewritten to the FastAPI backend (`CHIRON_API_URL`, default `http://127.0.0.1:8000`).
+- Two modes over the same session: Chat (`components/ChatView.tsx`) and Face to face (`components/FaceView.tsx`). The face is an ASCII portrait generated by `web/scripts/ascii_face.py`, a placeholder until there is an avatar.
+- Style: dark, glass, mint accent. Motion follows Emil Kowalski's guidelines: strong ease-out, under 300 ms, transform/opacity only, `scale(0.97)` on press, and nothing animated on keyboard actions.
 
 ## Tests
 
-`python -m pytest` (config en `pytest.ini`). TDD para lo determinístico; el comportamiento del LLM se mide con evals.
+`python -m pytest` (config in `pytest.ini`). TDD for deterministic logic; LLM behavior is measured with evals.
 
 ## Gemini
 
-- Keys en `.env` como `GOOGLE_API_KEY_1`, `_2`, `_3` (cuentas distintas). `llm/gemini.py` rota de key ante 429 y espera si todas llegaron al límite por minuto.
-- `MODELS` en `llm/gemini.py` define qué modelo usa cada tarea (`patient`, `router`, `judge`, `live`, `embedding`), con alternativas de respaldo.
-- Los modelos cambian seguido: `python llm/probe_models.py` prueba cuáles andan con cada key y cuánto tardan.
-- En el plan gratuito los modelos "pro" tienen cuota 0, y el límite de embeddings es de 100 por minuto por key.
+- Keys in `.env` as `GOOGLE_API_KEY_1`, `_2`, `_3` (separate accounts). `llm/gemini.py` rotates keys on 429 and waits if all of them hit the per-minute limit.
+- `MODELS` in `llm/gemini.py` defines which model each task uses (`patient`, `router`, `judge`, `live`, `embedding`), with fallbacks.
+- Models change often: `python llm/probe_models.py` checks which ones work with each key and how long they take.
+- On the free tier, "pro" models have zero quota, and the embeddings limit is 100 per minute per key.
 
-## Observabilidad (LangSmith)
+## Observability (LangSmith)
 
-- Con `LANGSMITH_TRACING=true` y `LANGSMITH_API_KEY` en `.env`, cada turno del grafo se traza solo en el proyecto `chiron` de smith.langchain.com.
-- Cada traza se llama `turno N`, lleva el `case_id` como tag y `case_id` + `session_id` en la metadata. Dentro se ven el router, el nodo y el prompt y la respuesta exactos de Gemini.
+- With `LANGSMITH_TRACING=true` and `LANGSMITH_API_KEY` in `.env`, every graph turn is traced automatically to the `chiron` project on smith.langchain.com.
+- Each trace is named `turno N`, carries the `case_id` as a tag, and `case_id` + `session_id` in its metadata. Inside you can see the router, the node, and the exact Gemini prompt and response.
 
 ## RAG
 
-Entorno: `python -m venv .venv` + `.venv/Scripts/pip install -r requirements.txt`.
+Environment: `python -m venv .venv` + `.venv/Scripts/pip install -r requirements.txt`.
 
 ```
-python rag/clean_pdfs.py mpna   # raw/*.pdf -> clean/*.md (requiere pdftotext)
-python rag/chunk.py mpna        # clean + grillas + contexto -> chunks.jsonl
-python rag/ingest.py mpna       # chunks -> Chroma (.chroma/), embeddings de Gemini
+python rag/clean_pdfs.py mpna   # raw/*.pdf -> clean/*.md (requires pdftotext)
+python rag/chunk.py mpna        # clean + grillas + context -> chunks.jsonl
+python rag/ingest.py mpna       # chunks -> Chroma (.chroma/), Gemini embeddings
 python rag/query.py mpna "¿qué preguntar ante disnea?"
 ```
 
-- Una colección de Chroma por materia: `ecoe_<materia>`.
-- Metadata de cada chunk: `materia`, `fuente`, `tipo` (`apunte` | `clase` | `guia` | `grilla` | `contexto_ecoe`), `seccion`, `pagina`.
-- Material de EVA (UC15): se baja a `raw/eva/` (no se versiona) y se procesa según `sources.json`. Quedan afuera a propósito la guía ADA 2025 y las ALAD 2019, además de foros, cuestionarios y tareas.
-- Chunking con LangChain (`MarkdownHeaderTextSplitter` + `RecursiveCharacterTextSplitter`).
+- One Chroma collection per subject: `ecoe_<materia>`.
+- Metadata for each chunk: `materia`, `fuente`, `tipo` (`apunte` | `clase` | `guia` | `grilla` | `contexto_ecoe`), `seccion`, `pagina`.
+- EVA course material (UC15): downloaded to `raw/eva/` (not versioned) and processed according to `sources.json`. The ADA 2025 guideline and the ALAD 2019 guidelines are deliberately excluded, as are forums, quizzes, and assignments.
+- Chunking with LangChain (`MarkdownHeaderTextSplitter` + `RecursiveCharacterTextSplitter`).
 
-## Convenciones
+## Conventions
 
-- Contenido, prompts y documentación en español. Código en inglés o español, siguiendo lo que ya haya en el archivo.
-- Python 3.11. Dependencias en `requirements.txt`.
+- Language: docs, code comments, commit messages, and developer-facing strings (logs, CLI help, exceptions, validator errors) in English. UI copy, patient/teacher prompts, clinical cases, grillas, course material, and RAG data stay in Spanish.
+- Python 3.11. Dependencies in `requirements.txt`.

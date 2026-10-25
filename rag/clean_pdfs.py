@@ -1,19 +1,19 @@
-"""Extrae y limpia los apuntes en PDF de una materia y los guarda como Markdown.
+"""Extracts and cleans a subject's (materia) PDF course notes and saves them as Markdown.
 
-Uso:
+Usage:
     python rag/clean_pdfs.py mpna
 
-Lee data/ecoe/<materia>/raw/*.pdf y escribe data/ecoe/<materia>/clean/<nombre>.md.
-Además limpia las fuentes listadas en data/ecoe/<materia>/sources.json (material de EVA)
-a clean/<out>, p. ej. clean/guias/ o clean/catedra/.
-Requiere `pdftotext` (poppler) en el PATH.
+Reads data/ecoe/<materia>/raw/*.pdf and writes data/ecoe/<materia>/clean/<name>.md.
+It also cleans the sources listed in data/ecoe/<materia>/sources.json (EVA material)
+into clean/<out>, e.g. clean/guias/ or clean/catedra/.
+Requires `pdftotext` (poppler) on the PATH.
 
-La limpieza es determinística (no usa LLM) para no alterar el contenido médico:
-- quita números de página y marca cada página con <!-- p. N --> para poder citar
-- convierte títulos en encabezados Markdown
-- une líneas cortadas en párrafos y normaliza viñetas
-- deja las tablas alineadas en bloques ```text
-- descarta restos de diagramas (líneas con casi nada de texto)
+Cleaning is deterministic (no LLM) so medical content is never altered:
+- removes page numbers and marks each page with <!-- p. N --> for citations
+- turns titles into Markdown headings
+- joins broken lines into paragraphs and normalizes bullets
+- keeps aligned tables in ```text blocks
+- drops diagram leftovers (lines with almost no text)
 """
 
 import json
@@ -25,10 +25,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 
-# Documentos que no son prosa y se procesan aparte (grillas -> JSON, paraclínica -> tabla).
+# Documents that aren't prose and are processed separately (grillas -> JSON, paraclínica -> table).
 SKIP = {"grillas-mpna", "paraclinica"}
 
-# "n" y los caracteres de uso privado son viñetas de fuentes de símbolos (Wingdings) en diapositivas
+# "n" and private-use characters are bullets from symbol fonts (Wingdings) in slides
 BULLET = re.compile(r"^\s*(?:[•●▪◦·-]|[-n](?=\s)|\d+[.)](?=\s))\s*")
 PAGE_NUMBER = re.compile(r"^\s*\d{1,3}\s*$")
 COLUMN_GAP = re.compile(r"\S {3,}\S")
@@ -38,9 +38,9 @@ LIGATURES = {"ﬁ": "fi", "ﬂ": "fl", "ﬀ": "ff", "ﬃ": "ffi", "ﬄ": "ffl", 
 def normalize(text: str) -> str:
     for bad, good in LIGATURES.items():
         text = text.replace(bad, good)
-    # "ı́" (i sin punto + acento combinado) y similares -> forma compuesta
+    # "ı́" (dotless i + combining accent) and similar -> precomposed form
     text = text.replace("ı́", "í")
-    # viñetas de Wingdings: "n" + carácter de uso privado al inicio de línea -> "•"
+    # Wingdings bullets: "n" + private-use character at line start -> "•"
     text = re.sub(r"(?m)^(\s*)n?[-]+[  ]*", r"\1• ", text)
     text = re.sub(r"[-]", "", text)
     return unicodedata.normalize("NFC", text)
@@ -56,12 +56,12 @@ def has_word(line: str, min_len: int = 3) -> bool:
 
 
 def is_diagram_label(text: str) -> bool:
-    """Etiqueta suelta de un esquema ("+", "aVR", "V6"): sin palabras ni números útiles."""
+    """Stray diagram label ("+", "aVR", "V6"): no useful words or numbers."""
     return not has_word(text, 4) and not re.search(r"\d", text) and len(text) <= 15
 
 
 def is_heading(line: str, prev_blank: bool) -> int:
-    """Devuelve el nivel de encabezado (0 si no es encabezado)."""
+    """Returns the heading level (0 if it isn't a heading)."""
     text = line.strip()
     if not text or len(text) > 70 or text.endswith((".", ",", ";", ":")) or BULLET.match(line):
         return 0
@@ -85,12 +85,12 @@ def clean_page(raw: str) -> list[str]:
     out: list[str] = []
     paragraph: list[str] = []
     table: list[str] = []
-    bullet_indent = -1  # sangría de la viñeta abierta (-1 si el párrafo no es viñeta)
+    bullet_indent = -1  # indent of the open bullet (-1 if the paragraph isn't a bullet)
 
     def flush_paragraph():
         if paragraph:
             text = " ".join(paragraph)
-            text = re.sub(r"(\w)- (\w)", r"\1\2", text)  # palabras cortadas con guion
+            text = re.sub(r"(\w)- (\w)", r"\1\2", text)  # words hyphenated across lines
             out.append(re.sub(r"\s+", " ", text).strip())
             out.append("")
             paragraph.clear()
@@ -101,7 +101,7 @@ def clean_page(raw: str) -> list[str]:
         block = [l for l in table if l.strip()]
         words = sum(len(re.findall(r"[^\W\d_]{3,}", l)) for l in block)
         numbers = sum(len(re.findall(r"\d", l)) for l in block)
-        # bloque sin palabras ni valores = resto de un diagrama: se descarta
+        # block with no words or values = diagram leftover: drop it
         if words >= 4 or numbers >= 3:
             indent = min(len(l) - len(l.lstrip()) for l in block)
             out.append("```text")
@@ -128,7 +128,7 @@ def clean_page(raw: str) -> list[str]:
         if not BULLET.match(line) and is_diagram_label(text):
             continue
         if table:
-            # una línea corta entre filas de tabla suele ser parte de la tabla
+            # a short line between table rows is usually part of the table
             if len(text) < 30 and next_line.strip() and COLUMN_GAP.search(next_line.strip()):
                 table.append(line)
                 continue
@@ -147,13 +147,13 @@ def clean_page(raw: str) -> list[str]:
             paragraph.append("- " + BULLET.sub("", line, count=1).strip())
             bullet_indent = indent
             continue
-        # texto con menos sangría que la viñeta abierta: termina la lista
+        # text indented less than the open bullet: the list ends
         if paragraph and bullet_indent >= 0 and indent <= bullet_indent:
             flush_paragraph()
         if not paragraph:
             bullet_indent = -1
 
-        # línea corta tipo subtítulo ("Plano frontal") antes de un párrafo
+        # short subtitle-like line ("Plano frontal") before a paragraph
         if (
             not paragraph
             and len(text.split()) <= 6
@@ -167,7 +167,7 @@ def clean_page(raw: str) -> list[str]:
             out.append("")
             continue
 
-        # continuación de párrafo o de viñeta
+        # paragraph or bullet continuation
         if paragraph and paragraph[-1].rstrip().endswith((".", ":")) and text[0].isupper():
             flush_paragraph()
         paragraph.append(text)
@@ -178,7 +178,7 @@ def clean_page(raw: str) -> list[str]:
 
 
 def pdf_to_markdown(pdf: Path, layout: bool = True) -> str:
-    """layout=False usa el orden de lectura de pdftotext: mejor para PDFs a dos columnas."""
+    """layout=False uses pdftotext's reading order: better for two-column PDFs."""
     raw = subprocess.run(
         ["pdftotext", "-enc", "UTF-8", *(["-layout"] if layout else []), str(pdf), "-"],
         capture_output=True,
@@ -194,7 +194,7 @@ def pdf_to_markdown(pdf: Path, layout: bool = True) -> str:
             md.extend(body)
     text = "\n".join(md)
     text = re.sub(r"\n{3,}", "\n\n", text)
-    text = re.sub(r"(?m)^(- .*)\n\n(?=- )", r"\1\n", text)  # listas sin líneas en blanco
+    text = re.sub(r"(?m)^(- .*)\n\n(?=- )", r"\1\n", text)  # lists without blank lines
     return text.strip() + "\n"
 
 
@@ -212,7 +212,7 @@ def main():
         ]
     for pdf, out, layout in jobs:
         if not pdf.exists():
-            print(f"FALTA {pdf.relative_to(ROOT)} (se omite)")
+            print(f"MISSING {pdf.relative_to(ROOT)} (skipped)")
             continue
         md = pdf_to_markdown(pdf, layout)
         out.parent.mkdir(parents=True, exist_ok=True)

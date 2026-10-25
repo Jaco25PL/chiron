@@ -1,6 +1,6 @@
-"""Interfaz pública del simulador para la API y el front.
+"""Public interface of the simulator, used by the API and the frontend.
 
-Contrato (no cambiar sin actualizar api/):
+Contract (don't change it without updating api/):
 
     list_cases(materia) -> [{id, materia, titulo, dificultad, grillas, paciente: {nombre, edad, sexo}}]
     new_session(case_id) -> session_id
@@ -9,7 +9,7 @@ Contrato (no cambiar sin actualizar api/):
         "debug": {"intent": str, "facts": [ids], "exams": [ids], "studies": [str],
                   "model": str, "latency_ms": int}
     }
-    finish(session_id) -> get_session(...) con finished=True
+    finish(session_id) -> get_session(...) with finished=True
     get_session(session_id) -> {
         "case_id": str, "transcript": [{"role": "estudiante" | "paciente" | "docente", "text": str}],
         "revealed_facts": [ids], "total_facts": int, "exams_done": [ids], "exams_done_labels": [str], "studies_requested": [str],

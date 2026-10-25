@@ -1,104 +1,104 @@
-# Chiron — Arquitectura técnica
+# Chiron — Technical Architecture
 
-> **Borrador tentativo.** Esta arquitectura es una propuesta inicial y puede cambiar a medida que avance el proyecto.
+> **Tentative draft.** This architecture is an initial proposal and may change as the project evolves.
 
 ## Stack
 
-- **Lenguaje:** Python (backend y agentes)
-- **Orquestación:** LangGraph + LangChain
-- **Modelos:** Gemini API, rotando entre modelos según la tarea y los rate limits
-- **Voz y video:** Gemini Live API para conversación en tiempo real + avatar animado sincronizado con el audio
-- **RAG:** vector store (Chroma o FAISS) con embeddings de Gemini
-- **Herramientas:** servidor MCP (FastMCP) con las herramientas de examen físico
-- **Backend:** FastAPI con WebSockets
-- **Frontend:** web con cámara y micrófono del estudiante
-- **Observabilidad y evals:** LangSmith (tracing + datasets + evaluadores)
-- **Testing:** pytest para la lógica, Playwright para el flujo E2E
-- **Desarrollo:** Claude Code
+- **Language:** Python (backend and agents)
+- **Orchestration:** LangGraph + LangChain
+- **Models:** Gemini API, rotating across models by task and rate limits
+- **Voice and video:** Gemini Live API for real-time conversation + an animated avatar synced to the audio
+- **RAG:** vector store (Chroma or FAISS) with Gemini embeddings
+- **Tools:** MCP server (FastMCP) with the physical exam tools
+- **Backend:** FastAPI with WebSockets
+- **Frontend:** web app using the student's camera and microphone
+- **Observability and evals:** LangSmith (tracing + datasets + evaluators)
+- **Testing:** pytest for logic, Playwright for the E2E flow
+- **Development:** Claude Code
 
-## El grafo (LangGraph)
+## The graph (LangGraph)
 
 ```
-inicio (carga el caso)
+start (loads the case)
    ↓
-paciente ←──────────┐   responde con RAG sobre su caso
+patient ←───────────┐   answers with RAG over its case
    ↓                │
-router ─────────────┤   ¿pregunta? → paciente
-   │                │   ¿examen?  → herramienta MCP
-   │   examen (MCP) ┘
-   ↓   ¿terminó / dio diagnóstico?
-feedback                LLM-as-a-judge con rúbrica
+router ─────────────┤   question? → patient
+   │                │   exam?     → MCP tool
+   │   exam (MCP)   ┘
+   ↓   finished / gave a diagnosis?
+feedback                LLM-as-a-judge with the rubric
    ↓
-fin
+end
 ```
 
-## Estado de la sesión
+## Session state
 
-Caso activo, transcripción, información ya revelada, exámenes realizados y diagnóstico propuesto por el estudiante.
+Active case, transcript, information already revealed, exams performed, and the diagnosis proposed by the student.
 
-## Caso clínico (estructura)
+## Clinical case (structure)
 
-Datos del paciente, motivo de consulta, historia de la enfermedad, antecedentes, medicación, alergias, personalidad (nervioso, reservado, conversador), hallazgos del examen, laboratorio, diagnóstico oculto y preguntas clave para la rúbrica.
+Patient data, chief complaint, history of present illness, past history, medication, allergies, personality (nervous, reserved, talkative), exam findings, labs, hidden diagnosis, and key questions for the rubric.
 
-## Uso del dataset de preguntas y respuestas
+## Using the question-and-answer dataset
 
-- Few-shot en el prompt, para que el paciente responda natural
-- Dataset de evals en LangSmith
-- Base de la rúbrica del feedback
+- Few-shot examples in the prompt, so the patient answers naturally
+- Eval dataset in LangSmith
+- Basis for the feedback rubric
 
-## Evals (el diferencial)
+## Evals (the differentiator)
 
-| Eval | Qué mide |
+| Eval | What it measures |
 |---|---|
-| No revela el diagnóstico | El paciente nunca dice qué tiene |
-| Consistencia | No se contradice con su caso |
-| Sin alucinaciones | No inventa síntomas que no están en el caso |
-| En personaje | Habla como paciente, no como médico ni como AI |
-| Calidad del feedback | La rúbrica detecta las preguntas clave que faltaron |
-| Latencia | La respuesta es lo bastante rápida para una videollamada |
+| Doesn't reveal the diagnosis | The patient never says what they have |
+| Consistency | Doesn't contradict its case |
+| No hallucinations | Doesn't invent symptoms that aren't in the case |
+| In character | Talks like a patient, not like a doctor or an AI |
+| Feedback quality | The rubric catches the key questions that were missed |
+| Latency | Responses are fast enough for a video call |
 
-## Estructura del repo (propuesta)
+## Repo structure (proposed)
 
 ```
 chiron/
-├── cases/          casos clínicos ficticios (JSON)
-├── data/           dataset de preguntas y respuestas
-├── agents/         grafo, nodos y prompts
-├── rag/            indexado y retrieval
-├── mcp_server/     herramientas de examen físico
+├── cases/          fictional clinical cases (JSON)
+├── data/           question-and-answer dataset
+├── agents/         graph, nodes, and prompts
+├── rag/            indexing and retrieval
+├── mcp_server/     physical exam tools
 ├── api/            FastAPI + WebSockets
-├── frontend/       UI de videollamada
-├── evals/          datasets y evaluadores de LangSmith
+├── frontend/       video call UI
+├── evals/          LangSmith datasets and evaluators
 ├── tests/          pytest + Playwright
 └── README.md
 ```
 
-## Pasos (en orden, sin fecha)
+## Steps (in order, no dates)
 
-1. Casos clínicos ficticios + dataset de preguntas y respuestas
-2. Agente paciente en LangGraph, por chat (prompt + RAG del caso)
-3. Servidor MCP con las herramientas de examen físico
-4. Agente de feedback con rúbrica (LLM-as-a-judge)
-5. Evals en LangSmith
-6. Capa de voz con Gemini Live
-7. Videollamada con avatar
-8. README, video demo y post de LinkedIn
+1. Fictional clinical cases + question-and-answer dataset
+2. Patient agent in LangGraph, over chat (prompt + case RAG)
+3. MCP server with the physical exam tools
+4. Feedback agent with a rubric (LLM-as-a-judge)
+5. Evals in LangSmith
+6. Voice layer with Gemini Live
+7. Video call with an avatar
+8. README, demo video, and LinkedIn post
 
-Cada paso deja algo que funciona: si la videollamada se complica, igual hay producto por chat.
+Each step leaves something that works: if the video call gets complicated, there is still a chat product.
 
-## Métricas de éxito
+## Success metrics
 
-- El paciente no revela el diagnóstico ni se contradice (evals).
-- Una estudiante real lo usa y le sirve para practicar.
-- El feedback detecta las preguntas clave que faltaron.
+- The patient doesn't reveal the diagnosis or contradict itself (evals).
+- A real student uses it and finds it useful for practice.
+- The feedback catches the key questions that were missed.
 
-## Riesgos y supuestos
+## Risks and assumptions
 
-- Latencia en la videollamada que rompa la experiencia.
-- El paciente alucina síntomas que no están en el caso.
-- Límites de las APIs gratuitas.
-- **Supuesto:** con buen contexto y casos bien armados, un modelo gratuito alcanza para un paciente creíble.
+- Video call latency that breaks the experience.
+- The patient hallucinates symptoms that aren't in the case.
+- Free-tier API limits.
+- **Assumption:** with good context and well-built cases, a free model is enough for a believable patient.
 
-## Diferencial
+## Differentiator
 
-No es "un chatbot de salud": es un simulador evaluado, con métricas que prueban que el paciente se comporta como debe.
+It's not "a health chatbot": it's an evaluated simulator, with metrics that prove the patient behaves as it should.

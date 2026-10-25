@@ -1,5 +1,5 @@
 {
-  "_doc": "Fuentes extra de raw/ (además de raw/*.pdf) que se limpian a clean/<out>. La carpeta de destino define el tipo en el RAG: guias/ -> guia, catedra/ -> clase. layout=false extrae en orden de lectura (PDFs a dos columnas). Origen: EVA, UC15 MPNA 2026. Quedan afuera a propósito: Guía ADA 2025 y guías ALAD 2019 (enormes, en inglés o redundantes; taparían los apuntes de la cátedra), foros, cuestionarios y tareas.",
+  "_doc": "Extra sources from raw/ (in addition to raw/*.pdf) that are cleaned into clean/<out>. The destination folder sets the RAG type: guias/ -> guia, catedra/ -> clase. layout=false extracts in reading order (two-column PDFs). Origin: EVA, UC15 MPNA 2026. Deliberately excluded: ADA 2025 guideline and ALAD 2019 guidelines (huge, in English or redundant; they would bury the course notes), forums, quizzes, and assignments.",
   "sources": [
     {"raw": "eva/carpetas/ut-6-recursos-bibliograficos/Material de Hipertensión Arterial/2017 MSP Guía HTA.pdf", "out": "guias/msp-hta-2017.md", "layout": false},
     {"raw": "eva/carpetas/ut-6-recursos-bibliograficos/Material de Diabetes Mellitus/Guia Diabetes MSP 2017.pdf", "out": "guias/msp-diabetes-2017.md", "layout": false},

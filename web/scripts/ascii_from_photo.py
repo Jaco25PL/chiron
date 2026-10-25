@@ -1,17 +1,17 @@
-"""Convierte la foto de un paciente en el retrato ASCII de la vista "cara a cara".
+"""Turns a patient photo into the ASCII portrait for the "face to face" view.
 
-Requiere Pillow y rembg (`pip install "rembg[cpu]"`; baja un modelo de ~170 MB la primera vez).
+Requires Pillow and rembg (`pip install "rembg[cpu]"`; downloads a ~170 MB model the first time).
 
-Uso:
+Usage:
     python scripts/ascii_from_photo.py scripts/retratos/<case_id>.png [--cols 110]
 
-Escribe public/retratos/<case_id>.txt, que el front carga por caso.
+Writes public/retratos/<case_id>.txt, which the frontend loads per case.
 
-Sigue las recomendaciones de generadores como ScreenSnap/ASCIIFY:
-- foto de frente, con alto contraste y fondo negro (el fondo se recorta solo);
-- recorte ajustado a la cabeza y los hombros;
-- más columnas = más detalle;
-- caracteres densos para las zonas claras (la UI es oscura) y livianos para las oscuras.
+Follows the recommendations of generators like ScreenSnap/ASCIIFY:
+- front-facing photo, high contrast, black background (the background is removed automatically);
+- tight crop to the head and shoulders;
+- more columns = more detail;
+- dense characters for light areas (the UI is dark) and light characters for dark areas.
 """
 
 import argparse
@@ -19,16 +19,16 @@ from pathlib import Path
 
 from PIL import Image, ImageFilter, ImageOps
 
-# rampa corta y ordenada, de liviano a denso: con 70 caracteres las letras (xvXJ…) generan
-# textura en vez de luz y sombra y la cara no se lee
+# short, ordered ramp from light to dense: with 70 characters the letters (xvXJ…) create
+# texture instead of light and shadow, and the face becomes unreadable
 RAMP = " .:-=+*#%@"
-CHAR_ASPECT = 0.5  # una celda monoespaciada es ~el doble de alta que ancha
+CHAR_ASPECT = 0.5  # a monospace cell is ~twice as tall as it is wide
 
 
 def remove_background(img: Image.Image, modelo: str = "u2net_human_seg") -> Image.Image:
-    """Recorta a la persona con un modelo de segmentación (rembg / U²-Net, corre local) y pone
-    el fondo en negro. Probé antes con heurísticas de color y fallaban con fondos en degradé
-    o ropa del mismo tono que el fondo."""
+    """Cuts out the person with a segmentation model (rembg / U²-Net, runs locally) and makes
+    the background black. I tried color heuristics first, and they failed with gradient
+    backgrounds or clothing the same tone as the background."""
     from rembg import new_session, remove
 
     cut = remove(img, session=new_session(modelo))
@@ -38,23 +38,23 @@ def remove_background(img: Image.Image, modelo: str = "u2net_human_seg") -> Imag
 
 
 def to_ascii(img: Image.Image, cols: int, alto: float = 0.78, gamma: float = 0.8, plano: bool = False) -> str:
-    """alto: fracción de la figura que se conserva desde arriba (recorte a cabeza y hombros).
-    gamma < 1 levanta los medios tonos, donde están los rasgos de la cara.
-    plano=True para ilustraciones de colores planos: sin ecualizar ni enfocar (las arruinan)."""
+    """alto: fraction of the figure kept from the top (crop to head and shoulders).
+    gamma < 1 lifts the midtones, where the facial features are.
+    plano=True for flat-color illustrations: no equalizing or sharpening (they ruin them)."""
     gray = ImageOps.grayscale(img)
-    # recorte: todo lo que no es fondo negro
+    # crop: everything that isn't black background
     bbox = gray.point(lambda v: 255 if v > 18 else 0).getbbox()
     if bbox:
         x0, y0, x1, y1 = bbox
         gray = gray.crop((x0, y0, x1, y0 + int((y1 - y0) * alto)))
     person = gray.point(lambda v: 255 if v > 12 else 0)
-    # ecualizar solo sobre la persona: si no, el fondo negro se come el rango y la cara queda plana
+    # equalize only over the person: otherwise the black background eats the range and the face looks flat
     if not plano:
         gray = ImageOps.equalize(gray, mask=person)
         gray = gray.point(lambda v: round(255 * (v / 255) ** gamma))
     gray = Image.composite(gray, Image.new("L", gray.size, 0), person)
     if not plano:
-        gray = gray.filter(ImageFilter.UnsharpMask(radius=3, percent=120, threshold=3))  # define rasgos
+        gray = gray.filter(ImageFilter.UnsharpMask(radius=3, percent=120, threshold=3))  # sharpens features
     rows = max(1, round(cols * gray.height / gray.width * CHAR_ASPECT))
     small = gray.resize((cols, rows), Image.Resampling.LANCZOS)
     lines = []
@@ -65,13 +65,13 @@ def to_ascii(img: Image.Image, cols: int, alto: float = 0.78, gamma: float = 0.8
 
 
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("foto", type=Path)
-    ap.add_argument("--cols", type=int, default=110)
-    ap.add_argument("--alto", type=float, default=0.78, help="fracción de la figura a conservar desde arriba")
-    ap.add_argument("--modelo", default="u2net_human_seg", help="modelo de rembg (u2net para no-personas)")
-    ap.add_argument("--plano", action="store_true", help="ilustración de colores planos (no foto)")
-    ap.add_argument("--fondo-negro", action="store_true", help="la foto ya tiene fondo negro: no recortar fondo")
+    ap = argparse.ArgumentParser(description="Convert a patient photo into an ASCII portrait.")
+    ap.add_argument("foto", type=Path, help="input photo")
+    ap.add_argument("--cols", type=int, default=110, help="output width in characters")
+    ap.add_argument("--alto", type=float, default=0.78, help="fraction of the figure to keep from the top")
+    ap.add_argument("--modelo", default="u2net_human_seg", help="rembg model (u2net for non-people)")
+    ap.add_argument("--plano", action="store_true", help="flat-color illustration (not a photo)")
+    ap.add_argument("--fondo-negro", action="store_true", help="the photo already has a black background: skip background removal")
     args = ap.parse_args()
     ap_img = Image.open(args.foto).convert("RGB")
     if not args.fondo_negro:
@@ -81,7 +81,7 @@ def main():
     out = Path(__file__).resolve().parent.parent / "public" / "retratos" / f"{args.foto.stem}.txt"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(art + "\n", encoding="utf-8")
-    print(f"{out} ({len(art.splitlines())} líneas x {args.cols} columnas)")
+    print(f"{out} ({len(art.splitlines())} lines x {args.cols} columns)")
 
 
 if __name__ == "__main__":

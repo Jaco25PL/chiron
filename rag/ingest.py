@@ -1,12 +1,12 @@
-"""Indexa los chunks de una materia en Chroma con embeddings de Gemini.
+"""Indexes a subject's (materia) chunks into Chroma with Gemini embeddings.
 
-Uso:
-    python rag/chunk.py mpna      # primero generar los chunks
+Usage:
+    python rag/chunk.py mpna      # generate the chunks first
     python rag/ingest.py mpna
 
-Las keys se leen de .env (GOOGLE_API_KEY_1, _2, ...); si una se queda sin cuota
-se rota a la siguiente. El índice queda en .chroma/ (no se versiona) con una
-colección por materia: ecoe_<materia>.
+Keys are read from .env (GOOGLE_API_KEY_1, _2, ...); if one runs out of quota,
+it rotates to the next. The index lives in .chroma/ (not versioned), with one
+collection per subject: ecoe_<materia>.
 """
 
 import json
@@ -46,14 +46,14 @@ def main():
     for i in range(0, len(rows), BATCH):
         batch = rows[i : i + BATCH]
         docs = [
-            # Chroma no acepta None en metadata
+            # Chroma doesn't accept None in metadata
             Document(page_content=r["texto"], metadata={k: v for k, v in r["metadata"].items() if v is not None})
             for r in batch
         ]
         ids = [r["id"] for r in batch]
         with_rotation(lambda key, model: get_store(materia, key, model).add_documents(docs, ids=ids), "embedding")
         print(f"{min(i + BATCH, len(rows))}/{len(rows)}")
-    print(f"Listo: colección ecoe_{materia} en {PERSIST_DIR.relative_to(ROOT)}")
+    print(f"Done: collection ecoe_{materia} in {PERSIST_DIR.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

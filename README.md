@@ -1,72 +1,72 @@
 # Chiron — Product Brief
 
-## Nombre
+## Name
 
-Chiron, por el centauro de la mitología griega que enseñó medicina a Asclepio, el dios de la medicina, y formó a otros grandes sanadores. Era el maestro de los médicos. Chiron no cura pacientes: forma a quienes los van a curar, igual que este producto.
+Chiron is named after the centaur of Greek mythology who taught medicine to Asclepius, the god of medicine, and trained other great healers. He was the teacher of physicians. Chiron doesn't heal patients: it trains the people who will, just like this product.
 
-## Problema
+## Problem
 
-Los estudiantes de salud necesitan practicar entrevistas clínicas, pero practicar con pacientes reales o actores (pacientes estandarizados) es caro, limitado y depende de horarios. Muchos llegan a la práctica real con poca experiencia y sin feedback.
+Health-science students need to practice clinical interviews, but practicing with real patients or actors (standardized patients) is expensive, limited, and tied to schedules. Many reach real clinical practice with little experience and no feedback.
 
-## Usuario
+## User
 
-Estudiantes de medicina o enfermería que preparan entrevistas clínicas y exámenes prácticos.
+Medical or nursing students preparing for clinical interviews and practical exams, such as the ECOE (the Spanish-language name of the OSCE).
 
-## Solución
+## Solution
 
-Un paciente virtual por videollamada al que el estudiante le hace la anamnesis y "examina", como en una consulta real. Al final recibe feedback sobre qué preguntó bien y qué se le pasó.
+A virtual patient on a video call. The student takes the history (anamnesis) and "examines" the patient, as in a real consultation. At the end, they get feedback on what they asked well and what they missed.
 
-## Propuesta de valor
+## Value proposition
 
-Practicar cuando quieras, las veces que quieras, con casos variados y feedback inmediato.
+Practice whenever you want, as often as you want, with varied cases and immediate feedback.
 
-## Objetivos
+## Goals
 
-- **Del producto:** que la práctica se sienta realista y el feedback sea útil.
-- **Personal:** demostrar que sé construir y testear un sistema de AI de punta a punta.
+- **Product:** practice should feel realistic and the feedback should be useful.
+- **Personal:** show that I can build and test an AI system end to end.
 
-## Alcance del MVP
+## MVP scope
 
-- Videollamada con un paciente virtual
-- 2–3 casos clínicos ficticios
-- Examen físico simulado (presión, auscultación, laboratorio)
-- Feedback final con rúbrica
-- Evals de calidad del agente
+- Video call with a virtual patient
+- 2–3 fictional clinical cases
+- Simulated physical exam (blood pressure, auscultation, labs)
+- Final feedback against a rubric
+- Quality evals for the agent
 
-## Arquitectura
+## Architecture
 
-Ver [ARCHITECTURE.md](ARCHITECTURE.md) (borrador tentativo).
+See [ARCHITECTURE.md](ARCHITECTURE.md) (tentative draft).
 
-## Cómo correrlo
+## Running it
 
-Necesitás Python 3.11, Node 20+ y las keys de Gemini en `.env` (`GOOGLE_API_KEY_1`, `_2`, …).
+You need Python 3.11, Node 20+, and Gemini keys in `.env` (`GOOGLE_API_KEY_1`, `_2`, …).
 
 ```bash
-# backend: FastAPI + LangGraph (puerto 8000)
+# backend: FastAPI + LangGraph (port 8000)
 python -m venv .venv && .venv/Scripts/pip install -r requirements.txt
 .venv/Scripts/python -m uvicorn api.main:app --port 8000
 
-# frontend: Next.js (puerto 3000), en otra terminal
+# frontend: Next.js (port 3000), in another terminal
 cd web && npm install && npm run dev
 ```
 
-Abrí http://localhost:3000. Hay dos modos que comparten la misma consulta: **Chat** y **Cara a cara** (videollamada; por ahora con un retrato ASCII fijo en lugar del avatar).
+Open http://localhost:3000. There are two modes that share the same consultation: **Chat** and **Face to face** (video call; for now with a static ASCII portrait instead of the avatar).
 
-## Hallazgos
+## Findings
 
-Lo que fui encontrando al construirlo (evals, latencia, datos, bugs): [docs/HALLAZGOS.md](docs/HALLAZGOS.md).
+What I found while building it (evals, latency, data, bugs): [docs/FINDINGS.md](docs/FINDINGS.md).
 
-## Decisiones de diseño
+## Design decisions
 
-### Jev en español, sin traducción en tiempo real
+### Jev in Spanish, no real-time translation
 
-[Jev](https://typesafe.ai/) (TypeSafe) es un modelo de decisiones tipadas con probabilidades calibradas, pensado para el router del grafo y para evaluar ítem por ítem la rúbrica. Su documentación indica que el inglés es el idioma donde rinde mejor, así que consideré traducir al inglés lo que dice el estudiante antes de pasárselo. **Lo descarté:**
+[Jev](https://typesafe.ai/) (TypeSafe) is a model for typed decisions with calibrated probabilities, intended for the graph's router and for scoring the rubric item by item. Its documentation says English is where it performs best, so I considered translating what the student says into English before passing it on. **I ruled it out:**
 
-- **Latencia:** suma una llamada extra (unos 0,7 s) en cada turno del router, y en una videollamada cada décima cuenta.
-- **Errores:** la traducción puede deformar términos médicos, por ejemplo "disnea paroxística nocturna" o edemas "gravitacionales", justo lo que la rúbrica tiene que detectar.
+- **Latency:** it adds an extra call (about 0.7 s) on every router turn, and in a video call every tenth of a second counts.
+- **Errors:** translation can distort medical terms, e.g. "disnea paroxística nocturna" (paroxysmal nocturnal dyspnea) or "gravitational" edema, which is exactly what the rubric has to detect.
 
-En su lugar, las preguntas y criterios de Jev, que son fijos y los escribimos nosotros, pueden traducirse una sola vez, sin costo en tiempo real. La elección se decide con un eval que compara tres variantes contra Gemini como juez:
+Instead, Jev's questions and criteria, which are fixed and written by us, can be translated once, at no real-time cost. The choice is settled by an eval that compares three variants against Gemini as judge:
 
-1. todo en español
-2. criterios en inglés y transcripción en español
-3. todo traducido
+1. everything in Spanish
+2. criteria in English, transcript in Spanish
+3. everything translated

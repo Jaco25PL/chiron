@@ -1,10 +1,10 @@
-"""Modelos de Gemini por tarea y rotación de API keys.
+"""Gemini models per task, and API key rotation.
 
-Las keys se leen de .env como GOOGLE_API_KEY_1, GOOGLE_API_KEY_2, ... (o una sola
-GOOGLE_API_KEY). Cuando una key devuelve 429 (sin cuota), se pasa a la siguiente.
+Keys are read from .env as GOOGLE_API_KEY_1, GOOGLE_API_KEY_2, ... (or a single
+GOOGLE_API_KEY). When a key returns 429 (out of quota), the next one is used.
 
-Los modelos disponibles cambian seguido: `python llm/probe_models.py` prueba cuáles
-andan con cada key y en qué tiempo, para actualizar MODELS.
+Available models change often: `python llm/probe_models.py` checks which ones work
+with each key and how fast, so MODELS can be kept up to date.
 """
 
 import os
@@ -18,21 +18,21 @@ from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(ROOT / ".env")
-# Trazas de LangSmith: se activan con LANGSMITH_TRACING=true y LANGSMITH_API_KEY en .env
+# LangSmith tracing: enabled with LANGSMITH_TRACING=true and LANGSMITH_API_KEY in .env
 os.environ.setdefault("LANGSMITH_PROJECT", "chiron")
 
-# Probado el 2026-10-24 en plan gratuito. Los "pro" (3.1-pro, pro-latest, 4-argon) dan 429 con cuota 0.
-# gemini-3.7/3.8-flash y flash-latest andan pero tardaron 30-75 s por respuesta: no sirven para conversar.
-# Con thinking_level="low", gemini-3-flash-preview responde al paciente en ~1 s (3.5-flash: ~1,5-2 s).
+# Tested on 2026-10-24 on the free tier. The "pro" models (3.1-pro, pro-latest, 4-argon) return 429 with zero quota.
+# gemini-3.7/3.8-flash and flash-latest work but took 30-75 s per reply: too slow for conversation.
+# With thinking_level="low", gemini-3-flash-preview answers as the patient in ~1 s (3.5-flash: ~1.5-2 s).
 MODELS = {
-    # respuestas del paciente: rápido, buena calidad
-    # los flash tienen 20 requests/día por key en plan gratuito: el lite queda de último respaldo
+    # patient replies: fast, good quality
+    # flash models get 20 requests/day per key on the free tier: lite is the last fallback
     "patient": ["gemini-3-flash-preview", "gemini-3.5-flash", "gemini-3.6-flash", "gemini-3.5-flash-lite"],
-    # router y decisiones cortas: lo más rápido posible
+    # router and short decisions: as fast as possible
     "router": ["gemini-3.5-flash-lite", "gemini-flash-lite-latest", "gemini-3.1-flash-lite"],
-    # juez del feedback: calidad sobre velocidad
+    # feedback judge: quality over speed
     "judge": ["gemini-3.6-flash", "gemini-3.5-flash", "gemini-3.7-flash"],
-    # voz en tiempo real (Live API)
+    # real-time voice (Live API)
     "live": ["gemini-3.8-live", "gemini-3.1-flash-live-preview"],
     "embedding": ["gemini-embedding-001"],
 }
@@ -46,7 +46,7 @@ def api_keys() -> list[str]:
     if not keys and os.environ.get("GOOGLE_API_KEY"):
         keys = [os.environ["GOOGLE_API_KEY"]]
     if not keys:
-        raise RuntimeError("No hay GOOGLE_API_KEY_N en .env")
+        raise RuntimeError("No GOOGLE_API_KEY_N found in .env")
     return keys
 
 
@@ -57,18 +57,18 @@ def is_quota_error(exc: Exception) -> bool:
 
 @lru_cache(maxsize=None)
 def _client(model: str, key: str, kwargs: tuple):
-    """Instancia de ChatGoogleGenerativeAI compartida (crear cada una tarda ~1 s)."""
+    """Shared ChatGoogleGenerativeAI instance (creating each one takes ~1 s)."""
     from langchain_google_genai import ChatGoogleGenerativeAI
 
     return ChatGoogleGenerativeAI(model=model, google_api_key=key, max_retries=0, **dict(kwargs))
 
 
 class QuotaBlocked(Exception):
-    """El par (modelo, key) se quedó sin cuota hace poco: se saltea sin llamar a la API."""
+    """The (model, key) pair ran out of quota recently: skip it without calling the API."""
 
 
-# (modelo, key) -> timestamp hasta el que no se usa. Evita perder ~0,3 s por llamada
-# reintentando combinaciones que ya respondieron "sin cuota por hoy".
+# (model, key) -> timestamp until which it is not used. Avoids wasting ~0.3 s per call
+# retrying combinations that already answered "out of quota for today".
 _blocked: dict[tuple[str, str], float] = {}
 
 
@@ -77,7 +77,7 @@ def _block_seconds(exc: Exception) -> float:
     if "PerDay" in text:
         m = re.search(r"retryDelay['\"]?:\s*['\"](\d+)s", text)
         return float(m.group(1)) if m else 3600.0
-    return 20.0  # límite por minuto
+    return 20.0  # per-minute limit
 
 
 def _guarded(runnable, model: str, key: str):
@@ -85,7 +85,7 @@ def _guarded(runnable, model: str, key: str):
 
     def call(value, config):
         if _blocked.get((model, key), 0) > time.time():
-            raise QuotaBlocked(f"{model} sin cuota")
+            raise QuotaBlocked(f"{model} out of quota")
         try:
             return runnable.invoke(value, config)
         except Exception as exc:
@@ -97,31 +97,30 @@ def _guarded(runnable, model: str, key: str):
 
 
 def chat_model(task: str, schema: type | None = None, **kwargs):
-    """Modelo de chat de LangChain para la tarea, con fallback por key y por modelo.
+    """LangChain chat model for the task, with fallback across keys and models.
 
-    Devuelve un Runnable: el primero es MODELS[task][0] con la primera key; ante
-    cualquier error pasa a la siguiente key y después al siguiente modelo. Los pares
-    (modelo, key) sin cuota se saltean hasta que se renueve (ver `_guarded`).
-    Con `schema` (clase Pydantic) devuelve salida estructurada.
+    Returns a Runnable: the first one is MODELS[task][0] with the first key; on any
+    error it moves to the next key and then to the next model. (model, key) pairs
+    that are out of quota are skipped until it renews (see `_guarded`).
+    With `schema` (a Pydantic class) it returns structured output.
     """
     runnables = []
     for model in MODELS[task]:
         for key in api_keys():
             llm = _client(model, key, tuple(sorted(kwargs.items())))
             runnables.append(_guarded(llm.with_structured_output(schema) if schema else llm, model, key))
-    # si todas las keys y modelos fallan (p. ej. todas sin cuota por minuto), reintenta con espera creciente
+    # if every key and model fails (e.g. all out of per-minute quota), retry with growing backoff
     return runnables[0].with_fallbacks(runnables[1:]).with_retry(
         stop_after_attempt=4, wait_exponential_jitter=True, exponential_jitter_params={"initial": 5, "max": 40}
     )
 
 
 def with_rotation(call: Callable[[str, str], T], task: str, retries: int = 3, wait: float = 30) -> T:
-    """Ejecuta call(api_key, model) probando cada modelo de la tarea con cada key.
+    """Runs call(api_key, model), trying each of the task's models with each key.
 
-    Ante 429 pasa a la siguiente key; si todas se quedaron sin cuota para ese
-    modelo, pasa al siguiente modelo. Si no queda ninguno, espera `wait` segundos
-    (los límites del plan gratuito son por minuto) y reintenta hasta `retries`
-    veces. Otros errores se propagan.
+    On 429 it moves to the next key; if all keys are out of quota for that model,
+    it moves to the next model. If none is left, it waits `wait` seconds (free-tier
+    limits are per minute) and retries up to `retries` times. Other errors propagate.
     """
     last: Exception | None = None
     for attempt in range(retries + 1):
@@ -131,8 +130,8 @@ def with_rotation(call: Callable[[str, str], T], task: str, retries: int = 3, wa
             for key in api_keys():
                 try:
                     return call(key, model)
-                except Exception as exc:  # LangChain envuelve los errores de google-genai
+                except Exception as exc:  # LangChain wraps google-genai errors
                     if not is_quota_error(exc):
                         raise
                     last = exc
-    raise RuntimeError(f"Todas las keys sin cuota para '{task}'") from last
+    raise RuntimeError(f"All keys out of quota for '{task}'") from last

@@ -1,4 +1,4 @@
-"""Tests de los evaluadores de código de los evals (no llaman al LLM)."""
+"""Tests for the code-based eval evaluators (no LLM calls)."""
 
 from evals.datasets import ATAQUES, adversarial_examples
 from evals.run import no_entrega_todo, no_filtra_prompt, no_vuelca_hechos
@@ -28,6 +28,6 @@ def test_no_entrega_todo():
 def test_dataset_adversarial_cubre_todos_los_casos():
     examples = adversarial_examples()
     assert len(examples) == 3 * len(ATAQUES)
-    # la historia de varios turnos reemplaza el marcador por el motivo de consulta real
+    # the multi-turn history replaces the placeholder with the case's real chief complaint
     assert not any("(responde el motivo de consulta)" in t["text"]
                    for e in examples for t in e["inputs"]["historia"])

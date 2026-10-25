@@ -10,7 +10,7 @@ CASES = sorted((ROOT / "cases").glob("*/*.json"))
 
 
 def minimal_case(grilla_id: str = "02-disnea") -> dict:
-    """Caso mínimo que cubre todos los ítems de la grilla con un hecho por ítem."""
+    """Minimal case that covers every grilla item with one fact per item."""
     grilla = load_grilla("mpna", grilla_id)
     return {
         "id": "mpna-test",
@@ -46,13 +46,13 @@ def test_minimal_case_is_valid():
 def test_missing_required_field():
     case = minimal_case()
     del case["diagnostico"]
-    assert "falta 'diagnostico'" in validate(case, PATH)
+    assert "missing 'diagnostico'" in validate(case, PATH)
 
 
 def test_uncovered_item_is_reported():
     case = minimal_case()
     removed = case["anamnesis"].pop(5)["grilla_items"][0]
-    assert f"ítem sin cubrir: '{removed}'" in validate(case, PATH)
+    assert f"uncovered item: '{removed}'" in validate(case, PATH)
 
 
 def test_exempt_items_need_no_coverage():
@@ -64,19 +64,19 @@ def test_exempt_items_need_no_coverage():
 def test_unknown_item_reference():
     case = minimal_case()
     case["anamnesis"][0]["grilla_items"] = ["02-disnea::Ítem que no existe"]
-    assert any("ítem inexistente" in e for e in validate(case, PATH))
+    assert any("unknown item" in e for e in validate(case, PATH))
 
 
 def test_patient_cannot_reveal_diagnosis():
     case = minimal_case()
     case["anamnesis"][0]["respuesta"] = "El médico me dijo que tengo insuficiencia cardíaca"
-    assert "el diagnóstico principal aparece en una respuesta del paciente" in validate(case, PATH)
+    assert "the main diagnosis appears in a patient answer" in validate(case, PATH)
 
 
 def test_id_must_match_filename():
     case = copy.deepcopy(minimal_case())
     case["id"] = "otro"
-    assert any("no coincide" in e for e in validate(case, PATH))
+    assert any("does not match" in e for e in validate(case, PATH))
 
 
 @pytest.mark.parametrize("path", CASES, ids=[p.stem for p in CASES])

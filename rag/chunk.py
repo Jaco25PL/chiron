@@ -1,19 +1,19 @@
-"""Divide el material limpio de una materia en chunks para el RAG.
+"""Splits a subject's (materia) cleaned material into chunks for the RAG.
 
-Uso:
+Usage:
     python rag/chunk.py mpna
 
-Lee:
-    data/ecoe/<materia>/clean/**/*.md    apuntes (raíz), guías (guias/) y material de cátedra (catedra/)
-    data/ecoe/<materia>/grillas/*.json   grillas de evaluación (una por chunk)
-    data/ecoe/contexto-ecoe.md           contexto general del ECOE (común a todas las materias)
-Escribe:
+Reads:
+    data/ecoe/<materia>/clean/**/*.md    course notes (root), guidelines (guias/) and lecture material (catedra/)
+    data/ecoe/<materia>/grillas/*.json   evaluation grillas (one chunk each)
+    data/ecoe/contexto-ecoe.md           general ECOE context (shared by all subjects)
+Writes:
     data/ecoe/<materia>/chunks.jsonl
 
-Usa los splitters de LangChain: MarkdownHeaderTextSplitter corta por encabezados y
-RecursiveCharacterTextSplitter parte las secciones largas. Cada chunk lleva metadata
-para filtrar y citar (materia, fuente, tipo, sección, página) y su texto empieza con
-la ruta de encabezados para que el embedding tenga contexto.
+Uses LangChain splitters: MarkdownHeaderTextSplitter splits on headings and
+RecursiveCharacterTextSplitter breaks up long sections. Each chunk carries metadata
+for filtering and citing (materia, fuente, tipo, seccion, pagina), and its text starts
+with the heading path so the embedding has context.
 """
 
 import json
@@ -27,7 +27,7 @@ from langchain_text_splitters import MarkdownHeaderTextSplitter, RecursiveCharac
 ROOT = Path(__file__).resolve().parent.parent
 CHUNK_SIZE = 1800  # ~450 tokens
 CHUNK_OVERLAP = 150
-MIN_CHARS = 200  # secciones más cortas se unen con la siguiente
+MIN_CHARS = 200  # shorter sections are merged with the next one
 
 HEADERS = [("#", "h1"), ("##", "h2"), ("###", "h3"), ("####", "h4")]
 PAGE = re.compile(r"<!-- p\. (\d+) -->")
@@ -46,7 +46,7 @@ def section_path(doc: Document) -> str:
 
 
 def merge_short(sections: list[Document]) -> list[Document]:
-    """Une secciones muy cortas (p. ej. un título con una línea) con la siguiente."""
+    """Merges very short sections (e.g. a heading with a single line) into the next one."""
     merged: list[Document] = []
     for doc in sections:
         prev = merged[-1] if merged else None
@@ -62,13 +62,13 @@ def chunk_markdown(path: Path, materia: str, tipo: str) -> list[dict]:
     sections = merge_short(header_splitter.split_text(path.read_text(encoding="utf-8")))
 
     chunks: list[dict] = []
-    page = None  # última marca de página vista, en orden de lectura
+    page = None  # last page marker seen, in reading order
     for section in sections:
         seccion = section_path(section)
-        # el splitter une las líneas con "  \n": se recuperan los cortes de párrafo
+        # the splitter joins lines with "  \n": restore paragraph breaks
         content = section.page_content.replace("  \n", "\n\n")
         for part in text_splitter.split_text(content):
-            # la página del chunk es la marca que lo abre (si no hay texto antes) o la última vista
+            # the chunk's page is the marker that opens it (if no text precedes it) or the last one seen
             first = PAGE.search(part)
             opens = first and not COMMENT.sub("", part[: first.start()]).strip()
             chunk_page = int(first.group(1)) if opens else page
@@ -125,7 +125,7 @@ def main():
     contexto = ROOT / "data" / "ecoe" / "contexto-ecoe.md"
     if contexto.exists():
         chunks += chunk_markdown(contexto, "general", "contexto_ecoe")
-    # la subcarpeta de clean/ define el tipo: guias/ -> guia, catedra/ -> clase, raíz -> apunte
+    # the clean/ subfolder sets the type: guias/ -> guia, catedra/ -> clase, root -> apunte
     tipos = {"guias": "guia", "catedra": "clase"}
     for md in sorted((base / "clean").rglob("*.md")):
         sub = md.parent.relative_to(base / "clean").as_posix()

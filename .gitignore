@@ -5,6 +5,9 @@ __pycache__/
 .venv/
 venv/
 
-# Material crudo: solo se versiona lo procesado (clean/, grillas/, chunks.jsonl, transcripciones)
+# Raw material: only processed data is versioned (clean/, grillas/, chunks.jsonl, transcripts)
 data/ecoe/*/raw/
 data/ecoe/audios/*.ogg
+
+# OAuth client JSON and other credentials
+secrets/

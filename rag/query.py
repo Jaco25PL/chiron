@@ -1,10 +1,10 @@
-"""Búsqueda en el índice del RAG.
+"""Search over the RAG index.
 
-Uso como script:
+As a script:
     python rag/query.py mpna "¿qué preguntar ante un dolor torácico?"
     python rag/query.py mpna "grilla disnea" --tipo grilla
 
-Uso como módulo:
+As a module:
     from rag.query import search
     search("mpna", "disuria", k=5, tipo="grilla")
 """
@@ -21,7 +21,7 @@ _stores = {}
 
 
 def search(materia: str, pregunta: str, k: int = 5, tipo: str | None = None) -> list[dict]:
-    """Devuelve [{texto, metadata, score}] ordenado por relevancia (menor score = más cercano)."""
+    """Returns [{texto, metadata, score}] sorted by relevance (lower score = closer)."""
     if materia not in _stores:
         _stores[materia] = get_store(materia)
     where = {"tipo": tipo} if tipo else None
@@ -30,11 +30,11 @@ def search(materia: str, pregunta: str, k: int = 5, tipo: str | None = None) -> 
 
 
 def main():
-    p = argparse.ArgumentParser()
-    p.add_argument("materia")
-    p.add_argument("pregunta")
-    p.add_argument("-k", type=int, default=5)
-    p.add_argument("--tipo", choices=["apunte", "guia", "clase", "grilla", "contexto_ecoe"])
+    p = argparse.ArgumentParser(description="Search the RAG index of a subject (materia).")
+    p.add_argument("materia", help="subject, e.g. mpna")
+    p.add_argument("pregunta", help="query text (in Spanish, like the indexed material)")
+    p.add_argument("-k", type=int, default=5, help="number of results")
+    p.add_argument("--tipo", choices=["apunte", "guia", "clase", "grilla", "contexto_ecoe"], help="filter by source type")
     args = p.parse_args()
 
     for r in search(args.materia, args.pregunta, args.k, args.tipo):

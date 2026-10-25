@@ -1,9 +1,9 @@
-"""API HTTP de Chiron + front estático.
+"""Chiron HTTP API + static frontend.
 
     .venv\\Scripts\\python -m uvicorn api.main:app --reload --port 8000
 
-Con CHIRON_FAKE=1 usa api/fake_session.py (sin LLM). Si no, usa agents.session y, si
-no se puede importar, cae al fake con un aviso en consola.
+With CHIRON_FAKE=1 it uses api/fake_session.py (no LLM). Otherwise it uses agents.session
+and, if that can't be imported, falls back to the fake with a console warning.
 """
 
 import logging
@@ -32,7 +32,7 @@ else:
     try:
         from agents import session  # type: ignore
     except Exception as e:  # noqa: BLE001
-        print(f"[chiron] AVISO: no se pudo importar agents.session ({e!r}); uso api/fake_session.py",
+        print(f"[chiron] WARNING: could not import agents.session ({e!r}); using api/fake_session.py",
               file=sys.stderr)
         from api import fake_session as session
         BACKEND = "fake"
@@ -42,7 +42,7 @@ app = FastAPI(title="Chiron")
 
 @app.on_event("startup")
 def _warm_up():
-    """Crea los clientes de Gemini en segundo plano para que el primer mensaje no espere."""
+    """Creates the Gemini clients in the background so the first message doesn't have to wait."""
     if BACKEND == "real":
         import threading
 
@@ -68,7 +68,7 @@ async def _validation_error(_: Request, exc: RequestValidationError):
 
 
 def _call(fn, *args, **kwargs):
-    """Llama al backend y convierte cualquier excepción en un JSON {error}."""
+    """Calls the backend and turns any exception into a JSON {error}."""
     try:
         return fn(*args, **kwargs)
     except KeyError as e:
