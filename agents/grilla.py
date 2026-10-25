@@ -102,9 +102,19 @@ def covered(case: dict, state: dict) -> set[str]:
     }
 
 
+def not_indicated(case: dict) -> set[str]:
+    """Study items earned by NOT ordering (e.g. "No es necesaria PC imagenológica"): every study they
+    link to is marked as not indicated in the case."""
+    indicated = {p["estudio"]: p.get("indicado", True) for p in case.get("paraclinica", [])}
+    return {it["id"] for it in items(case)
+            if it["kind"] == "estudio" and all(indicated.get(s) is False for s in it["studies"])}
+
+
 def checklist(case: dict, state: dict) -> list[dict]:
     """Beginner mode: what not to forget, ticked as the student covers it. Only items the app can tick
-    by itself (facts, findings, studies); conduct and diagnosis items are left to the final feedback."""
+    by itself (facts, findings, studies); conduct and diagnosis items are left to the final feedback,
+    and so are the studies not to order (ordering them would tick them)."""
     done = covered(case, state)
+    skip = not_indicated(case)
     return [{"id": it["id"], "texto": it["texto"], "tipo": it["kind"], "hecho": it["id"] in done}
-            for it in items(case) if it["kind"] in CHECKLIST_KINDS]
+            for it in items(case) if it["kind"] in CHECKLIST_KINDS and it["id"] not in skip]

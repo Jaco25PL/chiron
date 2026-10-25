@@ -47,3 +47,10 @@ def test_the_real_session_sends_the_checklist_only_to_beginners():
     assert any(x["hecho"] for x in get_session(sid)["checklist"])
     with pytest.raises(ValueError):
         new_session("mpna-dolor-toracico-angina", nivel="experto")
+
+
+def test_checklist_leaves_out_the_studies_not_to_order():
+    case = load_case("mpna-itu-pna-diabetica")
+    no_pedir = grilla.not_indicated(case)
+    assert no_pedir  # "No es necesaria PC imagenológica": ordering the scan must not tick it
+    assert not {x["id"] for x in grilla.checklist(case, {})} & no_pedir

@@ -121,19 +121,11 @@ def guard(kind: str, evidence: bool, rating: str | None) -> str | None:
     return rating if rating in POINTS else None
 
 
-def _not_indicated(case: dict) -> set[str]:
-    """Study items earned by NOT ordering (e.g. "No es necesaria PC imagenológica"): every study they
-    link to is marked as not indicated in the case."""
-    indicated = {p["estudio"]: p.get("indicado", True) for p in case.get("paraclinica", [])}
-    return {it["id"] for it in grilla.items(case)
-            if it["kind"] == "estudio" and all(indicated.get(s) is False for s in it["studies"])}
-
-
 def evidence(case: dict, state: dict) -> dict[str, bool]:
     """Per item: did the consultation show what the item asks for? For the items earned by not ordering
     a study, that means the student didn't order it."""
     done = grilla.covered(case, state)
-    inverse = _not_indicated(case)
+    inverse = grilla.not_indicated(case)
     return {it["id"]: (it["id"] not in done) if it["id"] in inverse else (it["id"] in done)
             for it in grilla.items(case)}
 
