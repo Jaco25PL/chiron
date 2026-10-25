@@ -29,12 +29,17 @@ def enabled() -> bool:
 def pool():
     from psycopg_pool import ConnectionPool
 
-    # prepare_threshold=None: Neon's pooled endpoint (PgBouncer) doesn't support prepared statements
+    # prepare_threshold=None: Neon's pooled endpoint (PgBouncer) doesn't support prepared statements.
+    # Neon closes idle connections, and the function outlives them: check each connection before
+    # handing it out (a dead one is replaced) and drop idle ones first ("SSL connection has been
+    # closed unexpectedly" on the first query after a quiet spell).
     p = ConnectionPool(
         os.environ["DATABASE_URL"],
         min_size=1,
         max_size=5,
         kwargs={"autocommit": True, "prepare_threshold": None},
+        check=ConnectionPool.check_connection,
+        max_idle=120,
         open=True,
     )
     with p.connection() as conn:
