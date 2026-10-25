@@ -145,6 +145,16 @@ A log of what I ran into while building Chiron: what showed up, how I caught it,
 - **What I did:** a case catalog that exposes only `{opaque id, name, sex}` (ids are hashes), the patient's identity returned when the consultation starts, and a "random patient" card where the server picks the case, like the real station. Tests assert the payloads and the screen never carry anything else.
 - **Lesson:** hiding something in the UI isn't hiding it. Whatever reaches the browser (URLs, API payloads, static file names) is visible to the user.
 
+## 18. The patient's voice arrived 5 seconds after their words
+
+- **Context:** face to face is a voice call. After the student stops talking, the patient should answer about as fast as a person would.
+- **Finding:** it felt slow. Instead of guessing, I timed every stage of a turn and stored the numbers per turn (`turns.timings`: router, the node that answered, LangGraph + checkpoint, database), then measured in the browser along the real production path (browser → Next proxy → chiron-api → Gemini) with `web/tests/e2e/latencia.spec.ts`: 8 turns, two patients.
+- **Where the time went (baseline, medians):** the reply text arrived at **3.3 s** (router 0.9 s, patient 1.1 s, LangGraph + Neon checkpoint 0.4 s, network and proxy 0.7 s). The patient **started speaking at 9.5 s**: the voice added **5.4 s** after the text, because the browser made a second request and could only play the WAV once Gemini had generated all of it and it had fully downloaded.
+- **What I did:** one streamed response (NDJSON) per phrase. The backend sends the reply first, so the caption appears at once, then starts Gemini TTS in streaming mode and forwards each PCM chunk as it is generated. The browser schedules every chunk on the AudioContext right after the previous one, so playback is gap-free while the rest is still being generated (Gemini produces audio faster than it plays: ~5 s of speech in ~2 s). The second request and the WAV are gone.
+- **Result:** voice after text went from **5.4 s to 1.3 s** (median; range 1.0–3.7 s, previously 3.5–10.1 s). In turns where the patient model answered normally, the patient starts speaking at **~4.4 s instead of ~8.5 s** after the phrase is sent.
+- **What the measurement also showed:** the next bottleneck isn't the voice. In 2 of 8 baseline turns and 4 of 8 after the change, a single call to the patient model (`gemini-3-flash-preview`, and `gemini-3.5-flash` after the preview ran out of quota) took **7–12 s instead of ~1 s**, with no error or retry (seen in LangSmith). The router on flash-lite was never slow. That's free-tier variance on the larger models; options are a faster patient model (it would need the evals re-run) or racing a second request when the first one is slow (it costs quota).
+- **Lesson:** measure each stage before optimizing. The obvious suspect (the LLM) wasn't where most of the wait was; a second request plus waiting for a whole file was. And keep the medians *and* the outliers: the median hid that half the slow turns had a different cause.
+
 ## Short version for LinkedIn
 
 > I'm building **Chiron**, an AI patient simulator that helps medical students practice for the ECOE (the Spanish-language OSCE, the hands-on clinical exam). The most interesting part wasn't getting the patient to talk, but **measuring that it behaves the way it should**.
