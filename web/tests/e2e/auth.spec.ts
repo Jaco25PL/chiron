@@ -27,7 +27,10 @@ test.describe("signed out", () => {
     expect(providers.google.callbackUrl).toBe(`${baseURL}/api/auth/callback/google`);
   });
 
-  test("'Continuar con Google' sends a correct OAuth request (Google itself is not contacted)", async ({ page, baseURL }) => {
+  test("'Continuar con Google' sends a correct OAuth request (Google itself is not contacted)", async ({
+    page,
+    baseURL,
+  }) => {
     let authorize: URL | null = null;
     await page.route("https://accounts.google.com/**", (route) => {
       authorize = new URL(route.request().url());
@@ -89,7 +92,7 @@ test.describe("signed in", () => {
     });
     await page.goto("/");
     await page.getByRole("button", { name: "Cuenta" }).click();
-    await page.getByRole("button", { name: "Cerrar sesión" }).click();
+    await page.getByRole("menuitem", { name: "Cerrar sesión" }).click();
     // sign-out is a server action; in dev its first call compiles on demand, which can exceed 5s
     await expect(page).toHaveURL(/\/login/, { timeout: 20_000 });
     release();

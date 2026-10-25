@@ -1,5 +1,7 @@
 // Chiron backend client (see agents/session.py for the contract).
 
+import type { Acento } from "@/lib/acento";
+
 // What the student may know before the consultation, as in the real exam: name and sex.
 export type Paciente = { nombre: string; sexo: string };
 
@@ -61,6 +63,9 @@ export const api = {
   enviar: (sessionId: string, text: string) =>
     call<Respuesta>(`/api/sessions/${sessionId}/messages`, { method: "POST", body: JSON.stringify({ text }) }),
   terminar: (sessionId: string) => call<Resumen>(`/api/sessions/${sessionId}/finish`, { method: "POST" }),
+  preferencias: () => call<{ acento: Acento }>("/api/preferencias"),
+  guardarAcento: (acento: Acento) =>
+    call<{ acento: Acento }>("/api/preferencias", { method: "POST", body: JSON.stringify({ acento }) }),
   /** Face-to-face call: the reply arrives first (onRespuesta) and then the patient's voice, as 24 kHz
    *  16-bit PCM chunks while it is generated (onAudio). Resolves when the voice has fully arrived. */
   enviarConVoz: async (
