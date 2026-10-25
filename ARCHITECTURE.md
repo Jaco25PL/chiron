@@ -138,7 +138,8 @@ sequenceDiagram
 ```
 
 - **Why not Gemini Live**, which would be faster: it writes its own replies, so it would bypass the LangGraph patient and everything the evals measure (no diagnosis leaks, one fact per question). Here voice is only input and output; the patient's words still come from the same graph.
-- **Speech to text in the browser:** free, no quota, near-zero latency (Chrome, Edge, Android, Safari). Firefox has no dictation, so the mic is disabled there and typing still works.
+- **It's a call, not voice messages:** like the voice mode of ChatGPT or Claude, there are only two buttons, answer and hang up. Once answered the microphone stays open; the browser's end-of-phrase detection is the turn-taking, and talking over the patient cuts their audio. Exams and studies are asked for out loud too. When the patient's voice comes back through the speakers, phrases made of the patient's own words (while they talk or 1.5 s after) are treated as echo: they neither interrupt nor get sent.
+- **Speech to text in the browser:** free, no quota, near-zero latency (Chrome, Edge, Android, Safari). Firefox has no dictation, so the call can't be answered there and the Chat mode remains.
 - **The voice endpoint only speaks the consultation's last patient reply**, for its owner. It never takes arbitrary text, so it can't be used as a free TTS service. The voice (Sulafat or Schedar, chosen by ear) is picked by sex, and the style ("mujer uruguaya de 61 años, de Montevideo, acento rioplatense…") is built from the case on the server, so age never reaches the browser. The style goes in `speech_metadata.style`: put inside the text, the model read it aloud.
 - **Latency:** the reply text appears first and the audio follows ~1–3 s later. Streaming the audio is the next improvement.
 
@@ -179,7 +180,7 @@ github.com/Jaco25PL/chiron  ──push to main──┬──▶ Vercel "chiron"
 | Layer | Tool | What it covers |
 |---|---|---|
 | Unit / integration | pytest (35) | case validator, eval checks, HMAC signature, consultation ownership, API with a fake backend, dependency sync |
-| E2E | Playwright (22) | full consultation, voice requests in face to face, sign-in redirects, OAuth request shape (Google intercepted), forged cookies, open redirect, sign-out race, cold-start notice, signed calls to the real backend; runs locally and against production |
+| E2E | Playwright (22) | full consultation, the face-to-face call (with a fake speech recognizer), sign-in redirects, OAuth request shape (Google intercepted), forged cookies, open redirect, sign-out race, cold-start notice, signed calls to the real backend; runs locally and against production |
 | LLM behavior | LangSmith evals | patient (diagnosis leaks, hallucinations, in character, one fact per question), router intent, adversarial attacks; LLM-as-judge + code checks |
 
 Tests run isolated from real infrastructure (`tests/conftest.py`: no database, no secret); evals run on demand because they spend model quota.

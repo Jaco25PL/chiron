@@ -11,7 +11,12 @@ type Reconocimiento = {
   lang: string;
   interimResults: boolean;
   continuous: boolean;
-  onresult: ((e: { resultIndex: number; results: ArrayLike<ArrayLike<{ transcript: string }> & { isFinal: boolean }> }) => void) | null;
+  onresult:
+    | ((e: {
+        resultIndex: number;
+        results: ArrayLike<ArrayLike<{ transcript: string }> & { isFinal: boolean }>;
+      }) => void)
+    | null;
   onerror: ((e: { error: string }) => void) | null;
   onend: (() => void) | null;
   start: () => void;
@@ -26,61 +31,109 @@ function crearReconocimiento(): Reconocimiento | null {
   return Ctor ? new Ctor() : null;
 }
 
-/** Push-to-talk dictation: start() listens until the student stops talking, then calls onFinal. */
-export function useDictado(onFinal: (texto: string) => void) {
+/** Normalized words, to compare what was heard with what the patient is saying. */
+export function palabras(t: string) {
+  return t
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .split(/[^a-z0-9ñ]+/)
+    .filter((w) => w.length > 2);
+}
+
+type Escucha = {
+  /** A finished phrase (the browser detected the pause at the end of it). */
+  onFrase: (texto: string) => void;
+  /** The student started talking: used to interrupt the patient. */
+  onVoz: (texto: string) => void;
+  /** True if what was heard is the patient's own voice coming back through the speakers. */
+  esEco: (texto: string) => boolean;
+};
+
+/** Hands-free listening for the call: one phrase at a time, restarting after each, until colgar(). */
+export function useEscucha({ onFrase, onVoz, esEco }: Escucha) {
   const [soportado, setSoportado] = useState(false);
-  const [escuchando, setEscuchando] = useState(false);
+  const [activa, setActiva] = useState(false);
   const [parcial, setParcial] = useState("");
+  const enLlamada = useRef(false);
   const rec = useRef<Reconocimiento | null>(null);
-  const alTerminar = useRef(onFinal);
+  const cb = useRef({ onFrase, onVoz, esEco });
   useEffect(() => {
-    alTerminar.current = onFinal;
-  }, [onFinal]);
+    cb.current = { onFrase, onVoz, esEco };
+  });
 
   useEffect(() => {
     // feature detection needs window, so it runs after hydration
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setSoportado(!!crearReconocimiento());
-    return () => rec.current?.abort();
+    return () => {
+      enLlamada.current = false;
+      rec.current?.abort();
+    };
   }, []);
 
-  const empezar = useCallback(() => {
-    const r = crearReconocimiento();
-    if (!r) return;
-    rec.current?.abort();
-    rec.current = r;
-    r.lang = "es-UY";
-    r.interimResults = true;
-    r.continuous = false; // ends on its own after a pause
-    let final = "";
-    r.onresult = (e) => {
-      let interino = "";
-      for (let i = e.resultIndex; i < e.results.length; i++) {
-        const res = e.results[i];
-        if (res.isFinal) final += res[0].transcript;
-        else interino += res[0].transcript;
-      }
-      setParcial((final + interino).trim());
-    };
-    r.onerror = (e) => {
-      if (e.error === "not-allowed" || e.error === "service-not-allowed") {
+  // one phrase per recognition session; it restarts itself while the call is on (created once)
+  const [escuchar] = useState(() => {
+    const escuchar = () => {
+      if (!enLlamada.current) return;
+      const r = crearReconocimiento();
+      if (!r) return;
+      rec.current = r;
+      r.lang = "es-UY";
+      r.interimResults = true;
+      r.continuous = false; // ends by itself at the pause after a phrase: that's the turn-taking
+      const inicio = Date.now();
+      let final = "";
+      r.onresult = (e) => {
+        let interino = "";
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          const res = e.results[i];
+          if (res.isFinal) final += res[0].transcript;
+          else interino += res[0].transcript;
+        }
+        const t = (final + interino).trim();
+        if (!t || cb.current.esEco(t)) return;
+        setParcial(t);
+        cb.current.onVoz(t);
+      };
+      r.onerror = (e) => {
+        if (["not-allowed", "service-not-allowed", "audio-capture"].includes(e.error)) {
+          enLlamada.current = false;
+          setActiva(false);
+          toast.error("Para hablarle al paciente, permití el micrófono en el navegador.", { id: "mic" });
+        }
+      };
+      r.onend = () => {
         setParcial("");
-        toast.error("Para hablarle al paciente, permití el micrófono en el navegador.", { id: "mic" });
+        const t = final.trim();
+        if (t && !cb.current.esEco(t)) cb.current.onFrase(t);
+        // listen again; if it ended right away (silence timeout, a hiccup) don't spin in a tight loop
+        if (enLlamada.current) setTimeout(escuchar, Date.now() - inicio < 400 ? 600 : 0);
+      };
+      try {
+        r.start();
+      } catch {
+        setTimeout(escuchar, 600);
       }
     };
-    r.onend = () => {
-      setEscuchando(false);
-      setParcial("");
-      if (final.trim()) alTerminar.current(final.trim());
-    };
+    return escuchar;
+  });
+
+  const contestar = useCallback(() => {
+    if (enLlamada.current) return;
+    enLlamada.current = true;
+    setActiva(true);
+    escuchar();
+  }, [escuchar]);
+
+  const colgar = useCallback(() => {
+    enLlamada.current = false;
+    setActiva(false);
     setParcial("");
-    setEscuchando(true);
-    r.start();
+    rec.current?.abort();
   }, []);
 
-  const parar = useCallback(() => rec.current?.stop(), []);
-
-  return { soportado, escuchando, parcial, empezar, parar };
+  return { soportado, activa, parcial, contestar, colgar };
 }
 
 /** Plays the patient's audio through one AudioContext, with an analyser the avatar can read for lip-sync. */
@@ -93,7 +146,8 @@ export function useVozPaciente() {
   /** Creates or resumes the AudioContext. Call it from a tap or key press: iOS only allows audio after a gesture. */
   const desbloquear = useCallback(() => {
     if (!ctx.current) {
-      const C = window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const C =
+        window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       ctx.current = new C();
       analyser.current = ctx.current.createAnalyser();
       analyser.current.fftSize = 1024;

@@ -2,9 +2,10 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { expect, test } from "@playwright/test";
 import { signInAs } from "./session";
+import { decir, microfonoFalso } from "./voz";
 
 // The main user journey, end to end: pick a case → interview → examine → order a study →
-// switch to face to face → end → summary. Against the fake backend it is deterministic; the
+// switch to a face-to-face call → hang up → summary. Against the fake backend it is deterministic; the
 // expected answers are read from the same case JSON the backend serves.
 
 const CASE_ID = "mpna-disnea-icc";
@@ -15,6 +16,7 @@ test.skip(!!process.env.BASE_URL, "uses the deterministic fake backend; prod is 
 
 test("a full consultation, from case selection to summary", async ({ page, context, baseURL }) => {
   await signInAs(context, baseURL!);
+  await microfonoFalso(context);
 
   // 1. pick the patient: the card only says who they are, never what they have
   await page.goto("/");
@@ -44,13 +46,14 @@ test("a full consultation, from case selection to summary", async ({ page, conte
   await send("Solicito un electrocardiograma");
   await expect(page.getByText(`${ecg.estudio}:`, { exact: false })).toBeVisible();
 
-  // 4. same consultation in face-to-face mode: the last patient line becomes the caption
+  // 4. same consultation as a call: answer, and the last patient line becomes the caption
   await page.getByRole("tab", { name: "Cara a cara" }).click();
   await expect(page.getByLabel(/Retrato de/)).toBeVisible();
+  await page.getByRole("button", { name: "Contestar" }).click();
   await expect(page.getByText(inicio.respuesta)).toBeVisible();
 
-  // 5. end it: the summary counts what the student obtained
-  await page.getByLabel("Terminar consulta").click();
+  // 5. hang up: the summary counts what the student obtained
+  await page.getByRole("button", { name: "Cortar" }).click();
   const sheet = page.getByRole("dialog");
   await expect(sheet.getByText("Consulta terminada")).toBeVisible();
   await expect(sheet).toContainText(`/${caso.anamnesis.length}`);
@@ -77,21 +80,34 @@ test("random patient: the server picks the case and the student only learns name
 });
 
 
-test("face to face: each new patient reply is spoken, and muting stops it", async ({ page, context, baseURL }) => {
+test("face to face is a call: answer, talk hands-free, the patient speaks, hang up", async ({ page, context, baseURL }) => {
   await signInAs(context, baseURL!);
+  await microfonoFalso(context);
   const voces: number[] = [];
   page.on("response", (r) => r.url().endsWith("/voz") && voces.push(r.status()));
-  await page.goto(`/consulta/aleatorio?modo=cara`);
-  await expect(page.getByLabel("Hablar")).toBeEnabled(); // Chromium has speech recognition
+  await page.goto("/consulta/aleatorio?modo=cara");
 
-  await page.locator("#mensaje").fill("Hola, buenas tardes");
-  await page.keyboard.press("Enter");
-  await expect.poll(() => voces).toEqual([200]); // the fake backend returns a short silent WAV
+  // like a phone call: two buttons, no text box and no shortcut chips
+  await expect(page.getByRole("button", { name: "Contestar" })).toBeEnabled();
+  await expect(page.getByRole("button", { name: "Cortar" })).toBeVisible();
+  await expect(page.locator("#mensaje")).toHaveCount(0);
+  await expect(page.getByText("Le tomo los signos vitales")).toHaveCount(0);
+
+  await page.getByRole("button", { name: "Contestar" }).click();
+  await expect(page.getByRole("button", { name: "Contestar" })).toHaveCount(0);
+  await expect(page.getByText("Conectado · saludá para empezar")).toBeVisible();
+
+  // a phrase is sent when the student pauses; the reply is spoken (the fake backend returns a silent WAV)
+  await decir(page, "Hola, buenas tardes");
+  await expect(page.getByText("Buenas, doctor.")).toBeVisible();
+  await expect.poll(() => voces).toEqual([200]);
   await expect(page.getByText("No se pudo reproducir")).toHaveCount(0);
 
-  await page.getByLabel("Silenciar al paciente").click();
-  await page.locator("#mensaje").fill("¿Qué lo trae por acá?");
-  await page.keyboard.press("Enter");
-  await expect(page.getByText(/está pensando/)).toBeHidden();
-  expect(voces).toEqual([200]); // muted: no new audio requested
+  // the exam is asked for out loud too; the teacher answers in writing, the patient's voice isn't used
+  await decir(page, "Le tomo la presión arterial");
+  await expect(page.getByText("Docente")).toBeVisible();
+  expect(voces).toEqual([200]);
+
+  await page.getByRole("button", { name: "Cortar" }).click();
+  await expect(page.getByRole("dialog").getByText("Consulta terminada")).toBeVisible();
 });

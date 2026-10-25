@@ -1,12 +1,12 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { api, type Caso, type Turno } from "@/lib/api";
 import { ASCII_FACE } from "@/lib/ascii-face";
-import { useDictado, useVozPaciente } from "@/lib/voz";
-import { Composer } from "./Composer";
-import { CameraOff, Close, Mic, PhoneDown, Speaker, SpeakerOff, Stethoscope } from "./icons";
+import { palabras, useEscucha, useVozPaciente } from "@/lib/voz";
+import { CameraOff, Close, Mic, Phone, PhoneDown, Stethoscope } from "./icons";
 
 /** The case's ASCII portrait: public/retratos/<id>.txt, else default.txt, else the generated bust. */
 function useRetrato(caseId: string | undefined) {
@@ -24,8 +24,10 @@ function useRetrato(caseId: string | undefined) {
   return { arte, cols, filas: lineas.length };
 }
 
-/** "Face to face" view: a video call with the patient. The student talks (browser speech recognition)
- *  and the patient answers out loud (Gemini TTS); typing still works. For now the face is a static ASCII portrait. */
+/** "Face to face" view: a voice call with the patient, like the voice mode of ChatGPT or Claude.
+ *  Two buttons only: answer and hang up. Once answered the microphone stays open; each phrase is sent
+ *  when the student pauses, the patient answers out loud (Gemini TTS), and talking over the patient
+ *  interrupts them. Exams and studies are asked for by voice too. For now the face is an ASCII portrait. */
 export function FaceView({
   caso,
   sessionId,
@@ -43,6 +45,7 @@ export function FaceView({
   onSend: (t: string) => void;
   onEnd: () => void;
 }) {
+  const router = useRouter();
   const ultimoPaciente = [...turnos].reverse().find((t) => t.role === "paciente");
   const ultimoIdx = turnos.length - 1;
   const ultimoDocente = turnos[ultimoIdx]?.role === "docente" ? turnos[ultimoIdx] : null;
@@ -51,31 +54,72 @@ export function FaceView({
   const { arte, cols, filas } = useRetrato(caso?.id);
 
   const voz = useVozPaciente();
-  const { desbloquear, callar } = voz;
-  const [mudo, setMudo] = useState(false);
-  // every send comes from a tap or key press: the moment to unlock audio on iOS
-  const enviar = useCallback(
-    (texto: string) => {
-      desbloquear();
-      callar();
-      onSend(texto);
-    },
-    [desbloquear, callar, onSend],
-  );
-  const dictado = useDictado(enviar);
+  const { callar, reproducir } = voz;
 
-  // speak each new patient reply (not the ones that were already there when this view opened)
+  // the patient's voice can come back through the speakers: what is heard while (or right after)
+  // they speak, made of their own words, is echo and neither interrupts nor gets sent
+  const sonando = useRef({ hablando: false, texto: "", hasta: 0 });
+  useEffect(() => {
+    if (sonando.current.hablando && !voz.hablando) sonando.current.hasta = Date.now();
+    sonando.current.hablando = voz.hablando;
+  }, [voz.hablando]);
+  const esEco = useCallback((t: string) => {
+    const s = sonando.current;
+    if (!s.hablando && Date.now() - s.hasta > 1500) return false;
+    const dichas = new Set(palabras(s.texto));
+    const oidas = palabras(t);
+    return !oidas.length || oidas.filter((w) => dichas.has(w)).length / oidas.length >= 0.6;
+  }, []);
+
+  // a phrase finished while the patient is still "thinking" waits and goes right after
+  const pendiente = useRef("");
+  const ocupado = useRef(pensando);
+  useEffect(() => {
+    ocupado.current = pensando;
+    if (!pensando && pendiente.current) {
+      const t = pendiente.current;
+      pendiente.current = "";
+      onSend(t);
+    }
+  }, [pensando, onSend]);
+
+  const escucha = useEscucha({
+    onFrase: (t) => {
+      if (ocupado.current) pendiente.current = `${pendiente.current} ${t}`.trim();
+      else onSend(t);
+    },
+    onVoz: (t) => {
+      if (sonando.current.hablando && palabras(t).length >= 2) callar(); // the student talks over the patient
+    },
+    esEco,
+  });
+
+  // speak each new patient reply during the call (not the ones from before it started)
   const idxPaciente = ultimoPaciente ? turnos.lastIndexOf(ultimoPaciente) : -1;
   const hablado = useRef(idxPaciente);
   useEffect(() => {
-    if (idxPaciente <= hablado.current || !sessionId) return;
+    if (idxPaciente <= hablado.current || !sessionId || !ultimoPaciente) return;
     hablado.current = idxPaciente;
-    if (mudo) return;
+    if (!escucha.activa) return;
+    sonando.current.texto = ultimoPaciente.text;
     api
       .voz(sessionId)
-      .then(voz.reproducir)
+      .then(reproducir)
       .catch(() => toast.error("No se pudo reproducir la voz del paciente; seguí con los subtítulos.", { id: "voz" }));
-  }, [idxPaciente, sessionId, mudo, voz.reproducir]);
+  }, [idxPaciente, sessionId, ultimoPaciente, escucha.activa, reproducir]);
+
+  const contestar = () => {
+    voz.desbloquear(); // inside the tap: iOS only allows audio after a gesture
+    escucha.contestar();
+  };
+  const cortar = () => {
+    escucha.colgar();
+    callar();
+    if (turnos.length) onEnd(); // ends the consultation and shows the summary
+    else router.push("/"); // declined before saying anything
+  };
+
+  const enLlamada = escucha.activa;
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3 px-3 pb-[max(12px,env(safe-area-inset-bottom))] sm:px-6">
@@ -83,7 +127,9 @@ export function FaceView({
       <div className="relative min-h-0 flex-1 overflow-hidden rounded-[28px] border border-line bg-[radial-gradient(ellipse_at_50%_35%,#0f1716_0%,#050607_70%)] [container-type:size]">
         <pre
           aria-label={`Retrato de ${nombre}`}
-          className="pointer-events-none absolute left-1/2 top-[52%] -translate-x-1/2 -translate-y-1/2 select-none font-mono leading-none [mask-image:radial-gradient(ellipse_70%_75%_at_50%_45%,#000_55%,transparent_100%)]"
+          className={`pointer-events-none absolute left-1/2 top-[52%] -translate-x-1/2 -translate-y-1/2 select-none font-mono leading-none transition-opacity duration-300 ease-out [mask-image:radial-gradient(ellipse_70%_75%_at_50%_45%,#000_55%,transparent_100%)] ${
+            enLlamada ? "opacity-100" : "opacity-35"
+          }`}
           style={{
             // a monospace character is ~0.6em wide. Height drives the size; on narrow (mobile) screens
             // the shoulders may overflow the sides so the face stays large
@@ -99,34 +145,28 @@ export function FaceView({
         {/* líneas de barrido fijas */}
         <div className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(0deg,rgb(0_0_0/0.18)_0px,rgb(0_0_0/0.18)_1px,transparent_1px,transparent_3px)]" />
 
-        {/* propia cámara */}
+        {/* propia cámara: muestra si el micrófono está abierto */}
         <div className="glass absolute right-3 top-3 grid aspect-[3/4] w-[22%] max-w-36 min-w-20 place-items-center rounded-2xl sm:right-4 sm:top-4">
-          <div className="flex flex-col items-center gap-1.5 text-ink-3">
-            <CameraOff width={18} height={18} />
+          <div className={`flex flex-col items-center gap-1.5 ${enLlamada ? "text-accent" : "text-ink-3"}`}>
+            {enLlamada ? (
+              <Mic width={18} height={18} className={escucha.parcial ? "animate-pulse" : ""} />
+            ) : (
+              <CameraOff width={18} height={18} />
+            )}
             <span className="text-[11px]">Vos</span>
           </div>
         </div>
 
         {/* nombre */}
         <div className="glass absolute left-3 top-3 flex items-center gap-2 rounded-full py-1.5 pl-2.5 pr-3.5 sm:left-4 sm:top-4">
-          <span className={`size-2 rounded-full bg-live shadow-[0_0_10px_var(--live)] ${voz.hablando ? "animate-pulse" : ""}`} />
+          <span
+            className={`size-2 rounded-full ${enLlamada ? "bg-live shadow-[0_0_10px_var(--live)]" : "bg-ink-3"} ${voz.hablando ? "animate-pulse" : ""}`}
+          />
           <span className="text-[13px] font-medium">{nombre}</span>
         </div>
-        <button
-          type="button"
-          aria-label={mudo ? "Activar la voz del paciente" : "Silenciar al paciente"}
-          aria-pressed={mudo}
-          onClick={() => {
-            if (!mudo) voz.callar();
-            setMudo(!mudo);
-          }}
-          className="press glass absolute left-3 top-14 grid size-9 place-items-center rounded-full text-ink-2 hover:text-ink sm:left-4 sm:top-[60px]"
-        >
-          {mudo ? <SpeakerOff width={17} height={17} /> : <Speaker width={17} height={17} />}
-        </button>
 
         {/* informe del docente */}
-        {ultimoDocente && cerrado !== ultimoIdx && (
+        {enLlamada && ultimoDocente && cerrado !== ultimoIdx && (
           <div
             key={ultimoIdx}
             className="glass enter absolute inset-x-3 top-16 max-h-[45%] overflow-y-auto rounded-2xl p-4 sm:inset-x-auto sm:left-4 sm:top-16 sm:max-w-sm"
@@ -143,65 +183,88 @@ export function FaceView({
           </div>
         )}
 
+        {/* llamada entrante */}
+        {!enLlamada && (
+          <div className="absolute inset-x-3 bottom-6 flex flex-col items-center gap-1 text-center">
+            <p className="text-[19px] font-medium">{nombre}</p>
+            <p className="text-[13px] text-ink-2">
+              {!escucha.soportado
+                ? "Tu navegador no permite llamadas de voz: usá Chrome o Safari, o el modo Chat"
+                : listo
+                  ? "Llamada entrante…"
+                  : "Conectando…"}
+            </p>
+          </div>
+        )}
+
         {/* subtítulos */}
-        <div className="absolute inset-x-3 bottom-4 flex justify-center sm:bottom-6">
-          {dictado.escuchando ? (
-            <p className="max-w-2xl rounded-2xl bg-black/55 px-4 py-2.5 text-center text-[15px] leading-snug text-ink-2 backdrop-blur-md sm:text-[17px]">
-              {dictado.parcial || "Te escucho…"}
-            </p>
-          ) : pensando ? (
-            <span className="rounded-full bg-black/55 px-4 py-2 text-[13px] text-ink-2 backdrop-blur-md">{nombre.split(" ")[0]} está pensando…</span>
-          ) : ultimoPaciente ? (
-            <p
-              key={turnos.lastIndexOf(ultimoPaciente)}
-              className="enter max-w-2xl rounded-2xl bg-black/55 px-4 py-2.5 text-center text-[15px] leading-snug text-ink backdrop-blur-md sm:text-[17px]"
-            >
-              {ultimoPaciente.text}
-            </p>
-          ) : (
-            <span className="rounded-full bg-black/55 px-4 py-2 text-[13px] text-ink-2 backdrop-blur-md">Conectado · saludá para empezar</span>
-          )}
-        </div>
+        {enLlamada && (
+          <div className="absolute inset-x-3 bottom-4 flex justify-center sm:bottom-6">
+            {escucha.parcial ? (
+              <p className="max-w-2xl rounded-2xl bg-black/55 px-4 py-2.5 text-center text-[15px] leading-snug text-ink-2 backdrop-blur-md sm:text-[17px]">
+                {escucha.parcial}
+              </p>
+            ) : pensando ? (
+              <span className="rounded-full bg-black/55 px-4 py-2 text-[13px] text-ink-2 backdrop-blur-md">{nombre.split(" ")[0]} está pensando…</span>
+            ) : ultimoPaciente ? (
+              <p
+                key={idxPaciente}
+                className="enter max-w-2xl rounded-2xl bg-black/55 px-4 py-2.5 text-center text-[15px] leading-snug text-ink backdrop-blur-md sm:text-[17px]"
+              >
+                {ultimoPaciente.text}
+              </p>
+            ) : (
+              <span className="rounded-full bg-black/55 px-4 py-2 text-[13px] text-ink-2 backdrop-blur-md">Conectado · saludá para empezar</span>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* controles */}
-      <div className="mx-auto w-full max-w-3xl">
-        <Composer
-          onSend={enviar}
-          disabled={!listo || pensando}
-          placeholder="Hablale al paciente…"
-          before={
-            <>
-              <button
-                type="button"
-                disabled={!dictado.soportado || !listo || pensando}
-                title={dictado.soportado ? undefined : "Tu navegador no permite dictar: probá con Chrome o Safari"}
-                aria-label={dictado.escuchando ? "Dejar de escuchar" : "Hablar"}
-                aria-pressed={dictado.escuchando}
-                onClick={() => {
-                  voz.desbloquear();
-                  voz.callar();
-                  if (dictado.escuchando) dictado.parar();
-                  else dictado.empezar();
-                }}
-                className={`press grid size-12 shrink-0 place-items-center rounded-full transition-colors disabled:opacity-40 ${
-                  dictado.escuchando ? "bg-accent text-black shadow-[0_0_0_6px_rgb(110_231_210/0.18)]" : "glass text-ink hover:text-accent"
-                }`}
-              >
-                <Mic />
-              </button>
-              <button
-                type="button"
-                aria-label="Terminar consulta"
-                onClick={onEnd}
-                className="press order-last grid size-12 shrink-0 place-items-center rounded-full bg-danger text-white hover:brightness-110"
-              >
-                <PhoneDown />
-              </button>
-            </>
-          }
-        />
+      {/* controles: solo contestar y cortar, como una llamada */}
+      <div className="flex items-start justify-center gap-14 pb-1 pt-1">
+        <BotonLlamada etiqueta="Cortar" onClick={cortar} className="bg-danger hover:brightness-110">
+          <PhoneDown width={26} height={26} />
+        </BotonLlamada>
+        {!enLlamada && (
+          <BotonLlamada
+            etiqueta="Contestar"
+            onClick={contestar}
+            disabled={!listo || !escucha.soportado}
+            className="bg-live hover:brightness-110"
+          >
+            <Phone width={24} height={24} />
+          </BotonLlamada>
+        )}
       </div>
+    </div>
+  );
+}
+
+function BotonLlamada({
+  etiqueta,
+  onClick,
+  disabled,
+  className,
+  children,
+}: {
+  etiqueta: string;
+  onClick: () => void;
+  disabled?: boolean;
+  className: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col items-center gap-1.5">
+      <button
+        type="button"
+        aria-label={etiqueta}
+        onClick={onClick}
+        disabled={disabled}
+        className={`press grid size-16 place-items-center rounded-full text-white disabled:opacity-40 ${className}`}
+      >
+        {children}
+      </button>
+      <span className="text-[12px] text-ink-2">{etiqueta}</span>
     </div>
   );
 }
