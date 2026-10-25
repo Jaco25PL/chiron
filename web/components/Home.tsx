@@ -57,7 +57,7 @@ export function Home({ usuario }: { usuario: Usuario }) {
           />
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-3 sm:grid-cols-2">
           {casos === null
             ? [0, 1, 2, 3].map((i) => <div key={i} className="glass h-[150px] animate-pulse rounded-3xl" />)
             : [<RandomCard key={ALEATORIO} index={0} />, ...casos.map((c, i) => <CaseCard key={c.id} caso={c} index={i + 1} />)]}
@@ -118,13 +118,13 @@ function Card({
       <div className="mt-auto grid grid-cols-2 gap-2">
         <Link
           href={`/consulta/${href}?modo=chat`}
-          className="press flex h-10 items-center justify-center gap-2 rounded-full border border-line-strong text-sm font-medium text-ink hover:bg-glass-strong"
+          className="press flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-line-strong text-sm font-medium text-ink hover:bg-glass-strong"
         >
           <Chat width={17} height={17} /> Chat
         </Link>
         <Link
           href={`/consulta/${href}?modo=cara`}
-          className="press flex h-10 items-center justify-center gap-2 rounded-full bg-ink text-sm font-medium text-bg hover:bg-white"
+          className="press flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ink text-sm font-medium text-bg hover:bg-white"
         >
           <Video width={17} height={17} /> Cara a cara
         </Link>
