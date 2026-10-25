@@ -1,0 +1,22 @@
+# Backend runtime manifest, used by Vercel (Python runtime) to build the API.
+# Only what the server needs at runtime; development extras (Chroma, PDF tooling, pytest,
+# evals) live in requirements.txt, which .vercelignore keeps out of the deployment.
+# tests/test_dependencies.py checks this list stays in sync with requirements.txt.
+[project]
+name = "chiron-api"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi",
+    "langgraph",
+    "langgraph-checkpoint-postgres",
+    "psycopg[binary,pool]",
+    "langchain-core",
+    "langchain-google-genai",
+    "google-genai",
+    "numpy",
+    "python-dotenv",
+]
+
+[tool.vercel]
+entrypoint = "api.main:app"

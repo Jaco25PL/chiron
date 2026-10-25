@@ -35,3 +35,20 @@ CREATE TABLE IF NOT EXISTS turns (
     created_at       TIMESTAMPTZ NOT NULL DEFAULT now(),
     PRIMARY KEY (consultation_id, n)
 );
+
+-- RAG: course material chunks with gemini-embedding-001 vectors truncated to 768 dims
+-- (Matryoshka; ~same top-5 as 3072 dims). Loaded by rag/to_pgvector.py.
+CREATE EXTENSION IF NOT EXISTS vector;
+CREATE TABLE IF NOT EXISTS rag_chunks (
+    id         TEXT PRIMARY KEY,
+    materia    TEXT NOT NULL,
+    tipo       TEXT NOT NULL,
+    fuente     TEXT NOT NULL,
+    seccion    TEXT,
+    pagina     INT,
+    texto      TEXT NOT NULL,
+    metadata   JSONB NOT NULL,
+    embedding  vector(768) NOT NULL
+);
+CREATE INDEX IF NOT EXISTS rag_chunks_embedding_idx ON rag_chunks USING hnsw (embedding vector_cosine_ops);
+CREATE INDEX IF NOT EXISTS rag_chunks_materia_tipo_idx ON rag_chunks (materia, tipo);

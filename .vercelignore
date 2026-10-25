@@ -1,0 +1,22 @@
+# Files kept out of the backend deployment (Vercel project "chiron-api", root = repo root).
+# The frontend is a separate Vercel project rooted at web/.
+web/
+frontend/
+data/
+docs/
+evals/
+tests/
+deploy/
+secrets/
+.chroma/
+requirements.txt
+Dockerfile
+.gcloudignore
+ARCHITECTURE.md
+api/fake_session.py
+rag/clean_pdfs.py
+rag/chunk.py
+rag/ingest.py
+rag/query.py
+rag/to_pgvector.py
+llm/probe_models.py

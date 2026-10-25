@@ -11,3 +11,6 @@ data/ecoe/audios/*.ogg
 
 # OAuth client JSON and other credentials
 secrets/
+
+.vercel
+.env*

@@ -135,12 +135,16 @@ def finish_session(session_id: str, user: dict = Depends(current_user)):
 def rag_search(q: str, materia: str = "mpna", k: int = Query(5, ge=1, le=30), tipo: str = "",
                user: dict = Depends(current_user)):
     def _search():
-        from rag.query import search
+        from store import db
+        if db.enabled():  # deployed: pgvector in Neon
+            from rag.search import search
+        else:  # local without a database: Chroma index
+            from rag.query import search
         return search(materia, q, k=k, tipo=tipo or None)
     results = _call(_search)
     return [{**r, "score": float(r["score"])} for r in results]
 
 
 # Legacy debug UI (chat + RAG explorer), local development only: it can't sign requests.
-if not os.environ.get("CHIRON_BACKEND_SECRET"):
+if not os.environ.get("CHIRON_BACKEND_SECRET") and (ROOT / "frontend").is_dir():
     app.mount("/", StaticFiles(directory=ROOT / "frontend", html=True), name="frontend")

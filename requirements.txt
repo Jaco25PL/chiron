@@ -12,3 +12,4 @@ httpx
 pillow
 langgraph-checkpoint-postgres
 psycopg[binary,pool]
+numpy
