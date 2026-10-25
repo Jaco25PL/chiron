@@ -77,3 +77,12 @@ CREATE TABLE IF NOT EXISTS review_labels (
 -- Difficulty level (agents/grilla.py LEVELS): "principiante" shows the grilla checklist during the
 -- consultation. Added after the table existed, hence the idempotent ALTER.
 ALTER TABLE consultations ADD COLUMN IF NOT EXISTS nivel TEXT NOT NULL DEFAULT 'normal';
+
+-- The docente's feedback when a consultation ends (agents/feedback.py): computed once, read by the
+-- student's history (/api/historial). `resultado` is the whole feedback (items, bien, falto, consejos).
+CREATE TABLE IF NOT EXISTS feedback (
+    consultation_id  TEXT PRIMARY KEY REFERENCES consultations(id) ON DELETE CASCADE,
+    score            INT NOT NULL,
+    resultado        JSONB NOT NULL,
+    created_at       TIMESTAMPTZ NOT NULL DEFAULT now()
+);

@@ -52,6 +52,7 @@ def new_session(case_id: str, user: dict | None = None, mode: str = "chat", nive
         "owner": user["email"] if user else "", "nivel": nivel,
         "case": case, "transcript": [], "revealed_facts": [], "exams_done": [],
         "studies_requested": [], "diagnosis_proposed": None, "finished": False,
+        "mode": mode, "feedback": None, "fecha": None,
     }
     return sid
 
@@ -146,12 +147,33 @@ def get_session(session_id: str, user: dict | None = None) -> dict:
         "revealed_facts": s["revealed_facts"], "total_facts": len(s["case"].get("anamnesis", [])),
         "exams_done": s["exams_done"], "exams_done_labels": s["exams_done"], "studies_requested": s["studies_requested"],
         "diagnosis_proposed": s["diagnosis_proposed"], "finished": s["finished"], "nivel": s["nivel"],
+        "feedback": s["feedback"],
     })
 
 
 def finish(session_id: str, user: dict | None = None) -> dict:
-    _get(session_id, user)["finished"] = True
+    """The docente's feedback without an LLM: the deterministic coverage-based fallback, computed once."""
+    from datetime import datetime, timezone
+
+    from agents import feedback
+
+    s = _get(session_id, user)
+    if not s["feedback"]:
+        state = {k: s[k] for k in ("revealed_facts", "exams_done", "studies_requested")}
+        s["feedback"] = feedback.fallback(s["case"], state)
+        s["fecha"] = datetime.now(timezone.utc).isoformat()
+    s["finished"] = True
     return get_session(session_id, user)
+
+
+def historial(user: dict) -> list[dict]:
+    from agents import feedback
+
+    mine = [(sid, s) for sid, s in _sessions.items() if s["owner"] == user["email"] and s["feedback"]]
+    mine.sort(key=lambda x: x[1]["fecha"], reverse=True)
+    return [{"id": sid, "fecha": s["fecha"], "paciente": catalog.public_case(s["case"])["paciente"],
+             "modo": s["mode"], "score": s["feedback"]["score"],
+             "para_la_proxima": feedback.para_la_proxima(s["feedback"])} for sid, s in mine]
 
 
 def speak(session_id: str, user: dict | None = None):

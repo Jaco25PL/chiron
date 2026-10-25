@@ -23,6 +23,7 @@ export function useConsulta(caseId: string, modo: "chat" | "cara" = "chat", nive
   const [pensando, setPensando] = useState(false);
   const [inicio, setInicio] = useState<number | null>(null);
   const [resumen, setResumen] = useState<Resumen | null>(null);
+  const [corrigiendo, setCorrigiendo] = useState(false); // the docente is grading the consultation
   const creada = useRef(false);
 
   useEffect(() => {
@@ -77,18 +78,35 @@ export function useConsulta(caseId: string, modo: "chat" | "cara" = "chat", nive
   );
 
   const terminar = useCallback(async () => {
-    if (!sessionId) return;
+    if (!sessionId || corrigiendo) return;
+    setCorrigiendo(true);
     try {
       setResumen(await api.terminar(sessionId));
     } catch (e) {
       toast.error((e as Error).message);
+    } finally {
+      setCorrigiendo(false);
     }
-  }, [sessionId]);
+  }, [sessionId, corrigiendo]);
 
   const listo = !!sessionId;
   // waiting long enough to look stuck: usually the backend cold-starting (Cloud Run scales to zero)
   const demora = useDemora(!listo || pensando);
-  return { caso, sessionId, listo, turnos, pensando, demora, inicio, enviar, terminar, resumen, setResumen, checklist };
+  return {
+    caso,
+    sessionId,
+    listo,
+    turnos,
+    pensando,
+    demora,
+    inicio,
+    enviar,
+    terminar,
+    corrigiendo,
+    resumen,
+    setResumen,
+    checklist,
+  };
 }
 
 /** Seconds left of the 7 minutes (negative once over). Skips re-renders while the tab is hidden. */
