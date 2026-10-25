@@ -17,6 +17,8 @@ from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(ROOT / ".env")
+# Trazas de LangSmith: se activan con LANGSMITH_TRACING=true y LANGSMITH_API_KEY en .env
+os.environ.setdefault("LANGSMITH_PROJECT", "chiron")
 
 # Probado el 2026-10-24 en plan gratuito. Los "pro" (3.1-pro, pro-latest, 4-argon) dan 429 con cuota 0.
 # gemini-3.7/3.8-flash y flash-latest andan pero tardaron 30-75 s por respuesta: no sirven para conversar.

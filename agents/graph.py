@@ -204,7 +204,14 @@ def new_session(case_id: str) -> str:
 
 def send(session_id: str, text: str) -> dict:
     config = _config(session_id)
-    before = len(GRAPH.get_state(config).values.get("transcript", []))
+    current = GRAPH.get_state(config).values
+    before = len(current.get("transcript", []))
+    # nombre, tags y metadata para encontrar el turno en LangSmith
+    config |= {
+        "run_name": f"turno {before // 2 + 1}",
+        "tags": [current["case_id"]],
+        "metadata": {"case_id": current["case_id"], "session_id": session_id},
+    }
     start = time.perf_counter()
     state = GRAPH.invoke({"transcript": [{"role": "estudiante", "text": text}], "debug": {}}, config)
     new_turns = state["transcript"][before + 1:]

@@ -50,6 +50,11 @@ data/ecoe/
 - Los modelos cambian seguido: `python llm/probe_models.py` prueba cuáles andan con cada key y cuánto tardan.
 - En el plan gratuito los modelos "pro" tienen cuota 0, y el límite de embeddings es de 100 por minuto por key.
 
+## Observabilidad (LangSmith)
+
+- Con `LANGSMITH_TRACING=true` y `LANGSMITH_API_KEY` en `.env`, cada turno del grafo se traza solo en el proyecto `chiron` de smith.langchain.com.
+- Cada traza se llama `turno N`, lleva el `case_id` como tag y `case_id` + `session_id` en la metadata. Dentro se ven el router, el nodo y el prompt y la respuesta exactos de Gemini.
+
 ## RAG
 
 Entorno: `python -m venv .venv` + `.venv/Scripts/pip install -r requirements.txt`.
