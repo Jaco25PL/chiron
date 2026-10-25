@@ -98,6 +98,15 @@ Registro de lo que fui encontrando al construir Chiron: qué apareció, cómo lo
 - **Contexto:** Jev (TypeSafe) da decisiones tipadas con probabilidades calibradas, ideal para el router y la rúbrica, pero rinde mejor en inglés.
 - **Decisión:** no traducir lo que dice el estudiante, porque sumaría ~0,7 s por turno y puede deformar términos médicos. Las preguntas fijas de Jev, en cambio, se traducen una sola vez. La variante final se elige con un eval contra Gemini como juez.
 
+## 13. El plan gratuito alcanza para ~6 consultas por día, no para un producto
+
+- **Contexto:** 3 API keys gratuitas de Gemini con rotación entre keys y modelos.
+- **Hallazgo:** la segunda corrida del eval falló en 24 de 51 ejemplos, aun con reintentos. Esta vez no era el límite por minuto sino el **diario**: los modelos flash permiten **20 requests por día por key y por modelo**. Con 3 keys y 3 modelos flash son ~180 llamadas al día, compartidas entre el paciente, el juez de los evals y las pruebas.
+- **Cómo lo detecté:** agrupando los errores de LangSmith por `quotaId` (`GenerateRequestsPerDayPerProjectPerModel-FreeTier`) y probando después cada modelo con cada key.
+- **La cuenta:** una consulta de 7 minutos son unos 25 turnos, cada uno con una llamada al paciente. 180 llamadas al día dan para ~6 consultas, y eso sin correr evals.
+- **Qué hice:** el modelo *lite*, que tiene mucha más cuota, quedó como último respaldo del paciente, para que la app no se caiga. Los evals pasaron a correr una vez por día y con concurrencia baja.
+- **Aprendizaje:** antes de diseñar la arquitectura hay que hacer la cuenta de cuotas y costos por usuario. Los evals consumen la misma cuota que los usuarios, así que también entran en el presupuesto.
+
 ---
 
 ## Versión corta para LinkedIn

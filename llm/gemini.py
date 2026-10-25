@@ -25,7 +25,8 @@ os.environ.setdefault("LANGSMITH_PROJECT", "chiron")
 # Con thinking_level="low", gemini-3-flash-preview responde al paciente en ~1 s (3.5-flash: ~1,5-2 s).
 MODELS = {
     # respuestas del paciente: rápido, buena calidad
-    "patient": ["gemini-3-flash-preview", "gemini-3.5-flash", "gemini-3.6-flash"],
+    # los flash tienen 20 requests/día por key en plan gratuito: el lite queda de último respaldo
+    "patient": ["gemini-3-flash-preview", "gemini-3.5-flash", "gemini-3.6-flash", "gemini-3.5-flash-lite"],
     # router y decisiones cortas: lo más rápido posible
     "router": ["gemini-3.5-flash-lite", "gemini-flash-lite-latest", "gemini-3.1-flash-lite"],
     # juez del feedback: calidad sobre velocidad
