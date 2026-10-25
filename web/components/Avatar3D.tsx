@@ -43,9 +43,17 @@ export default function Avatar3D({ url, analyser, hablando, onListo, onError, cl
     const canvas = canvasRef.current!;
     let renderer: WebGLRenderer;
     try {
-      renderer = new WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "low-power" });
+      // failIfMajorPerformanceCaveat: no context when WebGL would run in software (no GPU, blocklisted
+      // driver). Drawing the avatar on the CPU slowed the whole call to a crawl; the ASCII portrait stays
+      renderer = new WebGLRenderer({
+        canvas,
+        antialias: true,
+        alpha: true,
+        powerPreference: "low-power",
+        failIfMajorPerformanceCaveat: true,
+      });
     } catch {
-      estado.current.onError(); // no WebGL: the ASCII portrait stays
+      estado.current.onError(); // no (hardware) WebGL: the ASCII portrait stays
       return;
     }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
