@@ -70,6 +70,7 @@ export type ConsultaPasada = {
   fecha: string; // ISO
   paciente: Paciente;
   modo: string;
+  nivel: Nivel;
   score: number;
   para_la_proxima: string[];
 };

@@ -172,7 +172,7 @@ def historial(user: dict) -> list[dict]:
     mine = [(sid, s) for sid, s in _sessions.items() if s["owner"] == user["email"] and s["feedback"]]
     mine.sort(key=lambda x: x[1]["fecha"], reverse=True)
     return [{"id": sid, "fecha": s["fecha"], "paciente": catalog.public_case(s["case"])["paciente"],
-             "modo": s["mode"], "score": s["feedback"]["score"],
+             "modo": s["mode"], "nivel": s["nivel"], "score": s["feedback"]["score"],
              "para_la_proxima": feedback.para_la_proxima(s["feedback"])} for sid, s in mine]
 
 

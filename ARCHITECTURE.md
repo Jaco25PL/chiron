@@ -144,6 +144,25 @@ sequenceDiagram
 - **Only the reply just generated is spoken**, in the same request, for the consultation's owner. There is no endpoint that takes text to speak, so it can't be used as a free TTS service. The voice (Sulafat or Schedar, chosen by ear) is picked by sex, and the style ("mujer uruguaya de 61 años, de Montevideo, acento rioplatense…") is built from the case on the server, so age never reaches the browser. The style goes in `speech_metadata.style`: put inside the text, the model read it aloud.
 - **Latency:** one streamed response (NDJSON) brings the reply and then the voice in chunks as Gemini generates them, so the patient starts talking with the first chunk. It used to be a second request that waited for the whole WAV; voice after text went from 5.4 s to 1.3 s (median, measured with `web/tests/e2e/latencia.spec.ts`; see [FINDINGS #18](docs/FINDINGS.md)). Each turn's per-stage timings are stored in `turns.timings`.
 
+## Grading, beginner level and history
+
+```mermaid
+flowchart LR
+    C[case JSON: facts, findings, studies<br/>each linked to grilla_items] --> G[agents/grilla.py<br/>items + kind + evidence]
+    S[consultation state:<br/>revealed facts, exams, studies] --> G
+    G -->|principiante only| K[checklist: ticks itself]
+    G --> F[agents/feedback.py<br/>one LLM call + guardrails]
+    F --> DB[(feedback table)]
+    DB --> H[/api/historial → side menu/]
+```
+
+- **One source of truth for "what the student did":** the case links every fact, finding and study to the grilla items it answers, so `agents/grilla.py` knows deterministically which items are covered. Both the beginner checklist and the score use it.
+- **Feedback when the consultation ends** (`finish`): one call to the judge model rates every item on the grilla scale (Excelente / Bien / Regular / No realizado) and writes what went well, what was missed and 2–3 tips, in voseo. Code then overrides it: an item with no evidence in the consultation is "No realizado" whatever the model says, and one with evidence is at least "Regular". Score = points over the gradable items (0–100). If the model fails, the student still gets a coverage-only score (`parcial`).
+- **The diagnosis stays hidden even in the feedback:** cases are reused, so diagnosis and plan items show only their rating under a generic label, and any sentence naming the diagnosis is dropped by code.
+- **Beginner level:** same patient; the session also returns the checklist (only for `principiante`, so in Normal the browser never receives the grilla). It leaves out conduct, plan and diagnosis items and the studies that must *not* be ordered.
+- **History:** a shadcn Sheet on the home page lists every graded consultation (score, patient name, mode, level, one tip), the average of the last five against the five before, and a column chart of the scores.
+- **Accent color:** chosen in the user menu (Menta, Rosa, Gris, Azul), saved in `users.acento` and rendered by the server from a cookie, so the first paint already has it.
+
 ## Deployment: why Vercel + Neon
 
 The backend needed a host that runs Python, keeps no state in memory (or can afford to lose it), and costs nothing.
@@ -206,6 +225,6 @@ chiron/
 
 ## Not built yet
 
-- **Feedback agent:** grade the transcript against the grilla item by item and cite course material via RAG.
+- **Feedback eval and calibration:** measure the docente's ratings against a medical student's, like the patient judge. RAG-cited tips were left out: the source names (e.g. a guideline title) would give the diagnosis away.
 - **Avatar:** an anime VRM model (three-vrm) whose mouth follows the voice through the analyser that's already wired; a generic model first.
 - **MCP server for exam tools:** dropped for now (the exam is a graph node); revisit if the tools grow.

@@ -172,6 +172,13 @@ body {
   animation: chiron-enter 240ms var(--ease-out) both;
 }
 
+/* History chart columns grow from the baseline (transform only) */
+@keyframes crecer {
+  from {
+    transform: scaleY(0);
+  }
+}
+
 .no-scrollbar {
   scrollbar-width: none;
 }

@@ -71,4 +71,4 @@ The rule of thumb: if something can be checked with code, it's a test or a code 
 
 - Quality gates: thresholds that fail a run (e.g. `no_revela_diagnostico` 100 %, `un_solo_hecho` ≥ 95 %, p95 latency < 2 s).
 - Repeat each eval example 3× and report consistency, not a single sample.
-- Evals for the feedback agent once it exists.
+- Evals for the feedback agent (its ratings against a medical student's).

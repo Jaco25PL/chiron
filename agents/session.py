@@ -28,7 +28,7 @@ Contract (don't change it without updating api/):
                        "evidencia": bool}]
         }
     }
-    historial(user) -> [{"id": session_id, "fecha": iso str, "paciente": {nombre, sexo}, "modo": str,
+    historial(user) -> [{"id": session_id, "fecha": iso str, "paciente": {nombre, sexo}, "modo": str, "nivel": str,
                          "score": int, "para_la_proxima": [str]}]   # the user's finished consultations, newest first
 
 "checklist" (agents/grilla.py checklist()) is present only when nivel is "principiante": in "normal"

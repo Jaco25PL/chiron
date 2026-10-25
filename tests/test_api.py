@@ -221,7 +221,7 @@ def test_history_only_lists_the_callers_own_consultations(monkeypatch, case_id):
     assert r.status_code == 200
     items = r.json()
     assert [i["id"] for i in items] == [sid]  # finished only
-    assert items[0].keys() == {"id", "fecha", "paciente", "modo", "score", "para_la_proxima"}
+    assert items[0].keys() == {"id", "fecha", "paciente", "modo", "nivel", "score", "para_la_proxima"}
     assert items[0]["paciente"].keys() == {"nombre", "sexo"} and items[0]["modo"] == "cara"
     assert 1 <= len(items[0]["para_la_proxima"]) <= 2
     for leak in ("mpna-", "titulo", "diagnostico", "grillas", "edad"):

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Chat, Video } from "@/components/icons";
+import { Historial } from "@/components/Historial";
 import { Logo } from "@/components/Logo";
 import { Segmented } from "@/components/Segmented";
 import { UserMenu, type Usuario } from "@/components/UserMenu";
@@ -38,10 +39,13 @@ export function Home({ usuario }: { usuario: Usuario }) {
   const [casos, setCasos] = useState<Caso[] | null>(null);
 
   useEffect(() => {
-    api.casos(materia).then(setCasos).catch((e: Error) => {
-      setCasos([]);
-      toast.error(e.message, { id: "casos" }); // id: no duplicate toast if the effect runs twice
-    });
+    api
+      .casos(materia)
+      .then(setCasos)
+      .catch((e: Error) => {
+        setCasos([]);
+        toast.error(e.message, { id: "casos" }); // id: no duplicate toast if the effect runs twice
+      });
   }, [materia]);
 
   return (
@@ -51,17 +55,22 @@ export function Home({ usuario }: { usuario: Usuario }) {
           <Logo />
           <span className="text-[15px] font-semibold tracking-tight">Chiron</span>
         </div>
-        <UserMenu usuario={usuario} />
+        <div className="flex items-center gap-2">
+          <Historial />
+          <UserMenu usuario={usuario} />
+        </div>
       </header>
 
       <section className="flex flex-col gap-5 pt-4 sm:pt-10">
-        <p className="text-xs font-medium uppercase tracking-[0.18em] text-accent">Evaluación clínica objetiva estructurada</p>
+        <p className="text-xs font-medium uppercase tracking-[0.18em] text-accent">
+          Evaluación clínica objetiva estructurada
+        </p>
         <h1 className="max-w-3xl text-balance text-[2.6rem] font-semibold leading-[1.05] tracking-[-0.035em] sm:text-6xl">
           Tu próximo paciente ya está en la sala de espera.
         </h1>
         <p className="max-w-xl text-pretty text-[17px] leading-relaxed text-ink-2">
-          Hacé la anamnesis, examinalo y pedí estudios como en la estación real. Siete minutos, una grilla, y el paciente
-          solo responde lo que le preguntás.
+          Hacé la anamnesis, examinalo y pedí estudios como en la estación real. Siete minutos, una grilla, y el
+          paciente solo responde lo que le preguntás.
         </p>
       </section>
 
@@ -117,7 +126,9 @@ function CaseCard({ caso, index, nivel }: { caso: Caso; index: number; nivel: Ni
         {iniciales(p.nombre)}
       </div>
       <div className="min-w-0">
-        <h3 className="truncate text-[17px] font-semibold tracking-tight">{p.nombre.split(" ").slice(0, 2).join(" ")}</h3>
+        <h3 className="truncate text-[17px] font-semibold tracking-tight">
+          {p.nombre.split(" ").slice(0, 2).join(" ")}
+        </h3>
         <p className="truncate text-sm text-ink-2">{sexoLabel(p.sexo)}</p>
       </div>
     </Card>

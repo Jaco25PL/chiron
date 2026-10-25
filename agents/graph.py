@@ -306,7 +306,8 @@ def finish(session_id: str, user: User | None = None) -> dict:
         fb = feedback.evaluate(load_case(s["case_id"]), s)
         GRAPH.update_state(_config(session_id), {"finished": True, "feedback": fb})
         db.finish_consultation(session_id)
-        db.save_feedback(session_id, fb, owner=s.get("owner", ""), case_id=s["case_id"], mode=s.get("mode", "chat"))
+        db.save_feedback(session_id, fb, owner=s.get("owner", ""), case_id=s["case_id"], mode=s.get("mode", "chat"),
+                         nivel=s.get("nivel", "normal"))
     return get_session(session_id, user)
 
 
@@ -320,7 +321,8 @@ def historial(user: User) -> list[dict]:
         except KeyError:  # a case that no longer exists
             continue
         out.append({"id": r["id"], "fecha": r["fecha"], "paciente": paciente, "modo": r["mode"],
-                    "score": r["score"], "para_la_proxima": feedback.para_la_proxima(r["resultado"])})
+                    "nivel": r.get("nivel", "normal"), "score": r["score"],
+                    "para_la_proxima": feedback.para_la_proxima(r["resultado"])})
     return out
 
 
