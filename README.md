@@ -27,19 +27,25 @@ Practice whenever you want, as often as you want, with varied cases and immediat
 
 ## MVP scope
 
-- Video call with a virtual patient
-- 2–3 fictional clinical cases
-- Simulated physical exam (blood pressure, auscultation, labs)
-- Final feedback against a rubric
-- Quality evals for the agent
+| Item | Status |
+|---|---|
+| 2–3 fictional clinical cases, built from the official rubrics (grillas) | ✅ 3 cases, validated + reviewed |
+| Patient agent over chat (LangGraph) | ✅ live |
+| Simulated physical exam and lab/imaging requests | ✅ teacher node in the graph |
+| "Face to face" video-call layout | ✅ static ASCII portrait (avatar pending) |
+| Quality evals for the agent (LangSmith) | ✅ patient, router, adversarial suites |
+| Final feedback against the rubric | ⏳ next |
+| Real-time voice + animated avatar | ⏳ later |
+
+Out of scope for now: an MCP server for the physical exam tools. The original plan had one, but the exam is implemented as a node of the graph, which needs no extra process. MCP stays an option if the exam tools grow.
 
 ## Architecture
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) (tentative draft).
+See [ARCHITECTURE.md](ARCHITECTURE.md): system overview, request flow, the graph, security, RAG, and why everything runs on Vercel + Neon at zero cost.
 
 ## Running it
 
-You need Python 3.11, Node 20+, and Gemini keys in `.env` (`GOOGLE_API_KEY_1`, `_2`, …).
+You need Python 3.12+, Node 20+, and Gemini keys in `.env` (`GOOGLE_API_KEY_1`, `_2`, …). Optional: `DATABASE_URL` (Neon Postgres) to persist consultations; without it everything stays in memory.
 
 ```bash
 # backend: FastAPI + LangGraph (port 8000)
@@ -54,7 +60,7 @@ Open http://localhost:3000. There are two modes that share the same consultation
 
 ## Live demo
 
-Frontend: **https://chiron-nu-two.vercel.app** (Google sign-in; access limited to test users while the OAuth app is in testing). Deployed on Vercel from `main` on every push. The Python backend is not hosted yet, so the hosted demo shows the UI and login only.
+**https://chiron-nu-two.vercel.app** (Google sign-in; access limited to test users while the OAuth app is in testing). Frontend and backend both deploy on Vercel from `main` on every push; consultations are stored in Neon Postgres.
 
 ## Findings
 
@@ -62,15 +68,15 @@ What I found while building it (evals, latency, data, bugs): [docs/FINDINGS.md](
 
 ## Design decisions
 
-### Jev in Spanish, no real-time translation
+### Jev (TypeSafe): evaluated, not adopted
 
-[Jev](https://typesafe.ai/) (TypeSafe) is a model for typed decisions with calibrated probabilities, intended for the graph's router and for scoring the rubric item by item. Its documentation says English is where it performs best, so I considered translating what the student says into English before passing it on. **I ruled it out:**
+[Jev](https://typesafe.ai/) returns typed decisions with calibrated probabilities, a good fit on paper for the graph's router and for scoring the rubric item by item. I evaluated it and **did not adopt it**; there is no Jev code in the repo:
 
-- **Latency:** it adds an extra call (about 0.7 s) on every router turn, and in a video call every tenth of a second counts.
-- **Errors:** translation can distort medical terms, e.g. "disnea paroxística nocturna" (paroxysmal nocturnal dyspnea) or "gravitational" edema, which is exactly what the rubric has to detect.
+- **The router doesn't need it today.** The Gemini flash-lite router scores 25/25 on its LangSmith eval, at ~1 s and free-tier cost.
+- **Language risk.** Its docs say English is where it performs best. Translating the student's words in real time would add ~0.7 s per router turn and can distort exactly the medical terms the rubric must detect (e.g. "disnea paroxística nocturna", "edemas gravitacionales").
 
-Instead, Jev's questions and criteria, which are fixed and written by us, can be translated once, at no real-time cost. The choice is settled by an eval that compares three variants against Gemini as judge:
+If the rubric scorer needs calibrated per-item confidence later, the plan is to translate only Jev's fixed criteria once (no real-time cost) and pick between Spanish-only, English criteria + Spanish transcript, and full translation with an eval against Gemini as judge.
 
-1. everything in Spanish
-2. criteria in English, transcript in Spanish
-3. everything translated
+### Vercel for the backend too
+
+The backend runs on Vercel as a Python function, next to the frontend, with Neon Postgres for state and vectors. It was chosen over Cloud Run (needs a billing account and, in Uruguay, a USD 30 prepayment) and Hugging Face Spaces (Docker Spaces now require PRO). Details and trade-offs in [ARCHITECTURE.md](ARCHITECTURE.md#deployment-why-vercel--neon).
