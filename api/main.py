@@ -13,6 +13,7 @@ import os
 import sys
 import traceback
 from pathlib import Path
+from typing import Literal
 
 ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
@@ -95,6 +96,7 @@ def _call(fn, *args, **kwargs):
 class NewSession(BaseModel):
     case_id: str
     mode: str = "chat"
+    nivel: Literal["normal", "principiante"] = "normal"  # agents/grilla.py LEVELS
 
 
 class Message(BaseModel):
@@ -119,9 +121,11 @@ def cases(materia: str = "mpna", user: dict = Depends(current_user)):
 @app.post("/api/sessions")
 def create_session(body: NewSession, user: dict = Depends(current_user)):
     """case_id: a public id from /api/cases, or "aleatorio". Returns who the patient is (name and
-    sex only), so the UI learns it here even for a random case."""
-    sid = _call(session.new_session, body.case_id, user, body.mode)
-    return {"session_id": sid, "case": _call(session.get_session, sid, user)["case"]}
+    sex only), so the UI learns it here even for a random case. In "principiante" it also brings the
+    checklist, all unticked."""
+    sid = _call(session.new_session, body.case_id, user, body.mode, body.nivel)
+    s = _call(session.get_session, sid, user)
+    return {"session_id": sid, "case": s["case"], **({"checklist": s["checklist"]} if "checklist" in s else {})}
 
 
 @app.post("/api/sessions/{session_id}/messages")

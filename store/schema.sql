@@ -73,3 +73,7 @@ CREATE TABLE IF NOT EXISTS review_labels (
     updated_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
     PRIMARY KEY (item_id, reviewer)
 );
+
+-- Difficulty level (agents/grilla.py LEVELS): "principiante" shows the grilla checklist during the
+-- consultation. Added after the table existed, hence the idempotent ALTER.
+ALTER TABLE consultations ADD COLUMN IF NOT EXISTS nivel TEXT NOT NULL DEFAULT 'normal';

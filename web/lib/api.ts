@@ -12,9 +12,17 @@ export type Caso = {
 export type Rol = "estudiante" | "paciente" | "docente";
 export type Turno = { role: Rol; text: string };
 
+/** "principiante" shows the grilla checklist during the consultation; the patient is the same. */
+export type Nivel = "principiante" | "normal";
+
+/** A grilla item the student must not forget, ticked by the backend once covered (beginner level only).
+ *  tipo: hecho = ask the patient, examen = physical exam, estudio = order a study. */
+export type ItemChecklist = { id: string; texto: string; tipo: "hecho" | "examen" | "estudio"; hecho: boolean };
+
 export type Respuesta = {
   replies: { role: "paciente" | "docente"; text: string }[];
   debug: { intent: string; facts: string[]; exams: string[]; studies: string[]; latency_ms: number };
+  checklist?: ItemChecklist[]; // only in "principiante"
 };
 
 export type Resumen = {
@@ -27,6 +35,8 @@ export type Resumen = {
   studies_requested: string[];
   diagnosis_proposed: string | null;
   finished: boolean;
+  nivel: Nivel;
+  checklist?: ItemChecklist[]; // only in "principiante"
 };
 
 const SIN_BACKEND =
@@ -53,10 +63,10 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const api = {
   casos: (materia = "mpna") => call<Caso[]>(`/api/cases?materia=${materia}`),
-  nuevaSesion: (caseId: string, mode: "chat" | "cara" = "chat") =>
-    call<{ session_id: string; case: Caso }>("/api/sessions", {
+  nuevaSesion: (caseId: string, mode: "chat" | "cara" = "chat", nivel: Nivel = "normal") =>
+    call<{ session_id: string; case: Caso; checklist?: ItemChecklist[] }>("/api/sessions", {
       method: "POST",
-      body: JSON.stringify({ case_id: caseId, mode }),
+      body: JSON.stringify({ case_id: caseId, mode, nivel }),
     }),
   enviar: (sessionId: string, text: string) =>
     call<Respuesta>(`/api/sessions/${sessionId}/messages`, { method: "POST", body: JSON.stringify({ text }) }),

@@ -74,7 +74,7 @@ Web E2E (Playwright, `web/tests/e2e/`): `cd web && npm run test:e2e` starts its 
 
 ## What the student may see
 
-As in the real ECOE, before and during the consultation the student only knows the patient's **name and sex**. `cases/catalog.py` is the single place that builds the public view (`{id, materia, paciente: {nombre, sexo}}`) and the opaque public id (a hash; internal ids spell out diagnoses). Never send titles, age, difficulty, grillas or internal ids to the browser; "aleatorio" lets the server pick the case.
+As in the real ECOE, before and during the consultation the student only knows the patient's **name and sex**. `cases/catalog.py` is the single place that builds the public view (`{id, materia, paciente: {nombre, sexo}}`) and the opaque public id (a hash; internal ids spell out diagnoses). Never send titles, age, difficulty, grillas or internal ids to the browser; "aleatorio" lets the server pick the case. The one exception is the "Principiante" level (chosen on the home page): its responses carry a `checklist` of the grilla items the app can tick (`agents/grilla.py checklist()`: ask, examine, order; never conduct or diagnosis items). In "Normal" the key is omitted.
 
 ## Gemini
 

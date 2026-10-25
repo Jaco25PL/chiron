@@ -187,3 +187,64 @@ def test_review_kappa():
 
     assert kappa([(True, True), (False, False)]) == 1
     assert kappa([(True, True), (True, True)]) is None  # everyone passes: kappa says nothing
+
+
+# --- levels: "principiante" shows the checklist, "normal" doesn't -------------------------------
+
+def test_normal_level_never_sends_the_checklist(case_id):
+    r = client.post("/api/sessions", json={"case_id": case_id})
+    assert "checklist" not in r.json()
+    sid = r.json()["session_id"]
+    assert "checklist" not in client.post(f"/api/sessions/{sid}/messages", json={"text": "¿Qué lo trae por acá?"}).json()
+    s = client.get(f"/api/sessions/{sid}").json()
+    assert "checklist" not in s and s["nivel"] == "normal"
+
+
+def test_beginner_checklist_ticks_as_the_student_asks():
+    from cases.catalog import load_case, public_id
+
+    case = load_case("mpna-disnea-icc")
+    r = client.post("/api/sessions", json={"case_id": public_id(case["id"]), "nivel": "principiante"})
+    assert r.status_code == 200
+    lista = r.json()["checklist"]
+    assert lista and not any(x["hecho"] for x in lista)
+    assert {x["tipo"] for x in lista} <= {"hecho", "examen", "estudio"}
+    assert all(x.keys() == {"id", "texto", "tipo", "hecho"} for x in lista)
+
+    # the fake backend matches the question against the case facts: "inicio" covers its grilla item
+    sid = r.json()["session_id"]
+    inicio = next(h for h in case["anamnesis"] if h["id"] == "inicio")
+    body = client.post(f"/api/sessions/{sid}/messages", json={"text": inicio["preguntas_ejemplo"][0]}).json()
+    assert body["debug"]["facts"] == ["inicio"]
+    hechos = {x["texto"] for x in body["checklist"] if x["hecho"]}
+    assert {k.split("::", 1)[1] for k in inicio["grilla_items"]} <= hechos
+
+    s = client.get(f"/api/sessions/{sid}").json()
+    assert s["nivel"] == "principiante" and s["checklist"] == body["checklist"]
+
+
+def test_beginner_checklist_rides_along_with_the_voice():
+    import json
+
+    sid = client.post("/api/sessions", json={"case_id": "aleatorio", "nivel": "principiante"}).json()["session_id"]
+    r = client.post(f"/api/sessions/{sid}/messages", params={"voz": 1}, json={"text": "Hola, buenas tardes"})
+    primera = json.loads(r.text.splitlines()[0])
+    assert primera["tipo"] == "respuesta" and primera["checklist"]
+
+
+def test_beginner_checklist_never_names_the_diagnosis():
+    from cases import catalog
+
+    for c in catalog.list_public("mpna"):
+        r = client.post("/api/sessions", json={"case_id": c["id"], "nivel": "principiante"})
+        assert r.json()["checklist"]
+        case = catalog.load_case(catalog.resolve(c["id"]))
+        raw = r.text.lower()
+        assert case["diagnostico"]["principal"].lower() not in raw
+        for key in case["diagnostico"].get("grilla_items", []):
+            assert key.split("::", 1)[1].lower() not in raw
+
+
+def test_invalid_level_is_rejected(case_id):
+    r = client.post("/api/sessions", json={"case_id": case_id, "nivel": "experto"})
+    assert r.status_code == 422 and "error" in r.json()

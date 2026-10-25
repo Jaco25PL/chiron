@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { sexoLabel } from "@/lib/api";
+import { type Nivel, sexoLabel } from "@/lib/api";
 import { formatoTiempo, useConsulta, useCuentaRegresiva } from "@/lib/useConsulta";
 import { ChatView } from "./ChatView";
+import { ChecklistBoton, ChecklistPanel, ChecklistSheet } from "./Checklist";
 import { FaceView } from "./FaceView";
 import { Chat, ChevronLeft, Clock, Video } from "./icons";
 import { Segmented } from "./Segmented";
@@ -13,11 +14,15 @@ import { SummarySheet } from "./SummarySheet";
 type Modo = "chat" | "cara";
 
 /** Consultation screen. Chat and face-to-face share the same session, so the mode can switch at any time. */
-export function Consulta({ caseId, modoInicial }: { caseId: string; modoInicial: Modo }) {
+export function Consulta({ caseId, modoInicial, nivel }: { caseId: string; modoInicial: Modo; nivel: Nivel }) {
   const [modo, setModo] = useState<Modo>(modoInicial);
-  const c = useConsulta(caseId, modoInicial);
+  const c = useConsulta(caseId, modoInicial, nivel);
   const restante = useCuentaRegresiva(c.inicio);
   const nombre = c.caso?.paciente.nombre.split(" ").slice(0, 2).join(" ");
+  // beginner level: side panel on desktop (can be hidden), bottom sheet from a pill on mobile
+  const [panel, setPanel] = useState(true);
+  const [hoja, setHoja] = useState(false);
+  const checklist = c.checklist;
 
   return (
     <div className="flex h-dvh flex-col">
@@ -28,7 +33,11 @@ export function Consulta({ caseId, modoInicial }: { caseId: string; modoInicial:
           </Link>
           <div className="hidden min-w-0 sm:block">
             <p className="truncate text-sm font-medium">{nombre ?? " "}</p>
-            <p className="truncate text-xs text-ink-3">{c.caso ? sexoLabel(c.caso.paciente.sexo) : " "}</p>
+            <p className="truncate text-xs text-ink-3">
+              {c.caso
+                ? `${sexoLabel(c.caso.paciente.sexo)} · ${nivel === "principiante" ? "Principiante" : "Normal"}`
+                : " "}
+            </p>
           </div>
         </div>
 
@@ -44,6 +53,14 @@ export function Consulta({ caseId, modoInicial }: { caseId: string; modoInicial:
         />
 
         <div className="flex items-center justify-end gap-2">
+          {checklist && (
+            <ChecklistBoton
+              items={checklist}
+              abierto={panel}
+              onClick={() => setPanel((p) => !p)}
+              className="hidden lg:flex"
+            />
+          )}
           <span
             className={`glass flex h-9 items-center gap-1.5 rounded-full px-3 font-mono text-[13px] tabular-nums transition-colors ${
               restante < 0 ? "text-danger" : restante <= 60 ? "text-[#ffd60a]" : "text-ink-2"
@@ -67,18 +84,30 @@ export function Consulta({ caseId, modoInicial }: { caseId: string; modoInicial:
 
       {c.demora && <AvisoDemora preparando={!c.listo} />}
 
-      {modo === "chat" ? (
-        <ChatView caso={c.caso} turnos={c.turnos} pensando={c.pensando} listo={c.listo} onSend={c.enviar} />
-      ) : (
-        <FaceView
-          caso={c.caso}
-          turnos={c.turnos}
-          pensando={c.pensando}
-          listo={c.listo}
-          onSend={c.enviar}
-          onEnd={c.terminar}
-        />
+      {checklist && (
+        <div className="flex justify-center px-3 pb-3 lg:hidden">
+          <ChecklistBoton items={checklist} abierto={hoja} onClick={() => setHoja(true)} />
+          <ChecklistSheet items={checklist} abierto={hoja} onAbierto={setHoja} />
+        </div>
       )}
+
+      <div className="flex min-h-0 flex-1 lg:pr-6">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+          {modo === "chat" ? (
+            <ChatView caso={c.caso} turnos={c.turnos} pensando={c.pensando} listo={c.listo} onSend={c.enviar} />
+          ) : (
+            <FaceView
+              caso={c.caso}
+              turnos={c.turnos}
+              pensando={c.pensando}
+              listo={c.listo}
+              onSend={c.enviar}
+              onEnd={c.terminar}
+            />
+          )}
+        </div>
+        {checklist && panel && <ChecklistPanel items={checklist} onCerrar={() => setPanel(false)} />}
+      </div>
 
       {modo === "chat" && (
         <button

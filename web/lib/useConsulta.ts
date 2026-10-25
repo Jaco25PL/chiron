@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { api, type Caso, type Resumen, type Turno } from "./api";
+import { api, type Caso, type ItemChecklist, type Nivel, type Resumen, type Turno } from "./api";
 
 /** How the face-to-face call hears back: the reply's text, then the patient's voice in chunks. */
 export type ConVoz = {
@@ -13,9 +13,11 @@ export type ConVoz = {
 
 export const DURACION_S = 7 * 60;
 
-/** Consultation state: backend session, transcript, timer and closing. */
-export function useConsulta(caseId: string, modo: "chat" | "cara" = "chat") {
+/** Consultation state: backend session, transcript, timer and closing. In "principiante" also the
+ *  checklist, as the backend ticked it in its latest response (null in "normal"). */
+export function useConsulta(caseId: string, modo: "chat" | "cara" = "chat", nivel: Nivel = "normal") {
   const [caso, setCaso] = useState<Caso | null>(null);
+  const [checklist, setChecklist] = useState<ItemChecklist[] | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [turnos, setTurnos] = useState<Turno[]>([]);
   const [pensando, setPensando] = useState(false);
@@ -28,13 +30,14 @@ export function useConsulta(caseId: string, modo: "chat" | "cara" = "chat") {
     creada.current = true;
     // the backend tells us who the patient is (also for "aleatorio", picked on the server)
     api
-      .nuevaSesion(caseId, modo)
+      .nuevaSesion(caseId, modo, nivel)
       .then((r) => {
         setCaso(r.case);
         setSessionId(r.session_id);
+        if (r.checklist) setChecklist(r.checklist);
       })
       .catch((e: Error) => toast.error(e.message, { id: "sesion" }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- created once, with the mode the user opened it in
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- created once, with the mode and level the user opened it in
   }, [caseId]);
 
   const enviar = useCallback(
@@ -51,6 +54,7 @@ export function useConsulta(caseId: string, modo: "chat" | "cara" = "chat") {
             onRespuesta: (r) => {
               respondio = true;
               setTurnos((ts) => [...ts, ...r.replies]);
+              if (r.checklist) setChecklist(r.checklist);
               setPensando(false); // the student may talk again while the patient's voice is still arriving
               voz.alResponder(r.replies);
             },
@@ -59,6 +63,7 @@ export function useConsulta(caseId: string, modo: "chat" | "cara" = "chat") {
         } else {
           const r = await api.enviar(sessionId, text);
           setTurnos((ts) => [...ts, ...r.replies]);
+          if (r.checklist) setChecklist(r.checklist);
         }
       } catch (e) {
         if (!respondio) toast.error((e as Error).message);
@@ -83,7 +88,7 @@ export function useConsulta(caseId: string, modo: "chat" | "cara" = "chat") {
   const listo = !!sessionId;
   // waiting long enough to look stuck: usually the backend cold-starting (Cloud Run scales to zero)
   const demora = useDemora(!listo || pensando);
-  return { caso, sessionId, listo, turnos, pensando, demora, inicio, enviar, terminar, resumen, setResumen };
+  return { caso, sessionId, listo, turnos, pensando, demora, inicio, enviar, terminar, resumen, setResumen, checklist };
 }
 
 /** Seconds left of the 7 minutes (negative once over). Skips re-renders while the tab is hidden. */
