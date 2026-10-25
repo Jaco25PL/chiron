@@ -109,3 +109,20 @@ test.describe("backend unavailable", () => {
     await expect(page).not.toHaveURL(/\/login/); // the user stays signed in
   });
 });
+
+test.describe("branding", () => {
+  test("logo and favicons load for signed-out visitors (the login page needs them)", async ({ request }) => {
+    for (const path of ["/logo.png", "/icon.png", "/apple-icon.png"]) {
+      const res = await request.get(path, { maxRedirects: 0 });
+      expect(res.status(), path).toBe(200);
+      expect(res.headers()["content-type"]).toContain("image/png");
+    }
+  });
+
+  test("the login page shows the logo", async ({ page }) => {
+    await page.goto("/login");
+    const logo = page.locator('img[src*="logo.png"]').first();
+    await expect(logo).toBeVisible();
+    expect(await logo.evaluate((img: HTMLImageElement) => img.naturalWidth)).toBeGreaterThan(0);
+  });
+});

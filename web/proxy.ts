@@ -7,5 +7,6 @@
 export { auth as proxy } from "@/auth";
 
 export const config = {
-  matcher: ["/((?!api/|_next/static|_next/image|favicon.ico|retratos/).*)"],
+  // public assets (logo, favicon, portraits) must load on /login too, before signing in
+  matcher: ["/((?!api/|_next/static|_next/image|favicon.ico|icon.png|apple-icon.png|logo.png|retratos/).*)"],
 };

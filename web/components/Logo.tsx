@@ -1,8 +1,7 @@
+import Image from "next/image";
+
+/** Chiron mark (C + K). Source: docs/brand/logo-source.png; web/public/logo.png is the trimmed,
+ *  transparent version. The favicon and Apple icon live in app/icon.png and app/apple-icon.png. */
 export function Logo({ size = 26 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden>
-      <circle cx="16" cy="16" r="15" fill="none" stroke="var(--accent)" strokeOpacity=".35" />
-      <path d="M21 10.5a7.5 7.5 0 1 0 0 11" fill="none" stroke="var(--accent)" strokeWidth="2.4" strokeLinecap="round" />
-    </svg>
-  );
+  return <Image src="/logo.png" alt="" width={size} height={size} priority aria-hidden />;
 }
