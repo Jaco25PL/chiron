@@ -37,7 +37,7 @@ def main():
         for m in client.models.list()
         if {"generateContent", "embedContent"} & set(m.supported_actions or [])
     }
-    configured = {m for task, ms in MODELS.items() if task != "live" for m in ms}
+    configured = {m for task, ms in MODELS.items() if task not in ("live", "tts") for m in ms}
     if "--all" in sys.argv:
         models = sorted(listed)
     else:

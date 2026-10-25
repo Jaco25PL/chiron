@@ -34,6 +34,8 @@ MODELS = {
     "judge": ["gemini-3.6-flash", "gemini-3.5-flash", "gemini-3.7-flash"],
     # real-time voice (Live API)
     "live": ["gemini-3.8-live", "gemini-3.1-flash-live-preview"],
+    # patient voice (llm/tts.py): lite starts speaking in ~1-3 s and sounds like flash
+    "tts": ["gemini-3.8-flash-lite-tts", "gemini-3.8-flash-tts"],
     "embedding": ["gemini-embedding-001"],
 }
 

@@ -9,6 +9,7 @@ Contract (don't change it without updating api/):
         "debug": {"intent": str, "facts": [ids], "exams": [ids], "studies": [str],
                   "model": str, "latency_ms": int}
     }
+    speak(session_id, user=None) -> bytes                          # WAV of the patient's last reply
     finish(session_id, user=None) -> get_session(...) with finished=True
     get_session(session_id, user=None) -> {
         "case": {id, materia, paciente: {nombre, sexo}}, "transcript": [{"role": "estudiante" | "paciente" | "docente", "text": str}],
@@ -19,4 +20,4 @@ Contract (don't change it without updating api/):
 With a user, a consultation can only be read or continued by its owner (PermissionError otherwise).
 """
 
-from agents.graph import finish, get_session, list_cases, new_session, send  # noqa: F401
+from agents.graph import finish, get_session, list_cases, new_session, send, speak  # noqa: F401

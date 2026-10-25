@@ -113,9 +113,34 @@ flowchart LR
 | Patient | gemini-3-flash-preview → 3.5-flash → 3.6-flash → 3.5-flash-lite | ~1 s with `thinking_level="low"`; lite as last resort when flash quota runs out |
 | Router, exam, labs | gemini-3.5-flash-lite → flash-lite-latest → 3.1-flash-lite | short classification, fastest |
 | Eval judge | gemini-3.6-flash → 3.5-flash → 3.7-flash | quality over speed |
+| Patient voice | gemini-3.8-flash-lite-tts → 3.8-flash-tts | lite starts speaking in ~1–3 s; side by side, flash didn't sound better |
 | Embeddings | gemini-embedding-001 | |
 
 Every option is tried with each of three API keys. A per-(model, key) circuit breaker skips combinations that answered "out of quota" until they reset, and clients are built lazily on first use (model setup went from ~20 s to 0.02 s). On the free tier the flash models allow 20 requests/day per key: roughly 6 consultations a day, which is the real bottleneck, not hosting.
+
+## Voice (face-to-face mode)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant B as Browser
+    participant A as FastAPI
+    participant G as LangGraph
+    participant T as Gemini TTS
+    B->>B: Web Speech API (es-UY) turns the student's speech into text
+    B->>A: POST /messages {text}  (same path as typing)
+    A->>G: router → patient
+    A-->>B: patient reply (caption)
+    B->>A: POST /sessions/{id}/voz
+    A->>T: last patient reply + voice by sex + style from the case
+    T-->>A: PCM 24 kHz
+    A-->>B: WAV → AudioContext (+ analyser for the future avatar's lip-sync)
+```
+
+- **Why not Gemini Live**, which would be faster: it writes its own replies, so it would bypass the LangGraph patient and everything the evals measure (no diagnosis leaks, one fact per question). Here voice is only input and output; the patient's words still come from the same graph.
+- **Speech to text in the browser:** free, no quota, near-zero latency (Chrome, Edge, Android, Safari). Firefox has no dictation, so the mic is disabled there and typing still works.
+- **The voice endpoint only speaks the consultation's last patient reply**, for its owner. It never takes arbitrary text, so it can't be used as a free TTS service. The voice (Sulafat or Schedar, chosen by ear) is picked by sex, and the style ("mujer uruguaya de 61 años, de Montevideo, acento rioplatense…") is built from the case on the server, so age never reaches the browser. The style goes in `speech_metadata.style`: put inside the text, the model read it aloud.
+- **Latency:** the reply text appears first and the audio follows ~1–3 s later. Streaming the audio is the next improvement.
 
 ## Deployment: why Vercel + Neon
 
@@ -131,7 +156,7 @@ The backend needed a host that runs Python, keeps no state in memory (or can aff
 **Why it works now (it didn't on day one):**
 
 1. **No in-memory state.** Consultations live in Neon through LangGraph's `PostgresSaver`, so a function can be cold-started or scaled out between two messages without losing anything.
-2. **No long-lived connections.** The future voice mode will connect the browser directly to Gemini Live with an ephemeral token minted by the backend, which is Google's recommended low-latency setup, so the backend never holds a WebSocket open.
+2. **No long-lived connections.** Voice is two plain requests per turn: speech recognition runs in the browser, and the patient's audio is one POST that returns a WAV (see [Voice](#voice-face-to-face-mode)).
 3. **Small bundle.** Runtime dependencies are ~131 MB (limit: 500 MB) once Chroma and dev tooling are left out. That's why the RAG moved to pgvector.
 
 **How it's wired:**
@@ -153,8 +178,8 @@ github.com/Jaco25PL/chiron  ──push to main──┬──▶ Vercel "chiron"
 
 | Layer | Tool | What it covers |
 |---|---|---|
-| Unit / integration | pytest (31) | case validator, eval checks, HMAC signature, consultation ownership, API with a fake backend, dependency sync |
-| E2E | Playwright (17) | sign-in redirects, OAuth request shape (Google intercepted), forged cookies, open redirect, sign-out race, cold-start notice, signed calls to the real backend; runs locally and against production |
+| Unit / integration | pytest (35) | case validator, eval checks, HMAC signature, consultation ownership, API with a fake backend, dependency sync |
+| E2E | Playwright (22) | full consultation, voice requests in face to face, sign-in redirects, OAuth request shape (Google intercepted), forged cookies, open redirect, sign-out race, cold-start notice, signed calls to the real backend; runs locally and against production |
 | LLM behavior | LangSmith evals | patient (diagnosis leaks, hallucinations, in character, one fact per question), router intent, adversarial attacks; LLM-as-judge + code checks |
 
 Tests run isolated from real infrastructure (`tests/conftest.py`: no database, no secret); evals run on demand because they spend model quota.
@@ -180,5 +205,5 @@ chiron/
 ## Not built yet
 
 - **Feedback agent:** grade the transcript against the grilla item by item and cite course material via RAG.
-- **Voice:** Gemini Live from the browser with ephemeral tokens; then an animated avatar synced to the audio.
+- **Avatar:** an anime VRM model (three-vrm) whose mouth follows the voice through the analyser that's already wired; a generic model first.
 - **MCP server for exam tools:** dropped for now (the exam is a graph node); revisit if the tools grow.

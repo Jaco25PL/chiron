@@ -102,3 +102,24 @@ def test_frontend_servido():
     r = client.get("/")
     assert r.status_code == 200
     assert "Chiron" in r.text
+
+
+# --- voice (face-to-face mode) ---------------------------------------------------------
+
+def test_voice_speaks_the_last_patient_reply(case_id):
+    sid = client.post("/api/sessions", json={"case_id": case_id}).json()["session_id"]
+    assert client.post(f"/api/sessions/{sid}/voz").status_code == 404  # nothing said yet
+    client.post(f"/api/sessions/{sid}/messages", json={"text": "Hola, buenas tardes"})
+    r = client.post(f"/api/sessions/{sid}/voz")
+    assert r.status_code == 200
+    assert r.headers["content-type"] == "audio/wav"
+    assert r.content[:4] == b"RIFF" and r.content[8:12] == b"WAVE"
+
+
+def test_voice_style_and_choice_stay_on_the_server():
+    from cases.catalog import load_case
+    from llm.tts import VOICES, style
+
+    case = load_case("mpna-itu-pna-diabetica")
+    assert "61 años" in style(case) and "mujer" in style(case)  # age is used for the voice only
+    assert VOICES[case["paciente"]["sexo"]] == "Sulafat"

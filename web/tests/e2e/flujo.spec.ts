@@ -76,3 +76,22 @@ test("random patient: the server picks the case and the student only learns name
   }
 });
 
+
+test("face to face: each new patient reply is spoken, and muting stops it", async ({ page, context, baseURL }) => {
+  await signInAs(context, baseURL!);
+  const voces: number[] = [];
+  page.on("response", (r) => r.url().endsWith("/voz") && voces.push(r.status()));
+  await page.goto(`/consulta/aleatorio?modo=cara`);
+  await expect(page.getByLabel("Hablar")).toBeEnabled(); // Chromium has speech recognition
+
+  await page.locator("#mensaje").fill("Hola, buenas tardes");
+  await page.keyboard.press("Enter");
+  await expect.poll(() => voces).toEqual([200]); // the fake backend returns a short silent WAV
+  await expect(page.getByText("No se pudo reproducir")).toHaveCount(0);
+
+  await page.getByLabel("Silenciar al paciente").click();
+  await page.locator("#mensaje").fill("¿Qué lo trae por acá?");
+  await page.keyboard.press("Enter");
+  await expect(page.getByText(/está pensando/)).toBeHidden();
+  expect(voces).toEqual([200]); // muted: no new audio requested
+});

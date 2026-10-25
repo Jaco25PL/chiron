@@ -61,6 +61,12 @@ export const api = {
   enviar: (sessionId: string, text: string) =>
     call<Respuesta>(`/api/sessions/${sessionId}/messages`, { method: "POST", body: JSON.stringify({ text }) }),
   terminar: (sessionId: string) => call<Resumen>(`/api/sessions/${sessionId}/finish`, { method: "POST" }),
+  /** The patient's last reply as WAV audio. */
+  voz: async (sessionId: string) => {
+    const res = await fetch(`/api/sessions/${sessionId}/voz`, { method: "POST" });
+    if (!res.ok) throw new Error(`Voz: error ${res.status}`);
+    return res.arrayBuffer();
+  },
 };
 
 export const ALEATORIO = "aleatorio";

@@ -18,7 +18,7 @@ if str(ROOT) not in sys.path:
 
 from fastapi import Depends, FastAPI, Query, Request  # noqa: E402
 from fastapi.exceptions import RequestValidationError  # noqa: E402
-from fastapi.responses import JSONResponse  # noqa: E402
+from fastapi.responses import JSONResponse, Response  # noqa: E402
 from fastapi.staticfiles import StaticFiles  # noqa: E402
 from pydantic import BaseModel  # noqa: E402
 
@@ -122,6 +122,12 @@ def send_message(session_id: str, body: Message, user: dict = Depends(current_us
     if not body.text.strip():
         raise AgentError(400, "Mensaje vacío")
     return _call(session.send, session_id, body.text, user)
+
+
+@app.post("/api/sessions/{session_id}/voz")
+def speak(session_id: str, user: dict = Depends(current_user)):
+    """The patient's last reply as audio. Only the owner's own consultation, never arbitrary text."""
+    return Response(_call(session.speak, session_id, user), media_type="audio/wav")
 
 
 @app.get("/api/sessions/{session_id}")

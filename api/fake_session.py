@@ -141,3 +141,13 @@ def get_session(session_id: str, user: dict | None = None) -> dict:
 def finish(session_id: str, user: dict | None = None) -> dict:
     _get(session_id, user)["finished"] = True
     return get_session(session_id, user)
+
+
+def speak(session_id: str, user: dict | None = None) -> bytes:
+    """A short silent WAV for the last patient reply: exercises the audio path without Gemini."""
+    from llm.tts import SAMPLE_RATE, to_wav
+
+    s = _get(session_id, user)
+    if not any(t["role"] == "paciente" for t in s["transcript"]):
+        raise KeyError("no patient reply yet")
+    return to_wav(bytes(2 * SAMPLE_RATE // 4))  # 0.25 s of silence

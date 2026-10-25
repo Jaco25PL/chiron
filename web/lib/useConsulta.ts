@@ -61,7 +61,7 @@ export function useConsulta(caseId: string, modo: "chat" | "cara" = "chat") {
   const listo = !!sessionId;
   // waiting long enough to look stuck: usually the backend cold-starting (Cloud Run scales to zero)
   const demora = useDemora(!listo || pensando);
-  return { caso, listo, turnos, pensando, demora, inicio, enviar, terminar, resumen, setResumen };
+  return { caso, sessionId, listo, turnos, pensando, demora, inicio, enviar, terminar, resumen, setResumen };
 }
 
 /** Seconds left of the 7 minutes (negative once over). Skips re-renders while the tab is hidden. */

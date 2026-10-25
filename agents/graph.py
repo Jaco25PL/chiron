@@ -251,6 +251,17 @@ def send(session_id: str, text: str, user: User | None = None) -> dict:
     }
 
 
+def speak(session_id: str, user: User | None = None) -> bytes:
+    """The patient's last reply as WAV audio, in the case's voice (face-to-face mode)."""
+    from llm.tts import synthesize
+
+    s = _state(session_id, user)
+    replies = [t["text"] for t in s.get("transcript", []) if t["role"] == "paciente"]
+    if not replies:
+        raise KeyError("no patient reply yet")
+    return synthesize(replies[-1], load_case(s["case_id"]))
+
+
 def finish(session_id: str, user: User | None = None) -> dict:
     """Ends the consultation ("Terminar consulta" button) and returns the final state."""
     _state(session_id, user)

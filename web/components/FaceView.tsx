@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import type { Caso, Turno } from "@/lib/api";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import { api, type Caso, type Turno } from "@/lib/api";
 import { ASCII_FACE } from "@/lib/ascii-face";
+import { useDictado, useVozPaciente } from "@/lib/voz";
 import { Composer } from "./Composer";
-import { CameraOff, Close, Mic, PhoneDown, Stethoscope } from "./icons";
+import { CameraOff, Close, Mic, PhoneDown, Speaker, SpeakerOff, Stethoscope } from "./icons";
 
 /** The case's ASCII portrait: public/retratos/<id>.txt, else default.txt, else the generated bust. */
 function useRetrato(caseId: string | undefined) {
@@ -22,9 +24,11 @@ function useRetrato(caseId: string | undefined) {
   return { arte, cols, filas: lineas.length };
 }
 
-/** "Face to face" view: a video call with the patient. For now the face is a static ASCII portrait. */
+/** "Face to face" view: a video call with the patient. The student talks (browser speech recognition)
+ *  and the patient answers out loud (Gemini TTS); typing still works. For now the face is a static ASCII portrait. */
 export function FaceView({
   caso,
+  sessionId,
   turnos,
   pensando,
   listo,
@@ -32,6 +36,7 @@ export function FaceView({
   onEnd,
 }: {
   caso: Caso | null;
+  sessionId: string | null;
   turnos: Turno[];
   pensando: boolean;
   listo: boolean;
@@ -44,6 +49,33 @@ export function FaceView({
   const [cerrado, setCerrado] = useState<number | null>(null);
   const nombre = caso?.paciente.nombre.split(" ").slice(0, 2).join(" ") ?? "Paciente";
   const { arte, cols, filas } = useRetrato(caso?.id);
+
+  const voz = useVozPaciente();
+  const { desbloquear, callar } = voz;
+  const [mudo, setMudo] = useState(false);
+  // every send comes from a tap or key press: the moment to unlock audio on iOS
+  const enviar = useCallback(
+    (texto: string) => {
+      desbloquear();
+      callar();
+      onSend(texto);
+    },
+    [desbloquear, callar, onSend],
+  );
+  const dictado = useDictado(enviar);
+
+  // speak each new patient reply (not the ones that were already there when this view opened)
+  const idxPaciente = ultimoPaciente ? turnos.lastIndexOf(ultimoPaciente) : -1;
+  const hablado = useRef(idxPaciente);
+  useEffect(() => {
+    if (idxPaciente <= hablado.current || !sessionId) return;
+    hablado.current = idxPaciente;
+    if (mudo) return;
+    api
+      .voz(sessionId)
+      .then(voz.reproducir)
+      .catch(() => toast.error("No se pudo reproducir la voz del paciente; seguí con los subtítulos.", { id: "voz" }));
+  }, [idxPaciente, sessionId, mudo, voz.reproducir]);
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3 px-3 pb-[max(12px,env(safe-area-inset-bottom))] sm:px-6">
@@ -77,9 +109,21 @@ export function FaceView({
 
         {/* nombre */}
         <div className="glass absolute left-3 top-3 flex items-center gap-2 rounded-full py-1.5 pl-2.5 pr-3.5 sm:left-4 sm:top-4">
-          <span className="size-2 rounded-full bg-live shadow-[0_0_10px_var(--live)]" />
+          <span className={`size-2 rounded-full bg-live shadow-[0_0_10px_var(--live)] ${voz.hablando ? "animate-pulse" : ""}`} />
           <span className="text-[13px] font-medium">{nombre}</span>
         </div>
+        <button
+          type="button"
+          aria-label={mudo ? "Activar la voz del paciente" : "Silenciar al paciente"}
+          aria-pressed={mudo}
+          onClick={() => {
+            if (!mudo) voz.callar();
+            setMudo(!mudo);
+          }}
+          className="press glass absolute left-3 top-14 grid size-9 place-items-center rounded-full text-ink-2 hover:text-ink sm:left-4 sm:top-[60px]"
+        >
+          {mudo ? <SpeakerOff width={17} height={17} /> : <Speaker width={17} height={17} />}
+        </button>
 
         {/* informe del docente */}
         {ultimoDocente && cerrado !== ultimoIdx && (
@@ -101,7 +145,11 @@ export function FaceView({
 
         {/* subtítulos */}
         <div className="absolute inset-x-3 bottom-4 flex justify-center sm:bottom-6">
-          {pensando ? (
+          {dictado.escuchando ? (
+            <p className="max-w-2xl rounded-2xl bg-black/55 px-4 py-2.5 text-center text-[15px] leading-snug text-ink-2 backdrop-blur-md sm:text-[17px]">
+              {dictado.parcial || "Te escucho…"}
+            </p>
+          ) : pensando ? (
             <span className="rounded-full bg-black/55 px-4 py-2 text-[13px] text-ink-2 backdrop-blur-md">{nombre.split(" ")[0]} está pensando…</span>
           ) : ultimoPaciente ? (
             <p
@@ -119,17 +167,26 @@ export function FaceView({
       {/* controles */}
       <div className="mx-auto w-full max-w-3xl">
         <Composer
-          onSend={onSend}
+          onSend={enviar}
           disabled={!listo || pensando}
           placeholder="Hablale al paciente…"
           before={
             <>
               <button
                 type="button"
-                disabled
-                title="Voz: próximamente"
-                aria-label="Micrófono (próximamente)"
-                className="glass grid size-12 shrink-0 place-items-center rounded-full text-ink-3"
+                disabled={!dictado.soportado || !listo || pensando}
+                title={dictado.soportado ? undefined : "Tu navegador no permite dictar: probá con Chrome o Safari"}
+                aria-label={dictado.escuchando ? "Dejar de escuchar" : "Hablar"}
+                aria-pressed={dictado.escuchando}
+                onClick={() => {
+                  voz.desbloquear();
+                  voz.callar();
+                  if (dictado.escuchando) dictado.parar();
+                  else dictado.empezar();
+                }}
+                className={`press grid size-12 shrink-0 place-items-center rounded-full transition-colors disabled:opacity-40 ${
+                  dictado.escuchando ? "bg-accent text-black shadow-[0_0_0_6px_rgb(110_231_210/0.18)]" : "glass text-ink hover:text-accent"
+                }`}
               >
                 <Mic />
               </button>
