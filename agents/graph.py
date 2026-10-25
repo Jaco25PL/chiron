@@ -20,7 +20,7 @@ from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langgraph.graph import END, START, StateGraph
 from pydantic import BaseModel, Field
 
-from agents import prompts
+from agents import grilla, prompts
 from cases import catalog
 from cases.catalog import load_case
 from llm.gemini import MODELS, chat_model
@@ -77,6 +77,7 @@ class State(TypedDict, total=False):
     debug: dict
     timings: Annotated[dict, _timings]
     owner: str  # email of the student who started the consultation
+    nivel: str  # "normal" | "principiante" (grilla.LEVELS); consultations without it are "normal"
 
 
 # --- cases -------------------------------------------------------------------------
@@ -220,17 +221,19 @@ def _state(session_id: str, user: User | None) -> dict:
     return s
 
 
-def new_session(case_id: str, user: User | None = None, mode: str = "chat") -> str:
+def new_session(case_id: str, user: User | None = None, mode: str = "chat", nivel: str = "normal") -> str:
     """case_id: public id, internal id or "aleatorio" (random case, picked here on the server)."""
+    if nivel not in grilla.LEVELS:
+        raise ValueError(f"unknown nivel {nivel!r}")
     case_id = catalog.resolve(case_id)  # KeyError if it doesn't exist
     session_id = uuid.uuid4().hex[:12]
     owner = user["email"] if user else ""
     GRAPH.update_state(
         _config(session_id),
-        {"case_id": case_id, "diagnosis_proposed": None, "finished": False, "owner": owner},
+        {"case_id": case_id, "diagnosis_proposed": None, "finished": False, "owner": owner, "nivel": nivel},
     )
     if user:
-        db.create_consultation(session_id, db.upsert_user(user["email"], user.get("name")), case_id, mode)
+        db.create_consultation(session_id, db.upsert_user(user["email"], user.get("name")), case_id, mode, nivel)
     return session_id
 
 
@@ -258,7 +261,7 @@ def send(session_id: str, text: str, user: User | None = None) -> dict:
            "studies": debug.get("studies")} for t in new_turns),
     ])
     timings["db"] = int((time.perf_counter() - t_db) * 1000)
-    return {
+    return _with_checklist(state, {
         "replies": [{"role": t["role"], "text": t["text"]} for t in new_turns],
         "debug": {
             "intent": state["intent"],
@@ -269,7 +272,15 @@ def send(session_id: str, text: str, user: User | None = None) -> dict:
             "latency_ms": latency_ms,
             "timings": timings,
         },
-    }
+    })
+
+
+def _with_checklist(state: dict, result: dict) -> dict:
+    """Beginner mode adds the grilla checklist, ticked with the state so far. In "normal" the key is
+    left out altogether: the browser must not receive the grilla."""
+    if state.get("nivel") == "principiante":
+        result["checklist"] = grilla.checklist(load_case(state["case_id"]), state)
+    return result
 
 
 def speak(session_id: str, user: User | None = None) -> Iterator[bytes]:
@@ -296,7 +307,7 @@ def get_session(session_id: str, user: User | None = None) -> dict:
     s = _state(session_id, user)
     case = load_case(s["case_id"])
     names = {e["id"]: e["maniobra"] for e in prompts.exam_options(case)}
-    return {
+    return _with_checklist(s, {
         "case": catalog.public_case(case),  # never the internal id: it spells out the diagnosis
         "transcript": s.get("transcript", []),
         "revealed_facts": s.get("revealed_facts", []),
@@ -306,4 +317,5 @@ def get_session(session_id: str, user: User | None = None) -> dict:
         "studies_requested": s.get("studies_requested", []),
         "diagnosis_proposed": s.get("diagnosis_proposed"),
         "finished": s.get("finished", False),
-    }
+        "nivel": s.get("nivel", "normal"),
+    })

@@ -64,13 +64,14 @@ def upsert_user(email: str, name: str | None) -> int | None:
     return row[0]
 
 
-def create_consultation(consultation_id: str, user_id: int | None, case_id: str, mode: str) -> None:
+def create_consultation(consultation_id: str, user_id: int | None, case_id: str, mode: str,
+                        nivel: str = "normal") -> None:
     if not enabled() or user_id is None:
         return
     with pool().connection() as conn:
         conn.execute(
-            "INSERT INTO consultations (id, user_id, case_id, mode) VALUES (%s, %s, %s, %s)",
-            (consultation_id, user_id, case_id, mode),
+            "INSERT INTO consultations (id, user_id, case_id, mode, nivel) VALUES (%s, %s, %s, %s, %s)",
+            (consultation_id, user_id, case_id, mode, nivel),
         )
 
 

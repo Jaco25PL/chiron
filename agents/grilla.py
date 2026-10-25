@@ -27,6 +27,9 @@ ROOT = Path(__file__).resolve().parent.parent
 # what the beginner checklist may show: items with evidence the app can see, never the diagnosis
 CHECKLIST_KINDS = ("hecho", "examen", "estudio")
 
+# difficulty levels: same patient; "principiante" also shows the checklist during the consultation
+LEVELS = ("normal", "principiante")
+
 
 @lru_cache
 def _grilla(materia: str, grilla_id: str) -> dict:

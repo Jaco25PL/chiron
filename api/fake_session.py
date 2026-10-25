@@ -12,6 +12,7 @@ import unicodedata
 import uuid
 from pathlib import Path
 
+from agents import grilla  # stdlib only, like cases.catalog: the E2E job installs just fastapi + uvicorn
 from cases import catalog
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -42,11 +43,13 @@ def list_cases(materia: str) -> list[dict]:
     return catalog.list_public(materia)
 
 
-def new_session(case_id: str, user: dict | None = None, mode: str = "chat") -> str:
+def new_session(case_id: str, user: dict | None = None, mode: str = "chat", nivel: str = "normal") -> str:
+    if nivel not in grilla.LEVELS:
+        raise ValueError(f"unknown nivel {nivel!r}")
     case = catalog.load_case(catalog.resolve(case_id))
     sid = uuid.uuid4().hex[:12]
     _sessions[sid] = {
-        "owner": user["email"] if user else "",
+        "owner": user["email"] if user else "", "nivel": nivel,
         "case": case, "transcript": [], "revealed_facts": [], "exams_done": [],
         "studies_requested": [], "diagnosis_proposed": None, "finished": False,
     }
@@ -121,21 +124,29 @@ def send(session_id: str, text: str, user: dict | None = None) -> dict:
     for lst, new in ((s["revealed_facts"], facts), (s["exams_done"], exams), (s["studies_requested"], studies)):
         lst.extend(x for x in new if x not in lst)
 
-    return {
+    return _with_checklist(s, {
         "replies": replies,
         "debug": {"intent": intent, "facts": facts, "exams": exams, "studies": studies,
                   "model": "fake", "latency_ms": int((time.perf_counter() - t0) * 1000)},
-    }
+    })
+
+
+def _with_checklist(s: dict, result: dict) -> dict:
+    """Same rule as the real backend: the checklist only in "principiante", ticked from this session's
+    facts, exams and studies (the same keys grilla.checklist reads)."""
+    if s["nivel"] == "principiante":
+        result["checklist"] = grilla.checklist(s["case"], s)
+    return result
 
 
 def get_session(session_id: str, user: dict | None = None) -> dict:
     s = _get(session_id, user)
-    return {
+    return _with_checklist(s, {
         "case": catalog.public_case(s["case"]), "transcript": s["transcript"],
         "revealed_facts": s["revealed_facts"], "total_facts": len(s["case"].get("anamnesis", [])),
         "exams_done": s["exams_done"], "exams_done_labels": s["exams_done"], "studies_requested": s["studies_requested"],
-        "diagnosis_proposed": s["diagnosis_proposed"], "finished": s["finished"],
-    }
+        "diagnosis_proposed": s["diagnosis_proposed"], "finished": s["finished"], "nivel": s["nivel"],
+    })
 
 
 def finish(session_id: str, user: dict | None = None) -> dict:

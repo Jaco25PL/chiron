@@ -31,3 +31,19 @@ def test_checklist_never_shows_the_diagnosis():
         for key in case["diagnostico"].get("grilla_items", []):
             assert key.split("::", 1)[1].lower() not in texto
         assert {x["tipo"] for x in lista} <= set(grilla.CHECKLIST_KINDS)
+
+
+def test_the_real_session_sends_the_checklist_only_to_beginners():
+    """agents/graph.py (in-memory checkpointer, no LLM calls): the level lives in the state."""
+    import pytest
+
+    from agents.graph import GRAPH, get_session, new_session
+
+    assert "checklist" not in get_session(new_session("mpna-dolor-toracico-angina"))
+    sid = new_session("mpna-dolor-toracico-angina", nivel="principiante")
+    s = get_session(sid)
+    assert s["nivel"] == "principiante" and not any(x["hecho"] for x in s["checklist"])
+    GRAPH.update_state({"configurable": {"thread_id": sid}}, {"revealed_facts": ["aparicion"]})
+    assert any(x["hecho"] for x in get_session(sid)["checklist"])
+    with pytest.raises(ValueError):
+        new_session("mpna-dolor-toracico-angina", nivel="experto")
