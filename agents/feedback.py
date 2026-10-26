@@ -246,7 +246,9 @@ def _judge():
         falto: list[str] = Field(description="Lo más importante que le faltó, máximo 5")
         consejos: list[str] = Field(description="2 o 3 consejos cortos para la próxima")
 
-    return chat_model("judge", Correccion, thinking_level="low")
+    # no backoff rounds: with every key out of quota the coverage-only correction (parcial) is better
+    # than waiting past the function's 60 s limit
+    return chat_model("judge", Correccion, retries=0, thinking_level="low")
 
 
 def evaluate(case: dict, state: dict) -> dict:

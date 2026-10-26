@@ -219,13 +219,15 @@ def _guarded(make_runnable, model: str, key: str):
     return RunnableLambda(call, name=model)
 
 
-def chat_model(task: str, schema: type | None = None, **kwargs):
+def chat_model(task: str, schema: type | None = None, retries: int = 3, **kwargs):
     """LangChain chat model for the task, with fallback across keys and models.
 
     Returns a Runnable: the first one is MODELS[task][0] with the first key; on any
     error it moves to the next key and then to the next model. (model, key) pairs
     that are out of quota are skipped until it renews (see `_guarded`).
     With `schema` (a Pydantic class) it returns structured output.
+    `retries`: rounds of backoff when everything is out of quota (0 = fail at once, for callers
+    that have their own fallback and a deadline).
     """
     frozen = tuple(sorted(kwargs.items()))
 
@@ -238,9 +240,12 @@ def chat_model(task: str, schema: type | None = None, **kwargs):
     runnables = [_guarded(factory(model, key), model, key) for model in MODELS[task] for key in api_keys()]
     # if every key and model is out of quota (e.g. the per-minute limit), retry with growing backoff.
     # Only then: any other error would re-run the whole chain, paid calls included
-    return runnables[0].with_fallbacks(runnables[1:]).with_retry(
+    chain = runnables[0].with_fallbacks(runnables[1:])
+    if not retries:
+        return chain
+    return chain.with_retry(
         retry_if_exception_type=(QuotaBlocked,),
-        stop_after_attempt=4,
+        stop_after_attempt=retries + 1,
         wait_exponential_jitter=True,
         exponential_jitter_params={"initial": 5, "max": 40},
     )

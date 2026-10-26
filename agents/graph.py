@@ -93,11 +93,12 @@ def list_cases(materia: str = "mpna") -> list[dict]:
 
 @lru_cache
 def models():
+    # one backoff round at most: a turn must finish well within the function's 60 s
     return {
-        "router": chat_model("router", Route, thinking_level="minimal"),
-        "patient": chat_model("patient", PatientReply, thinking_level="low"),
-        "exam": chat_model("router", ExamPick, thinking_level="minimal"),
-        "labs": chat_model("router", LabPick, thinking_level="minimal"),
+        "router": chat_model("router", Route, retries=1, thinking_level="minimal"),
+        "patient": chat_model("patient", PatientReply, retries=1, thinking_level="low"),
+        "exam": chat_model("router", ExamPick, retries=1, thinking_level="minimal"),
+        "labs": chat_model("router", LabPick, retries=1, thinking_level="minimal"),
     }
 
 
