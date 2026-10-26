@@ -39,7 +39,8 @@ MODELS = {
     # router and short decisions: as fast as possible
     "router": ["gemini-3.5-flash-lite", "gemini-flash-lite-latest", "gemini-3.1-flash-lite"],
     # feedback judge: quality over speed
-    "judge": ["gemini-3.6-flash", "gemini-3.5-flash", "gemini-3.7-flash"],
+    # (gemini-3.7-flash left out: 30-75 s per reply on the free tier, past the function's limit)
+    "judge": ["gemini-3.6-flash", "gemini-3.5-flash"],
     # real-time voice (Live API)
     "live": ["gemini-3.8-live", "gemini-3.1-flash-live-preview"],
     # patient voice (llm/tts.py): lite starts speaking in ~1-3 s and sounds like flash

@@ -17,6 +17,7 @@ Shape (see agents/session.py):
                 "evidencia": bool}]}
 """
 
+from concurrent.futures import ThreadPoolExecutor
 import logging
 import re
 import unicodedata
@@ -251,13 +252,19 @@ def _judge():
     return chat_model("judge", Correccion, retries=0, thinking_level="low")
 
 
+DEADLINE_S = 40
+_POOL = ThreadPoolExecutor(max_workers=4)
+
+
 def evaluate(case: dict, state: dict) -> dict:
     """The docente's feedback on a finished consultation (see the module docstring for the shape)."""
     try:
         from langchain_core.messages import HumanMessage, SystemMessage
 
-        out = _judge().invoke([SystemMessage(_prompt(case, state)), HumanMessage("Corregí la consulta.")])
-    except Exception:  # noqa: BLE001  quota or a malformed answer: the student still gets the score
+        # deadline: a slow fallback model (free tier) must not run past the function's 60 s limit
+        llamada = _POOL.submit(_judge().invoke, [SystemMessage(_prompt(case, state)), HumanMessage("Corregí la consulta.")])
+        out = llamada.result(timeout=DEADLINE_S)
+    except Exception:  # noqa: BLE001  quota, timeout or a malformed answer: the student still gets the score
         log.exception("feedback LLM failed; returning the coverage-based fallback")
         return fallback(case, state)
     results = _results(case, state, {c.id: c.calificacion for c in out.items})
