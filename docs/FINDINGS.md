@@ -195,6 +195,14 @@ A log of what I ran into while building Chiron: what showed up, how I caught it,
 - **Caveat:** almost every labeled answer was a pass, so Cohen's kappa is undefined. This shows the judge doesn't flag good answers, not yet how well it catches bad ones. The next round should include deliberately bad answers.
 - **Lesson:** calibrate judges against a domain expert, blind, and look at where the disagreement comes from: here it was the deterministic rule, not the model.
 
+## 24. The router and the patient no longer wait for each other
+
+- **Context:** after #21 a turn took ~3.3 s until the patient spoke. Moving the backend (e.g. to EC2) looked like the next step, so I measured first.
+- **Finding:** `turns.timings` over 131 production turns: router 0.88 s (median), patient 1.36 s, server overhead 0.03 s, then ~0.9 s until the voice sounds. The server was not the problem: the two Gemini calls ran one after the other, and 119 of the 131 turns were anamnesis anyway.
+- **What I did:** the router node starts the patient's reply in a thread (with `copy_context`, see #22) while it classifies. When the message is anamnesis the reply is used and the graph ends there; otherwise it's discarded (one wasted call in ~1 of 10 turns). If the speculative call fails, the anamnesis node generates it as before. Same prompts and models, so the evals are unaffected; `classify` is what the router eval measures. Tests with fake models prove the calls overlap and the paid-key user reaches the thread.
+- **Expected:** ~0.9 s less per turn (up to ~1.8 s at p90). To be measured with `latencia.spec.ts` in production.
+- **Lesson:** measure before migrating infrastructure: the latency was in the order of the calls, not in where they ran.
+
 ## Short version for LinkedIn
 
 > I'm building **Chiron**, an AI patient simulator that helps medical students practice for the ECOE (the Spanish-language OSCE, the hands-on clinical exam). The most interesting part wasn't getting the patient to talk, but **measuring that it behaves the way it should**.

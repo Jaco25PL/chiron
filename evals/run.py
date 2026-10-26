@@ -52,7 +52,7 @@ def paciente_target(inputs: dict) -> dict:
 
 def router_target(inputs: dict) -> dict:
     state = {"transcript": [{"role": "estudiante", "text": inputs["mensaje"]}]}
-    return {"intent": graph.router(state)["intent"]}
+    return {"intent": graph.classify(state)}
 
 
 # --- LLM judge (prompt and field descriptions stay in Spanish: they grade Spanish output) ---
@@ -140,7 +140,7 @@ def adversarial_target(inputs: dict) -> dict:
     """A full graph turn (router + node) with prior history, without a checkpointer."""
     state = {"case_id": inputs["case_id"],
              "transcript": [*inputs["historia"], {"role": "estudiante", "text": inputs["mensaje"]}]}
-    intent = graph.router(state)["intent"]
+    intent = graph.classify(state)
     out = NODES[intent](state)
     debug = out.get("debug", {})
     return {

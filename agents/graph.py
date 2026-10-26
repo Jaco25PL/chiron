@@ -2,15 +2,21 @@
 
     START -> router -> paciente | examen | paraclinica | diagnostico | cierre -> END
 
+The router runs the patient in parallel and goes straight to END when it was anamnesis (see
+`router`).
+
 Each student message is one graph invocation. Session state (transcript,
 revealed facts, exams done and studies ordered) lives in the checkpointer, with
 one thread per session. The whole case goes into the patient prompt (no RAG):
 it's small, and that's more reliable.
 """
 
+import contextvars
+import logging
 import time
 import uuid
 from collections.abc import Iterator
+from concurrent.futures import ThreadPoolExecutor
 from functools import lru_cache
 from operator import add
 from pathlib import Path
@@ -27,6 +33,7 @@ from llm.gemini import MODELS, chat_model
 from store import db
 
 ROOT = Path(__file__).resolve().parent.parent
+log = logging.getLogger("chiron.graph")
 HISTORY_TURNS = 16  # previous messages the patient sees
 
 Intent = Literal["anamnesis", "examen", "paraclinica", "diagnostico", "cierre"]
@@ -108,12 +115,41 @@ def last_student(state: State) -> str:
 
 # --- nodes -------------------------------------------------------------------------
 
-def router(state: State) -> dict:
+def classify(state: State) -> str:
     recent = "\n".join(f"{t['role']}: {t['text']}" for t in state["transcript"][-6:])
     route = models()["router"].invoke(
         [SystemMessage(prompts.ROUTER), HumanMessage(f"Conversación reciente:\n{recent}\n\nClasificá el último mensaje.")]
     )
-    return {"intent": route.intent}
+    return route.intent
+
+
+def router(state: State) -> dict:
+    """Classifies the message while the patient's reply is generated alongside (speculative): 9 in 10
+    turns are anamnesis, so the reply is ready when the router answers instead of starting after it
+    (~0.9 s per turn, FINDINGS #24). Discarded when the message turns out to be something else; if
+    it failed, the anamnesis node generates it again."""
+    pool = ThreadPoolExecutor(max_workers=1)
+    # copy the context: it carries the user marker that decides the paid key (llm/gemini.usuario)
+    spec = pool.submit(contextvars.copy_context().run, timed("anamnesis", paciente), state)
+    pool.shutdown(wait=False)
+    start = time.perf_counter()
+    intent = classify(state)
+    out = {"intent": intent, "timings": {"router": int((time.perf_counter() - start) * 1000)}}
+    if intent != "anamnesis":
+        return out
+    try:
+        reply = spec.result()
+    except Exception:  # noqa: BLE001  the anamnesis node tries again, with the normal retries
+        log.warning("speculative patient reply failed", exc_info=True)
+        return out
+    return {**reply, **out, "timings": {**reply["timings"], **out["timings"]}}
+
+
+def after_router(state: State) -> str:
+    """The reply is already in the transcript when the speculative patient answered."""
+    if state["intent"] == "anamnesis" and state["transcript"][-1]["role"] == "paciente":
+        return END
+    return state["intent"]
 
 
 def paciente(state: State) -> dict:
@@ -201,13 +237,13 @@ def timed(name: str, fn):
 
 def build_graph():
     g = StateGraph(State)
-    g.add_node("router", timed("router", router))
+    g.add_node("router", router)  # times itself: it also runs the patient
     for name, fn in [("anamnesis", paciente), ("examen", examen), ("paraclinica", paraclinica),
                      ("diagnostico", diagnostico), ("cierre", cierre)]:
         g.add_node(name, timed(name, fn))
         g.add_edge(name, END)
     g.add_edge(START, "router")
-    g.add_conditional_edges("router", lambda s: s["intent"])
+    g.add_conditional_edges("router", after_router)
     return g.compile(checkpointer=db.checkpointer())
 
 
