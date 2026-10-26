@@ -324,3 +324,11 @@ def test_server_errors_hide_their_details(case_id, monkeypatch):
     sid = client.post("/api/sessions", json={"case_id": case_id}).json()["session_id"]
     r = client.post(f"/api/sessions/{sid}/messages", json={"text": "Hola"})
     assert r.status_code == 500 and "secret" not in r.text and "RuntimeError" not in r.text
+
+
+def test_paid_users_have_no_daily_limit(case_id, monkeypatch):
+    from store import db
+
+    monkeypatch.setattr(db, "usage_last_day", lambda email: {"consultas": 999, "mensajes": 999})
+    monkeypatch.setenv("GEMINI_PAID_USERS", "dev@localhost")  # the dev-mode user of these tests
+    assert client.post("/api/sessions", json={"case_id": case_id}).status_code == 200

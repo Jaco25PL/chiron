@@ -222,7 +222,9 @@ def usage_last_day(email: str) -> dict:
         row = conn.execute(
             """SELECT
                  (SELECT count(*) FROM consultations c JOIN users u ON u.id = c.user_id
-                   WHERE u.email = %s AND c.started_at > now() - interval '1 day'),
+                   WHERE u.email = %s AND c.started_at > now() - interval '1 day'
+                     -- only consultations actually used: opening one and leaving is free
+                     AND EXISTS (SELECT 1 FROM turns t WHERE t.consultation_id = c.id AND t.role = 'estudiante')),
                  (SELECT count(*) FROM turns t JOIN consultations c ON c.id = t.consultation_id
                    JOIN users u ON u.id = c.user_id
                    WHERE u.email = %s AND t.role = 'estudiante' AND t.created_at > now() - interval '1 day')""",

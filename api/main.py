@@ -97,8 +97,13 @@ def _gemini_para(user: dict):
 
 
 def _check_daily_limit(user: dict, sessions: bool = False) -> None:
-    """429 past the per-user daily limits, so one account can't burn the Gemini credits."""
+    """429 past the per-user daily limits, so one account can't burn the Gemini credits. The users of
+    the paid key (GEMINI_PAID_USERS) have none: its monthly budget already caps them."""
     from store import db
+
+    pagos = {e.strip().lower() for e in os.environ.get("GEMINI_PAID_USERS", "").split(",") if e.strip()}
+    if user["email"].lower() in pagos:
+        return
 
     used = db.usage_last_day(user["email"])
     if sessions and used["consultas"] >= MAX_SESSIONS_PER_DAY:
