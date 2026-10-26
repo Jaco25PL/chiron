@@ -43,6 +43,10 @@ MODELS = {
     "tts": ["gemini-3.8-flash-lite-tts", "gemini-3.8-flash-tts"],
     "embedding": ["gemini-embedding-001"],
 }
+# GEMINI_MODEL_<TASK>=a,b overrides a task's list (to compare models in evals without editing code)
+for _task in MODELS:
+    if os.environ.get(f"GEMINI_MODEL_{_task.upper()}"):
+        MODELS[_task] = os.environ[f"GEMINI_MODEL_{_task.upper()}"].split(",")
 
 # Paid tier, USD per 1M tokens (input, output; output includes thinking), from
 # https://ai.google.dev/gemini-api/docs/pricing on 2026-10-25. Rounded up on purpose (the 2027
