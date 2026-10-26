@@ -63,10 +63,10 @@ export function useEscucha({ onFrase, onVoz, esEco }: Escucha) {
   });
 
   useEffect(() => {
-    // feature detection needs window, so it runs after hydration
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    // Brave exposes SpeechRecognition but blocks the Google service behind it: it never hears anything
+    // feature detection needs window, so it runs after hydration. Brave exposes SpeechRecognition but
+    // blocks the Google service behind it: it never hears anything
     const brave = !!(navigator as Navigator & { brave?: unknown }).brave;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSoportado(!!crearReconocimiento() && !brave);
     return () => {
       enLlamada.current = false;
