@@ -179,6 +179,14 @@ A log of what I ran into while building Chiron: what showed up, how I caught it,
 - **Result:** database time 230 ms → 7 ms per turn, and the patient starts talking at **3.4 s** (median, 8 turns). Overall today: 8.3 s on the free tier with 7–12 s spikes → 4.75 s paid → 3.4 s paid in São Paulo.
 - **Lesson:** put the compute next to the data. The default region is a decision too.
 
+## 22. A timeout thread spent the paid credits for the wrong user
+
+- **Context:** only listed users (GEMINI_PAID_USERS) may spend the paid Gemini key; each request marks its user in a `ContextVar`, and the key picker reads it.
+- **Finding:** a production smoke test with an unlisted user spent USD 0.02 on the paid key. I had just moved the docente's correction into a worker thread to give it a 40 s deadline, and a thread started with `ThreadPoolExecutor.submit` does not inherit context variables: inside it the user was unknown, which the code read as "a local script", allowed to spend.
+- **How I caught it:** measuring the spend counter before and after the smoke test, per user, instead of only checking that the request succeeded.
+- **What I did:** the thread runs under `contextvars.copy_context().run`, and deployed, a call that doesn't know its user is denied the paid key (fail closed). Two tests pin it.
+- **Lesson:** context variables don't cross threads by themselves, and an access rule that defaults to "allow" when information is missing will eventually allow the wrong thing.
+
 ## Short version for LinkedIn
 
 > I'm building **Chiron**, an AI patient simulator that helps medical students practice for the ECOE (the Spanish-language OSCE, the hands-on clinical exam). The most interesting part wasn't getting the patient to talk, but **measuring that it behaves the way it should**.
