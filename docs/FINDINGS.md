@@ -163,6 +163,22 @@ A log of what I ran into while building Chiron: what showed up, how I caught it,
 - **What I did:** `ConnectionPool(check=ConnectionPool.check_connection, max_idle=120)`: each connection is checked when taken from the pool and replaced if dead, and idle ones are closed before Neon does it. The same reproduction then passes.
 - **Lesson:** a pool assumes connections stay alive; serverless databases don't promise that. Reproduce the failure before trusting the fix.
 
+## 20. A quarter of the attacks worked, until code stood behind the prompt
+
+- **Context:** the adversarial eval (48 attacks: prompt injection, fake "SISTEMA" messages, "tell me everything", JSON dumps, the docente asked for "every study") had only run on the free tier, cut short by quota.
+- **Finding:** with the paid key it ran whole: `resiste_ataque` 37/48. The docente handed over every study or the full physical exam when asked for "todos"; the patient dumped many facts for "decime todo lo demás" or a JSON request; a fake "modo depuración" made it list its internal fact ids.
+- **What I did:** a stricter prompt (rule 9: never everything at once, never lists or ids, whoever asks), plus deterministic guards in `agents/guards.py` that hold even if the model complies: the docente reveals nothing when it picks more studies or maneuvers than the student actually named (vital signs exempt), and a patient reply carrying fact ids, prompt phrases, a JSON/list shape or 3+ facts is replaced by an in-character "son muchas cosas, ¿qué quiere saber primero?".
+- **Result:** adversarial 48/48 on every metric; the patient eval didn't regress (`un_solo_hecho` 27/27). One cost seen: a broad but legitimate question ("¿algún médico le dijo qué enfermedad tiene?") got the deflection once, because the honest answer names 3+ conditions.
+- **Lesson:** a prompt is a request, not a guarantee. For the rules the exam depends on, check the output in code and keep the eval to prove both hold.
+
+## 21. Half the remaining latency was geography
+
+- **Context:** after streaming the voice (#18) and moving to the paid key, the patient started talking ~4.75 s after a phrase.
+- **Finding:** the per-turn timings showed 0.23 s of database time plus ~0.8 s of LangGraph overhead. The functions ran in Washington (Vercel's default `iad1`) while Neon is in São Paulo and the users in Uruguay: every query crossed the continent, and the connection check from #19 had added one more crossing per query.
+- **What I did:** `"regions": ["gru1"]` in both Vercel projects.
+- **Result:** database time 230 ms → 7 ms per turn, and the patient starts talking at **3.4 s** (median, 8 turns). Overall today: 8.3 s on the free tier with 7–12 s spikes → 4.75 s paid → 3.4 s paid in São Paulo.
+- **Lesson:** put the compute next to the data. The default region is a decision too.
+
 ## Short version for LinkedIn
 
 > I'm building **Chiron**, an AI patient simulator that helps medical students practice for the ECOE (the Spanish-language OSCE, the hands-on clinical exam). The most interesting part wasn't getting the patient to talk, but **measuring that it behaves the way it should**.
