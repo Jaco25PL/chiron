@@ -94,7 +94,10 @@ def usuario(email: str | None):
     try:
         yield
     finally:
-        _usuario.reset(token)
+        try:
+            _usuario.reset(token)
+        except ValueError:  # a streamed response may resume in another context copy than it started in
+            _usuario.set(None)
 
 
 def _paid_users() -> set[str]:
@@ -130,7 +133,8 @@ def over_budget(key: str) -> bool:
     if key != paid_key():
         return False
     quien, permitidos = _usuario.get(), _paid_users()
-    if quien and permitidos and quien not in permitidos:
+    if permitidos and (quien not in permitidos if quien else bool(os.environ.get("VERCEL"))):
+        # deployed, a call that doesn't know its user (e.g. a thread that lost the context) can't spend
         return True
     return month_spend() >= budget_usd()
 

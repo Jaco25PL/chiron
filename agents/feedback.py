@@ -17,6 +17,7 @@ Shape (see agents/session.py):
                 "evidencia": bool}]}
 """
 
+import contextvars
 from concurrent.futures import ThreadPoolExecutor
 import logging
 import re
@@ -262,7 +263,9 @@ def evaluate(case: dict, state: dict) -> dict:
         from langchain_core.messages import HumanMessage, SystemMessage
 
         # deadline: a slow fallback model (free tier) must not run past the function's 60 s limit
-        llamada = _POOL.submit(_judge().invoke, [SystemMessage(_prompt(case, state)), HumanMessage("Corregí la consulta.")])
+        # copy_context: the thread must keep knowing which user this is (only listed users spend the paid key)
+        mensajes = [SystemMessage(_prompt(case, state)), HumanMessage("Corregí la consulta.")]
+        llamada = _POOL.submit(contextvars.copy_context().run, _judge().invoke, mensajes)
         out = llamada.result(timeout=DEADLINE_S)
     except Exception:  # noqa: BLE001  quota, timeout or a malformed answer: the student still gets the score
         log.exception("feedback LLM failed; returning the coverage-based fallback")

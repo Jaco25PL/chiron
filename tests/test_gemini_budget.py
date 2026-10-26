@@ -65,3 +65,20 @@ def test_only_listed_users_spend_the_paid_key(keys, monkeypatch):
         assert gemini.over_budget("paid")  # strangers get the free keys
         assert not gemini.over_budget("free-a")
     assert not gemini.over_budget("paid")  # outside a request (scripts, evals)
+
+
+def test_deployed_calls_without_a_user_dont_spend(keys, monkeypatch):
+    monkeypatch.setenv("GEMINI_PAID_USERS", "sofia@example.com")
+    monkeypatch.setenv("VERCEL", "1")
+    assert gemini.over_budget("paid")  # fail closed: no user known
+    with gemini.usuario("sofia@example.com"):
+        assert not gemini.over_budget("paid")
+
+
+def test_the_feedback_thread_keeps_the_user(keys, monkeypatch):
+    import contextvars
+    from concurrent.futures import ThreadPoolExecutor
+
+    monkeypatch.setenv("GEMINI_PAID_USERS", "sofia@example.com")
+    with gemini.usuario("alguien@gmail.com"), ThreadPoolExecutor(1) as pool:
+        assert pool.submit(contextvars.copy_context().run, gemini.over_budget, "paid").result()
