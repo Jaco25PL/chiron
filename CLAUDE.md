@@ -84,6 +84,7 @@ As in the real ECOE, before and during the consultation the student only knows t
 - `MODELS` in `llm/gemini.py` defines which model each task uses (`patient`, `router`, `judge`, `live`, `embedding`), with fallbacks.
 - Models change often: `python llm/probe_models.py` checks which ones work with each key and how long they take.
 - On the free tier, "pro" models have zero quota, and the embeddings limit is 100 per minute per key.
+- Paid key: `GEMINI_PAID_KEY=<n>` marks `GOOGLE_API_KEY_<n>` as paid (prepaid credits). It goes first; each call's cost is estimated from its token usage (`PRICES`, rounded up) into `gemini_spend`, and past `GEMINI_MONTHLY_BUDGET_USD` (default 5) it's skipped and the free keys take over. 402 (credits gone) counts as out of quota.
 
 ## Observability (LangSmith)
 

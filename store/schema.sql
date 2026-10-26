@@ -89,3 +89,10 @@ CREATE TABLE IF NOT EXISTS feedback (
 
 -- Per-user preferences: the accent color picked in the user menu (menta | rosa | gris | azul).
 ALTER TABLE users ADD COLUMN IF NOT EXISTS acento TEXT NOT NULL DEFAULT 'menta';
+
+-- What the paid Gemini key has cost this month (llm/gemini.py), estimated from each call's token
+-- usage. Past GEMINI_MONTHLY_BUDGET_USD the app stops using that key and falls back to the free ones.
+CREATE TABLE IF NOT EXISTS gemini_spend (
+    month  TEXT PRIMARY KEY,                 -- YYYY-MM
+    usd    NUMERIC(10, 4) NOT NULL DEFAULT 0
+);

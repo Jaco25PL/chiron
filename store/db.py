@@ -185,3 +185,30 @@ def set_acento(email: str, name: str | None, acento: str) -> None:
                    name = COALESCE(EXCLUDED.name, users.name), last_seen = now()""",
             (email, name, acento),
         )
+
+
+# --- Gemini spend on the paid key ------------------------------------------------------------
+
+_memory_spend: dict[str, float] = {}  # in-memory fallback without DATABASE_URL: month -> USD
+
+
+def add_gemini_spend(month: str, usd: float) -> float:
+    """Adds to the month's spend on the paid Gemini key and returns the month's total."""
+    if not enabled():
+        _memory_spend[month] = _memory_spend.get(month, 0.0) + usd
+        return _memory_spend[month]
+    with pool().connection() as conn:
+        row = conn.execute(
+            """INSERT INTO gemini_spend (month, usd) VALUES (%s, %s)
+               ON CONFLICT (month) DO UPDATE SET usd = gemini_spend.usd + EXCLUDED.usd RETURNING usd""",
+            (month, usd),
+        ).fetchone()
+    return float(row[0])
+
+
+def gemini_spend(month: str) -> float:
+    if not enabled():
+        return _memory_spend.get(month, 0.0)
+    with pool().connection() as conn:
+        row = conn.execute("SELECT usd FROM gemini_spend WHERE month = %s", (month,)).fetchone()
+    return float(row[0]) if row else 0.0

@@ -40,8 +40,11 @@ def to_pcm(audio: bytes) -> bytes:
         return w.readframes(w.getnframes())
 
 
-def _audio(chunks) -> Iterator[bytes]:
+def _audio(chunks, usage: dict) -> Iterator[bytes]:
     for chunk in chunks:
+        if chunk.usage_metadata:  # running totals; the last chunk has the final ones
+            usage["in"] = chunk.usage_metadata.prompt_token_count or 0
+            usage["out"] = (chunk.usage_metadata.total_token_count or 0) - usage["in"]
         content = chunk.candidates[0].content if chunk.candidates else None
         for part in content.parts if content and content.parts else []:
             if part.inline_data and part.inline_data.data:
@@ -55,7 +58,7 @@ def stream(text: str, case: dict) -> Iterator[bytes]:
     from google import genai
     from google.genai import types
 
-    from llm.gemini import with_rotation
+    from llm.gemini import record_usage, with_rotation
 
     voice = VOICES.get(case["paciente"]["sexo"], VOICES["masculino"])
     config = types.GenerateContentConfig(
@@ -68,12 +71,14 @@ def stream(text: str, case: dict) -> Iterator[bytes]:
 
     def call(key: str, model: str):
         client = genai.Client(api_key=key)  # keep the reference: an inline client is closed before the call
-        audio = _audio(client.models.generate_content_stream(model=model, contents=contents, config=config))
+        usage = {"in": 0, "out": 0}
+        audio = _audio(client.models.generate_content_stream(model=model, contents=contents, config=config), usage)
         first = next(audio, None)  # quota errors surface here, where with_rotation can still switch keys
         if first is None:
             raise RuntimeError(f"{model} returned no audio")
-        return client, first, audio
+        return client, first, audio, usage, key, model
 
-    _client, first, audio = with_rotation(call, "tts", retries=0)
+    _client, first, audio, usage, key, model = with_rotation(call, "tts", retries=0)
     yield first
     yield from audio
+    record_usage(key, model, usage["in"], usage["out"])
