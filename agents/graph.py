@@ -20,7 +20,7 @@ from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langgraph.graph import END, START, StateGraph
 from pydantic import BaseModel, Field
 
-from agents import feedback, grilla, prompts
+from agents import feedback, grilla, guards, prompts
 from cases import catalog
 from cases.catalog import load_case
 from llm.gemini import MODELS, chat_model
@@ -128,8 +128,9 @@ def paciente(state: State) -> dict:
     reply = models()["patient"].invoke([SystemMessage(prompts.patient_prompt(case)), *history])
     valid = {h["id"] for h in case["anamnesis"]}
     facts = [f for f in reply.hechos_usados if f in valid]
+    text, facts = guards.guard_patient(reply.respuesta, facts, case, turn=len(state["transcript"]))
     return {
-        "transcript": [{"role": "paciente", "text": reply.respuesta}],
+        "transcript": [{"role": "paciente", "text": text}],
         "revealed_facts": [f for f in facts if f not in state.get("revealed_facts", [])],
         "debug": {"facts": facts},
     }
@@ -138,11 +139,15 @@ def paciente(state: State) -> dict:
 def examen(state: State) -> dict:
     case = load_case(state["case_id"])
     options = {e["id"]: e for e in prompts.exam_options(case)}
-    pick = models()["exam"].invoke([SystemMessage(prompts.exam_prompt(case)), HumanMessage(last_student(state))])
-    ids = [i for i in pick.ids if i in options]
-    lines = [f"{options[i]['maniobra']}: {options[i]['hallazgo']}" for i in ids]
-    lines += [f"{m}: sin hallazgos para informar en esta estación." for m in pick.no_disponible]
-    text = "\n".join(lines) or "¿Qué maniobra querés realizar? Describila."
+    message = last_student(state)
+    pick = models()["exam"].invoke([SystemMessage(prompts.exam_prompt(case)), HumanMessage(message)])
+    ids = list(dict.fromkeys(i for i in pick.ids if i in options))
+    if guards.too_many_maneuvers(message, ids):  # "examen físico completo": the examiner asks which ones
+        ids, text = [], guards.ASK_MANEUVERS
+    else:
+        lines = [f"{options[i]['maniobra']}: {options[i]['hallazgo']}" for i in ids]
+        lines += [f"{m}: sin hallazgos para informar en esta estación." for m in pick.no_disponible]
+        text = "\n".join(lines) or "¿Qué maniobra querés realizar? Describila."
     return {
         "transcript": [{"role": "docente", "text": text}],
         "exams_done": [i for i in ids if i not in state.get("exams_done", [])],
@@ -153,11 +158,15 @@ def examen(state: State) -> dict:
 def paraclinica(state: State) -> dict:
     case = load_case(state["case_id"])
     studies = case["paraclinica"]
-    pick = models()["labs"].invoke([SystemMessage(prompts.labs_prompt(case)), HumanMessage(last_student(state))])
-    chosen = [studies[i] for i in pick.indices if 0 <= i < len(studies)]
-    lines = [f"{s['estudio']}: {s['resultado']}" for s in chosen]
-    lines += [f"{n}: no se cuenta con ese estudio en esta estación." for n in pick.no_disponible]
-    text = "\n".join(lines) or "¿Qué estudio querés solicitar?"
+    message = last_student(state)
+    pick = models()["labs"].invoke([SystemMessage(prompts.labs_prompt(case)), HumanMessage(message)])
+    chosen = [studies[i] for i in dict.fromkeys(pick.indices) if 0 <= i < len(studies)]
+    if guards.too_many_studies(message, chosen):  # "todos los estudios": the examiner asks which ones
+        chosen, text = [], guards.ASK_STUDIES
+    else:
+        lines = [f"{s['estudio']}: {s['resultado']}" for s in chosen]
+        lines += [f"{n}: no se cuenta con ese estudio en esta estación." for n in pick.no_disponible]
+        text = "\n".join(lines) or "¿Qué estudio querés solicitar?"
     names = [s["estudio"] for s in chosen]
     return {
         "transcript": [{"role": "docente", "text": text}],
