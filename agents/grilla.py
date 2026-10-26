@@ -87,7 +87,8 @@ def items(case: dict) -> list[dict]:
                     kind = "global"
                 else:
                     kind = "conducta"
-                out.append({"id": item_id(key), "grilla": gid, "texto": texto, "kind": kind, **ev})
+                out.append({"id": item_id(key), "grilla": gid, "seccion": section["nombre"], "texto": texto,
+                            "kind": kind, **ev})
     return out
 
 
@@ -116,5 +117,5 @@ def checklist(case: dict, state: dict) -> list[dict]:
     and so are the studies not to order (ordering them would tick them)."""
     done = covered(case, state)
     skip = not_indicated(case)
-    return [{"id": it["id"], "texto": it["texto"], "tipo": it["kind"], "hecho": it["id"] in done}
+    return [{"id": it["id"], "texto": it["texto"], "tipo": it["kind"], "seccion": it["seccion"], "hecho": it["id"] in done}
             for it in items(case) if it["kind"] in CHECKLIST_KINDS and it["id"] not in skip]

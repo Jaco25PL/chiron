@@ -258,7 +258,7 @@ def test_beginner_checklist_ticks_as_the_student_asks():
     lista = r.json()["checklist"]
     assert lista and not any(x["hecho"] for x in lista)
     assert {x["tipo"] for x in lista} <= {"hecho", "examen", "estudio"}
-    assert all(x.keys() == {"id", "texto", "tipo", "hecho"} for x in lista)
+    assert all(x.keys() == {"id", "texto", "tipo", "seccion", "hecho"} for x in lista)
 
     # the fake backend matches the question against the case facts: "inicio" covers its grilla item
     sid = r.json()["session_id"]

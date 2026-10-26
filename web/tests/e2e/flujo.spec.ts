@@ -63,7 +63,7 @@ test("a full consultation, from case selection to summary", async ({ page, conte
   await expect(sheet.getByText("Consulta terminada")).toBeVisible();
   await expect(sheet.getByLabel(/Puntaje: \d+ de 100/)).toBeVisible();
   await expect(sheet.getByText("Lo que hiciste bien")).toBeVisible();
-  await expect(sheet.getByText("Te faltó")).toBeVisible();
+  await expect(sheet.getByText("A mejorar")).toBeVisible();
   await expect(sheet).toContainText(`/${caso.anamnesis.length}`);
   await expect(sheet).toContainText(ecg.estudio);
 

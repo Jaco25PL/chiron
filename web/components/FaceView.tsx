@@ -66,12 +66,16 @@ export function FaceView({
     if (sonando.current.hablando && !voz.hablando) sonando.current.hasta = Date.now();
     sonando.current.hablando = voz.hablando;
   }, [voz.hablando]);
+  // Stricter than it looks necessary: speech recognition garbles the echo, so it rarely matches the
+  // patient's words exactly (a 60% match let echoes through: they cut the patient off and were sent as
+  // the student's words). While the patient talks, short fragments are ignored too.
   const esEco = useCallback((t: string) => {
     const s = sonando.current;
-    if (!s.hablando && Date.now() - s.hasta > 1500) return false;
-    const dichas = new Set(palabras(s.texto));
+    if (!s.hablando && Date.now() - s.hasta > 2000) return false;
     const oidas = palabras(t);
-    return !oidas.length || oidas.filter((w) => dichas.has(w)).length / oidas.length >= 0.6;
+    if (s.hablando && oidas.length < 3) return true;
+    const dichas = new Set(palabras(s.texto));
+    return !oidas.length || oidas.filter((w) => dichas.has(w)).length / oidas.length >= 0.3;
   }, []);
 
   // each phrase goes with its reply's voice: the text arrives first, then the audio streams in and
@@ -111,7 +115,8 @@ export function FaceView({
       else decir(t);
     },
     onVoz: (t) => {
-      if (sonando.current.hablando && palabras(t).length >= 2) callar(); // the student talks over the patient
+      // the student talks over the patient: a real sentence, not a stray word (that's usually echo)
+      if (sonando.current.hablando && palabras(t).length >= 4) callar();
     },
     esEco,
   });
@@ -230,7 +235,7 @@ export function FaceView({
             <p className="text-[19px] font-medium">{nombre}</p>
             <p className="text-[13px] text-ink-2">
               {!escucha.soportado
-                ? "Tu navegador no permite llamadas de voz: usá Chrome o Safari, o el modo Chat"
+                ? "Tu navegador no permite llamadas de voz: usá Chrome, Edge o Safari, o el modo Chat"
                 : listo
                   ? "Llamada entrante…"
                   : "Conectando…"}

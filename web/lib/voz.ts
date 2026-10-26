@@ -65,7 +65,9 @@ export function useEscucha({ onFrase, onVoz, esEco }: Escucha) {
   useEffect(() => {
     // feature detection needs window, so it runs after hydration
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setSoportado(!!crearReconocimiento());
+    // Brave exposes SpeechRecognition but blocks the Google service behind it: it never hears anything
+    const brave = !!(navigator as Navigator & { brave?: unknown }).brave;
+    setSoportado(!!crearReconocimiento() && !brave);
     return () => {
       enLlamada.current = false;
       rec.current?.abort();
@@ -101,6 +103,11 @@ export function useEscucha({ onFrase, onVoz, esEco }: Escucha) {
           enLlamada.current = false;
           setActiva(false);
           toast.error("Para hablarle al paciente, permití el micrófono en el navegador.", { id: "mic" });
+        } else if (e.error === "network") {
+          // the browser's dictation service is unreachable or blocked (privacy browsers, offline)
+          enLlamada.current = false;
+          setActiva(false);
+          toast.error("Tu navegador no tiene dictado por voz. Usá Chrome, Edge o Safari, o el modo Chat.", { id: "mic" });
         }
       };
       r.onend = () => {

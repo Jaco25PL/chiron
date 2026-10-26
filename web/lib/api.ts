@@ -19,7 +19,13 @@ export type Nivel = "principiante" | "normal";
 
 /** A grilla item the student must not forget, ticked by the backend once covered (beginner level only).
  *  tipo: hecho = ask the patient, examen = physical exam, estudio = order a study. */
-export type ItemChecklist = { id: string; texto: string; tipo: "hecho" | "examen" | "estudio"; hecho: boolean };
+export type ItemChecklist = {
+  id: string;
+  texto: string;
+  tipo: "hecho" | "examen" | "estudio";
+  seccion: string; // the grilla section, as on the paper grilla ("Fenómenos acompañantes"…)
+  hecho: boolean;
+};
 
 export type Respuesta = {
   replies: { role: "paciente" | "docente"; text: string }[];
@@ -135,6 +141,7 @@ export const api = {
     }
     const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
     let buf = "";
+    let audios = 0;
     for (;;) {
       const { done, value } = await reader.read();
       if (done) break;
@@ -144,8 +151,14 @@ export const api = {
         const linea = JSON.parse(buf.slice(0, i));
         buf = buf.slice(i + 1);
         if (linea.tipo === "respuesta") onRespuesta(linea);
-        else if (linea.tipo === "audio") onAudio(Uint8Array.from(atob(linea.pcm), (c) => c.charCodeAt(0)).buffer);
-        else if (linea.tipo === "error") throw new Error(`Voz: ${linea.error}`);
+        else if (linea.tipo === "audio") {
+          audios++;
+          onAudio(Uint8Array.from(atob(linea.pcm), (c) => c.charCodeAt(0)).buffer);
+        } else if (linea.tipo === "error") {
+          // the voice already played (it broke near the end): no need to alarm the student
+          if (audios) console.warn("voz:", linea.error);
+          else throw new Error(`Voz: ${linea.error}`);
+        }
       }
     }
   },

@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import { Drawer } from "vaul";
 import type { ItemChecklist } from "@/lib/api";
 import { Check, Close } from "./icons";
@@ -155,8 +156,16 @@ function Lista({ items }: { items: ItemChecklist[] }) {
               </span>
             </h3>
             <ul>
-              {grupo.map((i) => (
-                <Item key={i.id} item={i} />
+              {grupo.map((i, n) => (
+                <Fragment key={i.id}>
+                  {/* the grilla's own sections, in its order, like the paper grilla students know */}
+                  {i.seccion && i.seccion !== grupo[n - 1]?.seccion && (
+                    <li aria-hidden className="pb-0.5 pt-2.5 text-[12px] text-ink-3 first:pt-0.5">
+                      {i.seccion}
+                    </li>
+                  )}
+                  <Item item={i} />
+                </Fragment>
               ))}
             </ul>
           </section>

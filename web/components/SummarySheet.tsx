@@ -84,7 +84,7 @@ function Correccion({ resumen }: { resumen: Resumen }) {
       {fb && (
         <>
           <Lista titulo="Lo que hiciste bien" items={fb.bien} marca="bien" />
-          <Lista titulo="Te faltó" items={fb.falto} marca="falto" />
+          <Lista titulo="A mejorar" items={fb.falto} marca="falto" />
           <Lista titulo="Para la próxima" items={fb.consejos} marca="consejo" />
         </>
       )}
