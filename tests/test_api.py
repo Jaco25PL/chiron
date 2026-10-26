@@ -297,3 +297,30 @@ def test_beginner_checklist_never_names_the_diagnosis():
 def test_invalid_level_is_rejected(case_id):
     r = client.post("/api/sessions", json={"case_id": case_id, "nivel": "experto"})
     assert r.status_code == 422 and "error" in r.json()
+
+
+def test_messages_are_capped_in_length(case_id):
+    sid = client.post("/api/sessions", json={"case_id": case_id}).json()["session_id"]
+    r = client.post(f"/api/sessions/{sid}/messages", json={"text": "a" * 1001})
+    assert r.status_code == 422  # a huge message would be re-sent to Gemini on every later turn
+
+
+def test_daily_limit_answers_429(case_id, monkeypatch):
+    from store import db
+
+    sid = client.post("/api/sessions", json={"case_id": case_id}).json()["session_id"]
+    monkeypatch.setattr(db, "usage_last_day", lambda email: {"consultas": 999, "mensajes": 999})
+    assert client.post(f"/api/sessions/{sid}/messages", json={"text": "Hola"}).status_code == 429
+    assert client.post("/api/sessions", json={"case_id": case_id}).status_code == 429
+
+
+def test_server_errors_hide_their_details(case_id, monkeypatch):
+    from api import main
+
+    def boom(*a, **k):
+        raise RuntimeError("postgresql://user:secret@host/db")
+
+    monkeypatch.setattr(main.session, "send", boom)
+    sid = client.post("/api/sessions", json={"case_id": case_id}).json()["session_id"]
+    r = client.post(f"/api/sessions/{sid}/messages", json={"text": "Hola"})
+    assert r.status_code == 500 and "secret" not in r.text and "RuntimeError" not in r.text

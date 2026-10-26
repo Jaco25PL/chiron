@@ -56,6 +56,7 @@ export function Composer({
             ref={ref}
             id="mensaje"
             rows={1}
+            maxLength={1000} // the backend rejects longer messages (api/main.py MAX_MESSAGE_CHARS)
             value={text}
             placeholder={placeholder}
             onChange={(e) => {

@@ -75,3 +75,13 @@ def test_api_rejects_unsigned_requests_when_secret_is_set(monkeypatch):
     assert client.get("/api/cases").status_code == 401
     assert client.get("/api/cases", headers=signed_headers()).status_code == 200
     assert client.get("/api/health").status_code == 200  # health stays public
+
+
+def test_deployed_without_the_secret_refuses_everything(monkeypatch):
+    import pytest
+
+    from api.security import Unauthorized, verify
+
+    monkeypatch.setenv("VERCEL", "1")
+    with pytest.raises(Unauthorized):
+        verify({"x-chiron-user": "a@b.com"}, secret="")

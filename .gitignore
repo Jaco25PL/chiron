@@ -17,3 +17,6 @@ secrets/
 
 # agent worktrees (Claude Code)
 .claude/worktrees/
+
+# personal notes
+note.md

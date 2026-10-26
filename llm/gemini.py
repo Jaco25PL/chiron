@@ -6,7 +6,8 @@ GOOGLE_API_KEY). When a key returns 429 (out of quota), the next one is used.
 One key can be on the paid tier (GEMINI_PAID_KEY=<its number>). It goes first, and what it costs
 is estimated from each call's token usage and added up per month in the database; once the month
 reaches GEMINI_MONTHLY_BUDGET_USD (default 5) it is left out and the free keys take over. Prepaid
-credits running out (402) also counts as out of quota.
+credits running out (402) also counts as out of quota. With GEMINI_PAID_USERS (emails), only those
+users' requests use the paid key (see `usuario`); scripts and evals run outside a request and may.
 
 Available models change often: `python llm/probe_models.py` checks which ones work
 with each key and how fast, so MODELS can be kept up to date.
@@ -15,6 +16,8 @@ with each key and how fast, so MODELS can be kept up to date.
 import os
 import re
 import time
+from contextlib import contextmanager
+from contextvars import ContextVar
 from functools import lru_cache
 from pathlib import Path
 from typing import Callable, TypeVar
@@ -75,12 +78,31 @@ def budget_usd() -> float:
 
 
 _month = lambda: time.strftime("%Y-%m", time.gmtime())  # noqa: E731
-_spend_cache = {"month": "", "usd": 0.0, "at": 0.0}  # read from the DB at most once a minute
+# read from the DB at most every few seconds: other serverless instances spend too
+_spend_cache = {"month": "", "usd": 0.0, "at": 0.0}
+SPEND_TTL_S = 5
+
+# the student behind the current request (None outside a request: scripts, evals)
+_usuario: ContextVar[str | None] = ContextVar("gemini_usuario", default=None)
+
+
+@contextmanager
+def usuario(email: str | None):
+    """Marks the Gemini calls inside the block as made for this user (for GEMINI_PAID_USERS)."""
+    token = _usuario.set((email or "").lower() or None)
+    try:
+        yield
+    finally:
+        _usuario.reset(token)
+
+
+def _paid_users() -> set[str]:
+    return {e.strip().lower() for e in os.environ.get("GEMINI_PAID_USERS", "").split(",") if e.strip()}
 
 
 def month_spend() -> float:
     c = _spend_cache
-    if c["month"] != _month() or time.time() - c["at"] > 60:
+    if c["month"] != _month() or time.time() - c["at"] > SPEND_TTL_S:
         from store import db
 
         c.update(month=_month(), usd=db.gemini_spend(_month()), at=time.time())
@@ -102,9 +124,14 @@ def record_usage(key: str, model: str, input_tokens: int, output_tokens: int) ->
 
 
 def over_budget(key: str) -> bool:
-    """True for the paid key once the month's budget is spent: callers skip it (checked on every
-    call, since the chat models are built once and cached)."""
-    return key == paid_key() and month_spend() >= budget_usd()
+    """True when the paid key must be skipped: the month's budget is spent, or the request is from a
+    user not in GEMINI_PAID_USERS. Checked on every call, since the chat models are built once."""
+    if key != paid_key():
+        return False
+    quien, permitidos = _usuario.get(), _paid_users()
+    if quien and permitidos and quien not in permitidos:
+        return True
+    return month_spend() >= budget_usd()
 
 
 def api_keys() -> list[str]:
@@ -175,6 +202,7 @@ def _guarded(make_runnable, model: str, key: str):
         except Exception as exc:
             if is_quota_error(exc):
                 _blocked[(model, key)] = time.time() + _block_seconds(exc)
+                raise QuotaBlocked(f"{model}: {type(exc).__name__}") from exc
             raise
         # structured output comes with the raw message (include_raw), which carries the token usage
         raw = out.get("raw") if isinstance(out, dict) and "parsed" in out else out
@@ -208,9 +236,13 @@ def chat_model(task: str, schema: type | None = None, **kwargs):
         return make
 
     runnables = [_guarded(factory(model, key), model, key) for model in MODELS[task] for key in api_keys()]
-    # if every key and model fails (e.g. all out of per-minute quota), retry with growing backoff
+    # if every key and model is out of quota (e.g. the per-minute limit), retry with growing backoff.
+    # Only then: any other error would re-run the whole chain, paid calls included
     return runnables[0].with_fallbacks(runnables[1:]).with_retry(
-        stop_after_attempt=4, wait_exponential_jitter=True, exponential_jitter_params={"initial": 5, "max": 40}
+        retry_if_exception_type=(QuotaBlocked,),
+        stop_after_attempt=4,
+        wait_exponential_jitter=True,
+        exponential_jitter_params={"initial": 5, "max": 40},
     )
 
 

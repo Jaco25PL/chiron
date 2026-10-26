@@ -79,6 +79,8 @@ def stream(text: str, case: dict) -> Iterator[bytes]:
         return client, first, audio, usage, key, model
 
     _client, first, audio, usage, key, model = with_rotation(call, "tts", retries=0)
-    yield first
-    yield from audio
-    record_usage(key, model, usage["in"], usage["out"])
+    try:
+        yield first
+        yield from audio
+    finally:  # also when the student interrupts and the stream is closed early
+        record_usage(key, model, usage["in"], usage["out"])

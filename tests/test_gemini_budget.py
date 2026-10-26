@@ -55,3 +55,13 @@ def test_structured_replies_are_unwrapped_and_counted(keys):
 def test_running_out_of_credits_counts_as_out_of_quota():
     assert gemini.is_quota_error(Exception("402 PAYMENT_REQUIRED: prepaid credits depleted"))
     assert not gemini.is_quota_error(Exception("400 INVALID_ARGUMENT"))
+
+
+def test_only_listed_users_spend_the_paid_key(keys, monkeypatch):
+    monkeypatch.setenv("GEMINI_PAID_USERS", "Sofia@example.com, joaquin@example.com")
+    with gemini.usuario("sofia@example.com"):
+        assert not gemini.over_budget("paid")
+    with gemini.usuario("alguien@gmail.com"):
+        assert gemini.over_budget("paid")  # strangers get the free keys
+        assert not gemini.over_budget("free-a")
+    assert not gemini.over_budget("paid")  # outside a request (scripts, evals)

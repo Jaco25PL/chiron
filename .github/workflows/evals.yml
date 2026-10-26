@@ -23,6 +23,9 @@ jobs:
       LANGSMITH_API_KEY: ${{ secrets.LANGSMITH_API_KEY }}
       LANGSMITH_TRACING: "true"
       LANGSMITH_PROJECT: chiron
+      # key 1 has prepaid credits: capped per run (no database here, so the count is in memory)
+      GEMINI_PAID_KEY: "1"
+      GEMINI_MONTHLY_BUDGET_USD: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

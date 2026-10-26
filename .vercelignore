@@ -26,3 +26,7 @@ rag/ingest.py
 rag/query.py
 rag/to_pgvector.py
 llm/probe_models.py
+# never upload local secrets or notes with a manual `vercel deploy`
+.env
+.env.*
+note.md

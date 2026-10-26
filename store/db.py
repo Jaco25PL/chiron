@@ -212,3 +212,20 @@ def gemini_spend(month: str) -> float:
     with pool().connection() as conn:
         row = conn.execute("SELECT usd FROM gemini_spend WHERE month = %s", (month,)).fetchone()
     return float(row[0]) if row else 0.0
+
+
+def usage_last_day(email: str) -> dict:
+    """The user's consultations started and messages sent in the last 24 h (zeros without a DB)."""
+    if not enabled():
+        return {"consultas": 0, "mensajes": 0}
+    with pool().connection() as conn:
+        row = conn.execute(
+            """SELECT
+                 (SELECT count(*) FROM consultations c JOIN users u ON u.id = c.user_id
+                   WHERE u.email = %s AND c.started_at > now() - interval '1 day'),
+                 (SELECT count(*) FROM turns t JOIN consultations c ON c.id = t.consultation_id
+                   JOIN users u ON u.id = c.user_id
+                   WHERE u.email = %s AND t.role = 'estudiante' AND t.created_at > now() - interval '1 day')""",
+            (email, email),
+        ).fetchone()
+    return {"consultas": row[0], "mensajes": row[1]}

@@ -34,6 +34,9 @@ def sign(secret: str, email: str, name: str, ts: str) -> str:
 def verify(headers, secret: str | None = None, now: float | None = None) -> dict:
     """Returns {"email", "name"} or raises Unauthorized. `headers` is any case-insensitive mapping."""
     secret = os.environ.get("CHIRON_BACKEND_SECRET") if secret is None else secret
+    if not secret and os.environ.get("VERCEL"):
+        # deployed without the secret: refuse everything instead of trusting unsigned headers
+        raise Unauthorized("backend secret not configured")
     email = headers.get("x-chiron-user")
     raw_name = headers.get("x-chiron-name") or ""  # signed as sent (URL-encoded)
     name = unquote(raw_name)
