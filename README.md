@@ -36,8 +36,8 @@ Practice whenever you want, as often as you want, with varied cases and immediat
 | Simulated physical exam and lab/imaging requests | ✅ teacher node in the graph |
 | "Face to face" video-call layout | ✅ static ASCII portrait (avatar pending) |
 | Quality evals for the agent (LangSmith) | ✅ patient, router, adversarial suites |
-| Final feedback against the rubric | ⏳ next |
-| Real-time voice + animated avatar | ⏳ later |
+| Final feedback against the rubric | ✅  |
+| Real-time voice + animated avatar | ✅ Generic avatar by now |
 
 Out of scope for now: an MCP server for the physical exam tools. The original plan had one, but the exam is implemented as a node of the graph, which needs no extra process. MCP stays an option if the exam tools grow.
 
