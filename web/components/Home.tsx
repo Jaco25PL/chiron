@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Chat, Video } from "@/components/icons";
+import { Video } from "@/components/icons";
 import { Historial } from "@/components/Historial";
 import { Logo } from "@/components/Logo";
 import { Segmented } from "@/components/Segmented";
@@ -169,20 +169,13 @@ function Card({
       style={{ animationDelay: `${index * 50}ms` }}
     >
       <div className="flex items-center gap-3">{children}</div>
-      <div className="mt-auto grid grid-cols-2 gap-2">
-        <Link
-          href={`/consulta/${href}?modo=chat&nivel=${nivel}`}
-          className="press flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-line-strong text-sm font-medium text-ink hover:bg-glass-strong"
-        >
-          <Chat width={17} height={17} /> Chat
-        </Link>
-        <Link
-          href={`/consulta/${href}?modo=cara&nivel=${nivel}`}
-          className="press flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ink text-sm font-medium text-bg hover:bg-white"
-        >
-          <Video width={17} height={17} /> Cara a cara
-        </Link>
-      </div>
+      {/* face to face by default; the consultation's header switches to chat at any time */}
+      <Link
+        href={`/consulta/${href}?modo=cara&nivel=${nivel}`}
+        className="press mt-auto flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ink text-sm font-medium text-bg hover:bg-white"
+      >
+        <Video width={17} height={17} /> Atender
+      </Link>
     </article>
   );
 }

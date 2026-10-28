@@ -24,8 +24,9 @@ test("a full consultation, from case selection to summary", async ({ page, conte
   const card = page.locator("article").filter({ hasText: nombre });
   await expect(card).not.toContainText(caso.titulo);
   await expect(card).not.toContainText(String(caso.paciente.edad));
-  await card.getByRole("link", { name: "Chat" }).click();
-  await expect(page).toHaveURL(/\/consulta\/[0-9a-f]{10}\?/); // opaque id, not "mpna-disnea-icc"
+  await card.getByRole("link", { name: "Atender" }).click(); // face to face by default
+  await expect(page).toHaveURL(/\/consulta\/[0-9a-f]{10}\?modo=cara/); // opaque id, not "mpna-disnea-icc"
+  await page.getByRole("tab", { name: "Chat" }).click();
 
   // Enter is ignored until the session exists (it's created on load): retry until the box empties
   const send = async (text: string) => {
@@ -95,7 +96,7 @@ test("random patient: the server picks the case and the student only learns name
   await signInAs(context, baseURL!);
   await page.goto("/");
   const card = page.locator("article").filter({ hasText: "Paciente aleatorio" });
-  await card.getByRole("link", { name: "Cara a cara" }).click();
+  await card.getByRole("link", { name: "Atender" }).click();
   await expect(page).toHaveURL(/\/consulta\/aleatorio\?modo=cara/);
   const header = page.locator("header");
   await expect(header).toContainText(/Paciente (masculino|femenina)/);

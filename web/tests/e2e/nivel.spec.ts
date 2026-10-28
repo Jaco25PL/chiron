@@ -31,8 +31,9 @@ test("beginner: the level is remembered and the checklist ticks itself as the st
   await expect(page.getByRole("tab", { name: "Principiante" })).toHaveAttribute("aria-selected", "true");
 
   const nombre = caso.paciente.nombre.split(" ").slice(0, 2).join(" ");
-  await page.locator("article").filter({ hasText: nombre }).getByRole("link", { name: "Chat" }).click();
-  await expect(page).toHaveURL(/\?modo=chat&nivel=principiante/);
+  await page.locator("article").filter({ hasText: nombre }).getByRole("link", { name: "Atender" }).click();
+  await expect(page).toHaveURL(/\?modo=cara&nivel=principiante/);
+  await page.getByRole("tab", { name: "Chat" }).click();
   await expect(page.locator("header")).toContainText("Principiante");
 
   // desktop: a side panel, grouped by what to do, nothing done yet

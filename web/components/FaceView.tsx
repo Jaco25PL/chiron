@@ -3,14 +3,15 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { type Caso, type Nivel, type Turno } from "@/lib/api";
+import { type Caso, type Turno } from "@/lib/api";
 import { type MascotaId, mascota } from "@/lib/mascotas";
 import type { CharlaTutor, ConVoz, ConVozTutor } from "@/lib/useConsulta";
 import { ASCII_FACE } from "@/lib/ascii-face";
 import { palabras, useEscucha, useVozPaciente } from "@/lib/voz";
 import { CameraOff, Close, Mic, Phone, PhoneDown, Stethoscope } from "./icons";
 import { Mascota } from "./Mascota";
-import { ayudaTutor } from "./Tutor";
+import { TextoEscrito } from "./TextoEscrito";
+import { VIDRIO } from "./Tutor";
 
 // three.js only downloads when face to face opens; the ASCII portrait covers the wait
 const Avatar3D = dynamic(() => import("./Avatar3D"), { ssr: false });
@@ -55,7 +56,6 @@ export function FaceView({
   onEnd: () => void;
   tutor: {
     mascotaId: MascotaId;
-    nivel: Nivel;
     charla: CharlaTutor[];
     pensando: boolean;
     onPreguntar: (t: string, voz: ConVozTutor) => void;
@@ -307,7 +307,7 @@ export function FaceView({
 
         {/* compañera de estudio */}
         {enLlamada && (
-          <div className="absolute bottom-20 left-3 z-10 flex items-end gap-2 sm:bottom-24 sm:left-4">
+          <div className="absolute bottom-20 left-2 z-10 flex items-end gap-2 sm:bottom-24 sm:left-4">
             <button
               type="button"
               onClick={tocarMascota}
@@ -327,13 +327,12 @@ export function FaceView({
                         ? "esperando"
                         : "reposo"
                 }
-                alto={68}
+                alto={100}
               />
             </button>
             {conTutor && (
-              <p className="glass enter mb-2 max-w-[13rem] rounded-2xl rounded-bl-md px-3 py-2 text-[12px] leading-snug text-ink-2">
-                Le hablás a {nombreTutor}: {ayudaTutor(tutor.nivel)}. El paciente no te escucha y el reloj está en
-                pausa.
+              <p className={`enter mb-3 rounded-2xl rounded-bl-md px-3 py-2 text-[13px] text-ink-2 ${VIDRIO}`}>
+                Te escucho
               </p>
             )}
           </div>
@@ -352,8 +351,11 @@ export function FaceView({
                   {nombreTutor} está buscando en los apuntes…
                 </span>
               ) : vozDe === "tutor" && ultimaTutor ? (
-                <p className="enter max-w-2xl rounded-2xl bg-accent/20 px-4 py-2.5 text-center text-[15px] leading-snug text-ink backdrop-blur-md sm:text-[17px]">
-                  {ultimaTutor}
+                <p
+                  key={tutor.charla.length}
+                  className={`max-w-2xl rounded-2xl px-4 py-2.5 text-center text-[15px] leading-snug text-ink sm:text-[17px] ${VIDRIO}`}
+                >
+                  <TextoEscrito texto={ultimaTutor} animar />
                 </p>
               ) : (
                 <span className="rounded-full bg-black/55 px-4 py-2 text-[13px] text-ink-2 backdrop-blur-md">

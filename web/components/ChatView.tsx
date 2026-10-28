@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Caso, Turno } from "@/lib/api";
 import { Composer } from "./Composer";
 import { Stethoscope } from "./icons";
+import { TextoEscrito } from "./TextoEscrito";
 
 export function ChatView({
   caso,
@@ -11,38 +12,45 @@ export function ChatView({
   pensando,
   listo,
   onSend,
+  acompanante,
 }: {
   caso: Caso | null;
   turnos: Turno[];
   pensando: boolean;
   listo: boolean;
   onSend: (t: string) => void;
+  /** The study companion, anchored to the composer. */
+  acompanante?: React.ReactNode;
 }) {
   const fin = useRef<HTMLDivElement>(null);
   useEffect(() => {
     fin.current?.scrollIntoView({ block: "end" });
   }, [turnos.length, pensando]);
+  // replies already there when the view opened (switching from the call) appear whole; new ones type
+  const [yaEstaban] = useState(turnos.length);
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="min-h-0 flex-1 overflow-y-auto">
-        <div className="mx-auto flex w-full max-w-2xl flex-col gap-3 px-4 py-6">
+        {/* room at the bottom for the study companion, so it never covers the last message */}
+        <div className={`mx-auto flex w-full max-w-2xl flex-col gap-3 px-4 pt-6 ${acompanante ? "pb-28 lg:pb-36" : "pb-6"}`}>
           {turnos.length === 0 && <Vacio caso={caso} />}
           {turnos.map((t, i) => (
-            <Mensaje key={i} turno={t} />
+            <Mensaje key={i} turno={t} animar={i >= yaEstaban} />
           ))}
           {pensando && <Escribiendo />}
           <div ref={fin} />
         </div>
       </div>
-      <div className="mx-auto w-full max-w-2xl px-4 pb-[max(16px,env(safe-area-inset-bottom))] pt-2">
+      <div className="relative mx-auto w-full max-w-2xl px-4 pb-[max(16px,env(safe-area-inset-bottom))] pt-2">
+        {acompanante}
         <Composer onSend={onSend} disabled={!listo || pensando} />
       </div>
     </div>
   );
 }
 
-function Mensaje({ turno }: { turno: Turno }) {
+function Mensaje({ turno, animar }: { turno: Turno; animar: boolean }) {
   if (turno.role === "docente") {
     return (
       <div className="enter my-1 rounded-2xl border border-accent/20 bg-accent/[0.06] p-4">
@@ -61,7 +69,7 @@ function Mensaje({ turno }: { turno: Turno }) {
           propio ? "rounded-br-md bg-ink text-bg" : "glass enter rounded-bl-md text-ink"
         }`}
       >
-        {turno.text}
+        {propio ? turno.text : <TextoEscrito texto={turno.text} animar={animar} />}
       </p>
     </div>
   );

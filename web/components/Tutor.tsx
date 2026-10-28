@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import type { Nivel } from "@/lib/api";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { type Animacion, type MascotaId, mascota } from "@/lib/mascotas";
 import type { CharlaTutor } from "@/lib/useConsulta";
 import { Mascota } from "./Mascota";
+import { TextoEscrito } from "./TextoEscrito";
 import { Close } from "./icons";
 
 /** What the pet does: thinks while the answer comes, greets when it arrives, waits while open. */
@@ -26,16 +26,15 @@ export function useAnimacionTutor(abierto: boolean, pensando: boolean, respuesta
   return abierto ? "esperando" : "reposo";
 }
 
-/** "Te doy la respuesta" / "te doy pistas": how the companion helps at each level. */
-export function ayudaTutor(nivel: Nivel) {
-  return nivel === "principiante" ? "te ayuda con la respuesta" : "te da pistas, no la respuesta";
-}
+/** Frosted glass dense enough to read on top of the conversation (the plain .glass is too clear). */
+export const VIDRIO =
+  "border border-line-strong bg-[rgb(16_18_21/0.78)] shadow-2xl shadow-black/50 backdrop-blur-2xl backdrop-saturate-150";
 
-/** The study companion in Chat mode: the pet floats in a corner; tapping it opens a bubble to ask it
- *  study questions. The patient doesn't see any of it and the clock is paused while it's open. */
+/** The study companion in Chat mode: the pet sits right above the composer, at the conversation's left
+ *  edge; tapping it opens a bubble to ask study questions. The patient doesn't see any of it
+ *  and the clock is paused while it's open. Rendered inside ChatView's composer box. */
 export function TutorChat({
   mascotaId,
-  nivel,
   charla,
   pensando,
   listo,
@@ -43,7 +42,6 @@ export function TutorChat({
   onAbierto,
 }: {
   mascotaId: MascotaId;
-  nivel: Nivel;
   charla: CharlaTutor[];
   pensando: boolean;
   listo: boolean;
@@ -56,9 +54,12 @@ export function TutorChat({
   const nombre = mascota(mascotaId).nombre;
   const respuestas = charla.filter((c) => c.respuesta).length;
   const animacion = useAnimacionTutor(abierto, pensando, respuestas);
+  // answers already given when the bubble opened appear whole; new ones type
+  const [yaEstaban, setYaEstaban] = useState(0);
 
   const abrir = (si: boolean) => {
     setAbierto(si);
+    if (si) setYaEstaban(respuestas);
     onAbierto(si);
   };
   // switching to face to face with the bubble open: the clock must not stay paused
@@ -67,9 +68,14 @@ export function TutorChat({
     alCerrar.current = onAbierto;
   });
   useEffect(() => () => alCerrar.current(false), []);
-  useEffect(() => {
+
+  // braces: scrollIntoView returns a promise in recent Chrome, and an effect may only return its cleanup
+  const alFinal = useCallback(() => {
     fin.current?.scrollIntoView({ block: "end" });
-  }, [charla.length, respuestas]);
+  }, []);
+  useEffect(() => {
+    alFinal();
+  }, [charla.length, respuestas, alFinal]);
 
   const enviar = () => {
     if (!texto.trim() || pensando) return;
@@ -77,47 +83,46 @@ export function TutorChat({
     setTexto("");
   };
 
+  let n = 0; // index among the answers, to tell new ones from old ones
   return (
-    <div className="fixed bottom-[calc(max(16px,env(safe-area-inset-bottom))+104px)] left-3 z-30 flex flex-col items-start gap-2 sm:left-6">
+    <>
       {abierto && (
         <section
           aria-label={`Charla con ${nombre}`}
           onKeyDown={(e) => e.key === "Escape" && abrir(false)}
-          className="glass enter flex max-h-[min(460px,60dvh)] w-[min(360px,calc(100vw-24px))] origin-bottom-left flex-col rounded-3xl bg-bg-2/85"
+          className={`enter absolute bottom-full left-4 right-4 z-30 mb-[148px] flex max-h-[min(460px,55dvh)] origin-bottom-left flex-col rounded-3xl sm:right-auto sm:w-[380px] lg:mb-[176px] ${VIDRIO}`}
         >
-          <header className="flex items-start justify-between gap-3 px-4 pb-2 pt-3.5">
-            <div>
-              <p className="text-[14px] font-medium">{nombre}</p>
-              <p className="text-[12px] text-ink-3">
-                Tu compañera de estudio {ayudaTutor(nivel)} · el reloj está en pausa
-              </p>
-            </div>
+          <header className="flex items-center justify-between gap-3 px-4 pb-1.5 pt-3.5">
+            <p className="text-[14px] font-medium">{nombre}</p>
             <button aria-label="Cerrar" onClick={() => abrir(false)} className="press text-ink-3 hover:text-ink">
               <Close width={16} height={16} />
             </button>
           </header>
-          <div className="min-h-0 flex-1 overflow-y-auto px-4">
-            <div className="flex flex-col gap-2 pb-2">
+          <div className="no-scrollbar min-h-0 flex-1 overflow-y-auto px-4">
+            <div className="flex flex-col gap-2 pb-3">
               {!charla.length && (
-                <p className="py-2 text-[13.5px] text-ink-2">
+                <p className="py-1 text-[14px] leading-snug text-ink-2">
                   ¿Te trabaste? Preguntame lo que quieras: cómo seguir la anamnesis, una maniobra, una mnemotecnia, un
-                  medicamento… El paciente no se entera.
+                  medicamento…
                 </p>
               )}
-              {charla.map((c, i) => (
-                <div key={i} className="flex flex-col gap-2">
-                  <p className="ml-auto max-w-[85%] rounded-[18px] rounded-br-md bg-ink px-3.5 py-2 text-[14px] leading-snug text-bg">
-                    {c.pregunta}
-                  </p>
-                  {c.respuesta ? (
-                    <p className="enter max-w-[90%] rounded-[18px] rounded-bl-md bg-accent/[0.12] px-3.5 py-2 text-[14px] leading-snug text-ink">
-                      {c.respuesta.texto}
+              {charla.map((c, i) => {
+                const nueva = c.respuesta ? n++ >= yaEstaban : false;
+                return (
+                  <div key={i} className="flex flex-col gap-2">
+                    <p className="ml-auto max-w-[85%] rounded-[18px] rounded-br-md bg-ink px-3.5 py-2 text-[14px] leading-snug text-bg">
+                      {c.pregunta}
                     </p>
-                  ) : (
-                    <span className="text-[13px] text-ink-3">{nombre} está buscando en los apuntes…</span>
-                  )}
-                </div>
-              ))}
+                    {c.respuesta ? (
+                      <p className="max-w-[90%] rounded-[18px] rounded-bl-md bg-white/[0.07] px-3.5 py-2 text-[14.5px] leading-snug text-ink">
+                        <TextoEscrito texto={c.respuesta.texto} animar={nueva} alAvanzar={alFinal} />
+                      </p>
+                    ) : (
+                      <span className="text-[13px] text-ink-3">{nombre} está buscando en los apuntes…</span>
+                    )}
+                  </div>
+                );
+              })}
               <div ref={fin} />
             </div>
           </div>
@@ -135,7 +140,7 @@ export function TutorChat({
               maxLength={1000}
               placeholder={`Preguntale a ${nombre}…`}
               aria-label={`Pregunta para ${nombre}`}
-              className="min-w-0 flex-1 bg-transparent text-[14.5px] outline-none placeholder:text-ink-3"
+              className="min-w-0 flex-1 bg-transparent text-[15px] outline-none placeholder:text-ink-3"
             />
             <button
               type="submit"
@@ -153,10 +158,15 @@ export function TutorChat({
         aria-expanded={abierto}
         aria-label={abierto ? `Cerrar la charla con ${nombre}` : `Preguntarle a ${nombre}, tu compañera de estudio`}
         title={abierto ? undefined : `¿Dudas? Preguntale a ${nombre}`}
-        className="press rounded-2xl p-1"
+        className="press absolute bottom-full left-3 z-20 mb-11 rounded-2xl p-1"
       >
-        <Mascota id={mascotaId} animacion={animacion} alto={76} />
+        <span className="lg:hidden">
+          <Mascota id={mascotaId} animacion={animacion} alto={88} />
+        </span>
+        <span className="hidden lg:block">
+          <Mascota id={mascotaId} animacion={animacion} alto={116} />
+        </span>
       </button>
-    </div>
+    </>
   );
 }

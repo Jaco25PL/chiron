@@ -116,7 +116,23 @@ export function Consulta({ caseId, modoInicial, nivel }: { caseId: string; modoI
       <div className="flex min-h-0 flex-1 lg:pr-6">
         <div className="flex min-h-0 min-w-0 flex-1 flex-col">
           {modo === "chat" ? (
-            <ChatView caso={c.caso} turnos={c.turnos} pensando={c.pensando} listo={c.listo} onSend={c.enviar} />
+            <ChatView
+              caso={c.caso}
+              turnos={c.turnos}
+              pensando={c.pensando}
+              listo={c.listo}
+              onSend={c.enviar}
+              acompanante={
+                <TutorChat
+                  mascotaId={mascotaId}
+                  charla={c.tutor}
+                  pensando={c.tutorPensando}
+                  listo={c.listo}
+                  onPreguntar={(t) => void c.preguntarTutor(t)}
+                  onAbierto={c.pausar}
+                />
+              }
+            />
           ) : (
             <FaceView
               caso={c.caso}
@@ -127,7 +143,6 @@ export function Consulta({ caseId, modoInicial, nivel }: { caseId: string; modoI
               onEnd={c.terminar}
               tutor={{
                 mascotaId,
-                nivel,
                 charla: c.tutor,
                 pensando: c.tutorPensando,
                 onPreguntar: c.preguntarTutor,
@@ -147,18 +162,6 @@ export function Consulta({ caseId, modoInicial, nivel }: { caseId: string; modoI
         >
           Terminar
         </button>
-      )}
-
-      {modo === "chat" && (
-        <TutorChat
-          mascotaId={mascotaId}
-          nivel={nivel}
-          charla={c.tutor}
-          pensando={c.tutorPensando}
-          listo={c.listo}
-          onPreguntar={(t) => void c.preguntarTutor(t)}
-          onAbierto={c.pausar}
-        />
       )}
 
       <SummarySheet resumen={c.resumen} corrigiendo={c.corrigiendo} onClose={() => c.setResumen(null)} />

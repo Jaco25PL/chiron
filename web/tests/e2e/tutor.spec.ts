@@ -19,8 +19,9 @@ const usuario = () => ({ ...TEST_USER, email: `tutor-${Date.now()}-${Math.random
 async function abrirChat(page: Page, nivel: "Principiante" | "Normal") {
   await page.goto("/");
   await page.getByRole("tab", { name: nivel }).click();
-  await page.locator("article").filter({ hasText: nombre }).getByRole("link", { name: "Chat" }).click();
+  await page.locator("article").filter({ hasText: nombre }).getByRole("link", { name: "Atender" }).click();
   await expect(page).toHaveURL(/\/consulta\//);
+  await page.getByRole("tab", { name: "Chat" }).click();
 }
 
 async function preguntarTutor(page: Page, texto: string) {
