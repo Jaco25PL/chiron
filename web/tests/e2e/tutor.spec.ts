@@ -99,3 +99,28 @@ test("the pet picked in the settings is saved and shows up in the consultation",
   await abrirChat(page, "Normal");
   await expect(page.getByRole("button", { name: /Preguntarle a Boba/ })).toBeVisible();
 });
+
+test("in the call: tapping the pet sends the next phrase to it, and its answer shows above it", async ({
+  page,
+  context,
+  baseURL,
+}) => {
+  const { decir, microfonoFalso } = await import("./voz");
+  await signInAs(context, baseURL!, { user: usuario() });
+  await microfonoFalso(context);
+  await page.goto("/consulta/aleatorio?modo=cara&nivel=principiante");
+  await page.getByRole("button", { name: "Contestar" }).click();
+
+  const mascota = page.getByRole("button", { name: /Hablarle a Hámster/ });
+  await mascota.click();
+  await expect(page.getByText("Te escucho")).toBeVisible();
+  await expect(page.getByTitle(/Reloj en pausa/)).toBeVisible();
+
+  // the fake microphone and the 3D avatar render in software here: give it time
+  await decir(page, "¿Cómo era la anamnesis?");
+  await expect(page.getByText(/arrancá por la ficha patronímica/)).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText("Te escucho")).toBeHidden(); // gone once the student asked
+  // the companion's voice (silence from the fake backend) ends and the call goes back to the patient
+  await expect(page.getByRole("button", { name: /Hablarle a Hámster/ })).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByTitle("Tiempo de la estación")).toBeVisible();
+});

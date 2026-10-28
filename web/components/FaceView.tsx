@@ -11,7 +11,6 @@ import { palabras, useEscucha, useVozPaciente } from "@/lib/voz";
 import { CameraOff, Close, Mic, Phone, PhoneDown, Stethoscope } from "./icons";
 import { Mascota } from "./Mascota";
 import { TextoEscrito } from "./TextoEscrito";
-import { VIDRIO } from "./Tutor";
 
 // three.js only downloads when face to face opens; the ASCII portrait covers the wait
 const Avatar3D = dynamic(() => import("./Avatar3D"), { ssr: false });
@@ -77,6 +76,11 @@ export function FaceView({
   // talking to the study companion: the next phrase goes to it, not to the patient
   const [conTutor, setConTutor] = useState(false);
   const conTutorRef = useRef(false);
+  // the student already asked in this round with the companion: "Te escucho" gives way to its answer
+  const [pregunto, setPregunto] = useState(false);
+  // its answer stays readable for a while after the call goes back to the patient
+  const [ultimaVisible, setUltimaVisible] = useState(false);
+  const ocultarUltima = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { pausar, onPreguntar } = tutor;
   const nombreTutor = mascota(tutor.mascotaId).nombre;
   const ultimaTutor = tutor.charla.at(-1)?.respuesta?.texto;
@@ -125,16 +129,21 @@ export function FaceView({
     conTutorRef.current = false;
     setConTutor(false);
     pausar(false);
+    if (ocultarUltima.current) clearTimeout(ocultarUltima.current);
+    ocultarUltima.current = setTimeout(() => setUltimaVisible(false), 7000);
   }, [pausar]);
+  useEffect(() => () => void (ocultarUltima.current && clearTimeout(ocultarUltima.current)), []);
 
   // the question goes to the companion; once its answer has been heard, back to the patient
   const decirTutor = useCallback(
     (t: string) => {
       let voces: ReturnType<typeof hablar> | null = null;
+      setPregunto(true);
       onPreguntar(t, {
         alResponder: (r) => {
           sonando.current.texto = r.texto;
           setVozDe("tutor");
+          setUltimaVisible(true);
           voces = hablar(volverAlPaciente);
         },
         alAudio: (pcm) => voces?.encolar(pcm),
@@ -151,6 +160,8 @@ export function FaceView({
       return;
     }
     callar(); // the patient stops talking: the student is asking for help
+    setPregunto(false);
+    setUltimaVisible(false);
     conTutorRef.current = true;
     setConTutor(true);
     pausar(true);
@@ -176,6 +187,7 @@ export function FaceView({
       else decir(t);
     },
     onVoz: (t) => {
+      if (!conTutorRef.current) setUltimaVisible(false); // back to the patient: the old answer goes
       // the student talks over the patient: a real sentence, not a stray word (that's usually echo)
       if (sonando.current.hablando && palabras(t).length >= 4) callar();
     },
@@ -307,8 +319,21 @@ export function FaceView({
 
         {/* compañera de estudio */}
         {enLlamada && (
-          <div className="absolute bottom-20 left-2 z-10 flex items-end gap-2 sm:bottom-24 sm:left-4">
-            <button
+          <div className="absolute bottom-20 left-2 z-10 flex flex-col items-start gap-2 sm:bottom-24 sm:left-4">
+            {((conTutor && pregunto && tutor.pensando) || (ultimaVisible && ultimaTutor)) && (
+              <p
+                key={tutor.charla.length}
+                className="vidrio-oscuro enter max-w-[min(22rem,calc(100cqw-1.5rem))] origin-bottom-left rounded-2xl rounded-bl-md px-3.5 py-2.5 text-[14.5px] leading-snug text-ink"
+              >
+                {tutor.pensando || !ultimaTutor ? (
+                  <span className="text-ink-2">Buscando en los apuntes…</span>
+                ) : (
+                  <TextoEscrito texto={ultimaTutor} animar />
+                )}
+              </p>
+            )}
+            <div className="flex items-end gap-2">
+              <button
               type="button"
               onClick={tocarMascota}
               aria-pressed={conTutor}
@@ -330,11 +355,12 @@ export function FaceView({
                 alto={100}
               />
             </button>
-            {conTutor && (
-              <p className={`enter mb-3 rounded-2xl rounded-bl-md px-3 py-2 text-[13px] text-ink-2 ${VIDRIO}`}>
-                Te escucho
-              </p>
-            )}
+              {conTutor && !pregunto && (
+                <p className="vidrio-oscuro enter mb-3 rounded-2xl rounded-bl-md px-3 py-2 text-[13px] text-ink-2">
+                  Te escucho
+                </p>
+              )}
+            </div>
           </div>
         )}
 
@@ -345,24 +371,7 @@ export function FaceView({
               <p className="max-w-2xl rounded-2xl bg-black/55 px-4 py-2.5 text-center text-[15px] leading-snug text-ink-2 backdrop-blur-md sm:text-[17px]">
                 {escucha.parcial}
               </p>
-            ) : conTutor ? (
-              tutor.pensando ? (
-                <span className="rounded-full bg-black/55 px-4 py-2 text-[13px] text-ink-2 backdrop-blur-md">
-                  {nombreTutor} está buscando en los apuntes…
-                </span>
-              ) : vozDe === "tutor" && ultimaTutor ? (
-                <p
-                  key={tutor.charla.length}
-                  className={`max-w-2xl rounded-2xl px-4 py-2.5 text-center text-[15px] leading-snug text-ink sm:text-[17px] ${VIDRIO}`}
-                >
-                  <TextoEscrito texto={ultimaTutor} animar />
-                </p>
-              ) : (
-                <span className="rounded-full bg-black/55 px-4 py-2 text-[13px] text-ink-2 backdrop-blur-md">
-                  Decile tu duda a {nombreTutor}
-                </span>
-              )
-            ) : pensando ? (
+            ) : conTutor ? null : pensando ? (
               <span className="rounded-full bg-black/55 px-4 py-2 text-[13px] text-ink-2 backdrop-blur-md">
                 {nombre.split(" ")[0]} está pensando…
               </span>
