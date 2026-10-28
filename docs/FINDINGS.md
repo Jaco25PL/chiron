@@ -209,8 +209,9 @@ A log of what I ran into while building Chiron: what showed up, how I caught it,
 - **Finding:** `llm/tts.py` (and the RAG's query embedding) created a new google-genai client on every call, so every voice turn opened a new TCP + TLS connection to Google. Isolated with `models.get` (no generation quota): new client 1.54 s median vs reused 0.51 s, from Uruguay.
 - **What I did:** `llm/gemini.py genai_client(key)`, one client per key for the life of the process, used by the voice and the RAG search (LangChain's chat models were already built once).
 - **Result** (free keys, one model per task, 6 turns, in memory): time until the patient's voice starts after the text, median **2.54 s → 0.88 s**. The text half didn't change (same code); its median moved between runs from free-tier noise alone (1.85 vs 3.78 s), which is why the comparison is per leg.
-- **Pending:** the patient with `thinking_level="minimal"`: one interleaved pair (4.87 s low vs 2.65 s minimal, near-identical replies) before the free daily quota ran out. Needs a proper interleaved run and the evals before it ships.
-- **Lesson:** on the free tier, compare the leg a change touches, interleave A and B, and fix the models: whole-turn medians move by seconds on their own.
+- **Confirmed with the paid key** (same benchmark, 6 turns each, text half unchanged at 1.70 vs 1.71 s): new client per call → voice 1.99 s, total 4.47 s; reused client → voice **0.69 s**, total **2.33 s** (medians).
+- **Also tried, and dropped: the patient with `thinking_level="minimal"`.** On the free keys it looked ~1 s faster, but with the paid key, on the same 51 eval questions logged to LangSmith (`paciente-gemini-3-flash-preview-low-…` vs `…-minimal-…`): median 1.37 s vs 1.35 s, p90 1.85 vs 1.67 s, and identical quality on every evaluator. Not worth a change: the patient stays on "low" (`GEMINI_THINKING_PATIENT` overrides it for experiments). Both evals plus the benchmarks cost USD 0.52.
+- **Lesson:** on the free tier, compare the leg a change touches, interleave A and B, and fix the models: whole-turn medians move by seconds on their own, and a "win" there can vanish on the paid tier.
 
 ## Short version for LinkedIn
 

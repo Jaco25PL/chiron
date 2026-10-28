@@ -281,8 +281,9 @@ def main():
     if "paciente" in which:
         evaluate(
             paciente_target, data=datos(PACIENTE, casos), evaluators=[judge, hecho_correcto, un_solo_hecho],
-            experiment_prefix=f"paciente-{MODELS['patient'][0]}", max_concurrency=2,
-            metadata={"modelo_paciente": MODELS["patient"][0], "modelo_juez": MODELS["judge"][0], **extra},
+            experiment_prefix=f"paciente-{MODELS['patient'][0]}-{graph.PATIENT_THINKING}", max_concurrency=2,
+            metadata={"modelo_paciente": MODELS["patient"][0], "modelo_juez": MODELS["judge"][0],
+                      "thinking_paciente": graph.PATIENT_THINKING, **extra},
         )
     if "adversarial" in which:
         evaluate(

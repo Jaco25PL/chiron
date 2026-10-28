@@ -13,6 +13,7 @@ it's small, and that's more reliable.
 
 import contextvars
 import logging
+import os
 import time
 import uuid
 from collections.abc import Iterator
@@ -35,6 +36,8 @@ from store import db
 ROOT = Path(__file__).resolve().parent.parent
 log = logging.getLogger("chiron.graph")
 HISTORY_TURNS = 16  # previous messages the patient sees
+# how much the patient's model thinks: "low" by default; "minimal" is faster, pending the evals (FINDINGS #25)
+PATIENT_THINKING = os.environ.get("GEMINI_THINKING_PATIENT", "low")
 MAX_TUTOR = 30  # questions to the study companion per consultation (each one is an LLM call plus a search)
 
 Intent = Literal["anamnesis", "examen", "paraclinica", "diagnostico", "cierre"]
@@ -105,7 +108,7 @@ def models():
     # one backoff round at most: a turn must finish well within the function's 60 s
     return {
         "router": chat_model("router", Route, retries=1, thinking_level="minimal"),
-        "patient": chat_model("patient", PatientReply, retries=1, thinking_level="low"),
+        "patient": chat_model("patient", PatientReply, retries=1, thinking_level=PATIENT_THINKING),
         "exam": chat_model("router", ExamPick, retries=1, thinking_level="minimal"),
         "labs": chat_model("router", LabPick, retries=1, thinking_level="minimal"),
     }
