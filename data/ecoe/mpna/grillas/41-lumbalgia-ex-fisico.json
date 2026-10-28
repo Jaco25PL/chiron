@@ -1,0 +1,95 @@
+{
+  "id": "41-lumbalgia-ex-fisico",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 5,
+    "nombre": "Atención a personas con Dolor y atención a personas con Cefaleas/Lumbalgia."
+  },
+  "titulo": "SIMULACIÓN 8: EXAMEN FÍSICO LUMBALGIA",
+  "tipo": "examen_fisico",
+  "motivo_consulta": "lumbalgia",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Explica al paciente que realizará el examen físico",
+        "Solicita torso al descubierto contemplando el pudor"
+      ]
+    },
+    {
+      "nombre": "INSPECCIÓN",
+      "items": [
+        "Inspecciona desde adelante, atrás y de lado",
+        "Postura normal (hombros, escápulas, crestas iliacas)",
+        "Postura patol.: antálgica/postural/compensatoria",
+        "Curvatura normales: lordosis lumbar y cifosis dorsal",
+        "Curv. anorm: Hiperlordosis / Rectificación lumbar",
+        "Curv. anorm: Cifosis armónica / Cifosis angular",
+        "MANIOBRA DE ADAMS (puede adelantarse esta maniobra en caso de detectarse escoliosis)"
+      ]
+    },
+    {
+      "nombre": "PALPACIÓN",
+      "items": [
+        "De las Apófisis espinosas vértebra a vertebra",
+        "De la musculatura paravertebral bilateral",
+        "De los puntos sacroiliacos"
+      ]
+    },
+    {
+      "nombre": "MOVILIDAD",
+      "items": [
+        "Rotación a derecha",
+        "Rotación a Izquierda",
+        "Lateralización a derecha",
+        "Lateralización a izquierda",
+        "Extensión (hacia atrás)",
+        "Flexión (hacia adelante)"
+      ]
+    },
+    {
+      "nombre": "MANIOBRAS",
+      "items": [
+        "Maniobra de Goldthwait (mano en la región lumbar)",
+        "Maniobra de Lasegue (hasta 70° y dolor debajo de rodilla para ser positivo)",
+        "Maniobra de Bragard (lasegue sensibilizado con la dorsiflexión del pie)",
+        "Maniobra de Lasegue posterior",
+        "Maniobra de Neri (sentado, compresión de menton a tórax)"
+      ]
+    },
+    {
+      "nombre": "OTROS ASPECTOS A EXAMINAR",
+      "items": [
+        "Sensibilidad",
+        "Fuerza muscular",
+        "Marcha"
+      ]
+    },
+    {
+      "nombre": "DIAGNOSTICO E IMAGENOLOGÍA",
+      "items": [
+        "Mantiene planteo de lumbalgia aguda post esfuerzo",
+        "Se mantiene sin solicitar radiografía"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "new/Sim-8_GRILLA-Ex.Fisico_LUMBALGIA.pdf",
+    "paginas": [
+      1
+    ]
+  }
+}

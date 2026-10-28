@@ -1,0 +1,92 @@
+{
+  "id": "40-crisis-asmatica-manejo",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 9,
+    "nombre": "IRA, Asma y EPOC."
+  },
+  "titulo": "SIMULACIÓN 3: MANEJO CRISIS ASMA",
+  "tipo": "manejo",
+  "motivo_consulta": null,
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Clasificación de la severidad de la crisis",
+      "items": [
+        "Crisis Moderada"
+      ]
+    },
+    {
+      "nombre": "Elementos para clasificar la severidad",
+      "items": [
+        "Estado de conciencia",
+        "Fluidez del habla, palabras entrecortadas",
+        "Presencia de disnea sibilante",
+        "Frecuencia Respiratoria",
+        "Uso de musculatura accesoria o no",
+        "Frecuencia Cardíaca",
+        "SAT O2",
+        "Sibilancias y su grado a la auscultación",
+        "PICO Flujo mayor o menor a 70%"
+      ]
+    },
+    {
+      "nombre": "Tratamiento de la crisis asmática",
+      "items": [
+        "Salbutamol INH (puede optar por nebulización)",
+        "4 a 8 puff (o 20 gotas en 3cc de SF nebulizado)",
+        "Cada 20min por 1 hr (min 0, 20 y 40, revalora a 60min)",
+        "Con inhalocámara (o nebulizado)",
+        "Puede asociar B. Ipratropio INH o Nebulizado",
+        "4 puff (o 10 gotas en 3cc de SF para nebulizado)",
+        "Indica Corticoides: Via Oral, prednisona 20 mg",
+        "Indica Corticoides: Via IV, Hidrocortisona 200 mg",
+        "Evolución: plantea revalorar a la hora de tto"
+      ]
+    },
+    {
+      "nombre": "Grado de control de su Asma enfermedad",
+      "items": [
+        "Mal controlada"
+      ]
+    },
+    {
+      "nombre": "Elementos para valorar control de Asma",
+      "items": [
+        "Síntomas diurnos",
+        "Síntomas nocturnos",
+        "Afectación de actividad diaria",
+        "Uso de inhaloterapia o aumento de requerimientos",
+        "Crisis asmática en el último mes"
+      ]
+    },
+    {
+      "nombre": "Recomendaciones no farmacológicas",
+      "items": [
+        "Cesación del tabaquismo",
+        "Adecuación del ámbito de trabajo",
+        "Aconseja evitar desencadenantes",
+        "Inmunización Antigripal y anti SARS COv-2",
+        "Inmunización de Anti-Neumocócica",
+        "Sacar mascota intradomicilio"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "new/Sim-4_GRILLA-MANEJO CLÍNICO-Crisis-Asmática.pdf",
+    "paginas": [
+      1
+    ]
+  }
+}

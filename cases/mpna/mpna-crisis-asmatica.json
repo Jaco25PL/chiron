@@ -1,0 +1,1051 @@
+{
+  "id": "mpna-crisis-asmatica",
+  "materia": "mpna",
+  "titulo": "Falta de aire en mujer joven",
+  "grillas": [
+    "38-crisis-asmatica-anamnesis",
+    "39-crisis-asmatica-ex-fisico",
+    "40-crisis-asmatica-manejo"
+  ],
+  "dificultad": "intermedio",
+  "paciente": {
+    "nombre": "Lucía Fernanda Cabrera Pintos",
+    "edad": 34,
+    "sexo": "femenino",
+    "procedencia": "Nacida y criada en Montevideo",
+    "domicilio": "Cerro Norte, Montevideo",
+    "ocupacion": "Ayudante de panadería (amasado y horno) en una panadería de Belvedere, turno de madrugada",
+    "convivencia": "Vive con su pareja y su hijo de 9 años",
+    "escolaridad": "Ciclo básico completo",
+    "estado_civil": "Unión libre",
+    "prestador": "ASSE, policlínica barrial del Cerro",
+    "medico_referencia": "Dr. Martín Sosa, médico de familia de la policlínica"
+  },
+  "personalidad": {
+    "tipo": "nervioso",
+    "descripcion": "Está asustada porque le falta el aire y el inhalador no le está haciendo efecto. Llega sentada derecha, apoyando las manos en las rodillas. Colabora y contesta todo lo que le preguntan, pero en frases cortas, haciendo pausas para respirar. No agrega datos que no se le pidieron. Le da un poco de vergüenza reconocer que dejó el tratamiento y que sigue fumando; si se lo preguntan directamente, lo admite.",
+    "forma_de_hablar": "Voseo montevideano, registro popular. Frases cortas cortadas por pausas para tomar aire ('es que... me cuesta... hablar de corrido'), pero arma frases, no palabras sueltas. Muletillas: 'viste', 'te juro', 'ta'. Llama 'el puff' o 'el paf' al inhalador de salbutamol y 'el marrón' al corticoide inhalado."
+  },
+  "motivo_consulta": {
+    "frase_inicial": "Vengo porque... me falta el aire. Y el puff... no me está haciendo nada."
+  },
+  "anamnesis": [
+    {
+      "id": "ficha-patronimica",
+      "tema": "Datos patronímicos",
+      "preguntas_ejemplo": [
+        "¿Cómo se llama?",
+        "¿Qué edad tiene?",
+        "¿Dónde vive?",
+        "¿Con quién vive?",
+        "¿Dónde se atiende?"
+      ],
+      "respuesta": "Lucía Cabrera... 34 años. Vivo en el Cerro Norte... con mi pareja y mi hijo, de 9. Hice hasta tercero de liceo. Me atiendo acá en la policlínica... con el doctor Sosa.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Pregunta Ficha Patronímica completa?"
+      ]
+    },
+    {
+      "id": "motivo-consulta",
+      "tema": "Motivo de consulta",
+      "preguntas_ejemplo": [
+        "¿Qué la trae por acá?",
+        "¿Por qué consulta hoy?"
+      ],
+      "respuesta": "Vengo porque... me falta el aire. Y el puff... no me está haciendo nada.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Motivo de Consulta"
+      ]
+    },
+    {
+      "id": "disnea-inicio",
+      "tema": "Inicio y circunstancia de aparición de la falta de aire",
+      "preguntas_ejemplo": [
+        "¿Desde cuándo le falta el aire?",
+        "¿Cómo empezó?"
+      ],
+      "respuesta": "Empezó hace dos días... después de un resfrío. Primero era poquito, cuando caminaba. Anoche se me puso peor... no pude dormir, me tuve que quedar sentada en la cama.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Disnea sibilante: Inicio, características, evolución"
+      ]
+    },
+    {
+      "id": "disnea-caracteristicas",
+      "tema": "Características de la falta de aire (sibilancias)",
+      "preguntas_ejemplo": [
+        "¿Cómo es esa falta de aire?",
+        "¿Siente algún ruido en el pecho al respirar?"
+      ],
+      "respuesta": "Me silba el pecho... un chiflido, viste. Lo que más me cuesta es sacar el aire... como que se me queda adentro.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Disnea sibilante: Inicio, características, evolución"
+      ]
+    },
+    {
+      "id": "disnea-evolucion",
+      "tema": "Evolución de la falta de aire",
+      "preguntas_ejemplo": [
+        "¿Fue empeorando o está igual?",
+        "¿Ahora le falta el aire quieta, sin hacer nada?"
+      ],
+      "respuesta": "Fue empeorando... Hoy me falta aunque esté quieta. Para venir desde la parada... tuve que pararme dos veces. Y hablar mucho de corrido... me cansa.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Disnea sibilante: Inicio, características, evolución"
+      ]
+    },
+    {
+      "id": "tos",
+      "tema": "Tos y expectoración",
+      "preguntas_ejemplo": [
+        "¿Tiene tos?",
+        "¿Saca flema? ¿De qué color?"
+      ],
+      "respuesta": "Sí, toso bastante... Al principio era seca. Ahora largo un poco de flema... blanca, clarita. Verde o con sangre no.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Síntomas acompañantes altos: Tos y otros"
+      ]
+    },
+    {
+      "id": "sintomas-resfrio",
+      "tema": "Síntomas de vía aérea superior (rinorrea, estornudos, odinofagia)",
+      "preguntas_ejemplo": [
+        "¿Tuvo mocos, estornudos o dolor de garganta?",
+        "¿Cómo fue ese resfrío?"
+      ],
+      "respuesta": "Hace cuatro días me agarré un resfrío... mocos clarito, estornudos y la garganta un poco irritada. Ahora la nariz sigue tapada.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Síntomas acompañantes altos: Tos y otros",
+        "38-crisis-asmatica-anamnesis::Factores desencadenantes (infecc polvo tabaco etc)"
+      ]
+    },
+    {
+      "id": "fiebre",
+      "tema": "Fiebre",
+      "preguntas_ejemplo": [
+        "¿Tuvo fiebre?",
+        "¿Se tomó la temperatura?"
+      ],
+      "respuesta": "El primer día del resfrío tenía 37 y medio... después no me la tomé más. Chuchos no tuve.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Síntomas acompañantes altos: Tos y otros"
+      ]
+    },
+    {
+      "id": "dolor-puntada",
+      "tema": "Dolor torácico tipo puntada",
+      "preguntas_ejemplo": [
+        "¿Tiene dolor en el pecho?",
+        "¿Le duele como una puntada al respirar hondo o al toser?"
+      ],
+      "respuesta": "Puntada no... Siento el pecho apretado, como cerrado. Pero un pinchazo cuando respiro no, eso no.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Síntomas acompañantes bajos: Dolor tipo puntada"
+      ]
+    },
+    {
+      "id": "desencadenante-infeccion",
+      "tema": "Desencadenante del episodio actual: infección respiratoria",
+      "preguntas_ejemplo": [
+        "¿Qué cree que se lo desencadenó?",
+        "¿Pasó algo antes de que empezara?"
+      ],
+      "respuesta": "Yo creo que fue el resfrío... Siempre que me resfrío me agarra el pecho. Y encima estos días hizo un frío bárbaro de madrugada... cuando salgo para el trabajo.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Factores desencadenantes (infecc polvo tabaco etc)"
+      ]
+    },
+    {
+      "id": "desencadenante-polvo-tabaco",
+      "tema": "Exposición a polvo y tabaco en estos días",
+      "preguntas_ejemplo": [
+        "¿Estuvo expuesta a polvo, humo o algo irritante estos días?",
+        "¿Siguió fumando con el resfrío?"
+      ],
+      "respuesta": "En la panadería anda la harina por todos lados... y estos días seguí yendo. Y te soy sincera... fumar seguí fumando, menos, pero seguí.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Factores desencadenantes (infecc polvo tabaco etc)"
+      ]
+    },
+    {
+      "id": "tratamiento-actual-salbutamol",
+      "tema": "Tratamiento utilizado en este episodio: salbutamol (dosis, frecuencia, respuesta)",
+      "preguntas_ejemplo": [
+        "¿Qué se hizo para la falta de aire?",
+        "¿Cuántas veces usó el inhalador? ¿Le hizo efecto?",
+        "¿Cuándo fue la última vez?"
+      ],
+      "respuesta": "Me hice el puff... el salbutamol. Dos disparos cada dos o tres horas desde anoche. Me alivia un ratito y después vuelve igual. La última vez fue hace una hora, antes de salir de casa.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Tratamiento utilizado, profundiza características"
+      ]
+    },
+    {
+      "id": "tratamiento-actual-otros",
+      "tema": "Otros tratamientos en este episodio (corticoides orales, antibióticos)",
+      "preguntas_ejemplo": [
+        "¿Tomó alguna pastilla, corticoide o antibiótico?",
+        "¿Usó algún otro inhalador?"
+      ],
+      "respuesta": "No, pastillas no tomé nada. Solo el puff.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Tratamiento utilizado, profundiza características"
+      ]
+    },
+    {
+      "id": "crisis-previas",
+      "tema": "Crisis previas",
+      "preguntas_ejemplo": [
+        "¿Le había pasado esto antes?",
+        "¿Tuvo otras crisis de falta de aire?"
+      ],
+      "respuesta": "Sí, muchas veces... Desde chica me agarran estos ataques de falta de aire con chiflido.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::¿Ha tenido crisis anteriormente?"
+      ]
+    },
+    {
+      "id": "crisis-ultimo-anio",
+      "tema": "Crisis en el último año",
+      "preguntas_ejemplo": [
+        "¿Cuántas crisis tuvo en el último año?"
+      ],
+      "respuesta": "Este último año... unas cuatro o cinco, sobre todo desde que empezó el frío. Antes eran menos.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::¿Ha tenido crisis el último año, el último mes?"
+      ]
+    },
+    {
+      "id": "crisis-ultimo-mes",
+      "tema": "Crisis en el último mes",
+      "preguntas_ejemplo": [
+        "¿Tuvo alguna crisis en el último mes?",
+        "¿Cuándo fue la última?"
+      ],
+      "respuesta": "Sí, hace tres semanas tuve otra. Fui a la emergencia del hospital... me hicieron nebulizaciones y me mandaron a casa con unas pastillas de corticoide por cinco días. Después no vine al control.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::¿Ha tenido crisis el último año, el último mes?"
+      ]
+    },
+    {
+      "id": "consultas-emergencia",
+      "tema": "Intensidad de las crisis: consultas en emergencia",
+      "preguntas_ejemplo": [
+        "¿Cuántas veces tuvo que ir a emergencia por esto?",
+        "¿Las crisis fueron fuertes?"
+      ],
+      "respuesta": "En el último año fui tres veces a emergencia... Siempre me nebulizaron y me fui para casa ese mismo día.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Intensidad de las crisis (consultas en emergencia)"
+      ]
+    },
+    {
+      "id": "internacion-sala",
+      "tema": "Internaciones en sala",
+      "preguntas_ejemplo": [
+        "¿Alguna vez la internaron por el asma?"
+      ],
+      "respuesta": "Una vez, hace como siete años... estuve tres días internada en el Pasteur, en sala común. Desde ahí no me internaron más.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Internaciones en sala"
+      ]
+    },
+    {
+      "id": "internacion-cti",
+      "tema": "Internaciones en CTI",
+      "preguntas_ejemplo": [
+        "¿Estuvo alguna vez en CTI o terapia intensiva?"
+      ],
+      "respuesta": "No, en CTI nunca.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Internaciones en CTI"
+      ]
+    },
+    {
+      "id": "intubacion",
+      "tema": "Intubación orotraqueal",
+      "preguntas_ejemplo": [
+        "¿Alguna vez la tuvieron que intubar o conectar a un respirador?"
+      ],
+      "respuesta": "No, no... eso nunca, gracias a Dios.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Intubación Oro-Traqueal"
+      ]
+    },
+    {
+      "id": "diagnostico-asma",
+      "tema": "Momento y circunstancia del diagnóstico del asma",
+      "preguntas_ejemplo": [
+        "¿Desde cuándo sabe que es asmática?",
+        "¿Quién le hizo el diagnóstico?"
+      ],
+      "respuesta": "Desde los siete años. Tenía bronquitis a cada rato... y la pediatra me dijo que era asma. De adolescente casi no tuve, volvió de grande.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Momento y circunstancia de diagnóstico del Asma"
+      ]
+    },
+    {
+      "id": "sintomas-diurnos",
+      "tema": "Síntomas diurnos en las últimas 4 semanas",
+      "preguntas_ejemplo": [
+        "En el último mes, ¿cuántos días tuvo falta de aire, tos o chiflido durante el día?",
+        "¿Más de dos veces por semana?"
+      ],
+      "respuesta": "Este último mes... casi todos los días algo. Tos o el chiflido, sobre todo en el trabajo y de mañana.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Presencia y frecuencia de síntomas diurnos",
+        "40-crisis-asmatica-manejo::Síntomas diurnos"
+      ]
+    },
+    {
+      "id": "sintomas-nocturnos",
+      "tema": "Síntomas nocturnos en las últimas 4 semanas",
+      "preguntas_ejemplo": [
+        "¿Se despierta de noche por la tos o la falta de aire?",
+        "¿Cuántas noches por semana?"
+      ],
+      "respuesta": "Sí... dos o tres noches por semana me despierto tosiendo, ahogada. Me tengo que hacer el puff para volver a dormir.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Presencia y frecuencia de síntomas nocturnos",
+        "40-crisis-asmatica-manejo::Síntomas nocturnos"
+      ]
+    },
+    {
+      "id": "frecuencia-broncoobstruccion",
+      "tema": "Frecuencia habitual de los episodios de falta de aire con sibilancias",
+      "preguntas_ejemplo": [
+        "¿Cada cuánto le agarra el chiflido en el pecho?",
+        "¿Antes le pasaba tan seguido?"
+      ],
+      "respuesta": "Antes me pasaba cada tanto... una vez por semana, menos. Desde que arrancó el invierno es casi todos los días.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Frecuencia de los síntomas broncoobstructivos"
+      ]
+    },
+    {
+      "id": "limitacion-actividades",
+      "tema": "Limitación de las actividades diarias por los síntomas",
+      "preguntas_ejemplo": [
+        "¿La falta de aire le impide hacer sus cosas?",
+        "¿Tuvo que dejar de hacer algo por esto?"
+      ],
+      "respuesta": "Sí... En el trabajo me tengo que parar a cada rato a respirar. Y en casa ya ni barro, lo hace mi pareja.",
+      "grilla_items": []
+    },
+    {
+      "id": "medicacion-rescate",
+      "tema": "Medicación habitual de rescate",
+      "preguntas_ejemplo": [
+        "¿Qué medicación usa habitualmente para el asma?"
+      ],
+      "respuesta": "El salbutamol, el puff... lo uso cuando me falta el aire.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Medicación que utiliza habitualmente"
+      ]
+    },
+    {
+      "id": "medicacion-controladora",
+      "tema": "Corticoide inhalado indicado y adherencia",
+      "preguntas_ejemplo": [
+        "¿Le indicaron algún inhalador para usar todos los días?",
+        "¿Lo usa?"
+      ],
+      "respuesta": "El doctor Sosa me dio el marrón, la budesonida, para usar todos los días mañana y noche. Lo usé un par de meses... me sentía bien y lo dejé. Después se me terminó y no fui a buscar más.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Medicación que utiliza habitualmente"
+      ]
+    },
+    {
+      "id": "aumento-broncodilatador",
+      "tema": "Aumento del uso del broncodilatador de rescate",
+      "preguntas_ejemplo": [
+        "¿Está usando el salbutamol más que antes?",
+        "¿Cuántas veces por día lo usaba antes de esta crisis?"
+      ],
+      "respuesta": "Mucho más... Antes lo usaba una vez por semana. Estas últimas tres semanas lo uso tres o cuatro veces por día. Ya voy por el segundo frasquito este mes.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Aumento del uso de broncodilatadores"
+      ]
+    },
+    {
+      "id": "tecnica-inhalatoria",
+      "tema": "Técnica inhalatoria y uso de inhalocámara",
+      "preguntas_ejemplo": [
+        "¿Cómo usa el inhalador? ¿Me muestra?",
+        "¿Usa aerocámara o inhalocámara?"
+      ],
+      "respuesta": "Lo agito, me lo pongo en la boca, aprieto y respiro rápido. Así nomás... Aguantar el aire no, no aguanto. La aerocámara la tenía pero se me rompió hace un año y no compré otra.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Como usa el inhalador"
+      ]
+    },
+    {
+      "id": "desencadenantes-habituales",
+      "tema": "Desencadenantes habituales (inhalantes, ejercicio, frío, emociones)",
+      "preguntas_ejemplo": [
+        "¿Qué cosas le suelen provocar el chiflido o la falta de aire?",
+        "¿El ejercicio, el frío, olores fuertes?"
+      ],
+      "respuesta": "El frío, el humo, el olor a lavandina... y si corro, aunque sea para alcanzar el ómnibus. Y cuando el gato se me sube a la cama, también.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Desencadenantes (inhalantes, actividad física, etc.)"
+      ]
+    },
+    {
+      "id": "pico-flujo",
+      "tema": "Uso de pico flujo (flujómetro) en domicilio",
+      "preguntas_ejemplo": [
+        "¿Tiene un medidor de pico flujo?",
+        "¿Alguna vez se midió cómo sopla en su casa?"
+      ],
+      "respuesta": "¿Un medidor de soplar? No, nunca tuve. No sé cuál es mi número normal.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Investiga uso de pico Flujo"
+      ]
+    },
+    {
+      "id": "espirometria",
+      "tema": "Espirometría o funcional respiratorio previo",
+      "preguntas_ejemplo": [
+        "¿Le hicieron alguna vez una espirometría o un estudio de función pulmonar?"
+      ],
+      "respuesta": "Una vez, como a los veinte... en el Clínicas, me hicieron soplar en una máquina, antes y después del puff. No me acuerdo qué dio. Nunca más me lo hicieron.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Consulta sobre Espirometría o F. Respiratorio"
+      ]
+    },
+    {
+      "id": "actividad-fisica",
+      "tema": "Actividad física habitual",
+      "preguntas_ejemplo": [
+        "¿Hace ejercicio o alguna actividad física?"
+      ],
+      "respuesta": "Antes salía a caminar por la rambla del Cerro... tres veces por semana. Desde el invierno lo dejé, porque me agito enseguida.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Actividad física habitual"
+      ]
+    },
+    {
+      "id": "estres",
+      "tema": "Estrés",
+      "preguntas_ejemplo": [
+        "¿Cómo anda de ánimo? ¿Está con estrés?",
+        "¿Tiene alguna preocupación importante?"
+      ],
+      "respuesta": "Ando con mucho estrés, sí... la plata no alcanza, trabajo de madrugada y duermo poco. Cuando me pongo nerviosa me falta más el aire.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Estrés"
+      ]
+    },
+    {
+      "id": "tabaquismo",
+      "tema": "Tabaquismo",
+      "preguntas_ejemplo": [
+        "¿Fuma? ¿Cuánto y desde cuándo?"
+      ],
+      "respuesta": "Sí... fumo unos ocho o diez por día. Desde los quince. Sé que no debería, ya sé.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Tabaquismo, THC"
+      ]
+    },
+    {
+      "id": "thc",
+      "tema": "Consumo de marihuana (THC)",
+      "preguntas_ejemplo": [
+        "¿Fuma marihuana?",
+        "¿Consume alguna otra sustancia?"
+      ],
+      "respuesta": "No, porro no. De joven alguna vez, ahora nada.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Tabaquismo, THC"
+      ]
+    },
+    {
+      "id": "tabaquismo-convivientes",
+      "tema": "Tabaquismo en convivientes",
+      "preguntas_ejemplo": [
+        "¿Alguien fuma en su casa?"
+      ],
+      "respuesta": "Mi pareja fuma también... dice que fuma en el patio, pero en invierno fuma adentro, en la cocina.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Tabaquismo, THC"
+      ]
+    },
+    {
+      "id": "rinitis",
+      "tema": "Rinitis alérgica",
+      "preguntas_ejemplo": [
+        "¿Tiene alergia en la nariz, estornudos o nariz tapada seguido?"
+      ],
+      "respuesta": "Sí, en primavera estornudo sin parar y de mañana tengo la nariz tapada casi siempre. Nunca me traté eso.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Rinitis alérgica"
+      ]
+    },
+    {
+      "id": "dermatitis",
+      "tema": "Dermatitis atópica",
+      "preguntas_ejemplo": [
+        "¿Tuvo problemas de piel, eccemas o dermatitis?"
+      ],
+      "respuesta": "De chica tenía la piel lastimada en los pliegues de los codos y atrás de las rodillas... me picaba mucho. De grande ya no.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Dermatitis atópica"
+      ]
+    },
+    {
+      "id": "asma-familiar",
+      "tema": "Asma en familiares de primer grado",
+      "preguntas_ejemplo": [
+        "¿Alguien en su familia tiene asma?"
+      ],
+      "respuesta": "Mi madre es asmática. Y mi hijo... también usa el puff, le dicen que tiene bronquitis espasmódica.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Asma en familiares de primer grado"
+      ]
+    },
+    {
+      "id": "vacuna-antigripal",
+      "tema": "Vacuna antigripal",
+      "preguntas_ejemplo": [
+        "¿Se dio la vacuna de la gripe este año?"
+      ],
+      "respuesta": "No... la de la gripe nunca me la di. Nadie me dijo que tenía que dármela.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Vacuna antigripal y para Sars Cov 2"
+      ]
+    },
+    {
+      "id": "vacuna-covid",
+      "tema": "Vacuna contra SARS-CoV-2",
+      "preguntas_ejemplo": [
+        "¿Tiene la vacuna del COVID?",
+        "¿Cuántas dosis?"
+      ],
+      "respuesta": "La del COVID me di dos dosis, en el 2021. Después no me di más.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Vacuna antigripal y para Sars Cov 2"
+      ]
+    },
+    {
+      "id": "vacuna-neumococo",
+      "tema": "Vacuna antineumocócica",
+      "preguntas_ejemplo": [
+        "¿Recibió la vacuna contra el neumococo, la de la neumonía?"
+      ],
+      "respuesta": "¿La de la neumonía? No, esa no me la di nunca.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Vacuna antineumocócica"
+      ]
+    },
+    {
+      "id": "trabajo-tipo",
+      "tema": "Trabajo y tipo de tarea",
+      "preguntas_ejemplo": [
+        "¿En qué trabaja?",
+        "¿Qué tareas hace?"
+      ],
+      "respuesta": "Soy ayudante en una panadería, en Belvedere. Amaso, armo el pan y lo meto al horno. Entro a las cuatro de la mañana.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Indaga trabajo, tipo de trabajo, ambiente"
+      ]
+    },
+    {
+      "id": "trabajo-ambiente",
+      "tema": "Ambiente laboral (exposiciones)",
+      "preguntas_ejemplo": [
+        "¿Cómo es el ambiente donde trabaja?",
+        "¿Está expuesta a polvo o sustancias?",
+        "¿Usa tapabocas?"
+      ],
+      "respuesta": "Hay harina en el aire todo el tiempo... cuando volcamos las bolsas se levanta una nube. Tapabocas no usamos. Ahí adentro es cuando más me agarra el chiflido. Los fines de semana estoy mejor.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Indaga trabajo, tipo de trabajo, ambiente"
+      ]
+    },
+    {
+      "id": "vivienda",
+      "tema": "Características de la vivienda (humedad)",
+      "preguntas_ejemplo": [
+        "¿Cómo es su casa?",
+        "¿Tiene humedad?"
+      ],
+      "respuesta": "Es una casita de bloque, dos cuartos. Tiene mucha humedad... en el dormitorio la pared está con manchas negras, de hongo.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Indaga características de la vivienda"
+      ]
+    },
+    {
+      "id": "calefaccion",
+      "tema": "Calefacción y combustión intradomiciliaria",
+      "preguntas_ejemplo": [
+        "¿Cómo calefacciona la casa?",
+        "¿Cocina o calefacciona a leña?"
+      ],
+      "respuesta": "Tenemos una estufa a leña en la cocina... a veces larga humo para adentro.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Indaga características de la vivienda"
+      ]
+    },
+    {
+      "id": "mascotas",
+      "tema": "Mascotas intradomiciliarias",
+      "preguntas_ejemplo": [
+        "¿Tiene mascotas?",
+        "¿Están dentro de la casa?"
+      ],
+      "respuesta": "Tengo un gato, el Tito. Vive adentro... y duerme en mi cama, a los pies. Un perro también, pero ese está afuera.",
+      "grilla_items": [
+        "38-crisis-asmatica-anamnesis::Indaga presencia de mascotas intradomiciliarias"
+      ]
+    },
+    {
+      "id": "otros-antecedentes",
+      "tema": "Otros antecedentes personales (enfermedades crónicas, cirugías)",
+      "preguntas_ejemplo": [
+        "¿Tiene alguna otra enfermedad?",
+        "¿Presión, diabetes, corazón?",
+        "¿La operaron de algo?"
+      ],
+      "respuesta": "No, otra cosa no tengo. Presión y azúcar bien. Solo me operaron de la cesárea del nene.",
+      "grilla_items": []
+    },
+    {
+      "id": "alergias-medicamentos",
+      "tema": "Alergias a medicamentos",
+      "preguntas_ejemplo": [
+        "¿Es alérgica a algún medicamento?",
+        "¿Le hace mal la aspirina o el ibuprofeno?"
+      ],
+      "respuesta": "No, que yo sepa a ningún remedio. El ibuprofeno lo tomo para los dolores de cabeza y no me hace nada.",
+      "grilla_items": []
+    },
+    {
+      "id": "embarazo",
+      "tema": "Posibilidad de embarazo y anticoncepción",
+      "preguntas_ejemplo": [
+        "¿Cuándo fue su última menstruación?",
+        "¿Puede estar embarazada?",
+        "¿Usa algún método anticonceptivo?"
+      ],
+      "respuesta": "Me vino hace dos semanas, normal. Tengo el implante en el brazo, así que embarazada no.",
+      "grilla_items": []
+    },
+    {
+      "id": "ultimo-control",
+      "tema": "Último control con su médico",
+      "preguntas_ejemplo": [
+        "¿Cuándo fue su último control con el médico?",
+        "¿Tiene un plan de qué hacer si le agarra una crisis?"
+      ],
+      "respuesta": "Con el doctor Sosa hace como ocho meses... Después de la emergencia de hace tres semanas tenía que venir a control y no vine. Plan de qué hacer no tengo, yo me hago el puff y si no me pasa voy a la emergencia.",
+      "grilla_items": []
+    }
+  ],
+  "signos_vitales": {
+    "pa": "122/76 mmHg",
+    "fc": "112 lpm, regular",
+    "fr": "26 rpm",
+    "temperatura": "37,3 °C axilar",
+    "saturacion": "93 % (aire ambiente)",
+    "peso": "68 kg",
+    "talla": "1,62 m",
+    "imc": "25,9 kg/m²"
+  },
+  "examen_fisico": [
+    {
+      "id": "estado-general",
+      "maniobra": "Estado general y psiquismo",
+      "hallazgo": "Lúcida, orientada en tiempo y espacio, colaboradora, algo ansiosa. Sentada erguida, apoyando las manos en las rodillas. Habla en frases cortas, con pausas para respirar entre frase y frase (no en palabras sueltas). Sin somnolencia ni confusión. Estado general conservado, estable.",
+      "grilla_items": [
+        "39-crisis-asmatica-ex-fisico::Estado general del paciente / Psiquismo"
+      ]
+    },
+    {
+      "id": "coloracion-hidratacion",
+      "maniobra": "Coloración de piel y mucosas e hidratación",
+      "hallazgo": "Piel y mucosas normocoloreadas. Sin cianosis central ni periférica. Mucosas húmedas, bien hidratada.",
+      "grilla_items": [
+        "39-crisis-asmatica-ex-fisico::Constata coloración e hidratación"
+      ]
+    },
+    {
+      "id": "pulso-fc-temperatura",
+      "maniobra": "Pulso radial, frecuencia cardíaca y temperatura",
+      "hallazgo": "Pulso radial regular, simétrico, de buena amplitud. Frecuencia cardíaca 112 lpm (última dosis de salbutamol hace una hora). Temperatura axilar 37,3 °C.",
+      "grilla_items": [
+        "39-crisis-asmatica-ex-fisico::Cuenta frec. card. / toma pulso / Temperatura"
+      ]
+    },
+    {
+      "id": "fosas-nasales-cae",
+      "maniobra": "Inspección de fosas nasales y otoscopía (movilizando el pabellón para ver el CAE)",
+      "hallazgo": "Fosas nasales con mucosa edematosa y congestiva, rinorrea serosa escasa bilateral; sin pólipos visibles. Conductos auditivos externos permeables, sin secreción; tímpanos íntegros, nacarados, sin abombamiento.",
+      "grilla_items": [
+        "39-crisis-asmatica-ex-fisico::Observa las fosas nasales, observa y moviliza CAE"
+      ]
+    },
+    {
+      "id": "orofaringe",
+      "maniobra": "Examen de orofaringe",
+      "hallazgo": "Orofaringe levemente congestiva, sin exudados ni placas, amígdalas no hipertróficas. Úvula central.",
+      "grilla_items": [
+        "39-crisis-asmatica-ex-fisico::Examina/describe la orofaringe"
+      ]
+    },
+    {
+      "id": "lirios-ganglionares",
+      "maniobra": "Palpación de lirios ganglionares cervicales y supraclaviculares (desde atrás de la paciente)",
+      "hallazgo": "Se palpan pequeños ganglios submaxilares bilaterales, menores de 1 cm, móviles, no dolorosos. Sin adenomegalias cervicales ni supraclaviculares.",
+      "grilla_items": [
+        "39-crisis-asmatica-ex-fisico::Palpación LG: se pone atrás del paciente"
+      ]
+    },
+    {
+      "id": "inspeccion-torax",
+      "maniobra": "Inspección del tórax: paciente sentada, tórax descubierto, buena iluminación; inspección estática y dinámica de las caras anterior, laterales y posterior",
+      "hallazgo": "Se inspecciona con la paciente sentada y el tórax descubierto, observando las tres caras en reposo (estática) y durante la respiración (dinámica). Ver hallazgos de cada componente.",
+      "grilla_items": [
+        "39-crisis-asmatica-ex-fisico::Inspección: menciona cómo se realiza"
+      ]
+    },
+    {
+      "id": "frecuencia-respiratoria",
+      "maniobra": "Cuenta la frecuencia respiratoria (un minuto)",
+      "hallazgo": "26 respiraciones por minuto: polipnea.",
+      "grilla_items": [
+        "39-crisis-asmatica-ex-fisico::Cuenta frecuencia respiratoria",
+        "40-crisis-asmatica-manejo::Frecuencia Respiratoria"
+      ]
+    },
+    {
+      "id": "estatica-piel",
+      "maniobra": "Inspección estática: piel, cicatrices, tumoraciones, circulación colateral",
+      "hallazgo": "Piel del tórax sin lesiones, sin cicatrices, sin tumoraciones ni circulación venosa colateral.",
+      "grilla_items": [
+        "39-crisis-asmatica-ex-fisico::Estática: busca lesiones de piel, tumoraciones, etc."
+      ]
+    },
+    {
+      "id": "forma-torax",
+      "maniobra": "Forma del tórax y sus diámetros",
+      "hallazgo": "Tórax simétrico, sin deformidades. Diámetro anteroposterior discretamente aumentado por hiperinsuflación (atrapamiento aéreo propio de la obstrucción bronquial aguda), sin llegar a un tórax en tonel.",
+      "grilla_items": [
+        "39-crisis-asmatica-ex-fisico::Menciona la forma del tórax y sus diámetros",
+        "39-crisis-asmatica-ex-fisico::Plantea lo esperable para cada caso"
+      ]
+    },
+    {
+      "id": "dinamica-tirajes",
+      "maniobra": "Inspección dinámica: frecuencia, ritmo y patrón respiratorio, tirajes (supraclavicular, supraesternal, intercostal, subcostal) y uso de musculatura accesoria",
+      "hallazgo": "Polipnea de 26 rpm, ritmo regular, espiración prolongada. Movimientos torácicos simétricos. Sin tirajes supraclaviculares, supraesternales, intercostales ni subcostales. No utiliza musculatura accesoria (esternocleidomastoideos sin contracción visible). Sin respiración paradojal.",
+      "grilla_items": [
+        "39-crisis-asmatica-ex-fisico::Dinámica: FR, busca tirajes (explica)"
+      ]
+    },
+    {
+      "id": "palpacion-pared",
+      "maniobra": "Palpación del tórax: pared (piel, celular subcutáneo, músculos), expansibilidad, elasticidad y vibraciones vocales",
+      "hallazgo": "Pared torácica: piel de temperatura normal, celular subcutáneo sin edema ni enfisema subcutáneo, masas musculares indoloras. Sin puntos dolorosos a la palpación.",
+      "grilla_items": [
+        "39-crisis-asmatica-ex-fisico::Palpación: explica en qué consiste",
+        "39-crisis-asmatica-ex-fisico::Pared del tórax: piel, celular subcutáneo, músculos"
+      ]
+    },
+    {
+      "id": "expansibilidad",
+      "maniobra": "Expansibilidad torácica (vértices, cara anterior con manos paralelas al esternón, cara posterior con pulgares sobre las apófisis espinosas)",
+      "hallazgo": "Expansibilidad simétrica, levemente disminuida en forma bilateral y difusa (tórax algo hiperinsuflado). Sin asimetrías que sugieran lesión focal.",
+      "grilla_items": [
+        "39-crisis-asmatica-ex-fisico::Expansibilidad: Realiza la maniobra",
+        "39-crisis-asmatica-ex-fisico::Expansibilidad; Plantea lo esperable para cada caso"
+      ]
+    },
+    {
+      "id": "elasticidad",
+      "maniobra": "Elasticidad torácica (compresión anteroposterior y lateral)",
+      "hallazgo": "Elasticidad levemente disminuida en forma bilateral y simétrica, sin dolor a la compresión.",
+      "grilla_items": [
+        "39-crisis-asmatica-ex-fisico::Elasticidad: Realiza la maniobra",
+        "39-crisis-asmatica-ex-fisico::Elasticidad: Plantea lo esperable para cada caso"
+      ]
+    },
+    {
+      "id": "vibraciones-vocales",
+      "maniobra": "Vibraciones vocales en las caras anterior, laterales y posterior, comparando ambos hemitórax",
+      "hallazgo": "Vibraciones vocales presentes y simétricas en todas las caras, normales o apenas disminuidas en forma difusa. Sin aumento focal (no hay síndrome de condensación) ni abolición localizada (no hay derrame ni neumotórax).",
+      "grilla_items": [
+        "39-crisis-asmatica-ex-fisico::Vibraciones vocales: todas las caras / bilateralmente",
+        "39-crisis-asmatica-ex-fisico::Vibraciones vocales: Plantea lo esperable a cada caso"
+      ]
+    },
+    {
+      "id": "percusion",
+      "maniobra": "Percusión de las tres caras de ambos hemitórax, comparativa",
+      "hallazgo": "Sonoridad pulmonar conservada, levemente aumentada en forma bilateral y simétrica. Sin matidez ni timpanismo localizado.",
+      "grilla_items": [
+        "39-crisis-asmatica-ex-fisico::Percusión: en las 3 caras de ambos hemitórax",
+        "39-crisis-asmatica-ex-fisico::Percusión: Plantea lo esperable para cada caso"
+      ]
+    },
+    {
+      "id": "auscultacion",
+      "maniobra": "Auscultación pulmonar de las tres caras, sectores altos y bajos, comparando ambos hemitórax",
+      "hallazgo": "Murmullo alveolovesicular presente en ambos campos, algo disminuido en forma difusa y simétrica; no hay tórax silente. Espiración prolongada. Sibilancias espiratorias difusas bilaterales, audibles en las tres caras, en sectores altos y bajos, de intensidad moderada (sin sibilancias inspiratorias). Sin estertores crepitantes ni frote pleural. Sin hallazgos focales.",
+      "grilla_items": [
+        "39-crisis-asmatica-ex-fisico::Auscultación: en las 3 caras de ambos hemitórax",
+        "39-crisis-asmatica-ex-fisico::Ausculta sectores altos y bajos en cada cara",
+        "39-crisis-asmatica-ex-fisico::Ausculta bilateralmente y compara",
+        "39-crisis-asmatica-ex-fisico::Auscultación: Plantea lo esperable para cada caso"
+      ]
+    },
+    {
+      "id": "pico-flujo-consultorio",
+      "maniobra": "Pico flujo espiratorio (mejor de tres soplidos, de pie)",
+      "hallazgo": "La policlínica cuenta con medidor de pico flujo. Mejor de tres intentos: 250 L/min. La paciente no conoce su mejor valor personal; su valor teórico (mujer de 34 años, 1,62 m) es de aproximadamente 450 L/min, por lo que el PEF es de alrededor del 55 % del teórico: menor al 70 % y mayor al 50 %.",
+      "grilla_items": [
+        "39-crisis-asmatica-ex-fisico::Propone que de contar, utilizaría el pico flujo"
+      ]
+    },
+    {
+      "id": "oximetria",
+      "maniobra": "Oximetría de pulso",
+      "hallazgo": "SatO₂ 93 % respirando aire ambiente.",
+      "grilla_items": []
+    },
+    {
+      "id": "cardiovascular",
+      "maniobra": "Auscultación cardíaca y búsqueda de edemas",
+      "hallazgo": "Ritmo regular, taquicárdico a 112 lpm, ruidos bien golpeados, sin soplos ni ritmo de galope. Sin ingurgitación yugular. Sin edemas de miembros inferiores.",
+      "grilla_items": []
+    }
+  ],
+  "paraclinica": [
+    {
+      "estudio": "Espirometría con prueba broncodilatadora",
+      "resultado": "No se realiza durante la crisis. Si se solicita para más adelante: a coordinar en el seguimiento, con la paciente estable.",
+      "indicado": false,
+      "justificacion": "Durante la crisis no corresponde y no debe retrasar el tratamiento; la severidad se valora con la clínica, la saturación y el pico flujo. La espirometría con prueba broncodilatadora sí es útil en el seguimiento, una vez estable, para objetivar la obstrucción y la función pulmonar (no se hace desde hace más de diez años).",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Radiografía de tórax frente y perfil",
+      "resultado": "Campos pulmonares hiperclaros, hiperinsuflados en forma leve y simétrica, sin opacidades, sin neumotórax ni derrame pleural. Silueta cardíaca normal.",
+      "indicado": false,
+      "justificacion": "El diagnóstico de la crisis es clínico. No hay fiebre alta, puntada de lado, hallazgos focales ni asimetrías que hagan sospechar neumonía o neumotórax, por lo que no aporta al manejo. Se reservaría para la sospecha de complicación (neumonía, neumotórax) o la mala respuesta al tratamiento.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Hemograma",
+      "resultado": "Hemoglobina 13,4 g/dL; leucocitos 8.900/mm³ con eosinófilos 6 %; plaquetas 260.000/mm³.",
+      "indicado": false,
+      "justificacion": "No modifica la valoración de la severidad ni el tratamiento de una crisis moderada manejada en el primer nivel. No hay elementos de infección bacteriana que lo justifiquen.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Gasometría arterial",
+      "resultado": "pH 7,45; PaCO₂ 34 mmHg; PaO₂ 68 mmHg; HCO₃⁻ 23 mEq/L (aire ambiente).",
+      "indicado": false,
+      "justificacion": "Con SatO₂ de 93 % (por encima del 90 % que marca la crisis severa), lúcida, sin tirajes y sin signos de fatiga, la oximetría de pulso alcanza para valorar la oxigenación. No está disponible en la policlínica y no debe demorar el tratamiento; se reservaría para la crisis severa o potencialmente fatal en un nivel de mayor complejidad.",
+      "grilla_items": []
+    }
+  ],
+  "diagnostico": {
+    "principal": "Crisis asmática moderada en asma mal controlada",
+    "diferenciales": [
+      "Crisis asmática severa (descartada por los criterios de severidad)",
+      "Neumonía aguda comunitaria",
+      "Neumotórax",
+      "Bronquitis aguda / infección respiratoria baja",
+      "Asma de causa laboral (exposición a harina) como factor agravante a estudiar"
+    ],
+    "fundamento": "Asmática conocida desde los 7 años que consulta por disnea sibilante de 2 días de evolución, progresiva, desencadenada por una infección respiratoria alta viral (rinorrea, estornudos, odinofagia, febrícula) sobre exposición a frío, harina y tabaco, con respuesta parcial y transitoria al salbutamol. Severidad de la crisis (moderada): lúcida, sin somnolencia ni confusión; habla en frases (no en palabras cortadas); disnea sibilante; FR 26 rpm (polipnea, no >30); FC 112 lpm (entre 100 y 120); sin tirajes ni uso de musculatura accesoria; SatO₂ 93 % en aire ambiente (entre 90 y 95 %); sibilancias espiratorias difusas de intensidad moderada sin tórax silente; PEF 250 L/min, ~55 % del teórico (por debajo del 70 % y por encima del 50 %). No hay elementos de crisis severa (palabras cortadas, FR >30, FC >120, tirajes, SatO₂ <90 %, PEF ≤50 %) ni potencialmente fatal (somnolencia, confusión, tórax silente). Control del asma en las últimas 4 semanas (mal controlada / no controlada, 4 de 4 elementos): síntomas diurnos casi todos los días; despertares nocturnos 2-3 veces por semana; uso de salbutamol 3-4 veces por día; limitación de la actividad laboral y doméstica. Además, crisis hace 3 semanas que requirió emergencia y corticoide oral, 3 consultas en emergencia en el último año, abandono del corticoide inhalado, mala técnica inhalatoria sin inhalocámara, tabaquismo activo y pasivo, exposición laboral a harina, humedad y humo de leña en la vivienda y gato dentro del dormitorio. Factores de riesgo de muerte por asma: no tiene CTI ni intubación previa; tiene una internación en sala hace 7 años. Contra neumonía: febrícula, expectoración mucosa, sin puntada de lado ni hallazgos focales (vibraciones y percusión simétricas, sin crepitantes). Contra neumotórax: sin dolor pleurítico, examen simétrico.",
+    "grilla_items": [
+      "40-crisis-asmatica-manejo::Crisis Moderada",
+      "40-crisis-asmatica-manejo::Estado de conciencia",
+      "40-crisis-asmatica-manejo::Fluidez del habla, palabras entrecortadas",
+      "40-crisis-asmatica-manejo::Presencia de disnea sibilante",
+      "40-crisis-asmatica-manejo::Uso de musculatura accesoria o no",
+      "40-crisis-asmatica-manejo::Frecuencia Cardíaca",
+      "40-crisis-asmatica-manejo::SAT O2",
+      "40-crisis-asmatica-manejo::Sibilancias y su grado a la auscultación",
+      "40-crisis-asmatica-manejo::PICO Flujo mayor o menor a 70%",
+      "40-crisis-asmatica-manejo::Mal controlada",
+      "40-crisis-asmatica-manejo::Afectación de actividad diaria",
+      "40-crisis-asmatica-manejo::Uso de inhaloterapia o aumento de requerimientos",
+      "40-crisis-asmatica-manejo::Crisis asmática en el último mes"
+    ]
+  },
+  "conducta_esperada": [
+    {
+      "accion": "Iniciar sin demora broncodilatador β2 de acción corta: salbutamol inhalado (o nebulizado como alternativa).",
+      "grilla_items": [
+        "40-crisis-asmatica-manejo::Salbutamol INH (puede optar por nebulización)"
+      ]
+    },
+    {
+      "accion": "Dosis de salbutamol: 4 a 8 puff por vez según la grilla (los apuntes del curso indican 4 a 10 puffs), o 20 gotas en 3 cc de suero fisiológico si se nebuliza.",
+      "grilla_items": [
+        "40-crisis-asmatica-manejo::4 a 8 puff (o 20 gotas en 3cc de SF nebulizado)"
+      ]
+    },
+    {
+      "accion": "Repetir el salbutamol cada 20 minutos durante la primera hora (minutos 0, 20 y 40) y revalorar a los 60 minutos.",
+      "grilla_items": [
+        "40-crisis-asmatica-manejo::Cada 20min por 1 hr (min 0, 20 y 40, revalora a 60min)"
+      ]
+    },
+    {
+      "accion": "Administrar el inhalador con inhalocámara (aerocámara), que mejora el depósito del fármaco en la vía aérea; o bien por nebulización.",
+      "grilla_items": [
+        "40-crisis-asmatica-manejo::Con inhalocámara (o nebulizado)"
+      ]
+    },
+    {
+      "accion": "Puede asociarse bromuro de ipratropio inhalado o nebulizado junto al salbutamol: 4 puff con inhalocámara, o 10 gotas en 3 cc de suero fisiológico si se nebuliza (dosis de la grilla). Los apuntes lo indican sobre todo en las crisis de mayor gravedad, por lo que en esta crisis moderada es opcional.",
+      "grilla_items": [
+        "40-crisis-asmatica-manejo::Puede asociar B. Ipratropio INH o Nebulizado",
+        "40-crisis-asmatica-manejo::4 puff (o 10 gotas en 3cc de SF para nebulizado)"
+      ]
+    },
+    {
+      "accion": "Corticoide sistémico por vía oral desde el inicio: prednisona v/o (la grilla consigna 20 mg; los apuntes del curso indican 40 a 50 mg en adultos). Tolera la vía oral, por lo que es la vía de elección.",
+      "grilla_items": [
+        "40-crisis-asmatica-manejo::Indica Corticoides: Via Oral, prednisona 20 mg"
+      ]
+    },
+    {
+      "accion": "Si no pudiera usarse la vía oral o la crisis evolucionara a severa, corticoide intravenoso: hidrocortisona 200 mg i/v.",
+      "grilla_items": [
+        "40-crisis-asmatica-manejo::Indica Corticoides: Via IV, Hidrocortisona 200 mg"
+      ]
+    },
+    {
+      "accion": "Revalorar a la hora del tratamiento: disnea, capacidad para hablar, FR, FC, auscultación, SatO₂ y pico flujo. Si mejora y queda estable, alta con seguimiento en el primer nivel; si no mejora, persisten signos de gravedad o empeora (palabras cortadas, FR >30, FC >120, tirajes, SatO₂ <90 %, PEF ≤50 %), oxígeno y traslado a un nivel de mayor complejidad.",
+      "grilla_items": [
+        "40-crisis-asmatica-manejo::Evolución: plantea revalorar a la hora de tto"
+      ]
+    },
+    {
+      "accion": "Al alta, retomar el tratamiento controlador con corticoide inhalado (budesonida, según la indicación de su médico tratante), enseñar y verificar la técnica inhalatoria con inhalocámara, dar un plan de acción escrito ante nuevas crisis y control con su médico de referencia en pocos días; valorar automonitoreo con pico flujo y espirometría una vez estable.",
+      "grilla_items": []
+    },
+    {
+      "accion": "Recomendar la cesación del tabaquismo (y que su pareja no fume dentro de la casa), ofreciendo apoyo para dejar.",
+      "grilla_items": [
+        "40-crisis-asmatica-manejo::Cesación del tabaquismo"
+      ]
+    },
+    {
+      "accion": "Adecuación del ámbito de trabajo: reducir la exposición al polvo de harina (protección respiratoria, ventilación, evitar volcar bolsas), y valorar con salud laboral la posibilidad de asma relacionada con el trabajo.",
+      "grilla_items": [
+        "40-crisis-asmatica-manejo::Adecuación del ámbito de trabajo"
+      ]
+    },
+    {
+      "accion": "Aconsejar evitar los desencadenantes: humo de tabaco y de la estufa a leña, frío (abrigarse y cubrir boca y nariz al salir de madrugada), lavandina y otros irritantes, humedad y hongos del dormitorio.",
+      "grilla_items": [
+        "40-crisis-asmatica-manejo::Aconseja evitar desencadenantes"
+      ]
+    },
+    {
+      "accion": "Indicar la vacunación antigripal anual y completar la vacunación contra SARS-CoV-2.",
+      "grilla_items": [
+        "40-crisis-asmatica-manejo::Inmunización Antigripal y anti SARS COv-2"
+      ]
+    },
+    {
+      "accion": "Indicar la vacunación antineumocócica por tener una enfermedad respiratoria crónica.",
+      "grilla_items": [
+        "40-crisis-asmatica-manejo::Inmunización de Anti-Neumocócica"
+      ]
+    },
+    {
+      "accion": "Recomendar sacar al gato de adentro de la casa, o como mínimo del dormitorio y de la cama.",
+      "grilla_items": [
+        "40-crisis-asmatica-manejo::Sacar mascota intradomicilio"
+      ]
+    }
+  ],
+  "fuentes": [
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Asma: manifestaciones clínicas y anamnesis (control, técnica inhalatoria, emergencias, CTI, atopía, desencadenantes)",
+      "pagina": 254
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Asma: desencadenantes, examen físico, espirometría y pico flujo",
+      "pagina": 255
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Evaluación del control del asma (bien, parcialmente, no controlada) y tratamiento controlador",
+      "pagina": 257
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Medicación de rescate, educación e inhalocámara",
+      "pagina": 258
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Crisis asmática: desencadenantes y valoración inicial",
+      "pagina": 259
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Clasificación de gravedad de la crisis (leve o moderada, severa, potencialmente fatal) y factores de riesgo de muerte",
+      "pagina": 260
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Tratamiento de la crisis asmática (salbutamol, prednisona, ipratropio) y reevaluación",
+      "pagina": 261
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Seguimiento después de una crisis",
+      "pagina": 262
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Infecciones respiratorias: anamnesis orientada, exposiciones y examen en exacerbación broncoobstructiva",
+      "pagina": 239
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Saturación de oxígeno: SatO₂ <90 % como elemento de severidad en crisis asmática",
+      "pagina": 241
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Antecedentes inmunológicos (antigripal, SARS-CoV-2, antineumocócica) y ambientales",
+      "pagina": 70
+    },
+    {
+      "archivo": "catedra/asma.md",
+      "seccion": "Severidad de la crisis (tabla leve o moderada / severa / potencialmente fatal)",
+      "pagina": 33
+    },
+    {
+      "archivo": "catedra/asma.md",
+      "seccion": "Tratamiento de la crisis (SABA 4 a 10 puff cada 20 min por una hora, prednisona 40 a 50 mg v/o; ipratropio en la severa)",
+      "pagina": 34
+    },
+    {
+      "archivo": "catedra/asma.md",
+      "seccion": "Corticoides (prednisolona v/o 40 a 50 mg, hidrocortisona i/v 200 mg)",
+      "pagina": 25
+    },
+    {
+      "archivo": "catedra/enfermedades-tabacodependientes.md",
+      "seccion": "Agravación del asma por tabaquismo (peor control, más medicación)",
+      "pagina": 8
+    },
+    {
+      "archivo": "paraclinica.md",
+      "seccion": "Respiratorio — Asma bronquial (espirometría con prueba broncodilatadora, pico flujo)",
+      "pagina": null
+    }
+  ]
+}

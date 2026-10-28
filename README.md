@@ -31,7 +31,7 @@ Practice whenever you want, as often as you want, with varied cases and immediat
 
 | Item | Status |
 |---|---|
-| 2–3 fictional clinical cases, built from the official rubrics (grillas) | ✅ 3 cases, validated + reviewed |
+| 2–3 fictional clinical cases, built from the official rubrics (grillas) | ✅ 7 cases (cardio, ITU, asthma, diabetes), validated + reviewed |
 | Patient agent over chat (LangGraph) | ✅ live |
 | Simulated physical exam and lab/imaging requests | ✅ teacher node in the graph |
 | "Face to face" video-call layout | ✅ static ASCII portrait (avatar pending) |

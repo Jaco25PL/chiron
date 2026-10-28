@@ -405,5 +405,49 @@
     "tipo": "examen_fisico",
     "motivo_consulta": "dolor en fosa lumbar",
     "n_items": 32
+  },
+  {
+    "id": "38-crisis-asmatica-anamnesis",
+    "titulo": "SIMULACIÓN 3: ANAMNESIS CRISIS ASMÁTICA",
+    "unidad_tematica": {
+      "numero": 9,
+      "nombre": "IRA, Asma y EPOC."
+    },
+    "tipo": "anamnesis",
+    "motivo_consulta": "falta de aire",
+    "n_items": 36
+  },
+  {
+    "id": "39-crisis-asmatica-ex-fisico",
+    "titulo": "SIMULACIÓN 3: EXAMEN FÍSICO CRISIS ASMÁTICA",
+    "unidad_tematica": {
+      "numero": 9,
+      "nombre": "IRA, Asma y EPOC."
+    },
+    "tipo": "examen_fisico",
+    "motivo_consulta": null,
+    "n_items": 30
+  },
+  {
+    "id": "40-crisis-asmatica-manejo",
+    "titulo": "SIMULACIÓN 3: MANEJO CRISIS ASMA",
+    "unidad_tematica": {
+      "numero": 9,
+      "nombre": "IRA, Asma y EPOC."
+    },
+    "tipo": "manejo",
+    "motivo_consulta": null,
+    "n_items": 32
+  },
+  {
+    "id": "41-lumbalgia-ex-fisico",
+    "titulo": "SIMULACIÓN 8: EXAMEN FÍSICO LUMBALGIA",
+    "unidad_tematica": {
+      "numero": 5,
+      "nombre": "Atención a personas con Dolor y atención a personas con Cefaleas/Lumbalgia."
+    },
+    "tipo": "examen_fisico",
+    "motivo_consulta": "lumbalgia",
+    "n_items": 30
   }
 ]

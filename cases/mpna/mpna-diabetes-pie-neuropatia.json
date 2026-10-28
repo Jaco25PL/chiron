@@ -1,0 +1,950 @@
+{
+  "id": "mpna-diabetes-pie-neuropatia",
+  "materia": "mpna",
+  "titulo": "Pies fríos en mujer con diabetes",
+  "grillas": [
+    "23-diabetes-avanzada",
+    "24-pie-diabetico"
+  ],
+  "dificultad": "intermedio",
+  "paciente": {
+    "nombre": "Mirta Elena Sosa Píriz",
+    "edad": 66,
+    "sexo": "femenino",
+    "procedencia": "Nacida y criada en Florida (ciudad)",
+    "domicilio": "Barrio Prado Español, ciudad de Florida",
+    "ocupacion": "Jubilada; trabajó 30 años como cocinera en un comedor escolar",
+    "convivencia": "Vive sola desde que enviudó; su hija vive a dos cuadras y la visita todos los días",
+    "escolaridad": "Primaria completa",
+    "estado_civil": "Viuda",
+    "prestador": "ASSE, policlínica barrial de Florida",
+    "medico_referencia": "Dr. Hernán Acosta, médico de familia de la policlínica (hace un año que no lo ve)"
+  },
+  "personalidad": {
+    "tipo": "reservado",
+    "descripcion": "Tranquila, algo tímida y un poco avergonzada porque sabe que dejó de lado los controles y la medicación. Contesta con frases cortas y solo lo que le preguntan; no cuenta por iniciativa propia que abandonó las pastillas ni lo de la ampolla en el pie, pero si se lo preguntan lo reconoce con sinceridad. Minimiza un poco los síntomas ('debe ser la edad'). Viene porque la hija insistió.",
+    "forma_de_hablar": "Voseo del interior, registro sencillo y pausado. Muletillas: 'y, sí', 'qué sé yo', 'la verdad', 'mire, doctor/a'. Respuestas breves; cuando habla de la hija o de los nietos se suelta un poco más."
+  },
+  "motivo_consulta": {
+    "frase_inicial": "Y... vengo porque ando con los pies helados, doctor/a. Mi hija me insistió que viniera."
+  },
+  "anamnesis": [
+    {
+      "id": "ficha-patronimica",
+      "tema": "Datos patronímicos",
+      "preguntas_ejemplo": [
+        "¿Cómo se llama?",
+        "¿Qué edad tiene?",
+        "¿A qué se dedica?",
+        "¿Con quién vive?"
+      ],
+      "respuesta": "Mirta Sosa, tengo 66 años. Soy de acá de Florida, vivo en el Prado Español. Fui cocinera en el comedor de una escuela, ya estoy jubilada. Soy viuda, vivo sola, pero mi hija vive a dos cuadras y viene todos los días. Hice la escuela nomás. Me atiendo en la policlínica de ASSE, con el doctor Acosta.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Pregunta por la Ficha Patronímica"
+      ]
+    },
+    {
+      "id": "motivo-consulta",
+      "tema": "Motivo de consulta (frialdad de los pies)",
+      "preguntas_ejemplo": [
+        "¿Qué la trae por acá?",
+        "¿Por qué consulta?",
+        "¿En qué la puedo ayudar?"
+      ],
+      "respuesta": "Y... vengo porque ando con los pies helados, doctor/a. Mi hija me insistió que viniera.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Pregunta el Motivo de Consulta"
+      ]
+    },
+    {
+      "id": "frialdad-inicio",
+      "tema": "Frialdad de los pies: aparición, circunstancias y evolución",
+      "preguntas_ejemplo": [
+        "¿Desde cuándo siente los pies fríos?",
+        "¿Cómo empezó?",
+        "¿Fue empeorando?",
+        "¿Cuándo lo nota más?"
+      ],
+      "respuesta": "Y, hará unos seis u ocho meses. Empezó de a poco, como que los sentía fríos aunque estuviera abrigada. Lo noto más de noche, en la cama. Fue a más, ahora es todas las noches, en los dos pies, de los dedos hasta el tobillo más o menos. Mi hija me los toca y me dice que no están tan fríos, pero yo los siento helados.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Frialdad: Aparición, circunstancias, evolución"
+      ]
+    },
+    {
+      "id": "parestesias",
+      "tema": "Parestesias o disestesias en miembros inferiores",
+      "preguntas_ejemplo": [
+        "¿Siente hormigueo, ardor o pinchazos en los pies?",
+        "¿Siente algo raro en las piernas?"
+      ],
+      "respuesta": "Sí, un hormigueo, como cuando se te duerme el pie. Y de noche a veces me arden las plantas, como pinchazos. De día, caminando, lo siento menos.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Parestesias o distesias en MMII"
+      ]
+    },
+    {
+      "id": "disminucion-sensibilidad",
+      "tema": "Disminución de la sensibilidad en miembros inferiores",
+      "preguntas_ejemplo": [
+        "¿Siente menos los pies?",
+        "¿Nota los pies como dormidos o que no siente bien lo que toca?"
+      ],
+      "respuesta": "Sí, como que los tengo dormidos, acorchados. A veces se me sale la chancleta y no me doy cuenta. Y si piso algo con la media no lo siento bien.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Disminución de sensibilidad en MMII"
+      ]
+    },
+    {
+      "id": "lesion-no-dolorosa",
+      "tema": "Lesiones no dolorosas en los pies",
+      "preguntas_ejemplo": [
+        "¿Se lastimó los pies sin darse cuenta?",
+        "¿Tuvo alguna herida o ampolla en los pies?"
+      ],
+      "respuesta": "Ahora que lo pregunta... hace como tres semanas me compré unos zapatos nuevos para un cumpleaños y se me hizo una ampolla en el dedo chico del pie derecho. Ni me enteré, no me dolía nada; la vio mi hija. Ya se está secando.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Lesiones o quemaduras no dolorosas en pies"
+      ]
+    },
+    {
+      "id": "quemaduras-bolsa-agua",
+      "tema": "Quemaduras en los pies y fuentes de calor",
+      "preguntas_ejemplo": [
+        "¿Se quemó los pies alguna vez?",
+        "¿Usa algo para calentarse los pies?"
+      ],
+      "respuesta": "Quemarme no, que yo sepa. Pero como los siento tan helados, de noche me pongo la bolsa de agua caliente a los pies, bien caliente.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Lesiones o quemaduras no dolorosas en pies"
+      ]
+    },
+    {
+      "id": "poliuria",
+      "tema": "Poliuria (orina más cantidad de lo habitual)",
+      "preguntas_ejemplo": [
+        "¿Orina más que antes?",
+        "¿Se levanta de noche a orinar?"
+      ],
+      "respuesta": "Sí, orino bastante. Y de noche me levanto dos o tres veces, antes no me levantaba.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Orina más cantidad de lo habitual?"
+      ]
+    },
+    {
+      "id": "polidipsia",
+      "tema": "Polidipsia (más sed de lo habitual)",
+      "preguntas_ejemplo": [
+        "¿Tiene más sed que antes?",
+        "¿Toma mucha agua?"
+      ],
+      "respuesta": "Y, sí, ando con la boca seca. Tengo siempre una botella de agua al lado de la cama.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Tiene más sed de lo habitual?"
+      ]
+    },
+    {
+      "id": "polifagia",
+      "tema": "Polifagia (come más que antes)",
+      "preguntas_ejemplo": [
+        "¿Tiene más hambre que antes?",
+        "¿Come más que de costumbre?"
+      ],
+      "respuesta": "No, como lo mismo de siempre. Hambre de más no tengo.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Se alimenta más que antes?"
+      ]
+    },
+    {
+      "id": "adelgazamiento",
+      "tema": "Pérdida de peso sin causa aparente",
+      "preguntas_ejemplo": [
+        "¿Bajó de peso sin querer?",
+        "¿Le queda la ropa más grande?"
+      ],
+      "respuesta": "No, qué voy a adelgazar. Si estoy igual o con algún kilo de más; la ropa me queda igual.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Nota que adelgazó sin causa aparente?"
+      ]
+    },
+    {
+      "id": "diabetes-desde-cuando",
+      "tema": "Tiempo de evolución de la diabetes",
+      "preguntas_ejemplo": [
+        "¿Desde cuándo sabe que tiene diabetes?",
+        "¿Hace cuántos años es diabética?"
+      ],
+      "respuesta": "Hace nueve años, más o menos. Tenía 57.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Desde cuándo"
+      ]
+    },
+    {
+      "id": "diabetes-diagnostico",
+      "tema": "Cómo se diagnosticó la diabetes",
+      "preguntas_ejemplo": [
+        "¿Cómo se la diagnosticaron?",
+        "¿Tenía algún síntoma cuando se la encontraron?"
+      ],
+      "respuesta": "Fue por unos análisis de rutina para el carné de salud. Me salió el azúcar alta en ayunas, me lo repitieron y volvió a salir alta, y ahí el doctor me dijo que tenía diabetes. Yo no sentía nada.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Cómo se la diagnosticaron"
+      ]
+    },
+    {
+      "id": "cifras-glicemia",
+      "tema": "Cifras máximas y habituales de glicemia",
+      "preguntas_ejemplo": [
+        "¿Cuánto le da el azúcar habitualmente?",
+        "¿Cuál fue el valor más alto que tuvo?",
+        "¿Se controla el azúcar en su casa?"
+      ],
+      "respuesta": "En casa no me controlo, no tengo aparatito. Cuando me la midieron en la policlínica me daba entre 180 y 220. La más alta fue 290, el año pasado, en un control. También me hicieron ese análisis de los tres meses y el doctor me dijo que estaba alto, casi 9 me parece.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Cifras máximas y habituales de glicemia"
+      ]
+    },
+    {
+      "id": "tratamiento-adherencia",
+      "tema": "Tratamiento indicado para la diabetes y cumplimiento",
+      "preguntas_ejemplo": [
+        "¿Qué tratamiento le indicaron para la diabetes?",
+        "¿Toma la medicación?",
+        "¿Sigue alguna dieta?"
+      ],
+      "respuesta": "Me habían dado la metformina, la de 850, una en el desayuno. La dejé hace como dos años porque me caía mal: me daba diarrea y dolor de barriga. Yo la tomaba con el mate a la mañana, sin comer nada. No volví a decirle al doctor. Ahora estoy solo con la dieta... bueno, la dieta la cumplo más o menos, la verdad.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Tratamiento indicado y cumplimiento de mismo"
+      ]
+    },
+    {
+      "id": "internaciones",
+      "tema": "Internaciones por la diabetes",
+      "preguntas_ejemplo": [
+        "¿Estuvo internada alguna vez por el azúcar?",
+        "¿Tuvo que ir a emergencia por la diabetes?"
+      ],
+      "respuesta": "No, nunca me internaron. Por la diabetes nunca fui a emergencia.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Si requirió internación por su diabetes"
+      ]
+    },
+    {
+      "id": "vision",
+      "tema": "Pérdida progresiva de la visión",
+      "preguntas_ejemplo": [
+        "¿Cómo anda de la vista?",
+        "¿Nota que ve menos que antes?",
+        "¿Cuándo fue al oculista?"
+      ],
+      "respuesta": "Veo un poco más borroso de lejos que antes, de a poquito. Pensé que era la edad. Al oculista no voy desde hace como cuatro años, cuando me cambiaron los lentes de leer.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Pérdida de la visión progresiva"
+      ]
+    },
+    {
+      "id": "amaurosis-fugaz",
+      "tema": "Pérdida brusca y transitoria de la visión de un ojo",
+      "preguntas_ejemplo": [
+        "¿Alguna vez dejó de ver de golpe de un ojo y después se le pasó?",
+        "¿Se le nubló la vista de repente un rato?"
+      ],
+      "respuesta": "No, eso nunca. Que se me fuera la vista de golpe, no.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Amaurosis Fugaz"
+      ]
+    },
+    {
+      "id": "debilidad-hemicuerpo",
+      "tema": "Disminución de fuerza de un hemicuerpo",
+      "preguntas_ejemplo": [
+        "¿Tuvo debilidad de un brazo o una pierna de un lado?",
+        "¿Se le torció la boca o le costó hablar alguna vez?"
+      ],
+      "respuesta": "No, nunca. Fuerza tengo bien de los dos lados.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Disminución de fuerzas de un hemicuerpo"
+      ]
+    },
+    {
+      "id": "dolor-precordial",
+      "tema": "Dolor precordial",
+      "preguntas_ejemplo": [
+        "¿Tuvo dolor en el pecho?",
+        "¿Siente opresión en el pecho al caminar?"
+      ],
+      "respuesta": "No, dolor en el pecho no he tenido.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Dolor Precordial"
+      ]
+    },
+    {
+      "id": "disnea",
+      "tema": "Disnea: de esfuerzo, de decúbito, paroxística nocturna",
+      "preguntas_ejemplo": [
+        "¿Le falta el aire?",
+        "¿Puede dormir acostada sin almohadas de más?",
+        "¿Se despierta de noche con falta de aire?"
+      ],
+      "respuesta": "Si subo la cuesta de mi calle llego cansada, pero eso me pasa hace años, es que estoy gordita. Acostada duermo con una almohada sola y de noche no me despierto ahogada.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Disnea: DD – DPN - DE"
+      ]
+    },
+    {
+      "id": "orina-espumosa",
+      "tema": "Orinas espumosas e isostenuria",
+      "preguntas_ejemplo": [
+        "¿Nota la orina con espuma?",
+        "¿Cómo es el color de la orina?"
+      ],
+      "respuesta": "Espuma a veces sí, ahora que me dice. Le eché la culpa al jabón del inodoro. El color es normal, clarita.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Orinas espumosas y/o isostenuria"
+      ]
+    },
+    {
+      "id": "claudicacion",
+      "tema": "Claudicación intermitente dolorosa",
+      "preguntas_ejemplo": [
+        "¿Le duelen las piernas al caminar y tiene que pararse?",
+        "¿Le dan calambres en las pantorrillas cuando camina unas cuadras?"
+      ],
+      "respuesta": "No, caminando no me duelen las piernas. Voy al almacén, que son cinco cuadras, y no me tengo que parar por dolor.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Claudicación intermitente dolorosa"
+      ]
+    },
+    {
+      "id": "actividad-fisica",
+      "tema": "Actividad física / sedentarismo",
+      "preguntas_ejemplo": [
+        "¿Hace algún ejercicio?",
+        "¿Camina?",
+        "¿Cómo es un día suyo?"
+      ],
+      "respuesta": "Ejercicio no hago. Camino al almacén y a la feria, y después estoy en casa, tejiendo o mirando la tele. Desde que me jubilé me muevo poco.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Actividad física/sedentarismo"
+      ]
+    },
+    {
+      "id": "alimentacion",
+      "tema": "Hábitos de alimentación",
+      "preguntas_ejemplo": [
+        "¿Cómo se alimenta?",
+        "¿Qué come en un día común?",
+        "¿Come dulces, pan, refrescos?"
+      ],
+      "respuesta": "Y, como lo que hay. Al mediodía guiso, fideos o arroz con algo de carne. Pan como bastante, con el mate de tarde me como unos bizcochos. Verdura poco, porque cocinar para una sola da pereza. Refresco tomo los fines de semana cuando vienen los nietos.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Hábitos de alimentación"
+      ]
+    },
+    {
+      "id": "peso-talla",
+      "tema": "Peso y talla",
+      "preguntas_ejemplo": [
+        "¿Cuánto pesa?",
+        "¿Cuánto mide?"
+      ],
+      "respuesta": "En la balanza de la farmacia el mes pasado di 82 kilos. Mido 1,58.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Peso y talla para cálculo de IMC"
+      ]
+    },
+    {
+      "id": "tabaquismo",
+      "tema": "Tabaquismo",
+      "preguntas_ejemplo": [
+        "¿Fuma o fumó alguna vez?"
+      ],
+      "respuesta": "No, nunca fumé. Mi marido fumaba, pero afuera.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Tabaquismo"
+      ]
+    },
+    {
+      "id": "alcohol",
+      "tema": "Consumo de alcohol",
+      "preguntas_ejemplo": [
+        "¿Toma alcohol?",
+        "¿Vino, cerveza?"
+      ],
+      "respuesta": "Un vasito de vino en algún cumpleaños, nada más. En casa no tomo.",
+      "grilla_items": []
+    },
+    {
+      "id": "dislipemia",
+      "tema": "Dislipemia",
+      "preguntas_ejemplo": [
+        "¿Tiene el colesterol alto?",
+        "¿Le dijeron algo de las grasas en sangre?"
+      ],
+      "respuesta": "Sí, el doctor me dijo hace unos años que tenía el colesterol un poco alto, pero pastilla para eso no tomo. Me dijo que cuidara las comidas.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Dislipemia o problemas con el colesterol"
+      ]
+    },
+    {
+      "id": "hipertension",
+      "tema": "Hipertensión arterial",
+      "preguntas_ejemplo": [
+        "¿Es hipertensa?",
+        "¿Toma algo para la presión?"
+      ],
+      "respuesta": "Sí, presión alta tengo desde hace como doce años. Tomo enalapril de 10, uno de mañana y otro de noche. Esa sí la tomo siempre.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Hipertensión Arterial"
+      ]
+    },
+    {
+      "id": "af-cardiopatia",
+      "tema": "Antecedentes familiares de cardiopatía isquémica precoz",
+      "preguntas_ejemplo": [
+        "¿Alguien en su familia tuvo infarto?",
+        "¿A qué edad?"
+      ],
+      "respuesta": "Mi hermano mayor tuvo un infarto a los 52, lo pusieron en tratamiento y anda bien. Mi padre murió del corazón ya grande, pasados los 75.",
+      "grilla_items": [
+        "23-diabetes-avanzada::AF de cardiopatía isquémica precoz"
+      ]
+    },
+    {
+      "id": "af-diabetes",
+      "tema": "Antecedentes familiares pertinentes (diabetes y sus complicaciones)",
+      "preguntas_ejemplo": [
+        "¿Hay diabéticos en su familia?",
+        "¿Qué enfermedades hubo en su familia?"
+      ],
+      "respuesta": "Mi madre era diabética, se pinchaba insulina. Al final le tuvieron que cortar una pierna por una herida en el pie que no se curaba.",
+      "grilla_items": [
+        "23-diabetes-avanzada::Pregunta AF pertinentes?"
+      ]
+    },
+    {
+      "id": "medicacion-alergias",
+      "tema": "Medicación actual y alergias",
+      "preguntas_ejemplo": [
+        "¿Qué medicamentos toma?",
+        "¿Es alérgica a algo?"
+      ],
+      "respuesta": "Solo el enalapril. Alergias no tengo.",
+      "grilla_items": []
+    },
+    {
+      "id": "cuidado-pies-calzado",
+      "tema": "Cuidado de los pies y calzado",
+      "preguntas_ejemplo": [
+        "¿Cómo se corta las uñas?",
+        "¿Qué calzado usa?",
+        "¿Anda descalza en la casa?",
+        "¿Se revisa los pies?"
+      ],
+      "respuesta": "Las uñas me las corta mi hija, porque yo no llego bien. En casa ando en chancletas o descalza cuando hace calor. Revisarme los pies no, nunca me fijo.",
+      "grilla_items": []
+    }
+  ],
+  "signos_vitales": {
+    "pa": "138/84 mmHg",
+    "fc": "78 lpm",
+    "fr": "16 rpm",
+    "temperatura": "36,4 °C",
+    "saturacion": "97 %",
+    "peso": "82 kg",
+    "talla": "1,58 m",
+    "imc": "32,8 kg/m²"
+  },
+  "examen_fisico": [
+    {
+      "id": "explica-procedimiento",
+      "maniobra": "Le explica a la paciente que le va a examinar los pies y en qué consiste",
+      "hallazgo": "La paciente entiende y accede. Se quita los zapatos y las medias.",
+      "grilla_items": [
+        "24-pie-diabetico::Le explica lo que va a hacer"
+      ]
+    },
+    {
+      "id": "decubito-dorsal",
+      "maniobra": "Solicita a la paciente que se coloque en decúbito dorsal en la camilla",
+      "hallazgo": "Se acuesta en decúbito dorsal sin dificultad, con ambos pies descubiertos.",
+      "grilla_items": [
+        "24-pie-diabetico::Le solicita a el pte se coloque en decúbito dorsal"
+      ]
+    },
+    {
+      "id": "deformaciones",
+      "maniobra": "Inspección de deformaciones de los pies",
+      "hallazgo": "Hallux valgus leve bilateral. Dedos en garra en 2.º y 3.º dedos de ambos pies. Arco plantar conservado, sin retropié varo ni valgo, sin pie en mecedora.",
+      "grilla_items": [
+        "24-pie-diabetico::Deformaciones"
+      ]
+    },
+    {
+      "id": "amputaciones",
+      "maniobra": "Inspección en busca de amputaciones previas",
+      "hallazgo": "Sin amputaciones: ambos pies con sus cinco dedos completos.",
+      "grilla_items": [
+        "24-pie-diabetico::Amputaciones previas"
+      ]
+    },
+    {
+      "id": "mal-perforante",
+      "maniobra": "Inspección plantar en busca de mal perforante plantar",
+      "hallazgo": "No hay úlceras plantares. Bajo la cabeza del 1.er metatarsiano de ambos pies hay callosidad gruesa, sin herida debajo ni secreción.",
+      "grilla_items": [
+        "24-pie-diabetico::Lesiones de mal perforante plantar"
+      ]
+    },
+    {
+      "id": "lesion-calzado",
+      "maniobra": "Inspección de lesiones vinculadas al calzado",
+      "hallazgo": "Cara lateral del 5.º dedo del pie derecho: lesión de 8 mm con costra seca de ampolla en cicatrización, con leve eritema perilesional, sin secreción, sin calor ni tumefacción; no duele al tocarla. Sin otras zonas de roce.",
+      "grilla_items": [
+        "24-pie-diabetico::Lesiones vinculadas al calzado"
+      ]
+    },
+    {
+      "id": "coloracion",
+      "maniobra": "Inspección de la coloración de los pies",
+      "hallazgo": "Coloración rosada, simétrica en ambos pies. Sin palidez, cianosis, rubor ni zonas oscuras o necróticas.",
+      "grilla_items": [
+        "24-pie-diabetico::Coloración"
+      ]
+    },
+    {
+      "id": "temperatura",
+      "maniobra": "Valoración de la temperatura de ambos pies con el dorso de la mano",
+      "hallazgo": "Temperatura conservada y simétrica en ambos pies, comparable a la de las piernas. Sin frialdad objetiva ni zonas de calor local.",
+      "grilla_items": [
+        "24-pie-diabetico::Temperatura",
+        "24-pie-diabetico::Valora temperatura de ambos pies (con el dorso de la mano)"
+      ]
+    },
+    {
+      "id": "hiperqueratosis",
+      "maniobra": "Inspección de hiperqueratosis",
+      "hallazgo": "Hiperqueratosis en cabeza del 1.er metatarsiano de ambos pies y en ambos talones, con fisuras superficiales en los talones.",
+      "grilla_items": [
+        "24-pie-diabetico::Hiperqueratosis"
+      ]
+    },
+    {
+      "id": "interdigital",
+      "maniobra": "Inspección de los espacios interdigitales",
+      "hallazgo": "4.º espacio interdigital del pie izquierdo con piel blanquecina macerada y descamación, sin fisura ni úlcera. Resto de los espacios sin lesiones.",
+      "grilla_items": [
+        "24-pie-diabetico::Observa si presenta lesiones interdigitales"
+      ]
+    },
+    {
+      "id": "unas",
+      "maniobra": "Valoración del estado de las uñas",
+      "hallazgo": "Uñas de ambos hallux engrosadas y amarillentas, compatibles con onicomicosis. Uñas cortadas con los ángulos recortados, sin uña encarnada ni signos de infección periungueal.",
+      "grilla_items": [
+        "24-pie-diabetico::Valora el estado de las uñas"
+      ]
+    },
+    {
+      "id": "flexo-extension",
+      "maniobra": "Solicita flexión y extensión de los tobillos",
+      "hallazgo": "Flexo-extensión de ambos tobillos activa, completa e indolora.",
+      "grilla_items": [
+        "24-pie-diabetico::Solicita Flexo/Extensión"
+      ]
+    },
+    {
+      "id": "rotacion",
+      "maniobra": "Solicita rotación de los pies",
+      "hallazgo": "Rotación (inversión y eversión) conservada y simétrica, sin dolor.",
+      "grilla_items": [
+        "24-pie-diabetico::Solicita rotación"
+      ]
+    },
+    {
+      "id": "movilidad-dedos",
+      "maniobra": "Solicita movilidad de los dedos",
+      "hallazgo": "Moviliza todos los dedos; la extensión del 2.º y 3.º dedo de ambos pies está algo limitada por la posición en garra.",
+      "grilla_items": [
+        "24-pie-diabetico::Solicita movilidad de dedos"
+      ]
+    },
+    {
+      "id": "hidratacion-piel",
+      "maniobra": "Valoración del estado de hidratación de la piel de los pies",
+      "hallazgo": "Piel de ambos pies seca, descamativa, con fisuras superficiales en los talones.",
+      "grilla_items": [
+        "24-pie-diabetico::Valora estado de hidratación o hace referencia a la sequedad de la piel"
+      ]
+    },
+    {
+      "id": "pulso-tibial-posterior",
+      "maniobra": "Palpación del pulso tibial posterior (retromaleolar interno), bilateral",
+      "hallazgo": "Pulso tibial posterior presente y simétrico en ambos pies, de amplitud normal.",
+      "grilla_items": [
+        "24-pie-diabetico::Busca pulso tibial posterior"
+      ]
+    },
+    {
+      "id": "pulso-pedio",
+      "maniobra": "Palpación del pulso pedio (dorso del pie), bilateral",
+      "hallazgo": "Pulso pedio presente y simétrico en ambos pies.",
+      "grilla_items": [
+        "24-pie-diabetico::Busca pulso pedio"
+      ]
+    },
+    {
+      "id": "reflejo-aquiliano",
+      "maniobra": "Reflejo aquiliano, bilateral",
+      "hallazgo": "Reflejo aquiliano abolido en ambos lados (también con maniobra de refuerzo). Rotulianos presentes y simétricos.",
+      "grilla_items": [
+        "24-pie-diabetico::Busca el reflejo aquiliano"
+      ]
+    },
+    {
+      "id": "sensibilidad-termica",
+      "maniobra": "Sensibilidad térmica (objeto frío y tibio) en ambos pies",
+      "hallazgo": "Disminuida en ambos pies, desde los dedos hasta los tobillos: no distingue bien frío de tibio en el dorso ni en la planta. Conservada en las piernas.",
+      "grilla_items": [
+        "24-pie-diabetico::Menciona sensibilidad térmica"
+      ]
+    },
+    {
+      "id": "sensibilidad-fina",
+      "maniobra": "Sensibilidad táctil fina (algodón) en ambos pies",
+      "hallazgo": "Hipoestesia táctil simétrica en ambos pies hasta los tobillos, en distribución 'en calcetín'. Normal en las piernas.",
+      "grilla_items": [
+        "24-pie-diabetico::Busca sensibilidad fina"
+      ]
+    },
+    {
+      "id": "monofilamento",
+      "maniobra": "Monofilamento de 10 g (sensibilidad protectora a la presión) en la planta de ambos pies",
+      "hallazgo": "Con el monofilamento de 10 g apoyado perpendicular a la piel hasta que se curva, en la planta de ambos pies (pulpejo del hallux y cabezas de metatarsianos), con la paciente con los ojos cerrados: no lo percibe en la mayoría de los puntos de ambas plantas. Pérdida de la sensibilidad protectora bilateral.",
+      "grilla_items": [
+        "24-pie-diabetico::Menciona y describe uso del monofilamento"
+      ]
+    },
+    {
+      "id": "diapason",
+      "maniobra": "Diapasón de 128 Hz (sensibilidad vibratoria) sobre el primer metatarsiano de ambos pies",
+      "hallazgo": "Con el diapasón de 128 Hz vibrando apoyado sobre el primer metatarsiano: percibe la vibración 5 segundos en el pie derecho (hipopalestesia) y 4 segundos en el izquierdo (apalestesia). Normal en las rodillas.",
+      "grilla_items": [
+        "24-pie-diabetico::Menciona y describe uso del diapasón"
+      ]
+    }
+  ],
+  "paraclinica": [
+    {
+      "estudio": "Glicemia capilar (HGT) en la consulta",
+      "resultado": "214 mg/dL (posprandial, 2 h después del almuerzo).",
+      "indicado": true,
+      "justificacion": "Rápida, en la consulta; confirma la hiperglicemia en una paciente que abandonó el tratamiento farmacológico y tiene síntomas de síndrome diabético (poliuria, polidipsia).",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Hemoglobina glicosilada (HbA1c)",
+      "resultado": "9,1 %.",
+      "indicado": true,
+      "justificacion": "Es la prueba recomendada para el control de la diabetes (refleja los últimos 2–3 meses, sin ayuno). Muestra mal control metabólico, lejos de la meta general menor a 7 %, y orienta el ajuste del tratamiento.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Glicemia en ayunas (plasma venoso)",
+      "resultado": "178 mg/dL.",
+      "indicado": "opcional",
+      "justificacion": "Ya tiene diagnóstico de DM2; para el control la prueba de elección es la HbA1c. Puede acompañar la rutina, pero no cambia la conducta.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Creatinina plasmática con filtrado glomerular estimado",
+      "resultado": "Creatinina 0,9 mg/dL. FG estimado 66 mL/min/1,73 m².",
+      "indicado": true,
+      "justificacion": "Control anual de la función renal en DM2 y, sobre todo, necesario antes de reiniciar metformina: con FG de 50 o más se usa a dosis completa, entre 30 y 49 a mitad de dosis y sin iniciar tratamientos nuevos, y está contraindicada con FG menor a 30. Aquí no hay contraindicación.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Cociente albúmina/creatinina en orina matinal (microalbuminuria)",
+      "resultado": "48 mg/g (microalbuminuria; confirmar repitiendo la prueba en dos ocasiones con intervalo mensual).",
+      "indicado": true,
+      "justificacion": "Cribado anual de nefropatía diabética en DM2, por el método recomendado (cociente en orina matinal). Valor entre 30 y 299 mg/g: microalbuminuria. Como la hiperglicemia y la HTA pueden elevarla, debe confirmarse repitiéndola en dos ocasiones con intervalo mensual. Es criterio de derivación a nefrología y aumenta el riesgo cardiovascular.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Perfil lipídico",
+      "resultado": "Colesterol total 236 mg/dL, LDL 148 mg/dL, HDL 41 mg/dL, triglicéridos 235 mg/dL.",
+      "indicado": true,
+      "justificacion": "Control anual en DM2 y parte de la valoración del riesgo cardiovascular. LDL muy por encima del objetivo (menor a 70 mg/dL en muy alto riesgo: dos o más factores de riesgo, microalbuminuria, retinopatía). Patrón de dislipemia aterogénica (HDL bajo, TG altos).",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Examen oftalmológico con fondo de ojo (derivación a oftalmología)",
+      "resultado": "Retinopatía diabética no proliferativa leve bilateral (microaneurismas aislados), sin edema macular.",
+      "indicado": true,
+      "justificacion": "Control oftalmológico anual en DM2; hace cuatro años que no se controla y refiere visión borrosa progresiva. La RDNP leve requiere control anual.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Examen de orina",
+      "resultado": "Densidad 1.020, glucosa ++, proteínas trazas, cetonas negativas, sedimento sin leucocituria ni hematuria.",
+      "indicado": "opcional",
+      "justificacion": "No es la prueba de cribado de nefropatía (para eso se pide el cociente albúmina/creatinina). Muestra glucosuria por la hiperglicemia y descarta infección urinaria como causa de la poliuria; no cambia la conducta.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Electrocardiograma",
+      "resultado": "Ritmo sinusal, 76 lpm, eje normal, sin alteraciones de la repolarización ni ondas Q patológicas.",
+      "indicado": "opcional",
+      "justificacion": "La guía MSP lo incluye en el control anual del diabético especialmente si hay cardiopatía isquémica o trastornos del ritmo, que esta paciente no tiene. Razonable como basal por su alto riesgo cardiovascular y antes de aumentar la actividad física, pero no es imprescindible en esta consulta.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Ecodoppler arterial de miembros inferiores",
+      "resultado": "Si se solicitara: sin estenosis hemodinámicamente significativas.",
+      "indicado": false,
+      "justificacion": "La valoración vascular del pie es clínica (pulsos pedio y tibial posterior, temperatura, coloración). Con pulsos presentes y simétricos, sin claudicación ni dolor en reposo y sin frialdad objetiva, no hay elementos de arteriopatía que lo justifiquen.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Electromiograma / estudio de conducción nerviosa",
+      "resultado": "No se realiza.",
+      "indicado": false,
+      "justificacion": "La neuropatía diabética es de diagnóstico clínico; no se requiere estudio eléctrico (guía MSP). Aquí ya se cumplen los criterios: síntomas que empeoran de noche, pérdida de sensibilidad al monofilamento, hipo/apalestesia y aquilianos abolidos.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Radiografía de pies",
+      "resultado": "Si se solicitara: hallux valgus leve bilateral, sin lesiones óseas destructivas.",
+      "indicado": false,
+      "justificacion": "No hay úlcera profunda, infección ni pie caliente, rojo y tumefacto que haga sospechar osteomielitis o pie de Charcot. Las deformidades se valoran clínicamente.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Cultivo de la lesión del 5.º dedo",
+      "resultado": "No se realiza.",
+      "indicado": false,
+      "justificacion": "La lesión no tiene signos de infección y los estudios superficiales (exudados) no deben hacerse para diagnosticar infección ni para controlar heridas sin elementos de infección (guía MSP).",
+      "grilla_items": []
+    }
+  ],
+  "diagnostico": {
+    "principal": "Diabetes tipo 2 mal controlada con polineuropatía periférica diabética y pie de riesgo",
+    "diferenciales": [
+      "Arteriopatía obstructiva periférica de miembros inferiores",
+      "Neuropatía periférica de otra causa (por ejemplo, alcohólica)"
+    ],
+    "fundamento": "Mujer de 66 años con DM2 de 9 años de evolución, que abandonó la metformina hace 2 años por intolerancia digestiva (la tomaba en ayunas), sin controles en el último año y con síndrome diabético (poliuria, nicturia, polidipsia) y HbA1c 9,1 %: mal control metabólico. Consulta por frialdad subjetiva de los pies de 6–8 meses, nocturna, con hormigueo, ardor nocturno y sensación de pies 'dormidos', y una ampolla por calzado que no sintió. Examen: pérdida de la sensibilidad protectora al monofilamento de 10 g, hipo/apalestesia con diapasón de 128 Hz, aquilianos abolidos, hipoestesia térmica y táctil 'en calcetín': cumple los criterios clínicos de neuropatía (2 o más de: síntomas nocturnos, monofilamento/diapasón alterados, aquilianos ausentes; guía MSP p. 94). Con deformidades (hallux valgus, dedos en garra), hiperqueratosis y piel seca es un pie de riesgo grado 2 de la clasificación del Consenso 1999 (PNP + deformidades): seguimiento cada 3 meses. Contra arteriopatía: temperatura objetiva conservada y simétrica, coloración normal, pulsos pedio y tibial posterior presentes y simétricos, sin claudicación ni dolor en reposo; la frialdad es una disestesia. Contra neuropatía de otra causa: no consume alcohol en cantidad, y la neuropatía es distal, simétrica y concuerda con una diabetes de larga evolución mal controlada. Repercusiones asociadas: microalbuminuria (48 mg/g) con FG conservado (66 mL/min/1,73 m²) y retinopatía no proliferativa leve. Otros FRCV: HTA, dislipemia (LDL 148), obesidad (IMC 32,8), sedentarismo, antecedente familiar de cardiopatía isquémica precoz (hermano a los 52).",
+    "grilla_items": []
+  },
+  "conducta_esperada": [
+    {
+      "accion": "Reiniciar metformina 850 mg, un comprimido por día con el almuerzo (con la comida principal, nunca en ayunas). Es el fármaco de primera elección en DM2, más aún con sobrepeso u obesidad; no produce hipoglicemia y el FG de 66 mL/min/1,73 m² permite usarla a dosis completa. Luego titular según tolerancia y control (la dosis óptima en la mayoría es alrededor de 2000 mg/día).",
+      "grilla_items": [
+        "24-pie-diabetico::Metformina 850 mg día con almuerzo"
+      ]
+    },
+    {
+      "accion": "Explicar el efecto adverso más frecuente: intolerancia gastrointestinal (dolor abdominal, náuseas, diarrea), que fue el motivo del abandono. Se atenúa tomándola con alimentos y subiendo la dosis de forma lenta; consultar antes de suspenderla si aparecen síntomas.",
+      "grilla_items": [
+        "24-pie-diabetico::Ef. Adv.: Tolerancia gastrointestinal"
+      ]
+    },
+    {
+      "accion": "Pauta de alimentación para diabéticos: plato con la mitad de verduras, un cuarto de proteínas y un cuarto de hidratos de carbono; priorizar verduras, legumbres, frutas enteras y cereales integrales; evitar azúcares simples, bizcochos, refrescos y ultraprocesados; preferir agua; disminuir grasas saturadas; moderar la sal (no más de 4 g/día, es hipertensa). Por la obesidad, descenso de peso con reducción de 500–700 kcal/día (con licenciada en nutrición); una pérdida de 5–7 % ya da beneficio.",
+      "grilla_items": [
+        "24-pie-diabetico::Pauta de alimentación de diabético"
+      ]
+    },
+    {
+      "accion": "Pauta de actividad física: al menos 150 minutos por semana de actividad aeróbica moderada (por ejemplo caminar a un ritmo que permita hablar pero no cantar), repartidos en al menos 3 días y en sesiones de 10 minutos o más; ejercicios de fuerza 2 veces por semana; reducir el tiempo sentada. Adaptarla a la neuropatía y a los pies: siempre con calzado adecuado y revisando los pies después; la actividad leve no requiere ergometría previa, pero antes de actividades más intensas valorar ergometría por su riesgo cardiovascular.",
+      "grilla_items": [
+        "24-pie-diabetico::Pauta de actividad física"
+      ]
+    },
+    {
+      "accion": "Medidas de prevención de lesiones en los pies: inspección diaria de pies y calzado (con espejo o con ayuda de la hija); higiene diaria con secado cuidadoso entre los dedos; crema hidratante neutra excepto entre los dedos; uñas cortadas rectas sin recortar los ángulos; calzado de caja alta, ancha y redonda, sin costuras, con contrafuerte almohadillado y suela de goma; no caminar descalza; NO usar bolsa de agua caliente ni calientacamas (riesgo de quemadura sin dolor); medias de algodón sin costuras; no cortarse callos; tratar precozmente las lesiones no ulceradas (micosis, hiperqueratosis); consultar ante cualquier herida, ampolla o cambio de color.",
+      "grilla_items": [
+        "24-pie-diabetico::Medidas de prevención de lesiones en pies"
+      ]
+    },
+    {
+      "accion": "Pie de riesgo grado 2: control de los pies cada 3 meses y derivación al equipo de pie diabético/podología para manejo de la hiperqueratosis, uñas y la lesión del 5.º dedo (que hoy no tiene signos de infección). Signos de alarma para consultar en el día: herida nueva, supuración, rubor, calor o hinchazón, coloración oscura, fiebre, pie frío y pálido o dolor intenso.",
+      "grilla_items": []
+    },
+    {
+      "accion": "Abordaje de las repercusiones y del riesgo cardiovascular: mantener enalapril (IECA preferido con microalbuminuria) y controlar PA; iniciar estatina con objetivo de LDL menor a 70 mg/dL (muy alto riesgo); control oftalmológico anual (RDNP leve); derivar a nefrología por microalbuminuria (confirmada) y valorar derivación a diabetología por DM2 con complicaciones crónicas; automonitoreo de glicemia capilar registrado mientras la HbA1c esté fuera de meta; control en 3 meses con nueva HbA1c (meta general menor a 7 %, individualizada).",
+      "grilla_items": []
+    }
+  ],
+  "fuentes": [
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "HbA1c: prueba recomendada para el control, no para el diagnóstico",
+      "pagina": 30
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Metformina: primera elección, dosis óptima ~2000 mg/día, efectos adversos gastrointestinales atenuados con alimentos y titulación",
+      "pagina": 47
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Metformina contraindicada con FG < 30 mL/min/1,73 m²",
+      "pagina": 48
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Tabla 9: uso de hipoglicemiantes según filtrado glomerular",
+      "pagina": 51
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Metas de perfil lipídico (LDL < 70 mg/dL en muy alto riesgo)",
+      "pagina": 68
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Estatinas en toda persona con diabetes mayor de 40 años",
+      "pagina": 69
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "HTA en DM2: IECA o ARA II preferidos con microalbuminuria",
+      "pagina": 75
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Evaluación oftalmológica en DM2 y seguimiento de la retinopatía",
+      "pagina": 76
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Seguimiento según retinopatía: RDNP leve, control anual",
+      "pagina": 78
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Cribado de nefropatía: cociente albúmina/creatinina (microalbuminuria 30–299 mg/g)",
+      "pagina": 79
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Actividad física en DM2: 150 min/semana, fuerza 2 veces/semana, talk test",
+      "pagina": 86
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Ergometría según riesgo cardiovascular; actividad leve sin ergometría",
+      "pagina": 87
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Periodicidad de las actividades en consulta (Tabla 18)",
+      "pagina": 90
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Pie diabético: etiopatogenia",
+      "pagina": 92
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Pie de riesgo: clasificación del Consenso 1999 (Tabla 19)",
+      "pagina": 93
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Examen físico del pie: deformaciones, criterios de neuropatía, monofilamento, diapasón 128 Hz, pulsos",
+      "pagina": 94
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Educación de la persona con DM2: cuidado de los pies y calzado",
+      "pagina": 95
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Infecciones en pie diabético: no hacer estudios superficiales",
+      "pagina": 98
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Criterios de derivación (diabetología, nefrología, pie diabético, oftalmología)",
+      "pagina": 102
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "DM2: anamnesis (historia de la diabetes, tratamiento, hábitos, búsqueda de complicaciones)",
+      "pagina": 165
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "DM2: examen físico y evaluación de los pies",
+      "pagina": 166
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Neuropatía diabética y enfermedad arterial periférica",
+      "pagina": 168
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Tratamiento integral: metas de HbA1c, educación, alimentación",
+      "pagina": 169
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Plato (mitad vegetales), sal, actividad física (150 min en al menos 3 días, adaptar a neuropatía); metformina con alimentos",
+      "pagina": 170
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Metformina y función renal; automonitoreo",
+      "pagina": 171
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Pie diabético: mecanismos, anamnesis y examen de los pies",
+      "pagina": 172
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Pie diabético: evaluación neurológica, autocuidado, signos de alarma",
+      "pagina": 173
+    },
+    {
+      "archivo": "catedra/dm2-metas.md",
+      "seccion": "Meta de HbA1c < 7 % individualizada",
+      "pagina": 1
+    },
+    {
+      "archivo": "catedra/dm2-tratamiento-no-farmacologico.md",
+      "seccion": "Plan de alimentación: reducción calórica (500–700 kcal/día), evitar azúcares simples",
+      "pagina": 2
+    },
+    {
+      "archivo": "catedra/dm2-tratamiento-no-farmacologico.md",
+      "seccion": "Sal: no superar 4 g/día en DM2",
+      "pagina": 3
+    },
+    {
+      "archivo": "catedra/dm2-tratamiento-no-farmacologico.md",
+      "seccion": "Actividad física: evaluación previa, frecuencia, tiempo, sesiones de 10 minutos o más",
+      "pagina": 5
+    },
+    {
+      "archivo": "catedra/dm2-tratamiento-no-farmacologico.md",
+      "seccion": "Adecuar el ejercicio en neuropatía periférica, nefropatía y retinopatía",
+      "pagina": 8
+    },
+    {
+      "archivo": "catedra/dm2-educacion-automonitoreo.md",
+      "seccion": "Automonitoreo en pacientes con mal control metabólico",
+      "pagina": 2
+    },
+    {
+      "archivo": "paraclinica.md",
+      "seccion": "Metabólico — Diabetes tipo I y II (glicemia en ayunas, HbA1c)",
+      "pagina": null
+    }
+  ]
+}

@@ -26,7 +26,8 @@ PACIENTE = [
 ]
 # Items that grade the student's conduct, not information from the patient.
 EXEMPT = re.compile(
-    r"salud|present|ficha patron|motivo de consulta$|permiso|explica al paciente|explica que realizar|posiciona|acuesta|"
+    r"salud|present|ficha patron|motivo de consulta$|permiso|explica al paciente|explica que realizar|"
+    r"explica lo que va|posiciona|acuesta|"
     r"rendimiento global|desempeño global|realiza examen con tórax descubierto|"
     r"inspección desde la pelvis",
     re.I,

@@ -1,0 +1,85 @@
+{
+  "id": "39-crisis-asmatica-ex-fisico",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 9,
+    "nombre": "IRA, Asma y EPOC."
+  },
+  "titulo": "SIMULACIÓN 3: EXAMEN FÍSICO CRISIS ASMÁTICA",
+  "tipo": "examen_fisico",
+  "motivo_consulta": null,
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Explica lo que va a realizar"
+      ]
+    },
+    {
+      "nombre": "Examen Físico General:",
+      "items": [
+        "Estado general del paciente / Psiquismo",
+        "Constata coloración e hidratación",
+        "Cuenta frec. card. / toma pulso / Temperatura"
+      ]
+    },
+    {
+      "nombre": "Examen Físico extratorácico:",
+      "items": [
+        "Observa las fosas nasales, observa y moviliza CAE",
+        "Examina/describe la orofaringe",
+        "Palpación LG: se pone atrás del paciente"
+      ]
+    },
+    {
+      "nombre": "Examen Físico Pleuropulmonar",
+      "items": [
+        "Inspección: menciona cómo se realiza",
+        "Cuenta frecuencia respiratoria",
+        "Estática: busca lesiones de piel, tumoraciones, etc.",
+        "Menciona la forma del tórax y sus diámetros",
+        "Plantea lo esperable para cada caso",
+        "Dinámica: FR, busca tirajes (explica)",
+        "Palpación: explica en qué consiste",
+        "Pared del tórax: piel, celular subcutáneo, músculos",
+        "Expansibilidad: Realiza la maniobra",
+        "Expansibilidad; Plantea lo esperable para cada caso",
+        "Elasticidad: Realiza la maniobra",
+        "Elasticidad: Plantea lo esperable para cada caso",
+        "Vibraciones vocales: todas las caras / bilateralmente",
+        "Vibraciones vocales: Plantea lo esperable a cada caso",
+        "Percusión: en las 3 caras de ambos hemitórax",
+        "Percusión: Plantea lo esperable para cada caso",
+        "Auscultación: en las 3 caras de ambos hemitórax",
+        "Ausculta sectores altos y bajos en cada cara",
+        "Ausculta bilateralmente y compara",
+        "Auscultación: Plantea lo esperable para cada caso"
+      ]
+    },
+    {
+      "nombre": "Pico Flujo",
+      "items": [
+        "Propone que de contar, utilizaría el pico flujo"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "new/Sim-4_GRILLA-EX.FISICO-Crisis-Asmática.pdf",
+    "paginas": [
+      1
+    ]
+  }
+}

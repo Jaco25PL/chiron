@@ -1,0 +1,781 @@
+{
+  "id": "mpna-asma-no-controlada",
+  "materia": "mpna",
+  "titulo": "Joven con asma conocida que consulta porque los síntomas le molestan más",
+  "grillas": [
+    "29-asma-anamnesis",
+    "30-asma-ex-fisico"
+  ],
+  "dificultad": "basico",
+  "paciente": {
+    "nombre": "Ignacio Martín Techera Bentancor",
+    "edad": 26,
+    "sexo": "masculino",
+    "procedencia": "Nacido en Las Piedras (Canelones); vive en Montevideo desde los 20 años",
+    "domicilio": "Barrio Prado, Montevideo; apartamento en planta baja",
+    "ocupacion": "Operario de depósito en una barraca de materiales de construcción; estudia de noche en UTU",
+    "convivencia": "Vive con su pareja, Sofía",
+    "escolaridad": "Bachillerato completo; cursa una tecnicatura en administración en UTU",
+    "estado_civil": "Soltero, en pareja (concubinato)",
+    "prestador": "CASMU",
+    "medico_referencia": "Dra. Florencia Rodríguez, médica de familia del CASMU"
+  },
+  "personalidad": {
+    "tipo": "colaborador",
+    "descripcion": "Muchacho tranquilo y amable que consulta en un control programado, sin apuro y sin falta de aire en este momento. Contesta bien lo que le preguntan pero tiende a restarle importancia ('es el asma de siempre', 'con el inhalador se me pasa'). No sabe bien la diferencia entre un remedio de control y uno de rescate y no se da cuenta de que usa mal el aerosol. Nunca da datos que no le preguntaron.",
+    "forma_de_hablar": "Voseo montevideano joven, informal pero respetuoso. Muletillas: 'tá', 'de última', 'capaz', 'onda', 'bo'. Respuestas cortas y concretas; si la pregunta es vaga contesta 'normal' o 'más o menos'."
+  },
+  "motivo_consulta": {
+    "frase_inicial": "Vengo porque el asma me está jodiendo más que antes, y la verdad que ya me tiene medio podrido."
+  },
+  "anamnesis": [
+    {
+      "id": "ficha-patronimica",
+      "tema": "Datos patronímicos",
+      "preguntas_ejemplo": [
+        "¿Cómo se llama?",
+        "¿Qué edad tiene?",
+        "¿A qué se dedica?",
+        "¿Con quién vive?",
+        "¿Dónde vive?"
+      ],
+      "respuesta": "Ignacio Techera, tengo 26. Soy de Las Piedras pero vivo en el Prado hace como seis años, con mi novia, Sofía. Laburo en el depósito de una barraca, cargando y acomodando materiales, y de noche estudio administración en la UTU. Terminé el liceo. Me atiendo en el CASMU, con la doctora Rodríguez.",
+      "grilla_items": [
+        "29-asma-anamnesis::Pregunta Ficha Patronímica completa?"
+      ]
+    },
+    {
+      "id": "motivo-consulta",
+      "tema": "Motivo de consulta",
+      "preguntas_ejemplo": [
+        "¿Qué lo trae por acá?",
+        "¿Por qué consulta hoy?",
+        "¿En qué lo puedo ayudar?"
+      ],
+      "respuesta": "Por el asma, que me está jodiendo más que antes. Ya me tiene medio podrido.",
+      "grilla_items": []
+    },
+    {
+      "id": "diagnostico-asma",
+      "tema": "Momento y circunstancia del diagnóstico del asma",
+      "preguntas_ejemplo": [
+        "¿Desde cuándo sabe que tiene asma?",
+        "¿Cuándo y cómo se lo diagnosticaron?",
+        "¿Quién le dijo que era asmático?"
+      ],
+      "respuesta": "Desde chico. Como a los 7 años, después de varios broncoespasmos seguidos, la pediatra le dijo a mi vieja que era asma. Después me siguió un neumólogo de niños hasta los 15 más o menos.",
+      "grilla_items": [
+        "29-asma-anamnesis::Momento y circunstancia de diagnóstico del Asma"
+      ]
+    },
+    {
+      "id": "sintomas-actuales",
+      "tema": "Síntomas que presenta (tipo de síntoma)",
+      "preguntas_ejemplo": [
+        "¿Qué siente cuando le agarra el asma?",
+        "¿Qué síntomas tiene?",
+        "¿Tiene tos, silbidos, falta de aire?"
+      ],
+      "respuesta": "Me silba el pecho, siento como que se me cierra, me falta un poco el aire y me da una tos seca, de esas que no sacan nada.",
+      "grilla_items": []
+    },
+    {
+      "id": "evolucion",
+      "tema": "Desde cuándo está peor",
+      "preguntas_ejemplo": [
+        "¿Desde cuándo está peor?",
+        "¿Cómo venía antes?",
+        "¿Qué cambió?"
+      ],
+      "respuesta": "Hace unos tres meses, desde mitad del invierno más o menos, que estoy peor. Antes capaz que pasaba semanas sin acordarme del asma.",
+      "grilla_items": []
+    },
+    {
+      "id": "sintomas-diurnos",
+      "tema": "Síntomas diurnos",
+      "preguntas_ejemplo": [
+        "¿Tiene síntomas durante el día?",
+        "¿En el día le silba el pecho o le falta el aire?",
+        "¿En el trabajo le pasa?"
+      ],
+      "respuesta": "Sí, en el día me pasa. Me empieza a silbar el pecho y a picar la garganta con tos.",
+      "grilla_items": [
+        "29-asma-anamnesis::Presencia de síntomas diurnos"
+      ]
+    },
+    {
+      "id": "sintomas-nocturnos",
+      "tema": "Síntomas nocturnos",
+      "preguntas_ejemplo": [
+        "¿De noche tiene síntomas?",
+        "¿Se despierta por la tos o por falta de aire?",
+        "¿Cuántas veces se despertó en el último mes?"
+      ],
+      "respuesta": "De noche también, sí. En el último mes me habré despertado unas tres veces con tos y el pecho apretado, y tuve que usar el inhalador para volver a dormir. No es todas las semanas, pero antes no me pasaba.",
+      "grilla_items": [
+        "29-asma-anamnesis::Presencia de síntomas nocturnos"
+      ]
+    },
+    {
+      "id": "frecuencia-sintomas",
+      "tema": "Frecuencia de los síntomas broncoobstructivos en las últimas 4 semanas",
+      "preguntas_ejemplo": [
+        "¿Con qué frecuencia tiene síntomas?",
+        "¿Cuántas veces por semana?",
+        "¿Le pasa todos los días?",
+        "En el último mes, ¿cuántos días tuvo síntomas?"
+      ],
+      "respuesta": "En este último mes, unas tres o cuatro veces por semana. Todos los días no, hay días que ando bárbaro.",
+      "grilla_items": [
+        "29-asma-anamnesis::Frecuencia de los síntomas broncoobstructivos"
+      ]
+    },
+    {
+      "id": "limitacion-actividad",
+      "tema": "Limitación de la actividad por el asma",
+      "preguntas_ejemplo": [
+        "¿El asma le limita alguna actividad?",
+        "¿Tuvo que dejar de hacer algo por los síntomas?",
+        "¿Faltó al trabajo?"
+      ],
+      "respuesta": "En el fútbol sí: varias veces me tuve que salir en el primer tiempo porque no me daba el aire. Al laburo no falté, pero algún día lo pasé medio mal.",
+      "grilla_items": []
+    },
+    {
+      "id": "medicacion-habitual",
+      "tema": "Medicación que utiliza habitualmente para el asma",
+      "preguntas_ejemplo": [
+        "¿Qué medicación usa?",
+        "¿Usa algún inhalador?",
+        "¿Toma algo todos los días?",
+        "¿Alguna vez usó un inhalador preventivo o con corticoide?"
+      ],
+      "respuesta": "Ahora solo el salbutamol, el aerosol azul, cuando me agarra. De gurí y de adolescente usaba también uno marrón todos los días, la beclometasona, pero lo dejé como a los 19 porque andaba bien. Desde ahí, nada fijo.",
+      "grilla_items": [
+        "29-asma-anamnesis::Medicación que utiliza habitualmente"
+      ]
+    },
+    {
+      "id": "otra-medicacion",
+      "tema": "Otra medicación y alergias a fármacos",
+      "preguntas_ejemplo": [
+        "¿Toma alguna otra medicación?",
+        "¿Es alérgico a algún medicamento?",
+        "¿Toma aspirina o antiinflamatorios?"
+      ],
+      "respuesta": "Alguna loratadina de vez en cuando. Aspirina o ibuprofeno casi nunca tomo. Alérgico a remedios no soy, que yo sepa.",
+      "grilla_items": []
+    },
+    {
+      "id": "aumento-broncodilatador",
+      "tema": "Aumento del uso del broncodilatador de rescate",
+      "preguntas_ejemplo": [
+        "¿Está usando el inhalador más seguido?",
+        "¿Cuántas veces por semana usa el salbutamol?",
+        "¿Cuánto le dura un aerosol?"
+      ],
+      "respuesta": "Sí, bastante más. Antes lo usaba una o dos veces por mes; ahora tres o cuatro veces por semana, a veces dos disparos seguidos. Antes un aerosol me duraba muchísimo; ahora se me va bastante más rápido.",
+      "grilla_items": [
+        "29-asma-anamnesis::Aumento del uso de broncodilatadores"
+      ]
+    },
+    {
+      "id": "tecnica-inhalatoria",
+      "tema": "Cómo usa el inhalador (técnica, inhalocámara)",
+      "preguntas_ejemplo": [
+        "¿Cómo usa el inhalador?",
+        "¿Me muestra cómo lo usa?",
+        "¿Usa inhalocámara o aerocámara?",
+        "¿Aguanta la respiración después?"
+      ],
+      "respuesta": "Lo agito, me lo pongo en la boca y aprieto, y ahí respiro. Medio a las apuradas, la verdad, no aguanto el aire después. La aerocámara la usaba de chico, ahora no tengo, la perdí en una mudanza.",
+      "grilla_items": [
+        "29-asma-anamnesis::Como usa el inhalador"
+      ]
+    },
+    {
+      "id": "desencadenantes",
+      "tema": "Desencadenantes (inhalantes, actividad física, frío, infecciones, etc.)",
+      "preguntas_ejemplo": [
+        "¿Qué cosas le desencadenan los síntomas?",
+        "¿Le pasa con el ejercicio?",
+        "¿Con el polvo, el frío, los resfríos?",
+        "¿Tiene humedad en su casa o animales?"
+      ],
+      "respuesta": "El fútbol, sobre todo cuando hace frío. El polvo del depósito, cuando descargan cemento o barremos, me liquida. Y cuando me resfrío seguro que termino silbando. En casa hay algo de humedad en el cuarto, una mancha en la pared; animales no tenemos.",
+      "grilla_items": [
+        "29-asma-anamnesis::Desencadenantes (inhalantes, actividad física, etc.)"
+      ]
+    },
+    {
+      "id": "crisis",
+      "tema": "Crisis previas",
+      "preguntas_ejemplo": [
+        "¿Ha tenido crisis?",
+        "¿Cuándo fue la última crisis fuerte?",
+        "¿Tuvo algún ataque de asma este año?"
+      ],
+      "respuesta": "Sí, una fuerte en julio, con un resfrío. El inhalador no me alcanzaba.",
+      "grilla_items": [
+        "29-asma-anamnesis::¿Ha tenido crisis?"
+      ]
+    },
+    {
+      "id": "intensidad-crisis",
+      "tema": "Intensidad de las crisis (consultas en emergencia, tratamiento recibido)",
+      "preguntas_ejemplo": [
+        "¿Cuántas veces consultó en emergencia en el último año?",
+        "¿Qué le hicieron en la emergencia?",
+        "¿Le dieron corticoides en pastillas?"
+      ],
+      "respuesta": "En el último año fue esa sola vez, en la emergencia del CASMU. Me dieron varios disparos de salbutamol con aerocámara durante una hora y unas pastillas de corticoide por cinco días. A las pocas horas me mandaron para casa.",
+      "grilla_items": [
+        "29-asma-anamnesis::Intensidad de las crisis (consultas en emergencia)"
+      ]
+    },
+    {
+      "id": "internaciones",
+      "tema": "Internaciones, CTI, intubación",
+      "preguntas_ejemplo": [
+        "¿Alguna vez estuvo internado por el asma?",
+        "¿Estuvo en CTI?",
+        "¿Lo tuvieron que intubar?"
+      ],
+      "respuesta": "De grande nunca. De chico, como a los 8, me dejaron internado dos días en sala por un broncoespasmo. CTI nunca, y nunca me intubaron.",
+      "grilla_items": [
+        "29-asma-anamnesis::Internaciones, CTI, IOT"
+      ]
+    },
+    {
+      "id": "pico-flujo",
+      "tema": "Uso de medidor de pico flujo",
+      "preguntas_ejemplo": [
+        "¿Usa un medidor de pico flujo?",
+        "¿Alguna vez se midió el flujo con un aparatito en casa?",
+        "¿Sabe cuál es su mejor valor de pico flujo?"
+      ],
+      "respuesta": "No, nunca tuve uno. Ni sé bien cómo es.",
+      "grilla_items": [
+        "29-asma-anamnesis::Investiga uso de pico Flujo"
+      ]
+    },
+    {
+      "id": "espirometria",
+      "tema": "Espirometría o funcional respiratorio previo",
+      "preguntas_ejemplo": [
+        "¿Alguna vez le hicieron una espirometría?",
+        "¿Le hicieron un funcional respiratorio?",
+        "¿Cuándo fue la última?"
+      ],
+      "respuesta": "Sí, de adolescente, con el neumólogo: soplar fuerte en una máquina, después te dan un inhalador y soplás de nuevo. La última habrá sido a los 14. De grande nunca me la repitieron.",
+      "grilla_items": [
+        "29-asma-anamnesis::Consulta sobre Espirometría o F. Respiratorio"
+      ]
+    },
+    {
+      "id": "actividad-fisica",
+      "tema": "Actividad física habitual",
+      "preguntas_ejemplo": [
+        "¿Hace actividad física?",
+        "¿Hace deporte?",
+        "¿Cuántas veces por semana?"
+      ],
+      "respuesta": "Juego al fútbol 5 dos veces por semana con los compañeros del laburo, y voy y vengo en bici al trabajo.",
+      "grilla_items": [
+        "29-asma-anamnesis::Actividad física habitual"
+      ]
+    },
+    {
+      "id": "estres",
+      "tema": "Estrés",
+      "preguntas_ejemplo": [
+        "¿Está pasando por algún momento de estrés?",
+        "¿Cómo anda de ánimo?",
+        "¿Mucha presión en el trabajo o el estudio?"
+      ],
+      "respuesta": "Y sí, bastante. Entre el laburo y los parciales de la UTU ando a las corridas, durmiendo poco. Capaz que eso también influye.",
+      "grilla_items": [
+        "29-asma-anamnesis::Estrés"
+      ]
+    },
+    {
+      "id": "tabaquismo-thc",
+      "tema": "Tabaquismo, marihuana y exposición al humo",
+      "preguntas_ejemplo": [
+        "¿Fuma?",
+        "¿Fumó alguna vez?",
+        "¿Fuma marihuana?",
+        "¿Alguien fuma en su casa o en el trabajo?"
+      ],
+      "respuesta": "Cigarro nunca fumé. Porro alguna vez en alguna fiesta, pero hace más de un año que nada porque me hacía toser. En casa nadie fuma; en el depósito alguno fuma, pero afuera.",
+      "grilla_items": [
+        "29-asma-anamnesis::Tabaquismo, THC"
+      ]
+    },
+    {
+      "id": "rinitis",
+      "tema": "Rinitis alérgica",
+      "preguntas_ejemplo": [
+        "¿Tiene alergia en la nariz?",
+        "¿Estornuda mucho o se le tapa la nariz?",
+        "¿Le pica la nariz o los ojos?"
+      ],
+      "respuesta": "Sí, de la nariz soy alérgico. Sobre todo en primavera: estornudos de a diez, la nariz tapada, me pica todo. Ahora mismo estoy medio así.",
+      "grilla_items": [
+        "29-asma-anamnesis::Rinitis alérgica"
+      ]
+    },
+    {
+      "id": "dermatitis",
+      "tema": "Dermatitis atópica",
+      "preguntas_ejemplo": [
+        "¿Tuvo problemas de piel, eczemas?",
+        "¿De chico tenía la piel seca o con picazón?",
+        "¿Alergias a alimentos?"
+      ],
+      "respuesta": "De chico sí, tenía ronchas que picaban en los pliegues de los codos y atrás de las rodillas, me ponían cremas. Ya de grande se me fue. Alergia a comidas no tengo.",
+      "grilla_items": [
+        "29-asma-anamnesis::Dermatitis atópica"
+      ]
+    },
+    {
+      "id": "antecedentes-familiares",
+      "tema": "Asma y atopía en familiares de primer grado",
+      "preguntas_ejemplo": [
+        "¿Alguien en su familia tiene asma?",
+        "¿Sus padres o hermanos tienen alergias?"
+      ],
+      "respuesta": "Mi vieja es asmática, usa inhalador. Mi hermano menor no tiene asma pero es alérgico de la nariz. Mi viejo, que yo sepa, nada.",
+      "grilla_items": [
+        "29-asma-anamnesis::Asma en familiares de primer grado"
+      ]
+    },
+    {
+      "id": "vacunas-gripe-covid",
+      "tema": "Vacuna antigripal y contra SARS-CoV-2",
+      "preguntas_ejemplo": [
+        "¿Se vacunó contra la gripe este año?",
+        "¿Tiene la vacuna del COVID?",
+        "¿Cuántas dosis?"
+      ],
+      "respuesta": "La de la gripe este año no me la di; la última fue hace como dos años. Del COVID tengo tres dosis, la última en 2022.",
+      "grilla_items": [
+        "29-asma-anamnesis::Vacuna antigripal y para Sars Cov 2"
+      ]
+    },
+    {
+      "id": "vacuna-neumococo",
+      "tema": "Vacuna antineumocócica",
+      "preguntas_ejemplo": [
+        "¿Recibió la vacuna contra el neumococo?",
+        "¿Le dieron la vacuna de la neumonía?"
+      ],
+      "respuesta": "¿La de la neumonía? No, esa nunca me la di. Nadie me la ofreció.",
+      "grilla_items": [
+        "29-asma-anamnesis::Vacuna antineumocócica"
+      ]
+    },
+    {
+      "id": "sintomas-infecciosos",
+      "tema": "Síntomas de infección respiratoria actual (fiebre, expectoración)",
+      "preguntas_ejemplo": [
+        "¿Tuvo fiebre?",
+        "¿Saca flemas cuando tose?",
+        "¿Está resfriado ahora?",
+        "¿Le duele la garganta?"
+      ],
+      "respuesta": "No, fiebre no. La tos es seca, no saco flema. Resfriado ahora no estoy.",
+      "grilla_items": []
+    },
+    {
+      "id": "reflujo",
+      "tema": "Síntomas de reflujo gastroesofágico (diferencial de tos nocturna)",
+      "preguntas_ejemplo": [
+        "¿Tiene acidez o ardor en el pecho?",
+        "¿Le vuelve comida o ácido a la boca?",
+        "¿La tos le empeora acostado después de comer?"
+      ],
+      "respuesta": "No, acidez no tengo. Como de todo y no me cae mal.",
+      "grilla_items": []
+    },
+    {
+      "id": "antecedentes-personales",
+      "tema": "Otros antecedentes personales",
+      "preguntas_ejemplo": [
+        "¿Tiene alguna otra enfermedad?",
+        "¿Lo operaron alguna vez?",
+        "¿Tuvo neumonías o tuberculosis?"
+      ],
+      "respuesta": "No, aparte del asma, nada. Nunca me operaron, neumonía nunca tuve.",
+      "grilla_items": []
+    },
+    {
+      "id": "alcohol",
+      "tema": "Consumo de alcohol",
+      "preguntas_ejemplo": [
+        "¿Toma alcohol?",
+        "¿Cuánto toma?"
+      ],
+      "respuesta": "Alguna cerveza el fin de semana con los amigos, nada más.",
+      "grilla_items": []
+    }
+  ],
+  "signos_vitales": {
+    "pa": "118/72 mmHg (brazo derecho, sentado)",
+    "fc": "76 lpm, regular",
+    "fr": "16 rpm",
+    "temperatura": "36,4 °C",
+    "saturacion": "98 % (aire ambiente)",
+    "peso": "74 kg",
+    "talla": "1,78 m",
+    "imc": "23,4 kg/m²"
+  },
+  "examen_fisico": [
+    {
+      "id": "estado-general",
+      "maniobra": "Estado general, conciencia, habla, piel y mucosas, cianosis",
+      "hallazgo": "Buen estado general, vigil, lúcido, estable. Habla con frases completas sin disnea. Piel y mucosas normocoloreadas, sin cianosis central ni periférica. Sin hipocratismo digital. Mucosa nasal algo pálida y edematosa, con rinorrea acuosa escasa.",
+      "grilla_items": []
+    },
+    {
+      "id": "inspeccion-tecnica",
+      "maniobra": "Inspección del tórax: cómo se realiza (paciente sentado, tórax descubierto, inspección estática y dinámica comparando ambos hemitórax)",
+      "hallazgo": "Paciente sentado, con el tórax descubierto. Se observa el tórax en reposo (estática) y luego en movimiento (dinámica), comparando ambos hemitórax en sus caras anterior, posterior y laterales.",
+      "grilla_items": [
+        "30-asma-ex-fisico::Inspección: menciona cómo se realiza"
+      ]
+    },
+    {
+      "id": "frecuencia-respiratoria",
+      "maniobra": "Recuento de la frecuencia respiratoria durante un minuto (sin que el paciente lo note)",
+      "hallazgo": "16 respiraciones por minuto, ritmo regular.",
+      "grilla_items": [
+        "30-asma-ex-fisico::Cuenta frecuencia respiratoria"
+      ]
+    },
+    {
+      "id": "inspeccion-estatica-piel",
+      "maniobra": "Inspección estática: piel, cicatrices, lesiones, tumoraciones, circulación colateral, atrofias",
+      "hallazgo": "Piel del tórax sana, sin cicatrices, lesiones, tumoraciones ni circulación colateral. Trofismo muscular conservado. Hombros y clavículas simétricos.",
+      "grilla_items": [
+        "30-asma-ex-fisico::Estática: busca lesiones de piel, tumoraciones, etc."
+      ]
+    },
+    {
+      "id": "forma-diametros",
+      "maniobra": "Inspección estática: forma del tórax, simetría y diámetros (anteroposterior y transversal)",
+      "hallazgo": "Tórax simétrico, de forma normal, sin pectus excavatum ni carinatum, sin cifosis ni escoliosis. Diámetro anteroposterior menor que el transversal: sin tórax en tonel ni signos de hiperinsuflación (lo esperable en un asmático joven fuera de crisis).",
+      "grilla_items": [
+        "30-asma-ex-fisico::Menciona la forma del tórax y sus diámetros",
+        "30-asma-ex-fisico::Plantea lo esperable para cada caso"
+      ]
+    },
+    {
+      "id": "inspeccion-dinamica",
+      "maniobra": "Inspección dinámica: frecuencia, ritmo, amplitud, tipo respiratorio, espiración, músculos accesorios y búsqueda de tirajes (subcostal, intercostal, supraesternal, supraclavicular), aleteo nasal",
+      "hallazgo": "FR 16 rpm, respiración regular, de amplitud normal, costoabdominal, con expansión simétrica. Espiración no prolongada. Sin uso de músculos accesorios, sin tirajes subcostales, intercostales, supraesternales ni supraclaviculares, sin aleteo nasal ni respiración paradojal.",
+      "grilla_items": [
+        "30-asma-ex-fisico::Dinámica: FR, busca tirajes (explica)"
+      ]
+    },
+    {
+      "id": "palpacion-tecnica",
+      "maniobra": "Palpación: explicar en qué consiste (palma y pulpejos recorriendo las tres caras, comparando regiones simétricas; pared, elasticidad, expansibilidad, vibraciones vocales, adenopatías)",
+      "hallazgo": "Se palpa con la palma y los pulpejos, en forma sistemática y comparativa, las caras anterior, posterior y axilares de ambos hemitórax, evaluando pared torácica, elasticidad, expansibilidad, vibraciones vocales y regiones supraclaviculares y axilares.",
+      "grilla_items": [
+        "30-asma-ex-fisico::Palpación: explica en qué consiste"
+      ]
+    },
+    {
+      "id": "pared-toracica",
+      "maniobra": "Palpación de la pared torácica: piel, tejido celular subcutáneo, músculos, costillas, puntos dolorosos, enfisema subcutáneo; adenopatías supraclaviculares y axilares",
+      "hallazgo": "Piel y tejido celular subcutáneo sin alteraciones, sin enfisema subcutáneo. Músculos y costillas indoloros, sin crepitación ni irregularidades. No se palpan adenopatías supraclaviculares ni axilares.",
+      "grilla_items": [
+        "30-asma-ex-fisico::Pared del tórax: piel, celular subcutáneo, músculos"
+      ]
+    },
+    {
+      "id": "expansibilidad",
+      "maniobra": "Expansibilidad de vértices (manos sobre los hombros) y de bases (manos a nivel de T10, pulgares hacia la línea media) en inspiración profunda",
+      "hallazgo": "Expansibilidad de vértices y bases conservada y simétrica: los pulgares se separan en forma simétrica con la inspiración profunda. Lo esperable fuera de crisis es una expansión normal; en una crisis podría estar disminuida en forma bilateral por la hiperinsuflación.",
+      "grilla_items": [
+        "30-asma-ex-fisico::Expansibilidad: Realiza la maniobra",
+        "30-asma-ex-fisico::Expansibilidad; Plantea lo esperable para cada caso"
+      ]
+    },
+    {
+      "id": "elasticidad",
+      "maniobra": "Elasticidad torácica: compresión suave anteroposterior y lateral del tórax",
+      "hallazgo": "Tórax elástico, depresible, sin rigidez ni dolor a la compresión, simétrico. Lo esperable en un adulto joven fuera de crisis es una elasticidad conservada; la hiperinsuflación (crisis, enfisema) la disminuye.",
+      "grilla_items": [
+        "30-asma-ex-fisico::Elasticidad: Realiza la maniobra",
+        "30-asma-ex-fisico::Elasticidad: Plantea lo esperable para cada caso"
+      ]
+    },
+    {
+      "id": "vibraciones-vocales",
+      "maniobra": "Vibraciones vocales ('treinta y tres') en caras anterior, posterior y axilares, comparando bilateralmente de arriba hacia abajo",
+      "hallazgo": "Vibraciones vocales presentes, normales y simétricas en todas las caras de ambos hemitórax. Lo esperable fuera de crisis es que estén conservadas; con atrapamiento aéreo u obstrucción bronquial podrían estar disminuidas.",
+      "grilla_items": [
+        "30-asma-ex-fisico::Vibraciones vocales: todas las caras / bilateralmente",
+        "30-asma-ex-fisico::Vibraciones vocales: Plantea lo esperable a cada caso"
+      ]
+    },
+    {
+      "id": "percusion",
+      "maniobra": "Percusión digital en las tres caras (anterior, posterior y axilar) de ambos hemitórax, de arriba hacia abajo y comparando",
+      "hallazgo": "Sonoridad pulmonar normal y simétrica en las tres caras de ambos hemitórax. Matidez hepática en el 6.º espacio intercostal derecho, timpanismo de Traube conservado. Bases móviles. Lo esperable fuera de crisis es sonoridad normal; en una crisis o con hiperinsuflación habría hipersonoridad difusa.",
+      "grilla_items": [
+        "30-asma-ex-fisico::Percusión: en las 3 caras de ambos hemitórax",
+        "30-asma-ex-fisico::Percusión: Plantea lo esperable para cada caso"
+      ]
+    },
+    {
+      "id": "auscultacion",
+      "maniobra": "Auscultación en las tres caras de ambos hemitórax, sectores altos y bajos, comparando bilateralmente, con respiración lenta y profunda por la boca (inspiración y espiración completas)",
+      "hallazgo": "Murmullo vesicular presente y simétrico en las tres caras, sectores altos y bajos de ambos hemitórax. Espiración no prolongada en respiración tranquila. Con la espiración forzada aparecen escasas sibilancias espiratorias aisladas, bilaterales, que no se modifican con la tos. Sin estertores húmedos ni roce pleural. Es lo esperable en un asmático entre crisis: examen normal o con sibilancias aisladas; en una crisis habría sibilancias difusas y espiración prolongada, y un tórax silencioso indicaría gravedad.",
+      "grilla_items": [
+        "30-asma-ex-fisico::Auscultación: en las 3 caras de ambos hemitórax",
+        "30-asma-ex-fisico::Ausculta sectores altos y bajos en cada cara",
+        "30-asma-ex-fisico::Ausculta bilateralmente y compara",
+        "30-asma-ex-fisico::Auscultación: Plantea lo esperable para cada caso"
+      ]
+    },
+    {
+      "id": "cardiovascular",
+      "maniobra": "Examen cardiovascular básico (ritmo, ruidos cardíacos, pulsos)",
+      "hallazgo": "Ritmo regular de 76 lpm, ruidos cardíacos bien golpeados, sin soplos. Pulsos periféricos presentes y simétricos. Sin edemas.",
+      "grilla_items": []
+    }
+  ],
+  "paraclinica": [
+    {
+      "estudio": "Espirometría con prueba broncodilatadora",
+      "resultado": "Pre-broncodilatador: CVF 5,25 L (104 % del teórico), VEF1 3,62 L (84 % del teórico), VEF1/CVF 69 %. Post salbutamol 400 mcg: CVF 5,30 L, VEF1 4,08 L (+460 ml, +12,7 %), VEF1/CVF 77 %. Conclusión: obstrucción leve (VEF1/CVF < 70 % con CVF normal) con VEF1 conservado (≥ 80 %), y respuesta broncodilatadora significativa (> 200 ml y > 12 %): obstrucción reversible compatible con asma.",
+      "indicado": true,
+      "justificacion": "Indicada para valorar la función pulmonar en el seguimiento: es asmático conocido, sin espirometría desde los 14 años, y hoy no está controlado. Mide VEF1, CVF y su relación, y demuestra la reversibilidad (mejoría del VEF1 ≥ 12 % y ≥ 200 ml luego del broncodilatador). Una espirometría normal no descarta asma. Se coordina en forma ambulatoria; no se necesita para iniciar el corticoide inhalado.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Pico de flujo espiratorio (PEF) en consultorio",
+      "resultado": "Mejor de tres soplidos: 520 L/min (valor teórico para hombre de 26 años y 1,75–1,80 m ≈ 620 L/min; ≈ 84 % del teórico).",
+      "indicado": "opcional",
+      "justificacion": "Medición sencilla y accesible en el primer nivel; un valor aislado no confirma ni descarta asma ni define el control. Su principal utilidad aquí es enseñar la técnica e iniciar el automonitoreo domiciliario (registro de su mejor valor personal y de la variabilidad; un PEF < 60 % del mejor valor indica crisis).",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Radiografía de tórax frente y perfil",
+      "resultado": "Si se solicitara: tórax normal, sin consolidaciones, sin hiperinsuflación, sin derrame.",
+      "indicado": false,
+      "justificacion": "No indicada: no hay fiebre, taquicardia, taquipnea ni signos focales que hagan sospechar neumonía u otro diagnóstico; el asma se evalúa con la clínica y la función pulmonar. Agrega radiación sin cambiar la conducta.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Hemograma",
+      "resultado": "Si se solicitara: hemoglobina 15,1 g/dl, leucocitos 7.200/mm³ con eosinófilos 6 %, plaquetas 260.000/mm³.",
+      "indicado": false,
+      "justificacion": "No aporta a la valoración del control del asma ni cambia el tratamiento en un control ambulatorio sin elementos de infección ni otra sospecha clínica.",
+      "grilla_items": []
+    }
+  ],
+  "diagnostico": {
+    "principal": "Asma persistente leve no controlada",
+    "diferenciales": [
+      "Asma intermitente (descartada: síntomas más de 2 veces por semana y despertares nocturnos)",
+      "Asma persistente moderada (descartada: síntomas no diarios, despertares nocturnos menos de una vez por semana, VEF1 ≥ 80 %)",
+      "Rinitis alérgica con tos por goteo nasal posterior (coexiste, pero no explica las sibilancias ni la obstrucción reversible)",
+      "Reflujo gastroesofágico como causa de tos nocturna (sin pirosis ni regurgitación)",
+      "Infección respiratoria aguda (sin fiebre, sin expectoración, cuadro de 3 meses)"
+    ],
+    "fundamento": "Asmático conocido desde los 7 años, atópico (rinitis alérgica, dermatitis atópica en la infancia, madre asmática), que desde hace 3 meses presenta sibilancias, opresión torácica, disnea y tos seca. Clasificación de la enfermedad: en las últimas 4 semanas síntomas diurnos 3–4 veces por semana pero no diarios, despertares nocturnos unas 3 veces al mes (más de 2 al mes, menos de 1 por semana), una crisis leve-moderada en el año manejada en emergencia sin internación, y espirometría con obstrucción leve (VEF1/CVF 69 %), VEF1 84 % del teórico y reversibilidad significativa: asma persistente leve. Control: síntomas diurnos más de 2 veces por semana, despertares nocturnos por asma, uso del salbutamol de rescate más de 2 veces por semana y limitación de la actividad (debe salir del fútbol): cumple los cuatro criterios, asma no controlada. Factores que contribuyen: tratamiento solo con broncodilatador de acción corta a demanda (sin corticoide inhalado desde los 19 años), mala técnica inhalatoria sin inhalocámara, exposición laboral a polvo, humedad en la vivienda, rinitis alérgica activa, estrés y falta de vacuna antigripal. Examen entre crisis: normal salvo escasas sibilancias espiratorias aisladas en espiración forzada, sin elementos de gravedad (FR 16, Sat 98 %, sin tirajes).",
+    "grilla_items": [
+      "29-asma-anamnesis::Asma persistente leve",
+      "29-asma-anamnesis::No controlada"
+    ]
+  },
+  "conducta_esperada": [
+    {
+      "accion": "Explicar que el asma no está controlada y que hay que cambiar el tratamiento: el salbutamol solo, a demanda, ya no es suficiente ni se recomienda como único tratamiento en adultos.",
+      "grilla_items": [
+        "30-asma-ex-fisico::Explica que debe realizar cambio en el tratamiento"
+      ]
+    },
+    {
+      "accion": "Iniciar corticoide inhalado a dosis baja todos los días como tratamiento de control, por ejemplo beclometasona en aerosol (dosis baja en adultos: 200–500 mcg/día; p. ej., 100 mcg 2 disparos cada 12 h) o budesonida (200–400 mcg/día), con inhalocámara.",
+      "grilla_items": [
+        "30-asma-ex-fisico::Indica corticoides inhalados a dosis baja"
+      ]
+    },
+    {
+      "accion": "Explicar la función de cada inhalador: el corticoide inhalado es el de control (antiinflamatorio, se usa todos los días aunque esté bien, el efecto no es inmediato) y el salbutamol es el de rescate (broncodilatador de acción corta, alivia en minutos y dura 4–6 h, solo cuando hay síntomas).",
+      "grilla_items": [
+        "30-asma-ex-fisico::Explica tto y su función (de control y de rescate)"
+      ]
+    },
+    {
+      "accion": "Salbutamol en aerosol con inhalocámara como rescate para el control de los síntomas: 1–2 disparos (100–200 mcg) cuando aparezcan síntomas; ante una crisis, 4 a 10 disparos cada 20 minutos durante una hora y consultar si no mejora (plan de acción en crisis).",
+      "grilla_items": [
+        "30-asma-ex-fisico::Aumenta dosis de salbutamol para control síntomas"
+      ]
+    },
+    {
+      "accion": "Citar a nueva consulta en un mes para reevaluar control, técnica inhalatoria, adherencia y registros de pico flujo, y ajustar el tratamiento; coordinar espirometría con prueba broncodilatadora.",
+      "grilla_items": [
+        "30-asma-ex-fisico::Cita para nueva consulta en un mes"
+      ]
+    },
+    {
+      "accion": "Explicar la enfermedad: es crónica, con inflamación de los bronquios e hiperreactividad, que ante desencadenantes se cierran (broncoespasmo) en forma reversible; se controla con tratamiento regular aunque no se cure.",
+      "grilla_items": [
+        "30-asma-ex-fisico::Explica sobre la enfermedad"
+      ]
+    },
+    {
+      "accion": "Ayudar a reconocer sus desencadenantes: ejercicio y aire frío, polvo del depósito, humedad del dormitorio, infecciones respiratorias, alérgenos (rinitis en primavera), humo de tabaco/marihuana y estados emocionales/estrés.",
+      "grilla_items": [
+        "30-asma-ex-fisico::Ayuda a reconocer desencadenantes"
+      ]
+    },
+    {
+      "accion": "Aconsejar evitar los desencadenantes: protección respiratoria (tapaboca) en tareas con polvo, ventilar y tratar la humedad del dormitorio, no fumar tabaco ni marihuana, evitar el humo; tratar la rinitis; vacuna antigripal anual (y actualizar vacunas).",
+      "grilla_items": [
+        "30-asma-ex-fisico::Aconseja evitar desencadenantes"
+      ]
+    },
+    {
+      "accion": "Indicar enjuagarse la boca (y escupir) luego de cada uso del corticoide inhalado, para prevenir candidiasis oral y disfonía.",
+      "grilla_items": [
+        "30-asma-ex-fisico::Asesora realizar higiene bucal luego del tto"
+      ]
+    },
+    {
+      "accion": "Recomendar el uso de inhalocámara (aerocámara) con ambos aerosoles y enseñar/corregir la técnica: agitar, exhalar, inhalar lento y profundo, aguantar la respiración ~10 segundos; higiene de la inhalocámara.",
+      "grilla_items": [
+        "30-asma-ex-fisico::Recomienda uso de inhalocámara"
+      ]
+    },
+    {
+      "accion": "Recomendar automonitoreo con medidor de pico flujo: enseñar la técnica (de pie, indicador en cero, inspiración máxima, soplido explosivo, tres intentos y registrar el mayor), registrar su mejor valor y consultar si cae por debajo del 60 % de su mejor valor.",
+      "grilla_items": [
+        "30-asma-ex-fisico::Recomienda automonitoreo (pico flujo)"
+      ]
+    }
+  ],
+  "fuentes": [
+    {
+      "archivo": "catedra/asma.md",
+      "seccion": "Fisiopatología: inflamación crónica, hiperreactividad bronquial, obstrucción reversible",
+      "pagina": 5
+    },
+    {
+      "archivo": "catedra/asma.md",
+      "seccion": "Síntomas del asma; primer nivel: examen normal",
+      "pagina": 7
+    },
+    {
+      "archivo": "catedra/asma.md",
+      "seccion": "Interrogatorio para evaluar el control (últimas 4 semanas, más de dos por semana, síntomas nocturnos, mayor uso del inhalador), antecedentes, atopía y desencadenantes",
+      "pagina": 8
+    },
+    {
+      "archivo": "catedra/asma.md",
+      "seccion": "Examen físico: estado general, cianosis, tirajes, FR, inspección, expansibilidad, vibraciones, percusión, auscultación",
+      "pagina": 9
+    },
+    {
+      "archivo": "catedra/asma.md",
+      "seccion": "Diagnóstico: espirometría (variabilidad VEF1 > 200 ml y > 12 % post B2) y pico flujo",
+      "pagina": 10
+    },
+    {
+      "archivo": "catedra/asma.md",
+      "seccion": "Pico flujo espiratorio y uso del pico flujo (solo títulos de diapositiva; la técnica está en paraclinica.md)",
+      "pagina": 16
+    },
+    {
+      "archivo": "catedra/asma.md",
+      "seccion": "Seguimiento: control, técnica/adherencia, automonitoreo, plan de acción en crisis, vacunas",
+      "pagina": 21
+    },
+    {
+      "archivo": "catedra/asma.md",
+      "seccion": "Desencadenantes: frío, ejercicio, estados emocionales, infecciones respiratorias, tabaco, contaminantes, alérgenos",
+      "pagina": 23
+    },
+    {
+      "archivo": "catedra/asma.md",
+      "seccion": "Corticoides: potentes antiinflamatorios, vía inhalatoria (ICS), oral (OCS) o i/v. Las dosis de ICS y la recomendación de no tratar adultos solo con SABA siguen GINA (no figuran en el texto de los apuntes)",
+      "pagina": 24
+    },
+    {
+      "archivo": "catedra/asma.md",
+      "seccion": "Broncodilatadores: salbutamol 100–200 mcg por dosis, acción 4–6 h",
+      "pagina": 27
+    },
+    {
+      "archivo": "catedra/asma.md",
+      "seccion": "Inhalocámara: acción más rápida, menos efectos secundarios, higiene de la misma",
+      "pagina": 29
+    },
+    {
+      "archivo": "catedra/asma.md",
+      "seccion": "Técnica de administración del inhalador; si es corticoide enjuagar la boca",
+      "pagina": 30
+    },
+    {
+      "archivo": "catedra/asma.md",
+      "seccion": "Crisis asmática: PEF < 60 % del mejor valor; severidad de la crisis",
+      "pagina": 32
+    },
+    {
+      "archivo": "catedra/asma.md",
+      "seccion": "Tratamiento de la crisis leve a moderada: SABA 4 a 10 puff cada 20 min por una hora, prednisona 40–50 mg",
+      "pagina": 34
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Anamnesis respiratoria: antecedentes personales, tabaquismo, inhaladores, antecedentes familiares, vacunas, ambientales",
+      "pagina": 69
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Antecedentes inmunológicos (antigripal, SARS-CoV-2, antineumocócica) y ambientales",
+      "pagina": 70
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Examen físico general y trabajo respiratorio (tirajes, músculos accesorios)",
+      "pagina": 79
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Examen pleuropulmonar: inspección estática (forma y diámetros) y dinámica (FR, tirajes)",
+      "pagina": 87
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Palpación: pared torácica, expansibilidad, vibraciones vocales",
+      "pagina": 89
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Percusión: sonoridad, hipersonoridad en hiperinsuflación y crisis obstructivas",
+      "pagina": 92
+    },
+    {
+      "archivo": "mpna-teorico.md",
+      "seccion": "Auscultación: murmullo vesicular y ruidos agregados; sibilancias y tórax silencioso",
+      "pagina": 98
+    },
+    {
+      "archivo": "paraclinica.md",
+      "seccion": "Respiratorio — Asma bronquial: espirometría con prueba broncodilatadora y pico de flujo espiratorio",
+      "pagina": null
+    },
+    {
+      "archivo": "paraclinica.md",
+      "seccion": "Respiratorio — Bronquitis aguda: radiografía de tórax solo si se sospecha neumonía",
+      "pagina": null
+    }
+  ]
+}

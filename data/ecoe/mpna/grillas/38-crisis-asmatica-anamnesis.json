@@ -1,0 +1,91 @@
+{
+  "id": "38-crisis-asmatica-anamnesis",
+  "materia": "mpna",
+  "unidad_tematica": {
+    "numero": 9,
+    "nombre": "IRA, Asma y EPOC."
+  },
+  "titulo": "SIMULACIÓN 3: ANAMNESIS CRISIS ASMÁTICA",
+  "tipo": "anamnesis",
+  "motivo_consulta": "falta de aire",
+  "escala": [
+    "Excelente",
+    "Bien",
+    "Regular",
+    "No realizado"
+  ],
+  "secciones": [
+    {
+      "nombre": "Presentación",
+      "items": [
+        "Saluda y se presenta",
+        "Pregunta Ficha Patronímica completa?",
+        "Motivo de Consulta"
+      ]
+    },
+    {
+      "nombre": "EA: Exacerbación aguda del asma",
+      "items": [
+        "Disnea sibilante: Inicio, características, evolución",
+        "Síntomas acompañantes altos: Tos y otros",
+        "Síntomas acompañantes bajos: Dolor tipo puntada",
+        "Factores desencadenantes (infecc polvo tabaco etc)",
+        "Tratamiento utilizado, profundiza características"
+      ]
+    },
+    {
+      "nombre": "AEA: Crisis de asma",
+      "items": [
+        "¿Ha tenido crisis anteriormente?",
+        "¿Ha tenido crisis el último año, el último mes?",
+        "Intensidad de las crisis (consultas en emergencia)",
+        "Internaciones en sala",
+        "Internaciones en CTI",
+        "Intubación Oro-Traqueal"
+      ]
+    },
+    {
+      "nombre": "Valoración del ASMA Enfermedad y su CONTROL",
+      "items": [
+        "Momento y circunstancia de diagnóstico del Asma",
+        "Presencia y frecuencia de síntomas diurnos",
+        "Presencia y frecuencia de síntomas nocturnos",
+        "Frecuencia de los síntomas broncoobstructivos",
+        "Medicación que utiliza habitualmente",
+        "Aumento del uso de broncodilatadores",
+        "Como usa el inhalador",
+        "Desencadenantes (inhalantes, actividad física, etc.)",
+        "Investiga uso de pico Flujo",
+        "Consulta sobre Espirometría o F. Respiratorio"
+      ]
+    },
+    {
+      "nombre": "Hábitos, AP, AF, AI, AA",
+      "items": [
+        "Actividad física habitual",
+        "Estrés",
+        "Tabaquismo, THC",
+        "Rinitis alérgica",
+        "Dermatitis atópica",
+        "Asma en familiares de primer grado",
+        "Vacuna antigripal y para Sars Cov 2",
+        "Vacuna antineumocócica",
+        "Indaga trabajo, tipo de trabajo, ambiente",
+        "Indaga características de la vivienda",
+        "Indaga presencia de mascotas intradomiciliarias"
+      ]
+    },
+    {
+      "nombre": "Rendimiento global",
+      "items": [
+        "Desempeño global del estudiante"
+      ]
+    }
+  ],
+  "fuente": {
+    "archivo": "new/Sim-4_GRILLA-ANAMNESIS-Crisis-Asmática.pdf",
+    "paginas": [
+      1
+    ]
+  }
+}

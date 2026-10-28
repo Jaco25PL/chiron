@@ -1,0 +1,576 @@
+{
+  "id": "mpna-glicemia-alterada-tabaquismo",
+  "materia": "mpna",
+  "titulo": "Azúcar alto en un análisis de rutina en un fumador",
+  "grillas": [
+    "22-diabetes-y-tabaquismo"
+  ],
+  "dificultad": "intermedio",
+  "paciente": {
+    "nombre": "Gustavo Daniel Pereyra Silva",
+    "edad": 52,
+    "sexo": "masculino",
+    "procedencia": "Nacido y criado en Montevideo",
+    "domicilio": "Barrio La Teja, Montevideo",
+    "ocupacion": "Taxista; trabaja unas diez horas por día en el turno de la tarde y la noche",
+    "convivencia": "Vive con su esposa y su hijo menor, de 19 años",
+    "escolaridad": "Liceo hasta tercer año",
+    "estado_civil": "Casado",
+    "prestador": "Mutualista, policlínica de su barrio",
+    "medico_referencia": "Dr. Martín Acosta, médico de familia de la policlínica"
+  },
+  "personalidad": {
+    "tipo": "nervioso",
+    "descripcion": "Preocupado por el resultado del análisis: tiene miedo de 'quedar diabético' y tener que pincharse. Contesta lo que le preguntan y no agrega datos clínicos por su cuenta. Con el cigarrillo se pone un poco a la defensiva al principio, pero reconoce que le gustaría dejarlo; duda de poder lograrlo y no se ve dejando ya. Si el estudiante le explica las cosas con calma, se tranquiliza y hace preguntas ('¿entonces no es seguro?', '¿y qué análisis me tengo que hacer?').",
+    "forma_de_hablar": "Voseo montevideano, registro popular. Muletillas: 'mirá', 'la verdad', 'qué sé yo', 'viste', 'bo'. Respuestas cortas o medianas; habla de los viajes del taxi y del tránsito, pero el dato médico que da es solo el que se le preguntó."
+  },
+  "motivo_consulta": {
+    "frase_inicial": "Mirá, vengo porque me hice los análisis para el carné de salud y me salió el azúcar alto. Estoy preocupado, no sé si eso quiere decir que tengo diabetes."
+  },
+  "anamnesis": [
+    {
+      "id": "ficha-patronimica",
+      "tema": "Datos patronímicos",
+      "preguntas_ejemplo": [
+        "¿Cómo se llama?",
+        "¿Qué edad tiene?",
+        "¿A qué se dedica?",
+        "¿Con quién vive?"
+      ],
+      "respuesta": "Gustavo Pereyra, tengo 52 años. Soy de acá de Montevideo, vivo en La Teja. Soy taxista, laburo de tarde y de noche, unas diez horas arriba del auto. Estoy casado, vivo con mi señora y con el más chico, que tiene 19; la mayor ya se fue a vivir sola. Hice hasta tercero de liceo. Me atiendo en la mutualista, en la policlínica del barrio, con el doctor Acosta.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Pregunta por la Ficha patronímica"
+      ]
+    },
+    {
+      "id": "poliuria",
+      "tema": "Aumento de la cantidad de orina (poliuria)",
+      "preguntas_ejemplo": [
+        "¿Orina más cantidad de lo habitual?",
+        "¿Se levanta de noche a orinar?"
+      ],
+      "respuesta": "No, normal. Lo de siempre. De noche no me levanto, y eso que tomo mate todo el día.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Orina más cantidad de lo habitual?"
+      ]
+    },
+    {
+      "id": "polidipsia",
+      "tema": "Aumento de la sed (polidipsia)",
+      "preguntas_ejemplo": [
+        "¿Tiene más sed de lo habitual?",
+        "¿Anda con la boca seca?"
+      ],
+      "respuesta": "No, sed de más no. Tomo mate, pero es costumbre, no es que ande muerto de sed.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Tiene más sed de lo habitual?"
+      ]
+    },
+    {
+      "id": "polifagia",
+      "tema": "Aumento del apetito (polifagia)",
+      "preguntas_ejemplo": [
+        "¿Come más que antes?",
+        "¿Tiene más hambre de lo normal?"
+      ],
+      "respuesta": "No, como lo mismo de siempre. Como bien, eso sí, pero no es que ahora tenga más hambre que antes.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Se alimenta más que antes?"
+      ]
+    },
+    {
+      "id": "adelgazamiento",
+      "tema": "Pérdida de peso sin causa aparente",
+      "preguntas_ejemplo": [
+        "¿Bajó de peso sin proponérselo?",
+        "¿Notó que adelgazó?"
+      ],
+      "respuesta": "¿Adelgazar? Ojalá, bo. Al revés, en los últimos años engordé como diez kilos. Bajar no bajé nada.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Nota que adelgazó sin causa aparente?"
+      ]
+    },
+    {
+      "id": "glicemia-laboratorio",
+      "tema": "Valor de la glicemia en ayunas del análisis de sangre",
+      "preguntas_ejemplo": [
+        "¿Cuánto le dio la glicemia?",
+        "¿Fue en ayunas?",
+        "¿Trajo el análisis?"
+      ],
+      "respuesta": "Acá tengo el papel. Me dio 1,32. Fue en el laboratorio, me sacaron sangre del brazo, en ayunas, no había comido nada desde la cena. Al lado dice que lo normal es hasta 1,10.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Alteración de cifras de glicemia"
+      ]
+    },
+    {
+      "id": "hemoglucotest-farmacia",
+      "tema": "Medición de glicemia con hemoglucotest en una farmacia",
+      "preguntas_ejemplo": [
+        "¿Se midió el azúcar en otro lado?",
+        "¿Se hizo algún control con el dedo?"
+      ],
+      "respuesta": "Sí, después del análisis me asusté y me lo medí en la farmacia, con el aparatito que te pinchan el dedo. Me dio 1,48. Pero había desayunado hacía un rato, café con leche y bizcochos.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Alteración de cifras de glicemia"
+      ]
+    },
+    {
+      "id": "glicemias-previas",
+      "tema": "Glicemias anteriores",
+      "preguntas_ejemplo": [
+        "¿Alguna vez le había dado alta la glicemia?",
+        "¿Cuándo fue el último análisis?"
+      ],
+      "respuesta": "No, que yo sepa no. El carné anterior fue hace dos años y me dijeron que estaba todo bien. Nunca me dijeron nada del azúcar.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Alteración de cifras de glicemia"
+      ]
+    },
+    {
+      "id": "peso-al-nacer",
+      "tema": "Peso al nacer (macrosomía, más de 4 kg)",
+      "preguntas_ejemplo": [
+        "¿Sabe cuánto pesó al nacer?",
+        "¿Fue un bebé grande?"
+      ],
+      "respuesta": "Mi vieja siempre decía que nací normal, tres kilos y pico. Grandote no fui. Y mis dos hijos también nacieron con peso normal.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Peso al nacer macrosómico o mayor a 4kg"
+      ]
+    },
+    {
+      "id": "af-diabetes",
+      "tema": "Antecedentes familiares de diabetes tipo 2",
+      "preguntas_ejemplo": [
+        "¿Alguien en su familia tiene diabetes?",
+        "¿Sus padres o hermanos tienen el azúcar alto?"
+      ],
+      "respuesta": "Sí, mi madre. Le encontraron diabetes a los 60 y pico y toma pastillas, la metformina esa. Por eso me asusté. Mis hermanos no, que yo sepa.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Antecedentes familiares de DM2"
+      ]
+    },
+    {
+      "id": "actividad-fisica",
+      "tema": "Actividad física / sedentarismo",
+      "preguntas_ejemplo": [
+        "¿Hace ejercicio?",
+        "¿Camina?",
+        "¿Cuánto tiempo pasa sentado?"
+      ],
+      "respuesta": "Ejercicio nada, la verdad. Me paso diez horas sentado en el taxi. Antes jugaba al fútbol con los muchachos los sábados, pero hace como cinco años que dejé. Caminar, lo de ir hasta el auto y poco más.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Actividad física/sedentarismo"
+      ]
+    },
+    {
+      "id": "alimentacion",
+      "tema": "Hábitos de alimentación",
+      "preguntas_ejemplo": [
+        "¿Cómo se alimenta?",
+        "¿Qué come en un día normal?",
+        "¿Come frutas y verduras?"
+      ],
+      "respuesta": "Como mal, para qué te voy a mentir. Arriba del taxi como lo que viene: un chivito, unas empanadas, bizcochos con el mate. Refresco tomo bastante, el de cola. Verdura poca, fruta casi nada. Los domingos asado con la familia.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Hábitos de alimentación"
+      ]
+    },
+    {
+      "id": "peso-talla",
+      "tema": "Peso y talla (para calcular el IMC)",
+      "preguntas_ejemplo": [
+        "¿Cuánto pesa?",
+        "¿Cuánto mide?"
+      ],
+      "respuesta": "En el carné me pesaron: 94 kilos. Y mido 1,76.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Peso y talla para cálculo de IMC"
+      ]
+    },
+    {
+      "id": "tabaquismo-inicio",
+      "tema": "Tabaquismo: desde cuándo fuma",
+      "preguntas_ejemplo": [
+        "¿Fuma?",
+        "¿Desde qué edad fuma?"
+      ],
+      "respuesta": "Sí, fumo. Empecé a los 16, en el liceo, con los compañeros. O sea que hace como 36 años que fumo.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Tabaquismo: ¿desde cuándo?"
+      ]
+    },
+    {
+      "id": "tabaquismo-cantidad",
+      "tema": "Tabaquismo: cantidad de cigarrillos",
+      "preguntas_ejemplo": [
+        "¿Cuántos cigarrillos fuma por día?",
+        "¿Siempre fumó esa cantidad?"
+      ],
+      "respuesta": "Una cajilla por día, veinte. Más o menos siempre fumé eso desde los veintipico. Si es un día bravo de trabajo, capaz que un poco más.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Tabaquismo: ¿cuanta cantidad?"
+      ]
+    },
+    {
+      "id": "tabaquismo-caracteristicas",
+      "tema": "Tabaquismo: características de la conducta de fumar",
+      "preguntas_ejemplo": [
+        "Cuando se despierta, ¿cuánto tarda en prender el primer cigarrillo?",
+        "¿En qué momentos fuma más?",
+        "¿Qué fuma?"
+      ],
+      "respuesta": "Cigarrillos de cajilla, comunes. El primero me lo prendo apenas me levanto, con el primer mate, antes de los diez minutos. Después fumo en el taxi entre viaje y viaje, con el café, después de comer. Cuando estoy nervioso, con el tránsito, fumo más.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Tab: características de la conducta de fumar"
+      ]
+    },
+    {
+      "id": "tabaquismo-intentos",
+      "tema": "Tabaquismo: intentos previos de dejar de fumar",
+      "preguntas_ejemplo": [
+        "¿Alguna vez intentó dejar de fumar?",
+        "¿Cuánto tiempo estuvo sin fumar?",
+        "¿Por qué volvió?"
+      ],
+      "respuesta": "Una vez, hace como cuatro años, dejé de golpe cuando nació mi nieta. Aguanté tres semanas. Andaba de un humor de perros, comía todo el día, y en una discusión con un pasajero volví a prender uno y chau. Nunca usé parches ni nada.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Tabaquismo: Intentos por dejar de fumar"
+      ]
+    },
+    {
+      "id": "tabaquismo-motivacion",
+      "tema": "Tabaquismo: motivación para dejar de fumar",
+      "preguntas_ejemplo": [
+        "¿Ha pensado en dejar de fumar?",
+        "¿Le gustaría dejar?",
+        "¿Tiene intención de dejar en el próximo mes?"
+      ],
+      "respuesta": "Y... sí, lo pienso. Sé que tendría que dejar, son muchos años, y con esto del azúcar más todavía; mi nieta además me rezonga. Pero ahora, este mes, no me veo, con el estrés del taxi. Capaz que más adelante, en unos meses. No sé si voy a poder, la otra vez no pude.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Tabaquismo: Motivación para dejar de fumar"
+      ]
+    },
+    {
+      "id": "dislipemia",
+      "tema": "Dislipemia o problemas con el colesterol",
+      "preguntas_ejemplo": [
+        "¿Tiene el colesterol alto?",
+        "¿Le controlaron las grasas en sangre?"
+      ],
+      "respuesta": "No sé, la verdad. Nunca me dijeron que lo tuviera alto, pero creo que tampoco me lo midieron. En el carné me sacaron solo el azúcar.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Dislipemia o problemas con el colesterol"
+      ]
+    },
+    {
+      "id": "af-cardiopatia-isquemica",
+      "tema": "Antecedentes familiares de cardiopatía isquémica precoz",
+      "preguntas_ejemplo": [
+        "¿Alguien en su familia tuvo infarto o angina?",
+        "¿A qué edad?"
+      ],
+      "respuesta": "Mi viejo tuvo un infarto, pero ya de grande, a los 74, y vivió unos años más. Mis hermanos, tíos, nadie joven con problemas del corazón que yo sepa.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::AF de cardiopatía isquémica precoz"
+      ]
+    },
+    {
+      "id": "presion-arterial",
+      "tema": "Presión arterial",
+      "preguntas_ejemplo": [
+        "¿Tiene presión alta?",
+        "¿Cómo le dio la presión en el carné?"
+      ],
+      "respuesta": "No, presión alta no me dijeron nunca. En el carné me dijeron que estaba un poquito alta pero que no era nada.",
+      "grilla_items": []
+    },
+    {
+      "id": "alcohol",
+      "tema": "Consumo de alcohol y otras sustancias",
+      "preguntas_ejemplo": [
+        "¿Toma alcohol?",
+        "¿Consume alguna otra sustancia?"
+      ],
+      "respuesta": "Alguna cerveza el fin de semana con el asado, dos o tres. En la semana no, porque manejo. Otra cosa no consumo.",
+      "grilla_items": []
+    },
+    {
+      "id": "antecedentes-personales",
+      "tema": "Enfermedades previas, medicación y alergias",
+      "preguntas_ejemplo": [
+        "¿Tiene alguna enfermedad?",
+        "¿Toma alguna medicación?",
+        "¿Es alérgico a algo?"
+      ],
+      "respuesta": "No, soy sano, nunca estuve internado. Me operaron de apéndice de chico. No tomo ningún remedio, solo algún ibuprofeno si me duele la espalda. Alergias no tengo.",
+      "grilla_items": []
+    },
+    {
+      "id": "sintomas-respiratorios-cv",
+      "tema": "Tos, falta de aire, dolor de pecho o dolor de piernas al caminar",
+      "preguntas_ejemplo": [
+        "¿Tiene tos o catarro?",
+        "¿Se agita?",
+        "¿Le duele el pecho o las piernas al caminar?"
+      ],
+      "respuesta": "Algo de tos de mañana tengo, con un poco de catarro, la tos del fumador, digamos. Me agito si subo ligero una escalera, pero porque no hago nada. Dolor de pecho no, y las piernas no me duelen al caminar.",
+      "grilla_items": []
+    }
+  ],
+  "signos_vitales": {
+    "pa": "134/86 mmHg",
+    "fc": "84 lpm, regular",
+    "fr": "16 rpm",
+    "temperatura": "36,4 °C",
+    "saturacion": "96 % (aire ambiente)",
+    "peso": "94 kg",
+    "talla": "1,76 m",
+    "imc": "30,3 kg/m²",
+    "perimetro_abdominal": "104 cm"
+  },
+  "examen_fisico": [
+    {
+      "id": "estado-general",
+      "maniobra": "Impresión del estado general",
+      "hallazgo": "Lúcido, orientado, colaborador, algo ansioso. Buen estado general. Olor a tabaco; manchas amarillentas de nicotina en los dedos índice y mayor de la mano derecha.",
+      "grilla_items": []
+    },
+    {
+      "id": "antropometria",
+      "maniobra": "Peso, talla, IMC y perímetro abdominal",
+      "hallazgo": "Peso 94 kg, talla 1,76 m, IMC 30,3 kg/m² (obesidad grado 1). Perímetro abdominal 104 cm (mayor a 90 cm en hombres).",
+      "grilla_items": []
+    },
+    {
+      "id": "presion-arterial-fc",
+      "maniobra": "Presión arterial (ambos brazos, sentado, tras reposo) y frecuencia cardíaca",
+      "hallazgo": "PA 134/86 mmHg en brazo derecho y 132/84 mmHg en brazo izquierdo. FC 84 lpm regular.",
+      "grilla_items": []
+    },
+    {
+      "id": "piel",
+      "maniobra": "Inspección de piel (acantosis nigricans)",
+      "hallazgo": "Sin acantosis nigricans en cuello ni axilas. Piel sin lesiones.",
+      "grilla_items": []
+    },
+    {
+      "id": "cardiovascular",
+      "maniobra": "Auscultación cardíaca y palpación de pulsos periféricos",
+      "hallazgo": "Ritmo regular, ruidos bien golpeados, sin soplos. Pulsos carotídeos, femorales, pedios y tibiales posteriores presentes y simétricos, sin soplos carotídeos.",
+      "grilla_items": []
+    },
+    {
+      "id": "pleuropulmonar",
+      "maniobra": "Examen pleuropulmonar",
+      "hallazgo": "Murmullo alveolovesicular presente bilateral, algunos roncus aislados que se modifican con la tos. Sin sibilancias ni estertores crepitantes.",
+      "grilla_items": []
+    }
+  ],
+  "paraclinica": [
+    {
+      "estudio": "Nueva glicemia basal en plasma venoso (ayuno de 8 h)",
+      "resultado": "1,19 g/L (119 mg/dL).",
+      "indicado": true,
+      "justificacion": "Es el método recomendado para el diagnóstico de diabetes (MSP 2017). Un único valor ≥1,26 g/L (126 mg/dL) no alcanza: se necesitan dos determinaciones de glicemia basal en plasma venoso ≥1,26 g/L para confirmar. El resultado (110–125 mg/dL) no confirma diabetes y corresponde a glicemia de ayuno alterada según el punto de corte de la OMS adoptado por la guía.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Prueba de tolerancia oral a la glucosa (PTOG, 75 g, glicemia a las 2 horas)",
+      "resultado": "Glicemia basal 1,16 g/L (116 mg/dL); a las 2 horas de la carga de 75 g: 1,58 g/L (158 mg/dL).",
+      "indicado": "opcional",
+      "justificacion": "Segunda opción diagnóstica tras la glicemia basal. La guía MSP 2017 la recomienda ante resultados contradictorios o dudosos y en pacientes con glicemia de ayuno alterada (110 a <126 mg/dL) repetidas; acá las basales son discordantes (1,32 y luego 1,19 g/L, en rango de GAA), y frente a una GAA la PTOG sigue siendo de incuestionable valor (DM2 prevención, p. 6). Diabetes si a las 2 horas es ≥200 mg/dL; 140–199 mg/dL es tolerancia alterada a la glucosa (PTOG alterada). Si la basal es ≥126 mg/dL no se continúa la prueba. Durante la prueba debe estar en reposo y no fumar.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Hemoglucotest (glicemia capilar) en la consulta para diagnosticar diabetes",
+      "resultado": "1,41 g/L (sin ayuno).",
+      "indicado": false,
+      "justificacion": "La glicemia capilar en sangre total no se recomienda como prueba diagnóstica (MSP 2017): no sirve para confirmar ni descartar diabetes. Tampoco el valor de 1,48 g/L de la farmacia, tomado además después de desayunar.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Hemoglobina glicosilada (HbA1c) con fines diagnósticos",
+      "resultado": "5,9 %.",
+      "indicado": false,
+      "justificacion": "La guía MSP 2017 no recomienda actualmente la HbA1c para el diagnóstico de diabetes en Uruguay (falta de estandarización de los laboratorios y costos); se reserva para el control de la diabetes ya diagnosticada. ALAD tampoco la acepta para evaluar prediabetes.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Perfil lipídico (colesterol total, HDL, LDL, triglicéridos)",
+      "resultado": "Colesterol total 226 mg/dL, HDL 37 mg/dL, LDL 147 mg/dL, triglicéridos 210 mg/dL.",
+      "indicado": true,
+      "justificacion": "Valoración de otros factores de riesgo cardiovascular en un fumador con obesidad, sedentarismo e hiperglicemia, sin perfil lipídico previo. HDL <40 mg/dL y triglicéridos >150 mg/dL son además marcadores de riesgo de diabetes.",
+      "grilla_items": []
+    },
+    {
+      "estudio": "Insulinemia basal / índice de insulinorresistencia",
+      "resultado": "No se realiza.",
+      "indicado": false,
+      "justificacion": "No está indicada para evaluar insulinorresistencia, prediabetes ni riesgo cardiovascular: sus métodos no están estandarizados y la medición de insulina queda para investigación (DM2 prevención, ALAD).",
+      "grilla_items": []
+    }
+  ],
+  "diagnostico": {
+    "principal": "Glicemia basal aislada mayor a 1,26 g/L que no confirma diabetes (requiere nueva glicemia basal y eventual PTOG), en fumador de más de 30 paquetes-año en etapa de contemplación",
+    "diferenciales": [
+      "Diabetes mellitus tipo 2 (si una segunda glicemia basal es ≥1,26 g/L o la PTOG a las 2 h es ≥2 g/L)",
+      "Glicemia de ayuno alterada y/o tolerancia alterada a la glucosa (prediabetes)"
+    ],
+    "fundamento": "Hombre de 52 años, asintomático (sin poliuria, polidipsia, polifagia ni adelgazamiento), con una única glicemia basal en plasma venoso de 1,32 g/L y un hemoglucotest posprandial de 1,48 g/L, con glicemia normal hace dos años. Un solo valor basal no confirma diabetes: se requieren dos glicemias basales ≥126 mg/dL, o dos glicemias ≥200 mg/dL a las 2 h de la PTOG, o síntomas más glicemia al azar ≥200 mg/dL; el hemoglucotest no es diagnóstico (MSP 2017, p. 28 y 32-33). Tiene múltiples factores de riesgo de DM2: edad ≥45 años, madre con DM2, obesidad (IMC 30,3), perímetro abdominal 104 cm, sedentarismo, alimentación inadecuada y tabaquismo (factor de riesgo modificable de DM2). Peso al nacer normal y sin cardiopatía isquémica precoz en la familia (infarto paterno a los 74 años). Tabaquismo: fuma desde los 16 años, 20 cigarrillos/día desde los veintipico (más de 30 paquetes-año), primer cigarrillo a menos de 30 minutos de despertarse (alta dependencia), un intento previo de cesación de tres semanas. Etapa de contemplación: piensa en dejar y reconoce razones para hacerlo, pero con ambivalencia, no se ve dejando en el próximo mes y lo plantea para los próximos meses, dudando de lograrlo. Con los estudios de control (nueva basal 1,19 g/L y PTOG 1,58 g/L a las 2 h) queda clasificado como glicemia de ayuno alterada con tolerancia alterada a la glucosa, sin diabetes confirmada.",
+    "grilla_items": [
+      "22-diabetes-y-tabaquismo::Se encuentra en contemplación"
+    ]
+  },
+  "conducta_esperada": [
+    {
+      "accion": "Explica que con un solo valor de glicemia basal no se puede confirmar diabetes: el diagnóstico debe confirmarse en días sucesivos.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::No se puede confirmar diabetes con 1 sólo valor de glicemia basal"
+      ]
+    },
+    {
+      "accion": "Explica que los hemoglucotest (glicemia capilar, como el de la farmacia) no sirven para diagnosticar diabetes.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Los hemoglucotest no sirven para diagnóstico"
+      ]
+    },
+    {
+      "accion": "Indica una nueva glicemia basal en plasma venoso, con 8 horas de ayuno, para evaluar si hay una segunda cifra ≥1,26 g/L.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Se debe realizar nueva glicemia basal para evaluar una 2da cifra mayor a 1.26"
+      ]
+    },
+    {
+      "accion": "Explica que se confirma diabetes si la nueva glicemia basal vuelve a dar un valor ≥1,26 g/L (126 mg/dL).",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::O si en la GB vuelve a tener un valor ayor a 1.26"
+      ]
+    },
+    {
+      "accion": "Como segunda opción plantea la PTOG: glicemia 2 horas después de una carga oral de 75 g de glucosa, con ayuno de 8 a 12 horas, alimentación y actividad habituales los 3 días previos, en reposo y sin fumar durante la prueba.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Como segunda opción plantea realizar PTOG"
+      ]
+    },
+    {
+      "accion": "Explica que en la PTOG un valor ≥200 mg/dL (2 g/L) a las 2 horas hace diagnóstico de diabetes.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Explica diagnóstico con resultado mayor a 200 luego de las 2hs"
+      ]
+    },
+    {
+      "accion": "Explica qué es la glicemia de ayuno alterada: glicemia basal por encima de lo normal pero por debajo del umbral de diabetes (110 a 125 mg/dL según OMS y la guía MSP; 100 a 125 mg/dL según ADA/ALAD), un estado de transición con mayor riesgo de progresar a DM2.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Explica lo que es la glicemia de ayuno alterada"
+      ]
+    },
+    {
+      "accion": "Explica qué es una PTOG alterada (tolerancia alterada a la glucosa): glicemia a las 2 horas de la carga entre 140 y 199 mg/dL; tampoco es diabetes, pero es un estado de riesgo aumentado de DM2.",
+      "grilla_items": [
+        "22-diabetes-y-tabaquismo::Explica que es una PTOG alterada"
+      ]
+    },
+    {
+      "accion": "Consejo breve y personalizado para dejar de fumar adaptado a la etapa de contemplación (entrevista motivacional): vincular el tabaco con su riesgo de diabetes y cardiovascular, reforzar sus propios motivos (salud, la nieta), trabajar la ambivalencia, valorar el intento previo como aprendizaje, ofrecer ayuda para cuando decida fijar una fecha, y registrarlo en la historia clínica.",
+      "grilla_items": []
+    },
+    {
+      "accion": "Medidas higiénico-dietéticas para reducir el riesgo de DM2 y cardiovascular: alimentación saludable (menos refrescos, azúcares y ultraprocesados, más frutas y verduras), actividad física regular (al menos 150 minutos por semana), descenso de peso; solicitar perfil lipídico, controlar la presión arterial y acordar un control con los resultados.",
+      "grilla_items": []
+    }
+  ],
+  "fuentes": [
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Criterios diagnósticos de diabetes; glicemia basal en plasma venoso como método recomendado; PTOG",
+      "pagina": 28
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Indicaciones de la PTOG; punto de corte de glicemia de ayuno alterada (≥110 mg/dL, OMS); preparación de la PTOG",
+      "pagina": 29
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "HbA1c: no se recomienda para el diagnóstico de diabetes",
+      "pagina": 31
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Tamizaje: glicemia capilar no recomendada como prueba diagnóstica",
+      "pagina": 32
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Recomendaciones de tamizaje en población de riesgo",
+      "pagina": 33
+    },
+    {
+      "archivo": "guias/msp-diabetes-2017.md",
+      "seccion": "Tabaquismo como factor de riesgo modificable de DM2; otros factores de riesgo",
+      "pagina": 25
+    },
+    {
+      "archivo": "catedra/dm2-prevencion.md",
+      "seccion": "Glicemia de ayuno alterada y tolerancia alterada a la glucosa; PTOG (no fumar durante la prueba)",
+      "pagina": 2
+    },
+    {
+      "archivo": "catedra/dm2-prevencion.md",
+      "seccion": "Cuadro 1: criterios diagnósticos de los trastornos de la regulación de la glucosa",
+      "pagina": 4
+    },
+    {
+      "archivo": "catedra/dm2-prevencion.md",
+      "seccion": "Otros factores de riesgo de diabetes (edad, AF, IMC, cintura, sedentarismo, bajo peso al nacer o macrosomía)",
+      "pagina": 5
+    },
+    {
+      "archivo": "catedra/dm2-prevencion.md",
+      "seccion": "Insulinemia: no indicada; criterios diagnósticos de diabetes (confirmar en días sucesivos)",
+      "pagina": 7
+    },
+    {
+      "archivo": "catedra/tabaquismo-motivacion-etapas-cambio.md",
+      "seccion": "Etapas de cambio: precontemplación, contemplación, preparación",
+      "pagina": 4
+    },
+    {
+      "archivo": "catedra/tabaquismo-motivacion-etapas-cambio.md",
+      "seccion": "Preguntas para establecer la etapa de cambio",
+      "pagina": 5
+    },
+    {
+      "archivo": "guias/msp-tabaquismo-2009.md",
+      "seccion": "Consejo breve personalizado para dejar de fumar",
+      "pagina": 35
+    },
+    {
+      "archivo": "guias/msp-tabaquismo-2009.md",
+      "seccion": "Motivación y cambio: grados de motivación y etapas de Prochaska y Di Clemente",
+      "pagina": 45
+    },
+    {
+      "archivo": "guias/msp-tabaquismo-2009.md",
+      "seccion": "Grado de dependencia: tiempo hasta el primer cigarrillo (Fagerström)",
+      "pagina": 50
+    },
+    {
+      "archivo": "guias/msp-tabaquismo-2009.md",
+      "seccion": "Averiguar: ¿cuánto fuma?, ¿desde cuándo?",
+      "pagina": 63
+    },
+    {
+      "archivo": "catedra/enfermedades-tabacodependientes.md",
+      "seccion": "Enfermedades cardiovasculares por tabaco",
+      "pagina": 5
+    },
+    {
+      "archivo": "catedra/enfermedades-tabacodependientes.md",
+      "seccion": "Tabaco como causa de diabetes tipo 2",
+      "pagina": 9
+    }
+  ]
+}
