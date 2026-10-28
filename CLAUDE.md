@@ -67,6 +67,7 @@ data/ecoe/
 - Secrets (Gemini keys, `DATABASE_URL`, `CHIRON_BACKEND_SECRET`, LangSmith) are Vercel env vars of that project. The web project has `CHIRON_API_URL` + the same `CHIRON_BACKEND_SECRET`.
 - Deployed RAG search uses pgvector in Neon (`rag/search.py`, 768-dim truncated gemini-embedding-001 vectors loaded by `rag/to_pgvector.py`); Chroma remains for local dev only.
 - Cold starts: Gemini clients are built lazily, and the UI shows a "waking up" notice past ~3.5 s.
+- **QA environment:** changes go to the `qa` branch first; its Vercel preview (web https://chiron-git-qa-joaquins-projects-dc0b49f9.vercel.app, API https://chiron-api-git-qa-joaquins-projects-dc0b49f9.vercel.app) uses the Neon branch `qa` (a copy of production, isolated), only the free Gemini keys (no `GOOGLE_API_KEY_1` nor `GEMINI_PAID_*` in Preview) and the LangSmith project `chiron-qa`. Previews sit behind Vercel's deployment protection; the web reaches the API's preview with `CHIRON_API_BYPASS` (a "protection bypass for automation" token of `chiron-api`). Once it works there, merge `qa` into `main` to ship it. Real users only use production.
 - `Dockerfile` + `deploy/cloudrun.sh` are kept as an alternative container deploy (Cloud Run needs a billing account).
 ## Tests
 

@@ -9,6 +9,9 @@ import { createHmac } from "node:crypto";
 export const API_URL =
   process.env.CHIRON_API_URL ?? (process.env.NODE_ENV === "development" ? "http://127.0.0.1:8000" : undefined);
 const SECRET = process.env.CHIRON_BACKEND_SECRET;
+// QA only: the API's preview deployments sit behind Vercel's deployment protection, and this
+// "protection bypass for automation" token lets this server through (production has no protection)
+const BYPASS = process.env.CHIRON_API_BYPASS;
 
 /** Identity headers for the backend: x-chiron-user/-name/-ts, plus the HMAC when a secret is set. */
 export function identidad(email: string, nombre: string | null | undefined): Record<string, string> {
@@ -18,6 +21,7 @@ export function identidad(email: string, nombre: string | null | undefined): Rec
   if (SECRET) {
     headers["x-chiron-sig"] = createHmac("sha256", SECRET).update(`${email}\n${name}\n${ts}`).digest("hex");
   }
+  if (BYPASS) headers["x-vercel-protection-bypass"] = BYPASS;
   return headers;
 }
 
