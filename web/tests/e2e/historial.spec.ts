@@ -1,3 +1,4 @@
+import { nombreCorto } from "../../lib/api";
 import { expect, test } from "@playwright/test";
 import { signInAs } from "./session";
 
@@ -21,7 +22,7 @@ test("history starts empty and lists each finished consultation with its score",
   await page.getByRole("button", { name: "Historial" }).click();
   const panel = page.getByRole("dialog", { name: "Tu historial" });
   await expect(panel.getByText("Promedio de las últimas 1")).toBeVisible();
-  const nombre = caso.paciente.nombre.split(" ").slice(0, 2).join(" ");
+  const nombre = nombreCorto(caso.paciente.nombre);
   await expect(panel.getByRole("listitem").filter({ hasText: nombre })).toContainText(`${fin.feedback.score}/100`);
   await expect(panel).toContainText("Cara a cara");
   await expect(panel.getByRole("button", { name: new RegExp(`: ${fin.feedback.score} de 100`) })).toBeVisible();

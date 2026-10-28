@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { nombreCorto } from "../../lib/api";
 import { expect, test, type Page } from "@playwright/test";
 import { signInAs } from "./session";
 
@@ -30,7 +31,7 @@ test("beginner: the level is remembered and the checklist ticks itself as the st
   await page.reload();
   await expect(page.getByRole("tab", { name: "Principiante" })).toHaveAttribute("aria-selected", "true");
 
-  const nombre = caso.paciente.nombre.split(" ").slice(0, 2).join(" ");
+  const nombre = nombreCorto(caso.paciente.nombre);
   await page.locator("article").filter({ hasText: nombre }).getByRole("link", { name: "Atender" }).click();
   await expect(page).toHaveURL(/\?modo=cara&nivel=principiante/);
   await page.getByRole("tab", { name: "Chat" }).click();

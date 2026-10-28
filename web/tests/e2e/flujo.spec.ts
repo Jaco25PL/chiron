@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { nombreCorto } from "../../lib/api";
 import { expect, test } from "@playwright/test";
 import { signInAs } from "./session";
 import { decir, microfonoFalso } from "./voz";
@@ -20,7 +21,7 @@ test("a full consultation, from case selection to summary", async ({ page, conte
 
   // 1. pick the patient: the card only says who they are, never what they have
   await page.goto("/");
-  const nombre = caso.paciente.nombre.split(" ").slice(0, 2).join(" ");
+  const nombre = nombreCorto(caso.paciente.nombre);
   const card = page.locator("article").filter({ hasText: nombre });
   await expect(card).not.toContainText(caso.titulo);
   await expect(card).not.toContainText(String(caso.paciente.edad));

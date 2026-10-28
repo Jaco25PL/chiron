@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { type Nivel, sexoLabel } from "@/lib/api";
+import { type Nivel, nombreCorto, sexoLabel } from "@/lib/api";
 import { formatoTiempo, useConsulta, useCuentaRegresiva } from "@/lib/useConsulta";
 import { useMascota } from "@/lib/useMascota";
 import { ChatView } from "./ChatView";
@@ -22,7 +22,7 @@ export function Consulta({ caseId, modoInicial, nivel }: { caseId: string; modoI
   const restante = useCuentaRegresiva(c.inicio, c.pausa);
   const [mascotaId] = useMascota();
   const pausado = c.pausa.desde !== null;
-  const nombre = c.caso?.paciente.nombre.split(" ").slice(0, 2).join(" ");
+  const nombre = c.caso && nombreCorto(c.caso.paciente.nombre);
   // beginner level: side panel on desktop (can be hidden), bottom sheet from a pill on mobile
   const [panel, setPanel] = useState(true);
   const [hoja, setHoja] = useState(false);

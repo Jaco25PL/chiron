@@ -222,10 +222,18 @@ export function sexoLabel(sexo: string) {
   return sexo === "femenino" ? "Paciente femenina" : "Paciente masculino";
 }
 
+/** First name and first surname, as a patient is called: "Ignacio Martín Techera Bentancor" → "Ignacio
+ *  Techera", "Washington Ferreira Olivera" → "Washington Ferreira". Uruguayan names carry two surnames
+ *  at the end, so the first surname is the second to last word (one given name: the second word). */
+export function nombreCorto(nombre: string) {
+  const p = nombre.trim().split(/\s+/);
+  if (p.length >= 4) return `${p[0]} ${p[p.length - 2]}`;
+  return p.slice(0, 2).join(" ");
+}
+
 export function iniciales(nombre: string) {
-  return nombre
+  return nombreCorto(nombre)
     .split(" ")
-    .slice(0, 2)
     .map((p) => p[0])
     .join("");
 }

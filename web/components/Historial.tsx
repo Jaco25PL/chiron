@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Clock } from "@/components/icons";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { api, type ConsultaPasada } from "@/lib/api";
+import { api, type ConsultaPasada, nombreCorto } from "@/lib/api";
 
 const ULTIMAS = 5; // the average and its comparison use the last five consultations
 const BARRAS = 12; // columns in the chart
@@ -120,7 +120,7 @@ function Contenido({ items }: { items: ConsultaPasada[] }) {
               <div className="flex items-baseline justify-between gap-3">
                 <div className="min-w-0">
                   <p className="truncate text-[15px] font-medium">
-                    {c.paciente.nombre.split(" ").slice(0, 2).join(" ")}
+                    {nombreCorto(c.paciente.nombre)}
                   </p>
                   <p className="text-[12px] text-ink-3">
                     {fecha(c.fecha)} · {c.modo === "cara" ? "Cara a cara" : "Chat"} ·{" "}

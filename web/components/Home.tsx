@@ -8,7 +8,7 @@ import { Historial } from "@/components/Historial";
 import { Logo } from "@/components/Logo";
 import { Segmented } from "@/components/Segmented";
 import { UserMenu, type Usuario } from "@/components/UserMenu";
-import { ALEATORIO, api, iniciales, sexoLabel, type Caso, type Nivel } from "@/lib/api";
+import { ALEATORIO, api, iniciales, nombreCorto, sexoLabel, type Caso, type Nivel } from "@/lib/api";
 
 type Materia = "mpna" | "pediatria";
 
@@ -127,7 +127,7 @@ function CaseCard({ caso, index, nivel }: { caso: Caso; index: number; nivel: Ni
       </div>
       <div className="min-w-0">
         <h3 className="truncate text-[17px] font-semibold tracking-tight">
-          {p.nombre.split(" ").slice(0, 2).join(" ")}
+          {nombreCorto(p.nombre)}
         </h3>
         <p className="truncate text-sm text-ink-2">{sexoLabel(p.sexo)}</p>
       </div>

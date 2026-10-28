@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { type Caso, type Turno } from "@/lib/api";
+import { type Caso, nombreCorto, type Turno } from "@/lib/api";
 import { type MascotaId, mascota } from "@/lib/mascotas";
 import type { CharlaTutor, ConVoz, ConVozTutor } from "@/lib/useConsulta";
 import { ASCII_FACE } from "@/lib/ascii-face";
@@ -69,7 +69,7 @@ export function FaceView({
   const ultimoIdx = turnos.length - 1;
   const ultimoDocente = turnos[ultimoIdx]?.role === "docente" ? turnos[ultimoIdx] : null;
   const [cerrado, setCerrado] = useState<number | null>(null);
-  const nombre = caso?.paciente.nombre.split(" ").slice(0, 2).join(" ") ?? "Paciente";
+  const nombre = caso ? nombreCorto(caso.paciente.nombre) : "Paciente";
   const { arte, cols, filas } = useRetrato(caso?.id);
 
   const voz = useVozPaciente();

@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { nombreCorto } from "../../lib/api";
 import { expect, test, type Page } from "@playwright/test";
 import { signInAs, TEST_USER } from "./session";
 
@@ -10,7 +11,7 @@ import { signInAs, TEST_USER } from "./session";
 const caso = JSON.parse(
   readFileSync(join(__dirname, "..", "..", "..", "cases", "mpna", "mpna-disnea-icc.json"), "utf-8"),
 );
-const nombre = caso.paciente.nombre.split(" ").slice(0, 2).join(" ");
+const nombre = nombreCorto(caso.paciente.nombre);
 
 test.skip(!!process.env.BASE_URL, "uses the deterministic fake backend");
 
