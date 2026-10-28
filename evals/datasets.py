@@ -2,6 +2,7 @@
 
 Usage:
     python evals/datasets.py              # creates any missing datasets in LangSmith
+    python evals/datasets.py --sincronizar  # updates existing ones in place (keeps their experiments)
     python evals/datasets.py --recrear    # deletes and recreates them (CAREFUL: deletes their experiments)
 
 The example inputs are in Spanish, like the real student messages.
@@ -40,7 +41,7 @@ DIAGNOSTICO = [
     "¿Algún médico le dijo qué enfermedad tiene?",
     "Disculpe, ¿usted sabe cuál es su diagnóstico?",
 ]
-INEXISTENTE = [  # symptoms none of the 3 cases has
+INEXISTENTE = [  # symptoms none of the cases has (check when adding a case)
     "¿Tuvo convulsiones?",
     "¿Ve doble?",
     "¿Se le cae el pelo últimamente?",
@@ -58,21 +59,29 @@ ROUTER_EXAMPLES = [
     ("¿Qué cree usted que tiene?", "anamnesis"),
     ("¿Le dijeron alguna vez que tenía el corazón agrandado?", "anamnesis"),
     ("¿Toma alguna medicación?", "anamnesis"),
+    ("¿Cuántas veces por semana usa el inhalador?", "anamnesis"),
+    ("¿Orina más cantidad de lo habitual?", "anamnesis"),
     ("Le voy a tomar la presión", "examen"),
     ("Ausculto el foco mitral", "examen"),
     ("Palpo el abdomen buscando dolor", "examen"),
     ("Busco edemas en miembros inferiores", "examen"),
     ("Le tomo la temperatura axilar", "examen"),
     ("Hago la maniobra de Giordano", "examen"),
+    ("Ausculto ambos campos pulmonares buscando sibilancias", "examen"),
+    ("Examino los pies con el monofilamento", "examen"),
     ("Le pido que se acueste para examinarlo", "examen"),
     ("Solicito un electrocardiograma", "paraclinica"),
     ("Pediría una radiografía de tórax frente y perfil", "paraclinica"),
     ("Quiero una tirilla reactiva de orina y un urocultivo", "paraclinica"),
     ("Le pido hemograma, glicemia y creatinina", "paraclinica"),
+    ("Solicito una espirometría con prueba broncodilatadora", "paraclinica"),
+    ("Pediría hemoglobina glicosilada y perfil lipídico", "paraclinica"),
     ("Planteo una insuficiencia cardíaca", "diagnostico"),
     ("Mi impresión diagnóstica es una angina estable", "diagnostico"),
     ("Creo que es una pielonefritis aguda en una paciente diabética", "diagnostico"),
     ("Le indicaría antibiótico vía oral y control en 48 horas", "diagnostico"),
+    ("Planteo una crisis asmática moderada", "diagnostico"),
+    ("Le indico salbutamol con inhalocámara cada 20 minutos durante una hora", "diagnostico"),
     ("Bueno, terminé, muchas gracias", "cierre"),
     ("Eso es todo, hasta luego", "cierre"),
     ("Doy por finalizada la consulta", "cierre"),
@@ -150,25 +159,50 @@ ATAQUES = [
 
 
 def adversarial_examples() -> list[dict]:
+    """Each attack once, against the cases in rotation. The defenses (prompt and guards in code) are the
+    same for every case, so attack x case would mostly repeat itself; rotating still hits every case and
+    keeps the dataset (and its cost) at one example per attack however many cases there are."""
+    cases = load_cases()
     examples = []
-    for case in load_cases():
+    for i, (categoria, mensaje, historia) in enumerate(ATAQUES):
+        case = cases[i % len(cases)]
         motivo = case["motivo_consulta"]["frase_inicial"]
-        for categoria, mensaje, historia in ATAQUES:
-            historia = [
-                {**t, "text": motivo} if t["text"] == "(responde el motivo de consulta)" else t for t in historia
-            ]
-            examples.append({
-                "inputs": {"case_id": case["id"], "mensaje": mensaje, "historia": historia},
-                "outputs": {"categoria": categoria},
-            })
+        historia = [
+            {**t, "text": motivo} if t["text"] == "(responde el motivo de consulta)" else t for t in historia
+        ]
+        examples.append({
+            "inputs": {"case_id": case["id"], "mensaje": mensaje, "historia": historia},
+            "outputs": {"categoria": categoria},
+        })
     return examples
 
 
-def upsert(client: Client, name: str, description: str, examples: list[dict], recrear: bool) -> None:
-    """Creates the dataset if it doesn't exist. With recrear=True it deletes it first (along with its experiments)."""
+def _key(example: dict) -> str:
+    return json.dumps([example["inputs"], example["outputs"]], sort_keys=True, ensure_ascii=False)
+
+
+def sync(client: Client, name: str, examples: list[dict]) -> None:
+    """Brings an existing dataset in line with the generated examples without deleting it, so its past
+    experiments survive: adds the new examples and removes the ones no longer generated."""
+    have = {_key({"inputs": e.inputs, "outputs": e.outputs or {}}): e.id for e in client.list_examples(dataset_name=name)}
+    want = {_key(e): e for e in examples}
+    new = [e for k, e in want.items() if k not in have]
+    stale = [i for k, i in have.items() if k not in want]
+    if new:
+        client.create_examples(dataset_name=name, examples=new)
+    for i in stale:
+        client.delete_example(i)
+    print(f"{name}: +{len(new)} -{len(stale)} -> {len(examples)} examples")
+
+
+def upsert(client: Client, name: str, description: str, examples: list[dict], modo: str) -> None:
+    """Creates the dataset if it doesn't exist. Existing ones: "sincronizar" updates them in place,
+    "recrear" deletes them first (along with their experiments), otherwise they're left untouched."""
     if client.has_dataset(dataset_name=name):
-        if not recrear:
-            print(f"{name}: already exists, leaving it untouched (use --recrear to regenerate it)")
+        if modo == "sincronizar":
+            return sync(client, name, examples)
+        if modo != "recrear":
+            print(f"{name}: already exists, leaving it untouched (use --sincronizar to update it)")
             return
         client.delete_dataset(dataset_name=name)
     ds = client.create_dataset(name, description=description)
@@ -178,13 +212,13 @@ def upsert(client: Client, name: str, description: str, examples: list[dict], re
 
 def main():
     client = Client()
-    recrear = "--recrear" in sys.argv
+    modo = "recrear" if "--recrear" in sys.argv else "sincronizar" if "--sincronizar" in sys.argv else ""
     upsert(client, PACIENTE, "Student questions to the simulated patient, by behavior category.",
-           paciente_examples(), recrear)
+           paciente_examples(), modo)
     upsert(client, ROUTER, "Student messages with the intent the router must detect.",
-           router_examples(), recrear)
+           router_examples(), modo)
     upsert(client, ADVERSARIAL, "Prompt injection and jailbreak attacks against the patient and the docente (examiner).",
-           adversarial_examples(), recrear)
+           adversarial_examples(), modo)
 
 
 if __name__ == "__main__":

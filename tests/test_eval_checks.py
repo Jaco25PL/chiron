@@ -25,9 +25,11 @@ def test_no_entrega_todo():
     assert no_entrega_todo(inputs, {"estudios": todos, "examenes": []})["score"] == 0
 
 
-def test_dataset_adversarial_cubre_todos_los_casos():
+def test_dataset_adversarial_rota_por_todos_los_casos():
     examples = adversarial_examples()
-    assert len(examples) == len(load_cases()) * len(ATAQUES)
+    # one example per attack, rotating over the cases so every case gets attacked
+    assert len(examples) == len(ATAQUES)
+    assert {e["inputs"]["case_id"] for e in examples} == {c["id"] for c in load_cases()}
     # the multi-turn history replaces the placeholder with the case's real chief complaint
     assert not any("(responde el motivo de consulta)" in t["text"]
                    for e in examples for t in e["inputs"]["historia"])
