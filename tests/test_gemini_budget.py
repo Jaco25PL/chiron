@@ -82,3 +82,29 @@ def test_the_feedback_thread_keeps_the_user(keys, monkeypatch):
     monkeypatch.setenv("GEMINI_PAID_USERS", "sofia@example.com")
     with gemini.usuario("alguien@gmail.com"), ThreadPoolExecutor(1) as pool:
         assert pool.submit(contextvars.copy_context().run, gemini.over_budget, "paid").result()
+
+
+def test_genai_client_is_one_per_key_even_from_concurrent_first_calls(monkeypatch):
+    """Two threads asking for the first time must get the same client: the one not kept was garbage
+    collected, closing its connection mid-call ("client has been closed")."""
+    import threading
+    import time
+
+    from llm import gemini
+
+    creados = []
+
+    class Cliente:
+        def __init__(self, api_key):
+            time.sleep(0.05)  # widen the race window
+            creados.append(self)
+
+    monkeypatch.setattr("google.genai.Client", Cliente)
+    monkeypatch.setattr(gemini, "_clients", {})
+    vistos = []
+    hilos = [threading.Thread(target=lambda: vistos.append(gemini.genai_client("k"))) for _ in range(8)]
+    for h in hilos:
+        h.start()
+    for h in hilos:
+        h.join()
+    assert len(creados) == 1 and all(v is creados[0] for v in vistos)

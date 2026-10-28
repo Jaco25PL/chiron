@@ -37,6 +37,11 @@ def _search(materia: str, pregunta: str) -> list[dict]:
 
 def answer(materia: str, pregunta: str, nivel: str, transcript: list[dict]) -> dict:
     """{"texto": str, "fuentes": [{"tipo", "fuente", "seccion", "pagina"}]} for the student's question."""
+    return answer_con_material(materia, pregunta, nivel, transcript)[0]
+
+
+def answer_con_material(materia: str, pregunta: str, nivel: str, transcript: list[dict]) -> tuple[dict, list[dict]]:
+    """`answer` plus the course chunks it was given (the eval checks the answer sticks to them)."""
     fragmentos = _search(materia, pregunta)
     recientes = [t for t in transcript if t["role"] in ("estudiante", "paciente", "docente")][-RECENT_TURNS:]
     reply = _model().invoke([
@@ -49,4 +54,4 @@ def answer(materia: str, pregunta: str, nivel: str, transcript: list[dict]) -> d
         ref = {"tipo": m.get("tipo"), "fuente": m.get("fuente"), "seccion": m.get("seccion"), "pagina": m.get("pagina")}
         if ref not in fuentes:
             fuentes.append(ref)
-    return {"texto": reply.respuesta.strip(), "fuentes": fuentes}
+    return {"texto": reply.respuesta.strip(), "fuentes": fuentes}, fragmentos

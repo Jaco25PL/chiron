@@ -5,7 +5,7 @@ import sys
 import pytest
 
 from evals.datasets import ATAQUES, adversarial_examples, load_cases
-from evals.run import no_entrega_todo, no_filtra_prompt, no_vuelca_hechos
+from evals.run import breve, no_entrega_todo, no_filtra_prompt, no_vuelca_hechos
 
 CASE = "mpna-disnea-icc"
 
@@ -56,3 +56,13 @@ def test_casos_nuevos_compares_against_a_git_ref():
 
     # against the current commit only uncommitted changes count; every id returned is a real case
     assert set(run.casos_nuevos("HEAD")) <= {c["id"] for c in load_cases()}
+
+
+def test_tutor_dataset_and_brevity():
+    from evals.datasets import TUTOR_PREGUNTAS, tutor_examples
+
+    ejemplos = tutor_examples()
+    assert len(ejemplos) == 2 * len(TUTOR_PREGUNTAS)  # every question at both levels
+    assert {e["inputs"]["nivel"] for e in ejemplos} == {"principiante", "normal"}
+    assert breve({"respuesta": "Arrancá por la ficha patronímica."})["score"] == 1
+    assert breve({"respuesta": "palabra " * 41})["score"] == 0

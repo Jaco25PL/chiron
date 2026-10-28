@@ -15,6 +15,7 @@ with each key and how fast, so MODELS can be kept up to date.
 
 import os
 import re
+import threading
 import time
 from contextlib import contextmanager
 from contextvars import ContextVar
@@ -226,14 +227,22 @@ def _guarded(make_runnable, model: str, key: str):
     return RunnableLambda(call, name=model)
 
 
-@lru_cache(maxsize=None)
+_clients: dict[str, object] = {}
+_clients_lock = threading.Lock()
+
+
 def genai_client(key: str):
     """One google-genai client per key, kept for the life of the process. A new client per call opened a
     new connection every time (TCP + TLS to Google): ~1 s per call measured from Uruguay, vs a reused one.
-    Kept here also keeps it referenced (an inline client gets closed before its call completes)."""
-    from google import genai
+    Kept here also keeps it referenced (an inline client gets closed before its call completes). Locked:
+    two threads asking for the first time could each build one, and the one not kept was garbage
+    collected, closing its connection, in the middle of its call."""
+    with _clients_lock:
+        if key not in _clients:
+            from google import genai
 
-    return genai.Client(api_key=key)
+            _clients[key] = genai.Client(api_key=key)
+        return _clients[key]
 
 
 def chat_model(task: str, schema: type | None = None, retries: int = 3, **kwargs):

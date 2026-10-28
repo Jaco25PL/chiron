@@ -737,7 +737,7 @@
   },
   "conducta_esperada": [
     {
-      "accion": "Reiniciar metformina 850 mg, un comprimido por día con el almuerzo (con la comida principal, nunca en ayunas). Es el fármaco de primera elección en DM2, más aún con sobrepeso u obesidad; no produce hipoglicemia y el FG de 66 mL/min/1,73 m² permite usarla a dosis completa. Luego titular según tolerancia y control (la dosis óptima en la mayoría es alrededor de 2000 mg/día).",
+      "accion": "Reiniciar metformina empezando con 500 mg por día con el almuerzo (con la comida principal, nunca en ayunas), como indica la cátedra; la grilla dice 850 mg día con el almuerzo, y se aceptan ambas. Es el fármaco de primera elección en DM2, más aún con sobrepeso u obesidad; no produce hipoglicemia y el FG de 66 mL/min/1,73 m² permite usarla a dosis completa. Luego titular según tolerancia y control (la dosis óptima en la mayoría es alrededor de 2000 mg/día).",
       "grilla_items": [
         "24-pie-diabetico::Metformina 850 mg día con almuerzo"
       ]

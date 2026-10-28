@@ -213,6 +213,14 @@ A log of what I ran into while building Chiron: what showed up, how I caught it,
 - **Also tried, and dropped: the patient with `thinking_level="minimal"`.** On the free keys it looked ~1 s faster, but with the paid key, on the same 51 eval questions logged to LangSmith (`paciente-gemini-3-flash-preview-low-…` vs `…-minimal-…`): median 1.37 s vs 1.35 s, p90 1.85 vs 1.67 s, and identical quality on every evaluator. Not worth a change: the patient stays on "low" (`GEMINI_THINKING_PATIENT` overrides it for experiments). Both evals plus the benchmarks cost USD 0.52.
 - **Lesson:** on the free tier, compare the leg a change touches, interleave A and B, and fix the models: whole-turn medians move by seconds on their own, and a "win" there can vanish on the paid tier.
 
+## 26. An eval for the study companion: does it stick to the notes?
+
+- **Context:** the study companion answers from the course notes (RAG over pgvector). Tried by hand it looked right, but nothing measured whether it invents, gives away the case, or gives the answer when it should only hint.
+- **What I did:** `chiron-tutor` (12 questions x both levels: study questions, asking for the diagnosis, and topics the notes don't cover) and four evaluators: `fiel_al_material` (a judge compares the answer with the very chunks the RAG returned), `segun_nivel`, `no_diagnostica`, and `breve` (code, 40 words).
+- **Result:** first run: faithful, no diagnosis and brief at 100%, but `segun_nivel` 20/23: in normal mode it gave a dose or which studies to order straight away. One prompt change (a hint even for a specific value) -> 23/24, with `fiel_al_material` 23/24: it mixed up two stages of change in smoking cessation, exactly the kind of slip the eval is for. USD 0.40 for the three runs.
+- **Also found:** the first run lost a call to "client has been closed": two threads building the shared Gemini client (#25) at once, and the copy not kept was garbage collected mid-call. `genai_client` is now locked; a test hits it from 8 threads.
+- **Lesson:** a RAG answer is only as trustworthy as its check against the retrieved text; judging it against the chunks it actually got turns "looks right" into a number.
+
 ## Short version for LinkedIn
 
 > I'm building **Chiron**, an AI patient simulator that helps medical students practice for the ECOE (the Spanish-language OSCE, the hands-on clinical exam). The most interesting part wasn't getting the patient to talk, but **measuring that it behaves the way it should**.
