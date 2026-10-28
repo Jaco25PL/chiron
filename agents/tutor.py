@@ -19,7 +19,7 @@ RECENT_TURNS = 6  # consultation turns the tutor sees, for context
 
 
 class TutorReply(BaseModel):
-    respuesta: str = Field(description="Lo que le decís al estudiante: hablado, como mucho tres oraciones cortas.")
+    respuesta: str = Field(description="Lo que le decís al estudiante: hablado, una o dos oraciones cortas, directo al grano.")
 
 
 @lru_cache

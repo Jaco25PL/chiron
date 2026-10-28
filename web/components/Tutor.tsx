@@ -26,9 +26,8 @@ export function useAnimacionTutor(abierto: boolean, pensando: boolean, respuesta
   return abierto ? "esperando" : "reposo";
 }
 
-/** Frosted glass dense enough to read on top of the conversation (the plain .glass is too clear). */
-export const VIDRIO =
-  "border border-line-strong bg-[rgb(16_18_21/0.78)] shadow-2xl shadow-black/50 backdrop-blur-2xl backdrop-saturate-150";
+/** Liquid glass (globals.css .vidrio): see-through but blurred enough to read on top of the conversation. */
+export const VIDRIO = "vidrio";
 
 /** The study companion in Chat mode: the pet sits right above the composer, at the conversation's left
  *  edge; tapping it opens a bubble to ask study questions. The patient doesn't see any of it
