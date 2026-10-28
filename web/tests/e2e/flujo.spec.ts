@@ -51,11 +51,13 @@ test("a full consultation, from case selection to summary", async ({ page, conte
   await send("Solicito un electrocardiograma");
   await expect(page.getByText(`${ecg.estudio}:`, { exact: false })).toBeVisible();
 
-  // 4. same consultation as a call: answer, and the last patient line becomes the caption
+  // 4. same consultation as a call: like a real video call, the patient is heard, not captioned
+  // (their last line stays in the page for screen readers only)
   await page.getByRole("tab", { name: "Cara a cara" }).click();
   await expect(page.getByLabel(/Retrato de/)).toBeVisible();
   await page.getByRole("button", { name: "Contestar" }).click();
-  await expect(page.getByText(inicio.respuesta)).toBeVisible();
+  await expect(page.getByText(inicio.respuesta)).toBeAttached();
+  await expect(page.getByText(inicio.respuesta)).toHaveClass(/sr-only/);
 
   // 5. hang up: the docente grades the consultation against the grilla (the fake backend's
   // coverage-based correction) and the summary counts what the student obtained
@@ -136,7 +138,7 @@ test("face to face is a call: answer, talk hands-free, the patient speaks, hang 
   // a phrase is sent when the student pauses; the reply is spoken (the fake backend streams silence)
   // the fake microphone, the 3D avatar and the blurs all render in software here: give it time
   await decir(page, "Hola, buenas tardes");
-  await expect(page.getByText("Buenas, doctor.")).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText("Buenas, doctor.")).toBeAttached({ timeout: 15_000 }); // heard, not captioned
   await expect.poll(() => llamadas).toEqual(["200 application/x-ndjson"]);
   await expect(page.getByText("No se pudo reproducir")).toHaveCount(0);
 

@@ -15,6 +15,9 @@ import { TextoEscrito } from "./TextoEscrito";
 // three.js only downloads when face to face opens; the ASCII portrait covers the wait
 const Avatar3D = dynamic(() => import("./Avatar3D"), { ssr: false });
 const AVATAR = "/avatares/generico.vrm"; // generic for now; one per patient later
+// A real video call has no captions of the other person: the patient is only heard. Their line stays in
+// the page for screen readers (sr-only); true shows it on screen again. The student's own words still show.
+const SUBTITULOS_PACIENTE = false;
 
 /** The waiting ASCII portrait: public/retratos/<id>.txt for the case, else the default one (built in). */
 function useRetrato(caseId: string | undefined) {
@@ -378,7 +381,12 @@ export function FaceView({
             ) : ultimoPaciente ? (
               <p
                 key={idxPaciente}
-                className="enter max-w-2xl rounded-2xl bg-black/55 px-4 py-2.5 text-center text-[15px] leading-snug text-ink backdrop-blur-md sm:text-[17px]"
+                aria-live="polite"
+                className={
+                  SUBTITULOS_PACIENTE
+                    ? "enter max-w-2xl rounded-2xl bg-black/55 px-4 py-2.5 text-center text-[15px] leading-snug text-ink backdrop-blur-md sm:text-[17px]"
+                    : "sr-only"
+                }
               >
                 {ultimoPaciente.text}
               </p>
