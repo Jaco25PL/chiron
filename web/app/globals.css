@@ -179,6 +179,16 @@ body {
   }
 }
 
+/* The tutor's pet floats a little while idle (transform only; the sprite animates its own frames) */
+@keyframes flotar {
+  50% {
+    transform: translateY(-3px);
+  }
+}
+.flotar {
+  animation: flotar 2.6s ease-in-out infinite;
+}
+
 .no-scrollbar {
   scrollbar-width: none;
 }
@@ -204,6 +214,9 @@ body {
   }
   .press:active:not(:disabled) {
     transform: none;
+  }
+  .flotar {
+    animation: none;
   }
   /* shadcn/ui menus and sheets (tw-animate-css) */
   [data-slot$="-content"],

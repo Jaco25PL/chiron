@@ -92,7 +92,7 @@ test.describe("signed in", () => {
     });
     await page.goto("/");
     await page.getByRole("button", { name: "Cuenta" }).click();
-    await page.getByRole("menuitem", { name: "Cerrar sesión" }).click();
+    await page.getByRole("button", { name: "Cerrar sesión" }).click();
     // sign-out is a server action; in dev its first call compiles on demand, which can exceed 5s
     await expect(page).toHaveURL(/\/login/, { timeout: 20_000 });
     release();

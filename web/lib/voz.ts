@@ -179,8 +179,9 @@ export function useVozPaciente() {
     setHablando(false);
   }, []);
 
-  /** Starts a new utterance (cutting the current one). Returns where its chunks go and how it ends. */
-  const hablar = useCallback(() => {
+  /** Starts a new utterance (cutting the current one). Returns where its chunks go and how it ends.
+   *  `alFin` runs once it has played to the end (not when it's cut off). */
+  const hablar = useCallback((alFin?: () => void) => {
     callar();
     desbloquear();
     const gen = generacion.current;
@@ -203,14 +204,20 @@ export function useVozPaciente() {
         fuentes.current.add(src);
         src.onended = () => {
           fuentes.current.delete(src);
-          if (vigente() && !fuentes.current.size && !abierta.current) setHablando(false);
+          if (vigente() && !fuentes.current.size && !abierta.current) {
+            setHablando(false);
+            alFin?.();
+          }
         };
         setHablando(true);
       },
       terminar() {
         if (!vigente()) return;
         abierta.current = false;
-        if (!fuentes.current.size) setHablando(false);
+        if (!fuentes.current.size) {
+          setHablando(false);
+          alFin?.();
+        }
       },
     };
   }, [callar, desbloquear]);

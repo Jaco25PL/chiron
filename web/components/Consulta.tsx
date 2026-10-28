@@ -4,12 +4,14 @@ import Link from "next/link";
 import { useState } from "react";
 import { type Nivel, sexoLabel } from "@/lib/api";
 import { formatoTiempo, useConsulta, useCuentaRegresiva } from "@/lib/useConsulta";
+import { useMascota } from "@/lib/useMascota";
 import { ChatView } from "./ChatView";
 import { ChecklistBoton, ChecklistPanel, ChecklistSheet } from "./Checklist";
 import { FaceView } from "./FaceView";
 import { Chat, ChevronLeft, Clock, Video } from "./icons";
 import { Segmented } from "./Segmented";
 import { SummarySheet } from "./SummarySheet";
+import { TutorChat } from "./Tutor";
 
 type Modo = "chat" | "cara";
 
@@ -17,7 +19,9 @@ type Modo = "chat" | "cara";
 export function Consulta({ caseId, modoInicial, nivel }: { caseId: string; modoInicial: Modo; nivel: Nivel }) {
   const [modo, setModo] = useState<Modo>(modoInicial);
   const c = useConsulta(caseId, modoInicial, nivel);
-  const restante = useCuentaRegresiva(c.inicio);
+  const restante = useCuentaRegresiva(c.inicio, c.pausa);
+  const [mascotaId] = useMascota();
+  const pausado = c.pausa.desde !== null;
   const nombre = c.caso?.paciente.nombre.split(" ").slice(0, 2).join(" ");
   // beginner level: side panel on desktop (can be hidden), bottom sheet from a pill on mobile
   const [panel, setPanel] = useState(true);
@@ -83,9 +87,9 @@ export function Consulta({ caseId, modoInicial, nivel }: { caseId: string; modoI
             className={`glass flex h-9 items-center gap-1.5 rounded-full px-3 font-mono text-[13px] tabular-nums transition-colors ${
               restante < 0 ? "text-danger" : restante <= 60 ? "text-[#ffd60a]" : "text-ink-2"
             }`}
-            title="Tiempo de la estación"
+            title={pausado ? "Reloj en pausa mientras hablás con tu compañera de estudio" : "Tiempo de la estación"}
           >
-            <Clock width={15} height={15} />
+            <Clock width={15} height={15} className={pausado ? "opacity-50" : ""} />
             {formatoTiempo(restante)}
           </span>
           {modo === "chat" && (
@@ -121,6 +125,14 @@ export function Consulta({ caseId, modoInicial, nivel }: { caseId: string; modoI
               listo={c.listo}
               onSend={c.enviar}
               onEnd={c.terminar}
+              tutor={{
+                mascotaId,
+                nivel,
+                charla: c.tutor,
+                pensando: c.tutorPensando,
+                onPreguntar: c.preguntarTutor,
+                pausar: c.pausar,
+              }}
             />
           )}
         </div>
@@ -135,6 +147,18 @@ export function Consulta({ caseId, modoInicial, nivel }: { caseId: string; modoI
         >
           Terminar
         </button>
+      )}
+
+      {modo === "chat" && (
+        <TutorChat
+          mascotaId={mascotaId}
+          nivel={nivel}
+          charla={c.tutor}
+          pensando={c.tutorPensando}
+          listo={c.listo}
+          onPreguntar={(t) => void c.preguntarTutor(t)}
+          onAbierto={c.pausar}
+        />
       )}
 
       <SummarySheet resumen={c.resumen} corrigiendo={c.corrigiendo} onClose={() => c.setResumen(null)} />

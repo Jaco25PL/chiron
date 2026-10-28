@@ -78,6 +78,12 @@ function Correccion({ resumen }: { resumen: Resumen }) {
             </span>{" "}
             datos de la historia que obtuviste
           </p>
+          {!!fb?.tutor_consultas && (
+            <p className="text-sm text-ink-3">
+              Le consultaste a tu compañera de estudio{" "}
+              {fb.tutor_consultas === 1 ? "una vez" : `${fb.tutor_consultas} veces`} (no cambia el puntaje)
+            </p>
+          )}
         </div>
       </div>
 

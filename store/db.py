@@ -159,31 +159,42 @@ def finish_consultation(consultation_id: str) -> None:
 
 # --- Per-user preferences ---------------------------------------------------------------
 
-ACENTOS = ("menta", "rosa", "gris", "azul")  # accent colors offered in the user menu
-_acentos: dict[str, str] = {}  # in-memory fallback without DATABASE_URL: email -> acento
+ACENTOS = ("menta", "rosa", "gris", "azul")  # accent colors offered in the settings
+# the study companion's pets (web/lib/mascotas.ts, web/public/mascotas/<id>.webp); the first is the default
+MASCOTAS = ("scarf-hamster", "boba", "cache-capy", "rocky-4", "byte-bunny", "pixel-panda", "prompt-penguin",
+            "chedarini", "sunny", "boxcat")
+# each preference: its column and its allowed values (the first one is the default)
+PREFERENCIAS = {"acento": ACENTOS, "mascota": MASCOTAS}
+_preferencias: dict[str, dict] = {}  # in-memory fallback without DATABASE_URL: email -> {campo: valor}
 
 
-def get_acento(email: str) -> str:
+def get_preferencias(email: str) -> dict:
+    """{"acento", "mascota"}, with the defaults for what the user never picked."""
+    defaults = {campo: valores[0] for campo, valores in PREFERENCIAS.items()}
     if not enabled():
-        return _acentos.get(email, ACENTOS[0])
+        return {**defaults, **_preferencias.get(email, {})}
     with pool().connection() as conn:
-        row = conn.execute("SELECT acento FROM users WHERE email = %s", (email,)).fetchone()
-    return row[0] if row else ACENTOS[0]
+        row = conn.execute("SELECT acento, mascota FROM users WHERE email = %s", (email,)).fetchone()
+    return {"acento": row[0], "mascota": row[1]} if row else defaults
 
 
-def set_acento(email: str, name: str | None, acento: str) -> None:
-    """Saves the user's accent color, creating the user if this is their first request."""
-    if acento not in ACENTOS:
-        raise ValueError(f"unknown accent: {acento!r}")
-    if not enabled():
-        _acentos[email] = acento
+def set_preferencias(email: str, name: str | None, cambios: dict) -> None:
+    """Saves some of the user's preferences, creating the user if this is their first request."""
+    for campo, valor in cambios.items():
+        if valor not in PREFERENCIAS.get(campo, ()):
+            raise ValueError(f"unknown {campo}: {valor!r}")
+    if not cambios:
         return
+    if not enabled():
+        _preferencias.setdefault(email, {}).update(cambios)
+        return
+    cols = list(cambios)  # only whitelisted names (checked above) reach the SQL
     with pool().connection() as conn:
         conn.execute(
-            """INSERT INTO users (email, name, acento) VALUES (%s, %s, %s)
-               ON CONFLICT (email) DO UPDATE SET acento = EXCLUDED.acento,
-                   name = COALESCE(EXCLUDED.name, users.name), last_seen = now()""",
-            (email, name, acento),
+            f"""INSERT INTO users (email, name, {", ".join(cols)}) VALUES (%s, %s, {", ".join(["%s"] * len(cols))})
+                ON CONFLICT (email) DO UPDATE SET {", ".join(f"{c} = EXCLUDED.{c}" for c in cols)},
+                    name = COALESCE(EXCLUDED.name, users.name), last_seen = now()""",
+            (email, name, *cambios.values()),
         )
 
 

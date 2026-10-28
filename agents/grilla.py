@@ -111,11 +111,28 @@ def not_indicated(case: dict) -> set[str]:
             if it["kind"] == "estudio" and all(indicated.get(s) is False for s in it["studies"])}
 
 
+def _palabras(t: str) -> set[str]:
+    return {w for w in re.split(r"[^a-z0-9]+", _norm(t)) if len(w) >= 4}
+
+
+# words a diagnosis shares with plain section names ("Enfermedad actual", "Examen de pulsos"): no hint
+_GENERICAS = {"enfermedad", "actual", "antecedentes", "personales", "examen", "factores", "riesgo", "con",
+              "frecuencia", "paciente", "aguda", "agudo", "cronica", "cronico", "probable", "tipo"}
+
+
+def _seccion_publica(case: dict, seccion: str) -> str:
+    """The grilla section's name, or "" when it would hint at the diagnosis ("Preguntas para orientarse a
+    DIABETES", "AEA: Crisis de asma"): it shares a meaningful word with the main diagnosis."""
+    ocultas = _palabras(case.get("diagnostico", {}).get("principal", "")) - _GENERICAS
+    return "" if _palabras(seccion) & ocultas else seccion
+
+
 def checklist(case: dict, state: dict) -> list[dict]:
     """Beginner mode: what not to forget, ticked as the student covers it. Only items the app can tick
     by itself (facts, findings, studies); conduct and diagnosis items are left to the final feedback,
     and so are the studies not to order (ordering them would tick them)."""
     done = covered(case, state)
     skip = not_indicated(case)
-    return [{"id": it["id"], "texto": it["texto"], "tipo": it["kind"], "seccion": it["seccion"], "hecho": it["id"] in done}
+    return [{"id": it["id"], "texto": it["texto"], "tipo": it["kind"], "seccion": _seccion_publica(case, it["seccion"]),
+             "hecho": it["id"] in done}
             for it in items(case) if it["kind"] in CHECKLIST_KINDS and it["id"] not in skip]

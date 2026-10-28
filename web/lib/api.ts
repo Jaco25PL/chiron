@@ -1,6 +1,7 @@
 // Chiron backend client (see agents/session.py for the contract).
 
 import type { Acento } from "@/lib/acento";
+import type { MascotaId } from "@/lib/mascotas";
 
 // What the student may know before the consultation, as in the real exam: name and sex.
 export type Paciente = { nombre: string; sexo: string };
@@ -68,7 +69,16 @@ export type Feedback = {
   falto: string[];
   consejos: string[];
   items: ItemGrilla[];
+  tutor_consultas?: number; // "normal" only: how many times the student asked the study companion
 };
+
+/** The study companion's answer, from the course material. */
+export type RespuestaTutor = {
+  texto: string;
+  fuentes: { tipo: string | null; fuente: string | null; seccion: string | null; pagina: number | null }[];
+};
+
+export type Preferencias = { acento: Acento; mascota: MascotaId };
 
 /** A finished consultation in the student's history (newest first). */
 export type ConsultaPasada = {
@@ -115,54 +125,75 @@ export const api = {
   /** Ends the consultation; the docente's correction (one LLM call) can take several seconds. */
   terminar: (sessionId: string) => call<Resumen>(`/api/sessions/${sessionId}/finish`, { method: "POST" }),
   historial: () => call<ConsultaPasada[]>("/api/historial"),
-  preferencias: () => call<{ acento: Acento }>("/api/preferencias"),
+  preferencias: () => call<Preferencias>("/api/preferencias"),
   guardarAcento: (acento: Acento) =>
-    call<{ acento: Acento }>("/api/preferencias", { method: "POST", body: JSON.stringify({ acento }) }),
+    call<Preferencias>("/api/preferencias", { method: "POST", body: JSON.stringify({ acento }) }),
+  guardarMascota: (mascota: MascotaId) =>
+    call<Preferencias>("/api/preferencias", { method: "POST", body: JSON.stringify({ mascota }) }),
   /** Face-to-face call: the reply arrives first (onRespuesta) and then the patient's voice, as 24 kHz
    *  16-bit PCM chunks while it is generated (onAudio). Resolves when the voice has fully arrived. */
-  enviarConVoz: async (
+  enviarConVoz: (
     sessionId: string,
     text: string,
     { onRespuesta, onAudio }: { onRespuesta: (r: Respuesta) => void; onAudio: (pcm: ArrayBuffer) => void },
-  ) => {
-    let res: Response;
-    try {
-      res = await fetch(`/api/sessions/${sessionId}/messages?voz=1`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
-      });
-    } catch {
-      throw new Error(SIN_BACKEND);
-    }
-    if (!res.ok || !res.body) {
-      const body = await res.json().catch(() => null);
-      throw new Error(body?.error ?? SIN_BACKEND);
-    }
-    const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
-    let buf = "";
-    let audios = 0;
-    for (;;) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buf += value;
-      let i;
-      while ((i = buf.indexOf("\n")) >= 0) {
-        const linea = JSON.parse(buf.slice(0, i));
-        buf = buf.slice(i + 1);
-        if (linea.tipo === "respuesta") onRespuesta(linea);
-        else if (linea.tipo === "audio") {
-          audios++;
-          onAudio(Uint8Array.from(atob(linea.pcm), (c) => c.charCodeAt(0)).buffer);
-        } else if (linea.tipo === "error") {
-          // the voice already played (it broke near the end): no need to alarm the student
-          if (audios) console.warn("voz:", linea.error);
-          else throw new Error(`Voz: ${linea.error}`);
-        }
+  ) => conVoz(`/api/sessions/${sessionId}/messages?voz=1`, text, "respuesta", onRespuesta, onAudio),
+  /** A question to the study companion (not a consultation turn: the patient doesn't hear it). */
+  tutor: (sessionId: string, text: string) =>
+    call<RespuestaTutor>(`/api/sessions/${sessionId}/tutor`, { method: "POST", body: JSON.stringify({ text }) }),
+  /** The same, answered out loud: the text first, then its voice in chunks (like enviarConVoz). */
+  tutorConVoz: (
+    sessionId: string,
+    text: string,
+    { onRespuesta, onAudio }: { onRespuesta: (r: RespuestaTutor) => void; onAudio: (pcm: ArrayBuffer) => void },
+  ) => conVoz(`/api/sessions/${sessionId}/tutor?voz=1`, text, "tutor", onRespuesta, onAudio),
+};
+
+/** Reads an NDJSON voice stream: one `primera` line with the text, then base64 PCM `audio` lines.
+ *  Resolves when the voice has fully arrived. */
+async function conVoz<T>(
+  url: string,
+  text: string,
+  primera: string,
+  onRespuesta: (r: T) => void,
+  onAudio: (pcm: ArrayBuffer) => void,
+) {
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    });
+  } catch {
+    throw new Error(SIN_BACKEND);
+  }
+  if (!res.ok || !res.body) {
+    const body = await res.json().catch(() => null);
+    throw new Error(body?.error ?? SIN_BACKEND);
+  }
+  const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
+  let buf = "";
+  let audios = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buf += value;
+    let i;
+    while ((i = buf.indexOf("\n")) >= 0) {
+      const linea = JSON.parse(buf.slice(0, i));
+      buf = buf.slice(i + 1);
+      if (linea.tipo === primera) onRespuesta(linea as T);
+      else if (linea.tipo === "audio") {
+        audios++;
+        onAudio(Uint8Array.from(atob(linea.pcm), (c) => c.charCodeAt(0)).buffer);
+      } else if (linea.tipo === "error") {
+        // the voice already played (it broke near the end): no need to alarm the student
+        if (audios) console.warn("voz:", linea.error);
+        else throw new Error(`Voz: ${linea.error}`);
       }
     }
-  },
-};
+  }
+}
 
 /** One patient answer from the evals, for the medical reviewer to label (/revision). */
 export type ItemRevision = {

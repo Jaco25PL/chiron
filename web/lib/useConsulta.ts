@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { api, type Caso, type ItemChecklist, type Nivel, type Resumen, type Turno } from "./api";
+import { api, type Caso, type ItemChecklist, type Nivel, type Resumen, type RespuestaTutor, type Turno } from "./api";
 
 /** How the face-to-face call hears back: the reply's text, then the patient's voice in chunks. */
 export type ConVoz = {
@@ -10,6 +10,19 @@ export type ConVoz = {
   alAudio: (pcm: ArrayBuffer) => void;
   alTerminar: () => void;
 };
+
+/** The same for the study companion: its answer's text, then its voice. */
+export type ConVozTutor = {
+  alResponder: (r: RespuestaTutor) => void;
+  alAudio: (pcm: ArrayBuffer) => void;
+  alTerminar: () => void;
+};
+
+/** A question to the study companion and its answer (null while it thinks). */
+export type CharlaTutor = { pregunta: string; respuesta: RespuestaTutor | null };
+
+/** Time the station's clock was paused (the student talking to the study companion). */
+type Pausa = { total: number; desde: number | null };
 
 export const DURACION_S = 7 * 60;
 
@@ -24,6 +37,8 @@ export function useConsulta(caseId: string, modo: "chat" | "cara" = "chat", nive
   const [inicio, setInicio] = useState<number | null>(null);
   const [resumen, setResumen] = useState<Resumen | null>(null);
   const [corrigiendo, setCorrigiendo] = useState(false); // the docente is grading the consultation
+  const [tutor, setTutor] = useState<CharlaTutor[]>([]);
+  const [pausa, setPausa] = useState<Pausa>({ total: 0, desde: null });
   const creada = useRef(false);
 
   useEffect(() => {
@@ -77,6 +92,59 @@ export function useConsulta(caseId: string, modo: "chat" | "cara" = "chat", nive
     [sessionId, pensando],
   );
 
+  /** Stops or restarts the clock: while the student talks to the study companion, no time runs. */
+  const pausar = useCallback(
+    (si: boolean) => {
+      setPausa((p) => {
+        const ahora = Date.now();
+        if (si && p.desde === null) return { ...p, desde: ahora };
+        if (!si && p.desde !== null) {
+          // only the part after the consultation started was on the clock
+          const desde = Math.max(p.desde, inicio ?? ahora);
+          return { total: p.total + Math.max(0, ahora - desde), desde: null };
+        }
+        return p;
+      });
+    },
+    [inicio],
+  );
+
+  const tutorPensando = tutor.some((c) => !c.respuesta);
+  /** A question to the study companion. With `voz`, it answers out loud. */
+  const preguntarTutor = useCallback(
+    async (texto: string, voz?: ConVozTutor) => {
+      const pregunta = texto.trim();
+      if (!pregunta || !sessionId || tutorPensando) return;
+      setTutor((cs) => [...cs, { pregunta, respuesta: null }]);
+      const responder = (r: RespuestaTutor) =>
+        setTutor((cs) => cs.map((c, i) => (i === cs.length - 1 ? { ...c, respuesta: r } : c)));
+      let respondio = false;
+      try {
+        if (voz) {
+          await api.tutorConVoz(sessionId, pregunta, {
+            onRespuesta: (r) => {
+              respondio = true;
+              responder(r);
+              voz.alResponder(r);
+            },
+            onAudio: voz.alAudio,
+          });
+        } else {
+          responder(await api.tutor(sessionId, pregunta));
+          respondio = true;
+        }
+      } catch (e) {
+        if (!respondio) {
+          setTutor((cs) => cs.slice(0, -1)); // the question had no answer: let it be asked again
+          toast.error((e as Error).message, { id: "tutor" });
+        }
+      } finally {
+        voz?.alTerminar();
+      }
+    },
+    [sessionId, tutorPensando],
+  );
+
   const terminar = useCallback(async () => {
     if (!sessionId || corrigiendo) return;
     setCorrigiendo(true);
@@ -106,11 +174,17 @@ export function useConsulta(caseId: string, modo: "chat" | "cara" = "chat", nive
     resumen,
     setResumen,
     checklist,
+    tutor,
+    tutorPensando,
+    preguntarTutor,
+    pausa,
+    pausar,
   };
 }
 
-/** Seconds left of the 7 minutes (negative once over). Skips re-renders while the tab is hidden. */
-export function useCuentaRegresiva(inicio: number | null) {
+/** Seconds left of the 7 minutes (negative once over), not counting the paused time. Skips re-renders
+ *  while the tab is hidden or the clock is paused. */
+export function useCuentaRegresiva(inicio: number | null, pausa: Pausa = { total: 0, desde: null }) {
   const [ahora, setAhora] = useState(() => Date.now());
   useEffect(() => {
     if (inicio === null) return;
@@ -119,7 +193,10 @@ export function useCuentaRegresiva(inicio: number | null) {
     }, 500);
     return () => clearInterval(id);
   }, [inicio]);
-  return inicio === null ? DURACION_S : DURACION_S - Math.floor((ahora - inicio) / 1000);
+  if (inicio === null) return DURACION_S;
+  // paused before the consultation started: that time was never on the clock
+  const pausado = pausa.total + (pausa.desde !== null ? ahora - Math.max(pausa.desde, inicio) : 0);
+  return DURACION_S - Math.floor(Math.max(0, ahora - inicio - pausado) / 1000);
 }
 
 export function formatoTiempo(s: number) {

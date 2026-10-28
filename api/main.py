@@ -288,24 +288,29 @@ def rag_search(q: str = Query(max_length=300), materia: str = "mpna", k: int = Q
 
 
 class Preferencias(BaseModel):
-    acento: str
+    acento: str | None = None
+    mascota: str | None = None
 
 
 @app.get("/api/preferencias")
 def get_preferencias(user: dict = Depends(current_user)):
     from store import db  # imported here, like the routes above
 
-    return {"acento": _call(db.get_acento, user["email"])}
+    return _call(db.get_preferencias, user["email"])
 
 
 @app.post("/api/preferencias")
 def set_preferencias(body: Preferencias, user: dict = Depends(current_user)):
+    """Saves whichever preferences come in the body (at least one) and returns all of them."""
     from store import db
 
-    if body.acento not in db.ACENTOS:
-        raise AgentError(400, f"Color desconocido: {body.acento}")
-    _call(db.set_acento, user["email"], user.get("name"), body.acento)
-    return {"acento": body.acento}
+    cambios = body.model_dump(exclude_none=True)
+    if not cambios:
+        raise AgentError(400, "Nada para guardar")
+    if any(v not in db.PREFERENCIAS[k] for k, v in cambios.items()):
+        raise AgentError(400, "Valor desconocido")
+    _call(db.set_preferencias, user["email"], user.get("name"), cambios)
+    return _call(db.get_preferencias, user["email"])
 
 
 # Legacy debug UI (chat + RAG explorer), local development only: it can't sign requests.

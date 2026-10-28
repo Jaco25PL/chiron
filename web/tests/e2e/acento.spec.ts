@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import { signInAs, TEST_USER } from "./session";
 
-// The accent color picked in the user menu: applied at once, saved per user in the backend and
+// The accent color picked in the settings: applied at once, saved per user in the backend and
 // rendered by the server on <html data-acento>, so a reload (or another device) paints it first.
 
 /** A user of our own: the fake backend keeps preferences in memory, shared by all tests. */
@@ -28,15 +28,15 @@ test("choosing Rosa changes the accent, is saved, and the server renders it afte
   await expect(page.locator("html")).toHaveAttribute("data-acento", "menta");
 
   await page.getByRole("button", { name: "Cuenta" }).click();
-  await expect(page.getByRole("menuitemradio", { name: "Menta" })).toHaveAttribute("aria-checked", "true");
+  await expect(page.getByRole("radio", { name: "Menta" })).toBeChecked();
   const guardado = page.waitForResponse(
     (r) => r.url().endsWith("/api/preferencias") && r.request().method() === "POST",
   );
-  await page.getByRole("menuitemradio", { name: "Rosa" }).click();
+  await page.getByRole("dialog").getByText("Rosa", { exact: true }).click(); // the label, like a user
   expect((await guardado).status()).toBe(200);
 
   await expect(page.locator("html")).toHaveAttribute("data-acento", "rosa");
-  await expect(page.getByRole("menuitemradio", { name: "Rosa" })).toHaveAttribute("aria-checked", "true");
+  await expect(page.getByRole("radio", { name: "Rosa" })).toBeChecked();
   const accent = await page.evaluate(() =>
     getComputedStyle(document.documentElement).getPropertyValue("--accent").trim(),
   );
@@ -55,20 +55,21 @@ test("choosing Rosa changes the accent, is saved, and the server renders it afte
   await otro.close();
 });
 
-test("the color menu works with the keyboard", async ({ page, context, baseURL }) => {
+test("the color picker works with the keyboard", async ({ page, context, baseURL }) => {
   await signInAs(context, baseURL!, { user: usuario() });
   await page.goto("/");
   await page.getByRole("button", { name: "Cuenta" }).focus();
   await page.keyboard.press("Enter");
-  const azul = page.getByRole("menuitemradio", { name: "Azul" });
-  await expect(azul).toBeVisible();
-  for (let i = 0; i < 10 && !(await azul.evaluate((el) => el === document.activeElement)); i++) {
-    await page.keyboard.press("ArrowDown");
+  const azul = page.getByRole("radio", { name: "Azul" });
+  await expect(azul).toBeAttached();
+  // native radios: Tab reaches the checked one, the arrows move through the group (and pick)
+  for (let i = 0; i < 10 && !(await page.getByRole("radio", { name: "Menta" }).evaluate((el) => el === document.activeElement)); i++) {
+    await page.keyboard.press("Tab");
   }
-  await page.keyboard.press("Enter");
+  for (let i = 0; i < 10 && !(await azul.isChecked()); i++) await page.keyboard.press("ArrowDown");
   await expect(page.locator("html")).toHaveAttribute("data-acento", "azul");
   await page.keyboard.press("Escape");
-  await expect(azul).toBeHidden();
+  await expect(page.getByRole("dialog")).toBeHidden();
 });
 
 test("signed out, /login is rendered with the default accent", async ({ page }) => {

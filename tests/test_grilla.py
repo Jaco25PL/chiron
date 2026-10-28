@@ -54,3 +54,15 @@ def test_checklist_leaves_out_the_studies_not_to_order():
     no_pedir = grilla.not_indicated(case)
     assert no_pedir  # "No es necesaria PC imagenológica": ordering the scan must not tick it
     assert not {x["id"] for x in grilla.checklist(case, {})} & no_pedir
+
+
+def test_checklist_sections_dont_hint_at_the_diagnosis():
+    """Grilla sections are verbatim ("Preguntas para orientarse a DIABETES"): the checklist drops the
+    names that share a word with the main diagnosis, and keeps the plain ones."""
+    for case_id, oculta, visible in [
+        ("mpna-glicemia-alterada-tabaquismo", "Preguntas para orientarse a DIABETES", "OTROS FACTORES DE RIESGO CV"),
+        ("mpna-crisis-asmatica", "AEA: Crisis de asma", "Pico Flujo"),
+        ("mpna-disnea-icc", None, "Inspección"),
+    ]:
+        secciones = {it["seccion"] for it in grilla.checklist(load_case(case_id), {})}
+        assert oculta not in secciones and visible in secciones
