@@ -332,3 +332,27 @@ def test_paid_users_have_no_daily_limit(case_id, monkeypatch):
     monkeypatch.setattr(db, "usage_last_day", lambda email: {"consultas": 999, "mensajes": 999})
     monkeypatch.setenv("GEMINI_PAID_USERS", "dev@localhost")  # the dev-mode user of these tests
     assert client.post("/api/sessions", json={"case_id": case_id}).status_code == 200
+
+
+def test_tutor_answers_by_level_and_stays_out_of_the_transcript(case_id):
+    for nivel, palabra in (("principiante", "ficha patronímica"), ("normal", "¿te acordás")):
+        sid = client.post("/api/sessions", json={"case_id": case_id, "nivel": nivel}).json()["session_id"]
+        r = client.post(f"/api/sessions/{sid}/tutor", json={"text": "¿Cómo era la anamnesis?"})
+        assert r.status_code == 200 and palabra in r.json()["texto"]
+        assert client.get(f"/api/sessions/{sid}").json()["transcript"] == []
+
+
+def test_tutor_with_voice_streams_the_answer_then_audio(case_id):
+    import json
+
+    sid = client.post("/api/sessions", json={"case_id": case_id}).json()["session_id"]
+    r = client.post(f"/api/sessions/{sid}/tutor?voz=1", json={"text": "¿Cómo era la anamnesis?"})
+    tipos = [json.loads(line)["tipo"] for line in r.text.splitlines()]
+    assert tipos[0] == "tutor" and "audio" in tipos and tipos[-1] == "fin"
+
+
+def test_tutor_is_closed_once_the_consultation_ends(case_id):
+    sid = client.post("/api/sessions", json={"case_id": case_id}).json()["session_id"]
+    client.post(f"/api/sessions/{sid}/finish")
+    r = client.post(f"/api/sessions/{sid}/tutor", json={"text": "¿Y ahora?"})
+    assert r.status_code == 409

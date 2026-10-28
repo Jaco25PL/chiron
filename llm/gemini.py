@@ -36,6 +36,8 @@ MODELS = {
     # patient replies: fast, good quality
     # flash models get 20 requests/day per key on the free tier: lite is the last fallback
     "patient": ["gemini-3-flash-preview", "gemini-3.5-flash", "gemini-3.6-flash", "gemini-3.5-flash-lite"],
+    # study companion (agents/tutor.py): same needs as the patient, a short spoken reply
+    "tutor": ["gemini-3-flash-preview", "gemini-3.5-flash", "gemini-3.6-flash", "gemini-3.5-flash-lite"],
     # router and short decisions: as fast as possible
     "router": ["gemini-3.5-flash-lite", "gemini-flash-lite-latest", "gemini-3.1-flash-lite"],
     # feedback judge: quality over speed

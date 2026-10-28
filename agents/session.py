@@ -12,6 +12,11 @@ Contract (don't change it without updating api/):
         "checklist": [...]                                         # only in "principiante", see below
     }
     speak(session_id, user=None) -> Iterator[bytes]                # the patient's last reply as 24 kHz PCM chunks
+    tutor(session_id, text, user=None) -> {"texto": str, "fuentes": [{tipo, fuente, seccion, pagina}]}
+        # the study companion (agents/tutor.py), from the course material: an answer in "principiante", a hint
+        # in "normal". Not a consultation turn: the patient never sees it. ValueError once finished or past
+        # graph.MAX_TUTOR questions.
+    speak_tutor(text) -> Iterator[bytes]                          # the companion's answer in its voice
     finish(session_id, user=None) -> get_session(...) with finished=True and the feedback (computed once:
                                      calling it again returns the same one)
     get_session(session_id, user=None) -> {
@@ -21,6 +26,7 @@ Contract (don't change it without updating api/):
         "checklist": [{"id": str, "texto": str, "tipo": "hecho" | "examen" | "estudio", "hecho": bool}],
         "feedback": None | {                                      # the docente's correction, once finished
             "score": int,                                         # 0-100 over the grilla, `global` excluded
+            "tutor_consultas": int,                               # only in "normal", if the tutor was used
             "parcial": bool,                                      # True: the LLM failed, coverage only
             "bien": [str], "falto": [str], "consejos": [str],     # never name the diagnosis
             "items": [{"id": str, "texto": str, "tipo": str,      # diagnostico/plan items: generic texto
@@ -38,4 +44,6 @@ diagnosis items.
 With a user, a consultation can only be read or continued by its owner (PermissionError otherwise).
 """
 
-from agents.graph import finish, get_session, historial, list_cases, new_session, send, speak  # noqa: F401
+from agents.graph import (  # noqa: F401
+    finish, get_session, historial, list_cases, new_session, send, speak, speak_tutor, tutor,
+)

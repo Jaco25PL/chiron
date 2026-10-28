@@ -116,6 +116,8 @@ def _call(fn, *args, **kwargs):
     """Calls the backend and turns any exception into a JSON {error}."""
     try:
         return fn(*args, **kwargs)
+    except AgentError:
+        raise
     except KeyError as e:
         raise AgentError(404, f"No encontrado: {e}")
     except PermissionError:
@@ -189,6 +191,39 @@ def _with_voice(session_id: str, user: dict, result: dict):
             traceback.print_exc()
             yield json.dumps({"tipo": "error", "error": "voz no disponible"}) + "\n"
     yield json.dumps({"tipo": "fin"}) + "\n"
+
+
+@app.post("/api/sessions/{session_id}/tutor")
+def ask_tutor(session_id: str, body: Message, voz: bool = False, user: dict = Depends(current_user)):
+    """A question to the study companion, outside the consultation (the patient doesn't hear it). With
+    voz=1 it streams NDJSON like the call: the answer, then its voice as PCM chunks."""
+    if not body.text.strip():
+        raise AgentError(400, "Mensaje vacío")
+    _check_daily_limit(user)
+
+    def preguntar():
+        try:
+            return session.tutor(session_id, body.text, user)
+        except ValueError:  # finished consultation, or its question limit reached
+            raise AgentError(409, "El tutor no está disponible en esta consulta.")
+
+    with _gemini_para(user):
+        result = _call(preguntar)
+    if not voz:
+        return result
+
+    def lines():
+        yield json.dumps({"tipo": "tutor", **result}) + "\n"
+        try:
+            with _gemini_para(user):
+                for pcm in session.speak_tutor(result["texto"]):
+                    yield json.dumps({"tipo": "audio", "pcm": base64.b64encode(pcm).decode()}) + "\n"
+        except Exception:  # noqa: BLE001  the text already arrived
+            traceback.print_exc()
+            yield json.dumps({"tipo": "error", "error": "voz no disponible"}) + "\n"
+        yield json.dumps({"tipo": "fin"}) + "\n"
+
+    return StreamingResponse(lines(), media_type="application/x-ndjson")
 
 
 @app.get("/api/sessions/{session_id}")

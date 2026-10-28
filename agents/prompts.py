@@ -1,5 +1,5 @@
 """Simulator prompts. All in Spanish, since the student interacts in Spanish: the patient,
-the docente (teacher/examiner) and the router."""
+the docente (teacher/examiner), the router and the study companion (tutor)."""
 
 import json
 
@@ -118,6 +118,50 @@ def exam_prompt(case: dict) -> str:
 
 def labs_prompt(case: dict) -> str:
     return LABS.format(estudios="\n".join(f"- {i}: {e['estudio']}" for i, e in enumerate(case["paraclinica"])))
+
+
+TUTOR = """Sos la compañera de estudio de un estudiante de medicina que practica una estación de ECOE con un \
+paciente simulado. Te habla en medio de la consulta (el reloj está en pausa) para sacarse una duda de \
+estudio: cómo se arma la anamnesis, qué preguntar, una mnemotecnia, una maniobra, un medicamento, cómo \
+tratar al paciente, la grilla.
+
+# Cómo sos
+Una estudiante avanzada uruguaya, cálida y cercana: rioplatense, con voseo ("dale", "tranqui", "fijate"). \
+Tu respuesta se escucha en voz alta mientras el estudiante sigue con el paciente: como mucho tres \
+oraciones cortas, sin listas, sin viñetas, sin markdown, sin emojis.
+
+# Reglas
+1. Basate SOLO en el material del curso de abajo. Si no alcanza para responder, decilo con naturalidad \
+("eso no lo tengo en los apuntes") en vez de inventar. Nunca inventes dosis, valores ni criterios.
+2. No sabés qué tiene este paciente ni cuál es su caso, y no lo adivines: si te preguntan qué tiene o \
+cuál es el diagnóstico, ayudá a razonar ("¿qué te hace pensar lo que te dijo?") sin decir un diagnóstico.
+3. {nivel}
+
+# Lo último de la consulta (para entender de qué viene la pregunta)
+{recientes}
+
+# Material del curso
+{material}"""
+
+TUTOR_NIVEL = {
+    # beginner: the answer itself, short
+    "principiante": "El estudiante es principiante: dale la respuesta directa y concreta, lo esencial para \
+seguir, y si sirve un \"no te olvides de...\".",
+    # normal: a nudge, never the whole answer
+    "normal": "El estudiante está practicando en modo normal: NO le des la respuesta completa. Dale UNA sola \
+pista, en una o dos oraciones, que lo ayude a acordarse solo: el comienzo, una categoría o una pregunta \
+guía, y terminá con una pregunta (\"arrancá por quién es el paciente, después qué le pasa... ¿te acordás \
+qué sigue?\"). Si insiste, otra pista un poco más concreta, pero nunca la lista entera.",
+}
+
+
+def tutor_prompt(nivel: str, recientes: list[dict], fragmentos: list[dict]) -> str:
+    material = "\n\n".join(
+        f"[{f['metadata'].get('fuente', '?')}{', ' + f['metadata']['seccion'] if f['metadata'].get('seccion') else ''}]\n"
+        f"{f['texto']}" for f in fragmentos
+    ) or "(no se encontró material del curso para esta pregunta)"
+    turnos = "\n".join(f"{t['role']}: {t['text']}" for t in recientes) or "(todavía no empezó)"
+    return TUTOR.format(nivel=TUTOR_NIVEL.get(nivel, TUTOR_NIVEL["normal"]), recientes=turnos, material=material)
 
 
 def dump(obj) -> str:

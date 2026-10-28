@@ -26,7 +26,7 @@ from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langgraph.graph import END, START, StateGraph
 from pydantic import BaseModel, Field
 
-from agents import feedback, grilla, guards, prompts
+from agents import feedback, grilla, guards, prompts, tutor as companion
 from cases import catalog
 from cases.catalog import load_case
 from llm.gemini import MODELS, chat_model
@@ -35,6 +35,7 @@ from store import db
 ROOT = Path(__file__).resolve().parent.parent
 log = logging.getLogger("chiron.graph")
 HISTORY_TURNS = 16  # previous messages the patient sees
+MAX_TUTOR = 30  # questions to the study companion per consultation (each one is an LLM call plus a search)
 
 Intent = Literal["anamnesis", "examen", "paraclinica", "diagnostico", "cierre"]
 
@@ -87,6 +88,7 @@ class State(TypedDict, total=False):
     nivel: str  # "normal" | "principiante" (grilla.LEVELS); consultations without it are "normal"
     mode: str  # chat | cara, as it was opened
     feedback: dict  # the docente's feedback, computed once when the consultation ends
+    tutor: Annotated[list[dict], add]  # questions to the study companion: [{pregunta, respuesta}], not turns
 
 
 # --- cases -------------------------------------------------------------------------
@@ -344,12 +346,35 @@ def speak(session_id: str, user: User | None = None) -> Iterator[bytes]:
     return stream(replies[-1], load_case(s["case_id"]))
 
 
+def tutor(session_id: str, text: str, user: User | None = None) -> dict:
+    """A question to the study companion: {"texto", "fuentes"}. Stored apart from the transcript, so the
+    patient never sees it and it isn't a consultation turn (the clock doesn't run)."""
+    s = _state(session_id, user)
+    if s.get("finished"):
+        raise ValueError("consultation already finished")
+    if len(s.get("tutor", [])) >= MAX_TUTOR:
+        raise ValueError("too many questions to the tutor in this consultation")
+    case = load_case(s["case_id"])
+    out = companion.answer(case["materia"], text, s.get("nivel", "normal"), s.get("transcript", []))
+    GRAPH.update_state(_config(session_id), {"tutor": [{"pregunta": text, "respuesta": out["texto"]}]})
+    return out
+
+
+def speak_tutor(text: str) -> Iterator[bytes]:
+    """The study companion's answer in its own voice, as PCM chunks."""
+    from llm.tts import stream_tutor
+
+    return stream_tutor(text)
+
+
 def finish(session_id: str, user: User | None = None) -> dict:
     """Ends the consultation ("Terminar consulta" button) and returns the final state with the docente's
     feedback. Idempotent: the feedback (one LLM call) is computed only the first time."""
     s = _state(session_id, user)
     if not s.get("feedback"):
         fb = feedback.evaluate(load_case(s["case_id"]), s)
+        if s.get("nivel", "normal") == "normal" and s.get("tutor"):
+            fb["tutor_consultas"] = len(s["tutor"])  # shown as a fact, it doesn't change the score
         GRAPH.update_state(_config(session_id), {"finished": True, "feedback": fb})
         db.finish_consultation(session_id)
         db.save_feedback(session_id, fb, owner=s.get("owner", ""), case_id=s["case_id"], mode=s.get("mode", "chat"),

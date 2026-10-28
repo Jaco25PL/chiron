@@ -104,6 +104,7 @@ python rag/ingest.py mpna       # chunks -> Chroma (.chroma/), Gemini embeddings
 python rag/query.py mpna "¿qué preguntar ante disnea?"
 ```
 
+- Used by the study companion (`agents/tutor.py`, `POST /api/sessions/{id}/tutor[?voz=1]`): the student asks it study questions mid-consultation and it answers from these chunks, in its own voice (`llm/tts.py` `TUTOR_VOICE`). It never receives the case (diagnosis, hidden facts, grilla), only the turns the student has seen; its exchanges are stored apart from the transcript (state `tutor`), so the patient never sees them and the clock doesn't run. "principiante" gets the answer, "normal" one hint; in "normal" the feedback reports how many times it was used (`tutor_consultas`), without changing the score.
 - One Chroma collection per subject: `ecoe_<materia>`.
 - Metadata for each chunk: `materia`, `fuente`, `tipo` (`apunte` | `clase` | `guia` | `grilla` | `contexto_ecoe`), `seccion`, `pagina`.
 - EVA course material (UC15): downloaded to `raw/eva/` (not versioned) and processed according to `sources.json`. The ADA 2025 guideline and the ALAD 2019 guidelines are deliberately excluded, as are forums, quizzes, and assignments.

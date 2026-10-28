@@ -161,6 +161,8 @@ def finish(session_id: str, user: dict | None = None) -> dict:
     if not s["feedback"]:
         state = {k: s[k] for k in ("revealed_facts", "exams_done", "studies_requested")}
         s["feedback"] = feedback.fallback(s["case"], state)
+        if s["nivel"] == "normal" and s.get("tutor"):
+            s["feedback"]["tutor_consultas"] = len(s["tutor"])
         s["fecha"] = datetime.now(timezone.utc).isoformat()
     s["finished"] = True
     return get_session(session_id, user)
@@ -184,6 +186,26 @@ def speak(session_id: str, user: dict | None = None):
     if not any(t["role"] == "paciente" for t in s["transcript"]):
         raise KeyError("no patient reply yet")
     return iter([bytes(2 * SAMPLE_RATE // 8)] * 2)  # 2 x 0.125 s
+
+
+def tutor(session_id: str, text: str, user: dict | None = None) -> dict:
+    """A canned companion answer by level (no RAG, no Gemini)."""
+    s = _get(session_id, user)
+    if s.get("finished"):
+        raise ValueError("consultation already finished")
+    s.setdefault("tutor", []).append(text)
+    if s["nivel"] == "principiante":
+        texto = "Dale, arrancá por la ficha patronímica y el motivo de consulta, y no te olvides de los antecedentes."
+    else:
+        texto = "Arrancá por quién es el paciente y qué le pasa... ¿te acordás qué sigue?"
+    return {"texto": texto, "fuentes": [{"tipo": "clase", "fuente": "demo.md", "seccion": None, "pagina": None}]}
+
+
+def speak_tutor(text: str):
+    """Silence, like `speak`: exercises the audio path without Gemini."""
+    from llm.tts import SAMPLE_RATE
+
+    return iter([bytes(2 * SAMPLE_RATE // 8)] * 2)
 
 
 def _demo_review() -> None:
