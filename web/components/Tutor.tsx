@@ -89,7 +89,7 @@ export function TutorChat({
         <section
           aria-label={`Charla con ${nombre}`}
           onKeyDown={(e) => e.key === "Escape" && abrir(false)}
-          className={`enter absolute bottom-full left-4 right-4 z-30 mb-[148px] flex max-h-[min(460px,55dvh)] origin-bottom-left flex-col rounded-3xl sm:right-auto sm:w-[380px] lg:mb-[176px] ${VIDRIO}`}
+          className={`enter absolute bottom-full left-4 right-4 z-30 mb-[116px] flex max-h-[min(460px,55dvh)] origin-bottom-left flex-col rounded-3xl sm:right-auto sm:w-[380px] lg:mb-[144px] ${VIDRIO}`}
         >
           <header className="flex items-center justify-between gap-3 px-4 pb-1.5 pt-3.5">
             <p className="text-[14px] font-medium">{nombre}</p>
@@ -157,7 +157,7 @@ export function TutorChat({
         aria-expanded={abierto}
         aria-label={abierto ? `Cerrar la charla con ${nombre}` : `Preguntarle a ${nombre}, tu compañera de estudio`}
         title={abierto ? undefined : `¿Dudas? Preguntale a ${nombre}`}
-        className="press absolute bottom-full left-3 z-20 mb-11 rounded-2xl p-1"
+        className="press absolute bottom-full left-3 z-20 mb-3 rounded-2xl p-1"
       >
         <span className="lg:hidden">
           <Mascota id={mascotaId} animacion={animacion} alto={88} />

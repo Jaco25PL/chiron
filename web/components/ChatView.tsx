@@ -32,13 +32,14 @@ export function ChatView({
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="min-h-0 flex-1 overflow-y-auto">
-        {/* room at the bottom for the study companion, so it never covers the last message */}
-        <div className={`mx-auto flex w-full max-w-2xl flex-col gap-3 px-4 pt-6 ${acompanante ? "pb-28 lg:pb-36" : "pb-6"}`}>
+        <div className="mx-auto flex w-full max-w-2xl flex-col gap-3 px-4 py-6">
           {turnos.length === 0 && <Vacio caso={caso} />}
           {turnos.map((t, i) => (
             <Mensaje key={i} turno={t} animar={i >= yaEstaban} />
           ))}
           {pensando && <Escribiendo />}
+          {/* room for the study companion, before the scroll anchor so the last message stays above it */}
+          {acompanante && <div aria-hidden className="h-28 shrink-0 lg:h-36" />}
           <div ref={fin} />
         </div>
       </div>
