@@ -134,14 +134,15 @@ test("face to face is a call: answer, talk hands-free, the patient speaks, hang 
   await expect(page.getByText("Conectado · saludá para empezar")).toBeVisible();
 
   // a phrase is sent when the student pauses; the reply is spoken (the fake backend streams silence)
+  // the fake microphone, the 3D avatar and the blurs all render in software here: give it time
   await decir(page, "Hola, buenas tardes");
-  await expect(page.getByText("Buenas, doctor.")).toBeVisible();
+  await expect(page.getByText("Buenas, doctor.")).toBeVisible({ timeout: 15_000 });
   await expect.poll(() => llamadas).toEqual(["200 application/x-ndjson"]);
   await expect(page.getByText("No se pudo reproducir")).toHaveCount(0);
 
   // the exam is asked for out loud too; the teacher answers in writing (the backend sends no audio for it)
   await decir(page, "Le tomo la presión arterial");
-  await expect(page.getByText("Docente")).toBeVisible();
+  await expect(page.getByText("Docente")).toBeVisible({ timeout: 15_000 });
   await expect(page.getByText("No se pudo reproducir")).toHaveCount(0);
 
   await page.getByRole("button", { name: "Cortar" }).click();

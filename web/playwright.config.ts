@@ -36,6 +36,9 @@ export default defineConfig({
   testDir: "./tests/e2e",
   timeout: 30_000,
   fullyParallel: true,
+  // headless Chrome renders the backdrop blurs in software: more parallel browsers starve each other and
+  // time out (2 is also faster than the default half of the cores)
+  workers: 2,
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [["list"], ["html", { open: "never" }]] : [["list"]],
   use: { baseURL: external ?? `http://localhost:${WEB_PORT}`, channel: "chrome", trace: "retain-on-failure" },
