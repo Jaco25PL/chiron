@@ -74,7 +74,7 @@ flowchart TD
     patient & exam & labs & dx & close --> done([reply])
 ```
 
-- **The case goes whole into the patient's prompt, without RAG.** A case is small, and full context is more reliable than retrieved fragments. RAG is for reference material (the feedback step will cite it).
+- **The case goes whole into the patient's prompt, without RAG.** A case is small, and full context is more reliable than retrieved fragments. RAG is for the course material, which the study companion answers from (see below).
 - **The patient never sees the diagnosis.** Its prompt has the patient's facts only; exam findings and lab results live in the teacher nodes. Even a successful jailbreak can't reveal what the model was never given (defense in depth).
 - **Structured output everywhere:** the patient returns `{respuesta, hechos_usados}`, which turns "don't volunteer information" into a metric checked with code (see evals).
 - **State per consultation:** transcript, revealed facts, exams done, studies requested, proposed diagnosis, owner. Stored by LangGraph's checkpointer: `PostgresSaver` (Neon) when `DATABASE_URL` is set, `MemorySaver` locally.
@@ -89,7 +89,7 @@ flowchart TD
 | Open redirect after login | `callbackUrl` reduced to path + query on our own origin |
 | A slow API response restores a signed-out session | `/api` is excluded from the session-refreshing proxy (found by a flaky E2E test, see [FINDINGS #14](docs/FINDINGS.md)) |
 | The student learns the case before the consultation | Only `{opaque id, name, sex}` ever reaches the browser (`cases/catalog.py`); ids are hashes, since readable ids like `mpna-itu-pna-diabetica` leaked the diagnosis through the URL ([FINDINGS #17](docs/FINDINGS.md)); a random-patient option picks the case on the server |
-| Prompt injection / jailbreak | Adversarial eval suite (`chiron-adversarial`, 48 attacks) + the patient never receives the diagnosis |
+| Prompt injection / jailbreak | Adversarial eval suite (`chiron-adversarial`, 16 attacks rotating over the cases) + guards in code + the patient never receives the diagnosis |
 
 ## RAG pipeline
 
@@ -97,7 +97,7 @@ flowchart TD
 flowchart LR
     pdf["Course PDFs<br/>(notes, MSP guides,<br/>lab & imaging classes)"] --> clean["clean_pdfs.py<br/>deterministic, no LLM<br/>page markers"]
     clean --> md["Markdown"] --> chunk["chunk.py<br/>LangChain splitters<br/>+ grillas JSON"]
-    chunk --> jsonl["chunks.jsonl<br/>1,336 chunks"]
+    chunk --> jsonl["chunks.jsonl<br/>1,340 chunks"]
     jsonl --> emb["gemini-embedding-001<br/>3,072 dims"] --> chroma[("Chroma<br/>local dev")]
     chroma -- "to_pgvector.py<br/>truncate to 768 + renormalize" --> pg[("Neon pgvector<br/>HNSW cosine")]
 ```
@@ -105,6 +105,42 @@ flowchart LR
 - Cleaning is rule-based on purpose, so no model rewrites medical content; a word-count diff checks what was lost (< 0.1 %).
 - **768-dim Matryoshka truncation:** `gemini-embedding-001` vectors keep working when truncated and re-normalized. Top-5 overlap with the full 3,072 dims was 28/30 on a sample of queries, at a quarter of the storage and no new embedding calls.
 - Each chunk keeps `fuente`, `pagina` and `seccion`, so answers can cite "MPNA notes, p. 32".
+- New material only needs its new chunks embedded: `python rag/chunk.py mpna` then `python rag/to_pgvector.py mpna --missing` (4 grillas = 4 embedding calls).
+
+## RAG at runtime: the study companion
+
+The student can stop mid-consultation and ask a study question ("¿cómo era la anamnesis de una crisis asmática?"). The study companion (`agents/tutor.py`), shown as a pet in the corner, answers from the course material through the RAG, out loud in its own voice in the call.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant B as Browser (pet)
+    participant A as FastAPI
+    participant T as tutor.py
+    participant E as Gemini embeddings
+    participant PG as Neon pgvector
+    participant L as Gemini flash
+    participant V as Gemini TTS
+
+    B->>A: POST /api/sessions/{id}/tutor?voz=1 "¿cómo era la anamnesis del asma?"
+    Note over B: clock paused, the patient doesn't hear it
+    A->>T: question + level + turns the student already saw (never the case)
+    T->>E: embed the question (768 dims)
+    E-->>T: vector
+    T->>PG: 5 nearest chunks (cosine, HNSW)
+    PG-->>T: notes, MSP guides, grillas
+    T->>L: prompt: course chunks + level rule + question
+    L-->>T: 1-2 sentences ("principiante": the answer, "normal": one hint)
+    T-->>A: text + sources
+    A-->>B: NDJSON: the text first (bubble above the pet)
+    A->>V: the text in the companion's voice
+    V-->>B: PCM chunks, then the call returns to the patient
+```
+
+- **It can't give the case away:** it never receives the diagnosis, the hidden facts or the case's grilla, only the turns the student has already seen. Its exchanges live outside the transcript, so the patient never sees them and they aren't consultation turns.
+- **Grounded or silent:** the prompt allows only the retrieved chunks; when they don't cover the question it says "eso no lo tengo en los apuntes" instead of inventing doses or criteria.
+- **Measured:** the `chiron-tutor` eval checks each answer against the very chunks it was given (`fiel_al_material`), plus help by level, no diagnosis and brevity ([FINDINGS #26](docs/FINDINGS.md)).
+- **Cost per question:** one embedding, one flash call (~USD 0.002) and the voice.
 
 ## Models and quota
 
