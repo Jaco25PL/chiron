@@ -8,7 +8,7 @@ import json
 
 import numpy as np
 
-from llm.gemini import MODELS, with_rotation
+from llm.gemini import MODELS, genai_client, with_rotation
 from store import db
 
 DIMS = 768  # gemini-embedding-001 truncated (Matryoshka); see rag/to_pgvector.py
@@ -16,11 +16,9 @@ DIMS = 768  # gemini-embedding-001 truncated (Matryoshka); see rag/to_pgvector.p
 
 def embed_query(text: str) -> list[float]:
     def call(key: str, model: str) -> list[float]:
-        from google import genai
         from google.genai import types
 
-        client = genai.Client(api_key=key)
-        res = client.models.embed_content(
+        res = genai_client(key).models.embed_content(
             model=model, contents=text,
             config=types.EmbedContentConfig(task_type="RETRIEVAL_QUERY", output_dimensionality=DIMS),
         )

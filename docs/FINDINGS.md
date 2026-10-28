@@ -203,6 +203,15 @@ A log of what I ran into while building Chiron: what showed up, how I caught it,
 - **Expected:** ~0.9 s less per turn (up to ~1.8 s at p90). To be measured with `latencia.spec.ts` in production.
 - **Lesson:** measure before migrating infrastructure: the latency was in the order of the calls, not in where they ran.
 
+## 25. A new connection to Gemini on every voice turn cost about a second
+
+- **Context:** two LiveKit talks on voice-agent latency boil down to: measure each leg (end of turn, first token, first audio byte, network), keep things close to the models, tune provider settings, and don't open a new connection per interaction.
+- **Finding:** `llm/tts.py` (and the RAG's query embedding) created a new google-genai client on every call, so every voice turn opened a new TCP + TLS connection to Google. Isolated with `models.get` (no generation quota): new client 1.54 s median vs reused 0.51 s, from Uruguay.
+- **What I did:** `llm/gemini.py genai_client(key)`, one client per key for the life of the process, used by the voice and the RAG search (LangChain's chat models were already built once).
+- **Result** (free keys, one model per task, 6 turns, in memory): time until the patient's voice starts after the text, median **2.54 s → 0.88 s**. The text half didn't change (same code); its median moved between runs from free-tier noise alone (1.85 vs 3.78 s), which is why the comparison is per leg.
+- **Pending:** the patient with `thinking_level="minimal"`: one interleaved pair (4.87 s low vs 2.65 s minimal, near-identical replies) before the free daily quota ran out. Needs a proper interleaved run and the evals before it ships.
+- **Lesson:** on the free tier, compare the leg a change touches, interleave A and B, and fix the models: whole-turn medians move by seconds on their own.
+
 ## Short version for LinkedIn
 
 > I'm building **Chiron**, an AI patient simulator that helps medical students practice for the ECOE (the Spanish-language OSCE, the hands-on clinical exam). The most interesting part wasn't getting the patient to talk, but **measuring that it behaves the way it should**.

@@ -226,6 +226,16 @@ def _guarded(make_runnable, model: str, key: str):
     return RunnableLambda(call, name=model)
 
 
+@lru_cache(maxsize=None)
+def genai_client(key: str):
+    """One google-genai client per key, kept for the life of the process. A new client per call opened a
+    new connection every time (TCP + TLS to Google): ~1 s per call measured from Uruguay, vs a reused one.
+    Kept here also keeps it referenced (an inline client gets closed before its call completes)."""
+    from google import genai
+
+    return genai.Client(api_key=key)
+
+
 def chat_model(task: str, schema: type | None = None, retries: int = 3, **kwargs):
     """LangChain chat model for the task, with fallback across keys and models.
 

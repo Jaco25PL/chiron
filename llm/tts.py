@@ -69,10 +69,9 @@ def speak_as(text: str, voice: str, speaking_style: str) -> Iterator[bytes]:
     """PCM chunks of `text` in this voice and style, as Gemini generates them (faster than they play:
     the first one arrives in about a second). Rotates keys and models on quota errors."""
     # imported here so the fake backend (CI E2E installs only fastapi + uvicorn) can import this module
-    from google import genai
     from google.genai import types
 
-    from llm.gemini import record_usage, with_rotation
+    from llm.gemini import genai_client, record_usage, with_rotation
 
     config = types.GenerateContentConfig(
         response_modalities=["AUDIO"],
@@ -83,15 +82,15 @@ def speak_as(text: str, voice: str, speaking_style: str) -> Iterator[bytes]:
         types.Part(text=text, speech_metadata=types.SpeechMetadata(style=speaking_style))])]
 
     def call(key: str, model: str):
-        client = genai.Client(api_key=key)  # keep the reference: an inline client is closed before the call
         usage = {"in": 0, "out": 0}
-        audio = _audio(client.models.generate_content_stream(model=model, contents=contents, config=config), usage)
+        stream = genai_client(key).models.generate_content_stream(model=model, contents=contents, config=config)
+        audio = _audio(stream, usage)
         first = next(audio, None)  # quota errors surface here, where with_rotation can still switch keys
         if first is None:
             raise RuntimeError(f"{model} returned no audio")
-        return client, first, audio, usage, key, model
+        return first, audio, usage, key, model
 
-    _client, first, audio, usage, key, model = with_rotation(call, "tts", retries=0)
+    first, audio, usage, key, model = with_rotation(call, "tts", retries=0)
     try:
         yield first
         yield from audio
