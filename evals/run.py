@@ -6,6 +6,14 @@ Usage:
     python evals/run.py router       # router only
     python evals/run.py adversarial  # attacks (not run by default: burns quota)
 
+Which patients (paciente and adversarial suites; the router has no cases):
+    python evals/run.py paciente                             # all of them
+    python evals/run.py paciente --nuevos                    # only cases added/changed vs origin/main
+    python evals/run.py paciente --nuevos --desde <ref>      # ... vs another git ref
+    python evals/run.py paciente --casos mpna-a,mpna-b       # just these
+Run all of them after changing what every patient shares (prompts, models, guards, the graph): a new
+or edited case only needs its own run, since the others' results still hold.
+
 Evaluator keys stay in Spanish so existing LangSmith experiments remain comparable.
 
 Patient evaluators:
@@ -25,6 +33,7 @@ Adversarial evaluators (chiron-adversarial dataset):
                                        diagnosis, stays in character
 """
 
+import subprocess
 import sys
 from pathlib import Path
 
@@ -36,7 +45,7 @@ from langsmith import evaluate  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
 
 from agents import graph  # noqa: E402
-from evals.datasets import ADVERSARIAL, PACIENTE, ROUTER  # noqa: E402
+from evals.datasets import ADVERSARIAL, PACIENTE, ROUTER, load_cases  # noqa: E402
 from agents import prompts  # noqa: E402
 from llm.gemini import MODELS, chat_model  # noqa: E402
 
@@ -216,8 +225,53 @@ def resiste_ataque(inputs: dict, outputs: dict, reference_outputs: dict) -> dict
     return {"key": "resiste_ataque", "score": int(v.resiste_ataque), "comment": v.comentario}
 
 
+# --- which cases ---------------------------------------------------------------------
+
+
+def _arg(name: str) -> str | None:
+    return sys.argv[sys.argv.index(name) + 1] if name in sys.argv[:-1] else None
+
+
+def casos_nuevos(base: str = "origin/main") -> list[str]:
+    """Ids of the cases added or changed vs `base`, committed or not (new untracked files included)."""
+    git = lambda *a: subprocess.run(["git", *a], cwd=ROOT, capture_output=True, text=True, check=True).stdout  # noqa: E731
+    paths = git("diff", "--name-only", base, "--", "cases/mpna").split()
+    paths += git("ls-files", "--others", "--exclude-standard", "cases/mpna").split()
+    return sorted({Path(p).stem for p in paths if p.endswith(".json")})
+
+
+def casos_elegidos() -> list[str] | None:
+    """The cases to evaluate from --casos / --nuevos, or None for all of them."""
+    validos = {c["id"] for c in load_cases()}
+    if lista := _arg("--casos"):
+        casos = [c.strip() for c in lista.split(",") if c.strip()]
+        if desconocidos := [c for c in casos if c not in validos]:
+            sys.exit(f"unknown cases: {', '.join(desconocidos)} (valid: {', '.join(sorted(validos))})")
+        return casos
+    if "--nuevos" in sys.argv:
+        return [c for c in casos_nuevos(_arg("--desde") or "origin/main") if c in validos]
+    return None
+
+
+def datos(dataset: str, casos: list[str] | None):
+    """The dataset's name (all examples) or just the examples of these cases."""
+    if casos is None:
+        return dataset
+    from langsmith import Client
+
+    return [e for e in Client().list_examples(dataset_name=dataset) if e.inputs.get("case_id") in casos]
+
+
 def main():
-    which = sys.argv[1:] or ["paciente", "router"]
+    which = [a for a in sys.argv[1:] if a in ("paciente", "router", "adversarial")] or ["paciente", "router"]
+    casos = casos_elegidos()
+    if casos is not None:
+        if not casos:
+            print("No new or changed cases: nothing to evaluate for paciente/adversarial.")
+            which = [w for w in which if w == "router"]
+        else:
+            print(f"Cases: {', '.join(casos)}")
+    extra = {"casos": ",".join(casos)} if casos else {}
     if "router" in which:
         evaluate(
             router_target, data=ROUTER, evaluators=[intent_correcto],
@@ -226,16 +280,16 @@ def main():
         )
     if "paciente" in which:
         evaluate(
-            paciente_target, data=PACIENTE, evaluators=[judge, hecho_correcto, un_solo_hecho],
+            paciente_target, data=datos(PACIENTE, casos), evaluators=[judge, hecho_correcto, un_solo_hecho],
             experiment_prefix=f"paciente-{MODELS['patient'][0]}", max_concurrency=2,
-            metadata={"modelo_paciente": MODELS["patient"][0], "modelo_juez": MODELS["judge"][0]},
+            metadata={"modelo_paciente": MODELS["patient"][0], "modelo_juez": MODELS["judge"][0], **extra},
         )
     if "adversarial" in which:
         evaluate(
-            adversarial_target, data=ADVERSARIAL,
+            adversarial_target, data=datos(ADVERSARIAL, casos),
             evaluators=[resiste_ataque, no_vuelca_hechos, no_filtra_prompt, no_entrega_todo],
             experiment_prefix=f"adversarial-{MODELS['patient'][0]}", max_concurrency=2,
-            metadata={"modelo_paciente": MODELS["patient"][0], "modelo_juez": MODELS["judge"][0]},
+            metadata={"modelo_paciente": MODELS["patient"][0], "modelo_juez": MODELS["judge"][0], **extra},
         )
 
 

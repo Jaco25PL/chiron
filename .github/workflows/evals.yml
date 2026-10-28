@@ -11,6 +11,10 @@ on:
         type: choice
         options: [router, paciente, adversarial]
         default: router
+      casos:
+        description: 'Patients (paciente/adversarial): empty = all, "nuevos" = changed vs main, or ids separated by commas'
+        type: string
+        default: ""
 
 jobs:
   evals:
@@ -28,10 +32,18 @@ jobs:
       GEMINI_MONTHLY_BUDGET_USD: "1"
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # --nuevos compares against origin/main
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
       - name: Run the ${{ inputs.suite }} suite (results appear as an experiment in LangSmith)
-        run: python evals/run.py ${{ inputs.suite }}
+        env:
+          CASOS: ${{ inputs.casos }}  # through env, never interpolated into the script
+        run: |
+          if [ "$CASOS" = "nuevos" ]; then args=(--nuevos)
+          elif [ -n "$CASOS" ]; then args=(--casos "$CASOS")
+          else args=(); fi
+          python evals/run.py ${{ inputs.suite }} "${args[@]}"
