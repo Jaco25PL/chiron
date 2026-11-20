@@ -23,3 +23,6 @@ note.md
 
 # retrieval eval: cached query embeddings
 evals/.cache/
+
+# Playwright MCP screenshots and logs (local)
+.playwright-mcp/
