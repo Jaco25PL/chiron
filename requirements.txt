@@ -3,6 +3,7 @@ langchain-core
 langchain-chroma
 langchain-google-genai
 langchain-text-splitters
+langsmith>=0.14  # evals: traces.query (list_runs is removed on 2027-01-31)
 python-dotenv
 pytest
 fastapi

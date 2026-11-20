@@ -11,6 +11,7 @@ judge and of the code evaluators. Needs DATABASE_URL (the deployed database) in 
 Reviewers are the emails in CHIRON_REVIEWERS (env var of the chiron-api Vercel project).
 """
 
+import asyncio
 import random
 import sys
 from collections import defaultdict
@@ -32,6 +33,19 @@ WITH_REFERENCE = ("hecho", "apertura")
 SEED = 7
 
 
+def experiment_runs(client: Client, experiment: str) -> list:
+    """The experiment's root runs with their inputs, outputs and example. `traces.query` replaces the
+    deprecated `list_runs` (removed from LangSmith Cloud on 2027-01-31); it's async only, hence asyncio."""
+    project = client.read_project(project_name=experiment)
+
+    async def fetch() -> list:
+        page = client.traces.query(project_id=str(project.id), min_start_time=project.start_time, page_size=100,
+                                   selects=["ID", "INPUTS", "OUTPUTS", "REFERENCE_EXAMPLE_ID"])
+        return [t.root_run async for t in page]
+
+    return asyncio.run(fetch())
+
+
 def criteria(categoria: str) -> list[str]:
     keys = ["no_revela_diagnostico", "sin_alucinaciones", "en_personaje"]
     return keys + (["consistente", "un_solo_hecho"] if categoria in WITH_REFERENCE else [])
@@ -42,7 +56,7 @@ def publicar(experiment: str | None) -> None:
     ds = client.read_dataset(dataset_name=PACIENTE)
     if experiment is None:
         experiment = max(client.list_projects(reference_dataset_id=ds.id), key=lambda p: p.start_time).name
-    runs = [r for r in client.list_runs(project_name=experiment, is_root=True) if r.outputs]
+    runs = [r for r in experiment_runs(client, experiment) if r.outputs]
     feedback = defaultdict(dict)
     for f in client.list_feedback(run_ids=[r.id for r in runs]):
         feedback[str(f.run_id)][f.key] = {"score": f.score, "comentario": f.comment}
