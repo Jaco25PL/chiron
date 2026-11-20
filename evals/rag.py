@@ -2,6 +2,7 @@
 
     python evals/rag.py            # runs the gold set against the real search, prints the metrics
     python evals/rag.py --detalle  # ... plus what came back for every question that missed
+    python evals/rag.py --modo vector   # the search mode to measure (default: rag/search.py MODO)
     python evals/run.py rag        # the same, logged to LangSmith as an experiment (chiron-rag)
 
 The gold set (evals/rag_gold.json) says, for each question, where its answer is in the course material, by
@@ -95,11 +96,11 @@ def _embedding(pregunta: str) -> list[float]:
     return vec
 
 
-def buscar(preguntas: list[str]) -> dict[str, list[dict]]:
+def buscar(preguntas: list[str], modo: str | None = None) -> dict[str, list[dict]]:
     """The real search (rag/search.py, as the companion calls it) for each question, embeddings cached."""
-    from rag.search import search_vector
+    from rag.search import search_with
 
-    return {p: search_vector(MATERIA, _embedding(p), k=K) for p in preguntas}
+    return {p: search_with(MATERIA, p, _embedding(p), k=K, modo=modo) for p in preguntas}
 
 
 def resumen(filas: list[tuple[dict, dict]]) -> str:
@@ -122,8 +123,12 @@ def resumen(filas: list[tuple[dict, dict]]) -> str:
 def main():
     from llm import gemini  # noqa: F401  (loads .env)
 
+    from rag import search
+
+    modo = sys.argv[sys.argv.index("--modo") + 1] if "--modo" in sys.argv[:-1] else search.MODO
+    print(f"search: {modo}" + (f" (candidates {search.CANDIDATES}, rrf_k {search.RRF_K})" if modo != "vector" else ""))
     gold = load_gold()
-    resultados = buscar([q["pregunta"] for q in gold])
+    resultados = buscar([q["pregunta"] for q in gold], modo)
     filas = [(q, metricas(resultados[q["pregunta"]], q["relevantes"])) for q in gold]
     print(resumen(filas))
     dentro = [m["top1"] for q, m in filas if q["categoria"] != "fuera"]

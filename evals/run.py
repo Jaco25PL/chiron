@@ -372,12 +372,13 @@ def main():
                       "thinking_paciente": graph.PATIENT_THINKING, **extra},
         )
     if "rag" in which:
-        from rag.search import DIMS
+        from rag.search import CANDIDATES, DIMS, MODO
 
         evaluate(
             rag_target, data=RAG, evaluators=[rag_metricas],
-            experiment_prefix=f"rag-{MODELS['embedding'][0]}-{DIMS}", max_concurrency=4,
-            metadata={"embedding": MODELS["embedding"][0], "dims": DIMS, "k": 5, "busqueda": "vector"},
+            experiment_prefix=f"rag-{MODO}-{MODELS['embedding'][0]}-{DIMS}", max_concurrency=4,
+            metadata={"embedding": MODELS["embedding"][0], "dims": DIMS, "k": 5, "busqueda": MODO,
+                      "candidatos": CANDIDATES},
         )
     if "tutor" in which:
         evaluate(
