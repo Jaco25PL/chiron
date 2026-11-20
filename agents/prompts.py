@@ -157,6 +157,29 @@ orientalo a cómo razonarlo o dónde está (\"pensá en el broncodilatador de re
 }
 
 
+# Rewrites the student's question to the companion into a standalone one for the RAG search, resolving
+# "eso", "lo que me dijo", "¿y ahora?" from the last turns. Never adds a diagnosis: only what was said.
+CONSULTA_RAG = """Un estudiante de medicina, en medio de una consulta con un paciente simulado, le hace una \
+pregunta de estudio a su compañera. Con esa pregunta se van a buscar fragmentos de los apuntes del curso.
+
+Reescribí la pregunta para que se entienda sola, sin la conversación:
+- Reemplazá lo que remite a la conversación ("eso", "lo que me dijo", "esa maniobra", "¿y ahora?") por lo \
+que el paciente o el docente dijo, con palabras de los apuntes (síntoma, signo, hallazgo, maniobra, estudio).
+- No agregues un diagnóstico ni supongas qué tiene el paciente: solo lo que se dijo.
+- Si la pregunta ya se entiende sola, devolvela igual.
+- Una sola pregunta, corta, en español.
+
+Lo último de la consulta:
+{recientes}
+
+Pregunta del estudiante: {pregunta}"""
+
+
+def consulta_prompt(recientes: list[dict], pregunta: str) -> str:
+    turnos = "\n".join(f"{t['role']}: {t['text']}" for t in recientes)
+    return CONSULTA_RAG.format(recientes=turnos, pregunta=pregunta)
+
+
 def tutor_prompt(nivel: str, recientes: list[dict], fragmentos: list[dict]) -> str:
     material = "\n\n".join(
         f"[{f['metadata'].get('fuente', '?')}{', ' + f['metadata']['seccion'] if f['metadata'].get('seccion') else ''}]\n"

@@ -24,9 +24,9 @@ The rule of thumb: if something can be checked with code, it's a test or a code 
 
 | Layer | Count | Runs | Cost |
 |---|---|---|---|
-| pytest | 136 | every push (CI) | free, ~15 s |
+| pytest | 141 | every push (CI) | free, ~15 s |
 | Playwright E2E | 18 | every push (CI); `BASE_URL=…` against production | free, ~1 min |
-| LangSmith evals | 5 suites: paciente 119, router 33, adversarial 16, tutor 24, rag 71 | manual (`evals.yml`, or locally) | Gemini quota (rag: cached embeddings only) |
+| LangSmith evals | 5 suites: paciente 119, router 33, adversarial 16, tutor 24, rag 79 | manual (`evals.yml`, or locally) | Gemini quota (rag: cached embeddings only) |
 
 ## Risk → what covers it
 

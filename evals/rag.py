@@ -3,6 +3,9 @@
     python evals/rag.py            # runs the gold set against the real search, prints the metrics
     python evals/rag.py --detalle  # ... plus what came back for every question that missed
     python evals/rag.py --modo vector   # the search mode to measure (default: rag/search.py MODO)
+    python evals/rag.py --sin-reescribir   # search the question as asked (default: agents/tutor.py REWRITE)
+    python evals/rag.py --con-charla       # give questions without turns a neutral consultation before them
+    python evals/rag.py --lote validacion  # only the held-out questions (ids v-*), or "desarrollo"
     python evals/run.py rag        # the same, logged to LangSmith as an experiment (chiron-rag)
 
 The gold set (evals/rag_gold.json) says, for each question, where its answer is in the course material, by
@@ -73,34 +76,67 @@ def load_gold() -> list[dict]:
 _cache: dict | None = None
 _lock = threading.Lock()  # LangSmith's evaluate calls the target from several threads
 
+# Background turns for --con-charla: a neutral consultation, so questions that are clear on their own are
+# also measured as the companion really gets them (always with some turns before), rewrite included.
+CHARLA = [
+    {"role": "estudiante", "text": "Buen día, soy estudiante de medicina. ¿Cómo se llama?"},
+    {"role": "paciente", "text": "Buen día, me llamo Ana."},
+    {"role": "estudiante", "text": "¿Qué la trae por acá?"},
+    {"role": "paciente", "text": "Vengo a un control, doctor, me mandaron a hacerme ver."},
+]
 
-def _embedding(pregunta: str) -> list[float]:
-    """The query's embedding, from evals/.cache/ or computed once and saved (atomically)."""
+
+def _cached(key: str, compute):
+    """`compute()` once per key, kept in evals/.cache/ (saved atomically): embeddings and rewrites."""
     global _cache
-    from llm.gemini import MODELS
-    from rag.search import DIMS, embed_query
-
-    key = f"{MODELS['embedding'][0]}:{DIMS}:{pregunta}"
     with _lock:
         if _cache is None:
             _cache = json.loads(CACHE.read_text(encoding="utf-8")) if CACHE.exists() else {}
         if key in _cache:
             return _cache[key]
-    vec = embed_query(pregunta)
+    value = compute()
     with _lock:
-        _cache[key] = vec
+        _cache[key] = value
         CACHE.parent.mkdir(exist_ok=True)
         tmp = CACHE.with_suffix(f".{threading.get_ident()}.tmp")
-        tmp.write_text(json.dumps(_cache), encoding="utf-8")
+        tmp.write_text(json.dumps(_cache, ensure_ascii=False), encoding="utf-8")
         tmp.replace(CACHE)
-    return vec
+    return value
+
+
+def _embedding(consulta: str) -> list[float]:
+    from llm.gemini import MODELS
+    from rag.search import DIMS, embed_query
+
+    return _cached(f"{MODELS['embedding'][0]}:{DIMS}:{consulta}", lambda: embed_query(consulta))
+
+
+def consulta(pregunta: str, recientes: list[dict], reescribir: bool) -> str:
+    """What gets searched: the question, or its rewrite from the turns (agents/tutor.py search_query).
+    Rewrites are cached by prompt and model, so a changed prompt is measured afresh."""
+    if not reescribir or not recientes:
+        return pregunta
+    import hashlib
+
+    from agents import prompts, tutor
+    from llm.gemini import MODELS
+
+    h = hashlib.sha256(prompts.consulta_prompt(recientes, pregunta).encode()).hexdigest()[:16]
+    return _cached(f"rw:{MODELS['router'][0]}:{h}", lambda: tutor.search_query(pregunta, recientes))
+
+
+def buscar_una(q: dict, modo: str | None = None, reescribir: bool = False, charla: bool = False):
+    """(what was searched, the chunks) for a gold question ({pregunta, recientes?}), as the companion does."""
+    from rag.search import search_with
+
+    recientes = q.get("recientes") or (CHARLA if charla else [])
+    c = consulta(q["pregunta"], recientes, reescribir)
+    return c, search_with(MATERIA, c, _embedding(c), k=K, modo=modo)
 
 
 def buscar(preguntas: list[str], modo: str | None = None) -> dict[str, list[dict]]:
-    """The real search (rag/search.py, as the companion calls it) for each question, embeddings cached."""
-    from rag.search import search_with
-
-    return {p: search_with(MATERIA, p, _embedding(p), k=K, modo=modo) for p in preguntas}
+    """The search for bare questions (no turns, no rewrite), by question."""
+    return {p: buscar_una({"pregunta": p}, modo)[1] for p in preguntas}
 
 
 def resumen(filas: list[tuple[dict, dict]]) -> str:
@@ -125,11 +161,18 @@ def main():
 
     from rag import search
 
+    from agents import tutor
+
     modo = sys.argv[sys.argv.index("--modo") + 1] if "--modo" in sys.argv[:-1] else search.MODO
-    print(f"search: {modo}" + (f" (candidates {search.CANDIDATES}, rrf_k {search.RRF_K})" if modo != "vector" else ""))
+    reescribir = "--reescribir" in sys.argv or ("--sin-reescribir" not in sys.argv and tutor.REWRITE)
+    charla = "--con-charla" in sys.argv
+    print(f"search: {modo}, rewrite: {'yes' if reescribir else 'no'}, background turns: {'yes' if charla else 'no'}")
     gold = load_gold()
-    resultados = buscar([q["pregunta"] for q in gold], modo)
-    filas = [(q, metricas(resultados[q["pregunta"]], q["relevantes"])) for q in gold]
+    if lote := (sys.argv[sys.argv.index("--lote") + 1] if "--lote" in sys.argv[:-1] else None):
+        gold = [q for q in gold if q["id"].startswith("v-") == (lote == "validacion")]
+    res = {q["id"]: buscar_una(q, modo, reescribir, charla) for q in gold}
+    resultados = {q["pregunta"]: res[q["id"]][1] for q in gold}
+    filas = [(q, metricas(res[q["id"]][1], q["relevantes"])) for q in gold]
     print(resumen(filas))
     dentro = [m["top1"] for q, m in filas if q["categoria"] != "fuera"]
     fuera = [m["top1"] for q, m in filas if q["categoria"] == "fuera"]

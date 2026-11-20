@@ -297,11 +297,13 @@ def breve(outputs: dict) -> dict:
 
 
 def rag_target(inputs: dict) -> dict:
-    """The real search for the question, as the companion runs it (it doesn't use `recientes` yet)."""
+    """The real search for the question, as the companion runs it (rewritten with `recientes` if any)."""
+    from agents import tutor
     from evals import rag
 
-    chunks = rag.buscar([inputs["pregunta"]])[inputs["pregunta"]]
-    return {"chunks": [{"texto": c["texto"], "metadata": c["metadata"], "score": c["score"]} for c in chunks]}
+    consulta, chunks = rag.buscar_una(inputs, reescribir=tutor.REWRITE)
+    return {"consulta": consulta,
+            "chunks": [{"texto": c["texto"], "metadata": c["metadata"], "score": c["score"]} for c in chunks]}
 
 
 def rag_metricas(outputs: dict, reference_outputs: dict) -> dict:
@@ -372,13 +374,14 @@ def main():
                       "thinking_paciente": graph.PATIENT_THINKING, **extra},
         )
     if "rag" in which:
+        from agents.tutor import REWRITE
         from rag.search import CANDIDATES, DIMS, MODO
 
         evaluate(
             rag_target, data=RAG, evaluators=[rag_metricas],
             experiment_prefix=f"rag-{MODO}-{MODELS['embedding'][0]}-{DIMS}", max_concurrency=4,
             metadata={"embedding": MODELS["embedding"][0], "dims": DIMS, "k": 5, "busqueda": MODO,
-                      "candidatos": CANDIDATES},
+                      "candidatos": CANDIDATES, "reescritura": REWRITE},
         )
     if "tutor" in which:
         evaluate(

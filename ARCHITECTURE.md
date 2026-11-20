@@ -117,6 +117,7 @@ sequenceDiagram
     participant B as Browser (pet)
     participant A as FastAPI
     participant T as tutor.py
+    participant R as Gemini flash-lite
     participant E as Gemini embeddings
     participant PG as Neon pgvector
     participant L as Gemini flash
@@ -125,7 +126,9 @@ sequenceDiagram
     B->>A: POST /api/sessions/{id}/tutor?voz=1 "¿cómo era la anamnesis del asma?"
     Note over B: clock paused, the patient doesn't hear it
     A->>T: question + level + turns the student already saw (never the case)
-    T->>E: embed the question (768 dims)
+    T->>R: rewrite the question with the turns ("¿cómo se llama eso?" -> "...despertarse ahogado de noche")
+    R-->>T: standalone question (~1 s; past 2.5 s the original is searched)
+    T->>E: embed it (768 dims)
     E-->>T: vector
     T->>PG: 5 nearest chunks (cosine, HNSW)
     PG-->>T: notes, MSP guides, grillas
@@ -139,8 +142,9 @@ sequenceDiagram
 
 - **It can't give the case away:** it never receives the diagnosis, the hidden facts or the case's grilla, only the turns the student has already seen. Its exchanges live outside the transcript, so the patient never sees them and they aren't consultation turns.
 - **Grounded or silent:** the prompt allows only the retrieved chunks; when they don't cover the question it says "eso no lo tengo en los apuntes" instead of inventing doses or criteria.
-- **Measured:** the `chiron-tutor` eval checks each answer against the very chunks it was given (`fiel_al_material`), plus help by level, no diagnosis and brevity ([FINDINGS #26](docs/FINDINGS.md)).
-- **Cost per question:** one embedding, one flash call (~USD 0.002) and the voice.
+- **Measured:** the `chiron-tutor` eval checks each answer against the very chunks it was given (`fiel_al_material`), plus help by level, no diagnosis and brevity ([FINDINGS #26](docs/FINDINGS.md)); the `chiron-rag` eval checks the search alone against where each answer is in the notes (#27-#29).
+- **The question is rewritten before searching:** mid-consultation questions point at the conversation ("¿cómo se llama eso?"); the search alone can't resolve them, so a flash-lite call turns them into standalone ones from the turns. It only says what was said, never a diagnosis. Hybrid search (BM25) was measured too and left out (#28).
+- **Cost per question:** one flash-lite rewrite, one embedding, one flash call (~USD 0.002) and the voice.
 
 ## Models and quota
 

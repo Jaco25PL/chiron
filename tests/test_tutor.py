@@ -24,7 +24,62 @@ def fake_model(monkeypatch):
 
     monkeypatch.setattr(tutor, "_model", lambda: Model())
     monkeypatch.setattr(tutor, "_search", lambda materia, pregunta: [FRAGMENTO, FRAGMENTO])
+    monkeypatch.setattr(tutor, "_rewriter", lambda: Rewriter(lambda prompt: "pregunta reescrita"))
     return seen
+
+
+class Rewriter:
+    def __init__(self, fn):
+        self.fn, self.prompts = fn, []
+
+    def invoke(self, messages):
+        self.prompts.append(messages[0].content)
+        return SimpleNamespace(consulta=self.fn(messages[0].content))
+
+
+TURNS = [{"role": "paciente", "text": "A veces me despierto ahogado y me tengo que sentar."}]
+
+
+def test_search_query_resolves_the_question_with_the_last_turns(monkeypatch):
+    rw = Rewriter(lambda prompt: " ¿Qué es la disnea paroxística nocturna? ")
+    monkeypatch.setattr(tutor, "_rewriter", lambda: rw)
+    assert tutor.search_query("¿Cómo se llama eso?", TURNS) == "¿Qué es la disnea paroxística nocturna?"
+    assert "me despierto ahogado" in rw.prompts[0] and "¿Cómo se llama eso?" in rw.prompts[0]
+
+
+def test_search_query_without_turns_or_on_failure_keeps_the_question(monkeypatch):
+    def boom(prompt):
+        raise RuntimeError("quota")
+
+    monkeypatch.setattr(tutor, "_rewriter", lambda: Rewriter(boom))
+    assert tutor.search_query("¿Qué es el CAGE?", []) == "¿Qué es el CAGE?"
+    assert tutor.search_query("¿Cómo se llama eso?", TURNS) == "¿Cómo se llama eso?"
+
+
+def test_a_slow_rewrite_falls_back_to_the_question(monkeypatch):
+    import time
+
+    monkeypatch.setattr(tutor, "REWRITE_DEADLINE", 0.05)
+    monkeypatch.setattr(tutor, "_rewriter", lambda: Rewriter(lambda prompt: time.sleep(0.5) or "tarde"))
+    assert tutor.search_query("¿Cómo se llama eso?", TURNS) == "¿Cómo se llama eso?"
+
+
+def test_the_rewrite_thread_knows_the_user(monkeypatch):
+    """The paid key is chosen by the user in a ContextVar; a bare thread wouldn't see it (FINDINGS #22)."""
+    from llm import gemini
+
+    seen = []
+    monkeypatch.setattr(tutor, "_rewriter", lambda: Rewriter(lambda prompt: seen.append(gemini._usuario.get()) or "x"))
+    with gemini.usuario("alumna@example.com"):
+        tutor.search_query("¿Cómo se llama eso?", TURNS)
+    assert seen == ["alumna@example.com"]
+
+
+def test_the_search_gets_the_rewritten_question(fake_model, monkeypatch):
+    searched = []
+    monkeypatch.setattr(tutor, "_search", lambda materia, pregunta: searched.append(pregunta) or [FRAGMENTO])
+    tutor.answer("mpna", "¿Cómo se llama eso?", "normal", TURNS)
+    assert searched == ["pregunta reescrita"]
 
 
 def test_answer_uses_the_course_material(fake_model):
