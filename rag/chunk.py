@@ -63,6 +63,12 @@ GUIDE_BOLD = re.compile(r"^\*\*([^*]{4,60})\*\*\s*$")  # "**Metformina**"
 # guidelines whose structure the rules below can read; the smoking guideline puts its titles inline
 # ("Uruguay 2009 A. Averigüe - Pregunte") and some of its `###` are real (ABC, Fagerström): left as is
 STRUCTURED_GUIDES = {"msp-diabetes-2017.md", "msp-hta-2017.md"}
+# headings pdftotext made out of something else, per file: they become plain lines
+FALSE_HEADINGS = {
+    # labels of Figura 1 (Prochaska and Di Clemente's wheel) and the author's name: under "Acción" the
+    # definition of "Determinación o Preparación" read as the action stage, and the companion said so
+    "tabaquismo-motivacion-etapas-cambio.md": {"Acción", "Recaída", "Lic. Ps. Mary Barros"},
+}
 GENERIC_TITLES = {"recomendaciones", "recomendacion", "recomendación", "evidencia", "resumen de la evidencia",
                   "resumen de evidencia", "indice", "índice"}
 
@@ -101,6 +107,10 @@ def _subtitle(title: str) -> bool:
 
 def chunk_markdown(path: Path, materia: str, tipo: str) -> list[dict]:
     text = path.read_text(encoding="utf-8")
+    if false := FALSE_HEADINGS.get(path.name):
+        unhead = lambda line: re.sub(r"^#+ ", "", line)  # noqa: E731
+        text = "\n".join(unhead(line) if line.startswith("#") and unhead(line).strip() in false else line
+                         for line in text.split("\n"))
     if tipo == "guia" and path.name in STRUCTURED_GUIDES:
         text = structure_guide(text)
     sections = merge_short(header_splitter.split_text(text))
