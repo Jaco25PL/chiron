@@ -30,7 +30,12 @@ def embed_query(text: str) -> list[float]:
 
 def search(materia: str, pregunta: str, k: int = 5, tipo: str | None = None) -> list[dict]:
     """[{texto, metadata, score}] by cosine distance (lower = closer), like the Chroma version."""
-    vec = "[" + ",".join(f"{x:.6f}" for x in embed_query(pregunta)) + "]"
+    return search_vector(materia, embed_query(pregunta), k, tipo)
+
+
+def search_vector(materia: str, embedding: list[float], k: int = 5, tipo: str | None = None) -> list[dict]:
+    """`search` with the query already embedded (the retrieval eval caches the embeddings)."""
+    vec = "[" + ",".join(f"{x:.6f}" for x in embedding) + "]"
     sql = """SELECT texto, metadata, embedding <=> %s::vector AS score FROM rag_chunks
              WHERE materia IN (%s, 'general') {tipo} ORDER BY score LIMIT %s"""
     params: list = [vec, materia]

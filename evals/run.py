@@ -6,6 +6,7 @@ Usage:
     python evals/run.py router       # router only
     python evals/run.py adversarial  # attacks (not run by default: burns quota)
     python evals/run.py tutor        # the study companion (needs DATABASE_URL: its RAG is in pgvector)
+    python evals/run.py rag          # the companion's retrieval alone, no LLM (needs DATABASE_URL; see evals/rag.py)
 
 Which patients (paciente and adversarial suites; the router has no cases):
     python evals/run.py paciente                             # all of them
@@ -38,6 +39,8 @@ Study companion evaluators (chiron-tutor dataset):
 - segun_nivel             (LLM judge)  "principiante": gives the answer; "normal": one hint, not the answer
 - no_diagnostica          (LLM judge)  never tells the student what the patient has
 - breve                   (code)       40 words at most (it's heard aloud mid-station)
+Retrieval evaluator (chiron-rag dataset; all code, see evals/rag.py):
+- hit@1, hit@5, recall@5, rr, top1   the chunks the search returns vs where the answer is
 """
 
 import subprocess
@@ -52,7 +55,7 @@ from langsmith import evaluate  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
 
 from agents import graph  # noqa: E402
-from evals.datasets import ADVERSARIAL, PACIENTE, ROUTER, TUTOR, load_cases  # noqa: E402
+from evals.datasets import ADVERSARIAL, PACIENTE, RAG, ROUTER, TUTOR, load_cases  # noqa: E402
 from agents import prompts  # noqa: E402
 from llm.gemini import MODELS, chat_model  # noqa: E402
 
@@ -290,6 +293,24 @@ def breve(outputs: dict) -> dict:
     return {"key": "breve", "score": int(len(outputs["respuesta"].split()) <= 40)}
 
 
+# --- retrieval ---------------------------------------------------------------------------
+
+
+def rag_target(inputs: dict) -> dict:
+    """The real search for the question, as the companion runs it (it doesn't use `recientes` yet)."""
+    from evals import rag
+
+    chunks = rag.buscar([inputs["pregunta"]])[inputs["pregunta"]]
+    return {"chunks": [{"texto": c["texto"], "metadata": c["metadata"], "score": c["score"]} for c in chunks]}
+
+
+def rag_metricas(outputs: dict, reference_outputs: dict) -> dict:
+    from evals import rag
+
+    m = rag.metricas(outputs["chunks"], reference_outputs["relevantes"])
+    return {"results": [{"key": k, "score": v} for k, v in m.items() if v is not None]}
+
+
 # --- which cases ---------------------------------------------------------------------
 
 
@@ -328,7 +349,7 @@ def datos(dataset: str, casos: list[str] | None):
 
 
 def main():
-    which = [a for a in sys.argv[1:] if a in ("paciente", "router", "adversarial", "tutor")] or ["paciente", "router"]
+    which = [a for a in sys.argv[1:] if a in ("paciente", "router", "adversarial", "tutor", "rag")] or ["paciente", "router"]
     casos = casos_elegidos()
     if casos is not None:
         if not casos:
@@ -349,6 +370,14 @@ def main():
             experiment_prefix=f"paciente-{MODELS['patient'][0]}-{graph.PATIENT_THINKING}", max_concurrency=2,
             metadata={"modelo_paciente": MODELS["patient"][0], "modelo_juez": MODELS["judge"][0],
                       "thinking_paciente": graph.PATIENT_THINKING, **extra},
+        )
+    if "rag" in which:
+        from rag.search import DIMS
+
+        evaluate(
+            rag_target, data=RAG, evaluators=[rag_metricas],
+            experiment_prefix=f"rag-{MODELS['embedding'][0]}-{DIMS}", max_concurrency=4,
+            metadata={"embedding": MODELS["embedding"][0], "dims": DIMS, "k": 5, "busqueda": "vector"},
         )
     if "tutor" in which:
         evaluate(

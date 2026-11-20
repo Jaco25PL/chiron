@@ -24,9 +24,9 @@ The rule of thumb: if something can be checked with code, it's a test or a code 
 
 | Layer | Count | Runs | Cost |
 |---|---|---|---|
-| pytest | 31 | every push (CI) | free, ~5 s |
+| pytest | 132 | every push (CI) | free, ~15 s |
 | Playwright E2E | 18 | every push (CI); `BASE_URL=…` against production | free, ~1 min |
-| LangSmith evals | 3 suites (51 + 25 + 48 examples) | manual (`evals.yml`) | Gemini quota |
+| LangSmith evals | 5 suites: paciente 119, router 33, adversarial 16, tutor 24, rag 53 | manual (`evals.yml`, or locally) | Gemini quota (rag: cached embeddings only) |
 
 ## Risk → what covers it
 
@@ -38,7 +38,8 @@ The rule of thumb: if something can be checked with code, it's a test or a code 
 | The patient answers from the wrong fact | eval `hecho_correcto` (code) + `consistente` (judge) | eval |
 | The patient breaks character / admits it's an AI | eval `en_personaje` (judge) + adversarial suite | eval |
 | Prompt injection extracts the prompt or the case facts | adversarial suite: `no_filtra_prompt`, `no_vuelca_hechos` (code), `resiste_ataque` (judge) | eval |
-| The router sends a question to the wrong node | eval `intent_correcto` (code), 25 labeled messages | eval |
+| The router sends a question to the wrong node | eval `intent_correcto` (code), 33 labeled messages | eval |
+| The companion's search misses the chunk that holds the answer | eval `rag` (code): hit@1/hit@5/recall@5/MRR against a gold set labeled by content (`evals/rag_gold.json`); a test checks every gold phrase still exists in `chunks.jsonl` | eval + pytest |
 | A clinical case doesn't cover its rubric | `cases/validate.py`: every grilla item must map to a fact/finding; validator unit tests | pytest |
 | Someone calls the backend directly | HMAC signature tests (valid, wrong secret, tampered email, expired, missing) + API returns 401 unsigned | pytest |
 | A student reads another student's consultation | ownership tests in the graph and through the full web → backend path (403) | pytest + E2E |
