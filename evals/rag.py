@@ -6,6 +6,7 @@
     python evals/rag.py --sin-reescribir   # search the question as asked (default: agents/tutor.py REWRITE)
     python evals/rag.py --con-charla       # give questions without turns a neutral consultation before them
     python evals/rag.py --lote validacion  # only the held-out questions (ids v-*), or "desarrollo"
+    python evals/rag.py --local            # against chunks.jsonl on disk, before re-indexing pgvector
     python evals/run.py rag        # the same, logged to LangSmith as an experiment (chiron-rag)
 
 The gold set (evals/rag_gold.json) says, for each question, where its answer is in the course material, by
@@ -125,12 +126,75 @@ def consulta(pregunta: str, recientes: list[dict], reescribir: bool) -> str:
     return _cached(f"rw:{MODELS['router'][0]}:{h}", lambda: tutor.search_query(pregunta, recientes))
 
 
-def buscar_una(q: dict, modo: str | None = None, reescribir: bool = False, charla: bool = False):
-    """(what was searched, the chunks) for a gold question ({pregunta, recientes?}), as the companion does."""
+class IndiceLocal:
+    """chunks.jsonl as it is on disk, searched in memory (exact cosine): measures a re-chunking before
+    anything is written to pgvector. Chunks whose text didn't change reuse their pgvector embedding; new
+    texts are embedded like rag/to_pgvector.py does (RETRIEVAL_DOCUMENT, 768 dims) and cached."""
+
+    def __init__(self):
+        import hashlib
+
+        import numpy as np
+
+        from llm.gemini import MODELS
+        from rag.search import DIMS
+        from store import db
+
+        path = ROOT / "data" / "ecoe" / MATERIA / "chunks.jsonl"
+        self.chunks = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+        with db.pool().connection() as conn:
+            rows = conn.execute("SELECT texto, embedding::text FROM rag_chunks").fetchall()
+        have = {t: json.loads(e) for t, e in rows}
+        key = lambda t: f"doc:{MODELS['embedding'][0]}:{DIMS}:{hashlib.sha256(t.encode()).hexdigest()[:20]}"  # noqa: E731
+        _cached("_", lambda: None)  # loads the cache from disk
+        nuevos = [c["texto"] for c in self.chunks if c["texto"] not in have and key(c["texto"]) not in _cache]
+        if nuevos:
+            print(f"embedding {len(nuevos)} new chunk texts...")
+            for i in range(0, len(nuevos), 20):
+                for t, v in zip(nuevos[i:i + 20], _embed_docs(nuevos[i:i + 20])):
+                    _cached(key(t), lambda v=v: v)
+        vecs = [have.get(c["texto"]) or _cached(key(c["texto"]), lambda: None) for c in self.chunks]
+        self.m = np.array(vecs, dtype=float)
+
+    def search(self, embedding: list[float], k: int) -> list[dict]:
+        import numpy as np
+
+        d = 1 - self.m @ np.array(embedding)
+        return [{"id": self.chunks[i]["id"], "texto": self.chunks[i]["texto"], "metadata": self.chunks[i]["metadata"],
+                 "score": float(d[i])} for i in np.argsort(d)[:k]]
+
+
+def _embed_docs(textos: list[str]) -> list[list[float]]:
+    import numpy as np
+    from google.genai import types
+
+    from llm.gemini import genai_client, with_rotation
+    from rag.search import DIMS
+
+    def call(key, model):
+        res = genai_client(key).models.embed_content(
+            model=model, contents=textos,
+            config=types.EmbedContentConfig(task_type="RETRIEVAL_DOCUMENT", output_dimensionality=DIMS))
+        return [(np.array(e.values) / np.linalg.norm(e.values)).tolist() for e in res.embeddings]
+
+    return with_rotation(call, "embedding")
+
+
+_local: IndiceLocal | None = None
+
+
+def buscar_una(q: dict, modo: str | None = None, reescribir: bool = False, charla: bool = False,
+               local: bool = False):
+    """(what was searched, the chunks) for a gold question ({pregunta, recientes?}), as the companion does.
+    `local`: against chunks.jsonl on disk (IndiceLocal) instead of pgvector (vector mode only)."""
+    global _local
     from rag.search import search_with
 
     recientes = q.get("recientes") or (CHARLA if charla else [])
     c = consulta(q["pregunta"], recientes, reescribir)
+    if local:
+        _local = _local or IndiceLocal()
+        return c, _local.search(_embedding(c), K)
     return c, search_with(MATERIA, c, _embedding(c), k=K, modo=modo)
 
 
@@ -166,11 +230,13 @@ def main():
     modo = sys.argv[sys.argv.index("--modo") + 1] if "--modo" in sys.argv[:-1] else search.MODO
     reescribir = "--reescribir" in sys.argv or ("--sin-reescribir" not in sys.argv and tutor.REWRITE)
     charla = "--con-charla" in sys.argv
-    print(f"search: {modo}, rewrite: {'yes' if reescribir else 'no'}, background turns: {'yes' if charla else 'no'}")
+    local = "--local" in sys.argv
+    print(f"search: {modo}{' over chunks.jsonl (local)' if local else ''}, rewrite: {'yes' if reescribir else 'no'}, "
+          f"background turns: {'yes' if charla else 'no'}")
     gold = load_gold()
     if lote := (sys.argv[sys.argv.index("--lote") + 1] if "--lote" in sys.argv[:-1] else None):
         gold = [q for q in gold if q["id"].startswith("v-") == (lote == "validacion")]
-    res = {q["id"]: buscar_una(q, modo, reescribir, charla) for q in gold}
+    res = {q["id"]: buscar_una(q, modo, reescribir, charla, local) for q in gold}
     resultados = {q["pregunta"]: res[q["id"]][1] for q in gold}
     filas = [(q, metricas(res[q["id"]][1], q["relevantes"])) for q in gold]
     print(resumen(filas))

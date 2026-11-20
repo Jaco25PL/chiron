@@ -3,6 +3,8 @@
 Usage:
     python rag/to_pgvector.py mpna            # copy from Chroma
     python rag/to_pgvector.py mpna --missing  # embed chunks.jsonl rows missing from rag_chunks
+    python rag/to_pgvector.py mpna --replace  # after re-chunking: what would change (dry run)
+    python rag/to_pgvector.py mpna --replace --yes  # make rag_chunks exactly chunks.jsonl, in one transaction
 
 gemini-embedding-001 vectors are Matryoshka embeddings: their first 768 dimensions,
 re-normalized, work as a 768-dim embedding (top-5 overlap with 3072 dims was 28/30 on a
@@ -84,8 +86,60 @@ def fill_missing(materia: str, batch: int = 20):
         print(f"  {min(i + batch, len(missing))}/{len(missing)}")
 
 
+def _embed(textos: list[str], batch: int = 20) -> list[np.ndarray]:
+    from google.genai import types
+
+    from llm.gemini import genai_client, with_rotation
+
+    out = []
+    for i in range(0, len(textos), batch):
+        part = textos[i : i + batch]
+
+        def call(key, model):
+            res = genai_client(key).models.embed_content(
+                model=model, contents=part,
+                config=types.EmbedContentConfig(task_type="RETRIEVAL_DOCUMENT", output_dimensionality=DIMS),
+            )
+            return [np.array(e.values) for e in res.embeddings]
+
+        out += with_rotation(call, "embedding")
+        print(f"  embedded {min(i + batch, len(textos))}/{len(textos)}")
+    return out
+
+
+def replace(materia: str, apply: bool):
+    """Makes rag_chunks match chunks.jsonl after a re-chunking. Chunk ids are positional, so --missing
+    would leave stale rows behind: this deletes the subject's rows and inserts the file's in a single
+    transaction (searches never see an empty table). Texts already indexed keep their embedding; only
+    new texts are embedded. Without `apply` it only reports what would change."""
+    rows = [json.loads(l) for l in (ROOT / "data" / "ecoe" / materia / "chunks.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()]
+    with db.pool().connection() as conn:
+        have = dict(conn.execute("SELECT texto, embedding::text FROM rag_chunks WHERE materia IN (%s, 'general')",
+                                 (materia,)).fetchall())
+    nuevos = sorted({r["texto"] for r in rows} - set(have))
+    print(f"chunks.jsonl: {len(rows)} chunks; rag_chunks: {len(have)} texts; new texts to embed: {len(nuevos)}; "
+          f"rows to drop: {len(set(have) - {r['texto'] for r in rows})}")
+    if not apply:
+        print("dry run: nothing written (add --yes)")
+        return
+    vec = {t: "[" + ",".join(f"{x:.6f}" for x in v / np.linalg.norm(v)) + "]" for t, v in zip(nuevos, _embed(nuevos))}
+    vec.update(have)
+    with db.pool().connection() as conn, conn.cursor() as cur:  # one transaction: committed on exit
+        cur.execute("DELETE FROM rag_chunks WHERE materia IN (%s, 'general')", (materia,))
+        cur.executemany(
+            """INSERT INTO rag_chunks (id, materia, tipo, fuente, seccion, pagina, texto, metadata, embedding)
+               VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s::vector)""",
+            [(r["id"], r["metadata"].get("materia", materia), r["metadata"]["tipo"], r["metadata"]["fuente"],
+              r["metadata"].get("seccion"), r["metadata"].get("pagina"), r["texto"],
+              json.dumps(r["metadata"], ensure_ascii=False), vec[r["texto"]]) for r in rows],
+        )
+    print(f"{len(rows)} chunks -> rag_chunks")
+
+
 if __name__ == "__main__":
-    if "--missing" in sys.argv:
+    if "--replace" in sys.argv:
+        replace(sys.argv[1] if not sys.argv[1].startswith("--") else "mpna", "--yes" in sys.argv)
+    elif "--missing" in sys.argv:
         fill_missing(sys.argv[1] if len(sys.argv) > 2 else "mpna")
     else:
         main()

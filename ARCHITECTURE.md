@@ -106,6 +106,7 @@ flowchart LR
 - **768-dim Matryoshka truncation:** `gemini-embedding-001` vectors keep working when truncated and re-normalized. Top-5 overlap with the full 3,072 dims was 28/30 on a sample of queries, at a quarter of the storage and no new embedding calls.
 - Each chunk keeps `fuente`, `pagina` and `seccion`, so answers can cite "MPNA notes, p. 32".
 - New material only needs its new chunks embedded: `python rag/chunk.py mpna` then `python rag/to_pgvector.py mpna --missing` (4 grillas = 4 embedding calls).
+- After a re-chunking (ids are positional, so existing chunks shift), `python rag/to_pgvector.py mpna --replace` shows what would change and `--replace --yes` swaps the subject's rows in one transaction, embedding only texts not already indexed. Measure first with `python evals/rag.py --local`, which searches `chunks.jsonl` on disk.
 
 ## RAG at runtime: the study companion
 

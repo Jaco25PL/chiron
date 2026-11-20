@@ -104,6 +104,7 @@ python rag/clean_pdfs.py mpna   # raw/*.pdf -> clean/*.md (requires pdftotext)
 python rag/chunk.py mpna        # clean + grillas + context -> chunks.jsonl
 python rag/ingest.py mpna       # chunks -> Chroma (.chroma/), Gemini embeddings
 python rag/query.py mpna "¿qué preguntar ante disnea?"
+python rag/to_pgvector.py mpna --replace   # after re-chunking: dry run; --yes swaps pgvector rows
 ```
 
 - Used by the study companion (`agents/tutor.py`, `POST /api/sessions/{id}/tutor[?voz=1]`): the student asks it study questions mid-consultation and it answers from these chunks, in its own voice (`llm/tts.py` `TUTOR_VOICE`). It never receives the case (diagnosis, hidden facts, grilla), only the turns the student has seen; its exchanges are stored apart from the transcript (state `tutor`), so the patient never sees them and the clock doesn't run. "principiante" gets the answer, "normal" one hint; in "normal" the feedback reports how many times it was used (`tutor_consultas`), without changing the score.

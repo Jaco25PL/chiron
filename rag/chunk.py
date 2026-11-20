@@ -58,8 +58,52 @@ def merge_short(sections: list[Document]) -> list[Document]:
     return merged
 
 
+GUIDE_QUESTION = re.compile(r"^- (¿[^?]{25,250}\?)\s*$")  # "- ¿Cuál es el tratamiento farmacológico...?"
+GUIDE_BOLD = re.compile(r"^\*\*([^*]{4,60})\*\*\s*$")  # "**Metformina**"
+# guidelines whose structure the rules below can read; the smoking guideline puts its titles inline
+# ("Uruguay 2009 A. Averigüe - Pregunte") and some of its `###` are real (ABC, Fagerström): left as is
+STRUCTURED_GUIDES = {"msp-diabetes-2017.md", "msp-hta-2017.md"}
+GENERIC_TITLES = {"recomendaciones", "recomendacion", "recomendación", "evidencia", "resumen de la evidencia",
+                  "resumen de evidencia", "indice", "índice"}
+
+
+def structure_guide(text: str) -> str:
+    """Headings for an MSP guideline from its real structure. pdftotext's `###` there are table column
+    headers ("Edulcorante", "Visitas control 3 a 4 meses"): they become plain lines, or every chunk until
+    the next table would carry them as its section. Its sections are clinical questions ("- ¿Cuál es el
+    tratamiento farmacológico inicial...?") and bold subtitles ("**Metformina**"). Only the lines change
+    role; no text is added or dropped: a title with no text under it (table headers stacked one after the
+    other) stays a plain line, since the splitter drops empty sections along with their title."""
+    lines = [line[4:] if line.startswith("### ") else line for line in text.split("\n")]
+    heading = {}
+    for i, line in enumerate(lines):
+        if (q := GUIDE_QUESTION.match(line)) and "...." not in line:  # the table of contents has dot leaders
+            heading[i] = f"## {q.group(1)}"
+        elif (b := GUIDE_BOLD.match(line)) and _subtitle(b.group(1)):
+            heading[i] = f"### {b.group(1).strip()}"
+    level = lambda h: len(h) - len(h.lstrip("#"))  # noqa: E731
+    for i in sorted(heading):
+        nxt = next((j for j in range(i + 1, len(lines)) if COMMENT.sub("", lines[j]).strip()), None)
+        # a deeper heading next is fine: this title stays in its path ("¿...? > Metformina")
+        if nxt is not None and (nxt not in heading or level(heading[nxt]) > level(heading[i])):
+            lines[i] = heading[i]
+    return "\n".join(lines)
+
+
+def _subtitle(title: str) -> bool:
+    """A bold line that names a section: not a generic label, not a table header (all caps, a dangling
+    dash, mostly digits)."""
+    t = title.strip()
+    letters = [c for c in t if c.isalpha()]
+    return (t.lower() not in GENERIC_TITLES and len(letters) >= 4 and not t.endswith(("-", ":"))
+            and not all(c.isupper() for c in letters) and t[0].isupper())
+
+
 def chunk_markdown(path: Path, materia: str, tipo: str) -> list[dict]:
-    sections = merge_short(header_splitter.split_text(path.read_text(encoding="utf-8")))
+    text = path.read_text(encoding="utf-8")
+    if tipo == "guia" and path.name in STRUCTURED_GUIDES:
+        text = structure_guide(text)
+    sections = merge_short(header_splitter.split_text(text))
 
     chunks: list[dict] = []
     page = None  # last page marker seen, in reading order
